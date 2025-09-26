@@ -1,0 +1,83 @@
+# ------------------------------
+# Global
+# ------------------------------
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.iml
+
+# ------------------------------
+# Java / Spring Boot
+# ------------------------------
+hwjob-backend/target/
+hwjob-backend/.mvn/
+hwjob-backend/.classpath
+hwjob-backend/.project
+hwjob-backend/.settings/
+hwjob-backend/.springBeans
+hwjob-backend/.sts4-cache/
+hwjob-backend/.factorypath
+
+# ------------------------------
+# Node.js / ReactJS
+# ------------------------------
+hwjob-frontend/node_modules/
+hwjob-frontend/.pnp
+hwjob-frontend/.pnp.js
+
+
+hwjob-frontend/.next/
+hwjob-frontend/.nuxt/
+hwjob-frontend/dist/
+hwjob-frontend/build/
+
+hwjob-frontend/.DS_Store
+hwjob-frontend/.env.local
+hwjob-frontend/.env.development.local
+hwjob-frontend/.env.test.local
+hwjob-frontend/.env.production.local
+
+hwjob-frontend/npm-debug.log*
+hwjob-frontend/yarn-debug.log*
+hwjob-frontend/yarn-error.log*
+
+# React testing / coverage
+hwjob-frontend/coverage/
+hwjob-frontend/.eslintcache
+
+# ------------------------------
+# Hardhat (Ethereum dev)
+# ------------------------------
+hwjob-hardhat/node_modules/
+hwjob-hardhat/cache/
+hwjob-hardhat/artifacts/
+hwjob-hardhat/coverage/
+hwjob-hardhat/coverage.json
+hwjob-hardhat/typechain/
+hwjob-hardhat/typechain-types/
+
+# Dotenv
+hwjob-hardhat/.env
+hwjob-frontend/.env
+hwjob-backend/.env
+
+# ------------------------------
+# OS / Editor files
+# ------------------------------
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ------------------------------
+# Yarn / npm logs
+# ------------------------------
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
