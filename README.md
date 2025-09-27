@@ -1,4 +1,4 @@
-﻿# 🚀 Fullstack wain-voting-website
+﻿# 🚀 Fullstack HWJob-Website
 
 This project is an application **Recruitment Website** fullstack consists of 3 main parts:
 
@@ -8,6 +8,11 @@ This project is an application **Recruitment Website** fullstack consists of 3 m
 
 ---
 
+## 📂 System Analysis
+- **Database and UML**: [draw.io](https://drive.google.com/file/d/17dRY740MC6D5sm8k9s9n2n7uLQjuxFU3/view?usp=sharing).
+- **UX/UI**: ...
+- 
+---
 ## 📂 Directory structure
 
 <pre> 
