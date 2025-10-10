@@ -1,0 +1,38 @@
+{
+  "common": {
+    "welcome": "Chào mừng đến với trang web của tôi",
+    "language": "Ngôn ngữ"
+  },
+  "auth": {
+    "title": {
+      "login": "Đăng nhập",
+      "register": "Đăng ký"
+    },
+    "description": {
+      "login": "Vui lòng đăng nhập để tiếp tục",
+      "register": "Tạo tài khoản để tiếp tục"
+    },
+    "email": "Email",
+    "username": "Tên đăng nhập",
+    "password": "Mật khẩu",
+    "rePassword": "Nhập lại mật khẩu",
+    "rememberMe": "Ghi nhớ đăng nhập",
+    "forgotPassword": "Quên mật khẩu?",
+    "noAccount": "Chưa có tài khoản?",
+    "haveAccount": "Đã có tài khoản?",
+    "signUp": "Đăng ký",
+    "login": "Đăng nhập"
+  },
+
+  "admin": {},
+  "user": {
+    "navbar": {
+      "home": "Trang chủ",
+      "jobPosts": "Việc làm",
+      "history": "Lịch sử",
+      "profile": "Hồ sơ",
+      "settings": "Cài đặt",
+      "signOut": "Đăng xuất"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "common": {
+    "welcome": "Welcome to my website",
+    "language": "Language",
+    "home": "Home",
+    "about": "About"
+  },
+
+  "auth": {
+    "title": {
+      "login": "Login",
+      "register": "Register"
+    },
+    "description": {
+      "login": "Please login to continue",
+      "register": "Create an account to continue"
+    },
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "rePassword": "Re-Password",
+    "rememberMe": "Remember Me",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "No account?",
+    "haveAccount": "Have an account?",
+    "signUp": "Sign Up",
+    "login": "Login"
+  }
+}
