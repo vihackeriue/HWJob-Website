@@ -1,13 +1,13 @@
-package com.hw.hwjobservice;
+package com.hw.hwjobbackend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HwJobBackendApplication {
+public class HwjobBackendApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(HwJobBackendApplication.class, args);
+        SpringApplication.run(HwjobBackendApplication.class, args);
     }
 
 }

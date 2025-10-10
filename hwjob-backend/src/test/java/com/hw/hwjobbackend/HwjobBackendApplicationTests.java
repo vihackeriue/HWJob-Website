@@ -1,10 +1,10 @@
-package com.hw.hwjobservice;
+package com.hw.hwjobbackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class HwJobBackendApplicationTests {
+class HwjobBackendApplicationTests {
 
     @Test
     void contextLoads() {

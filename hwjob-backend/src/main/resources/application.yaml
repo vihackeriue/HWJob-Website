@@ -1,0 +1,31 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /hwjob/api/
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/hwjob_db
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+initial-app:
+  admin:
+    username: admin
+    email: admin@email.com
+    password: admin
+    name: Admin
+
+
+jwt:
+  signerKey: qigjqDCrJgeiYotGVUsT80cPLvHqd6VNzHk3+hgI8Ujq+Ke/4YrDzYa10slbXog1dWvcaqMlsXBPSrPdOGUXBwO7W7/fSLUtuPTwgrwThn4=
+  valid-duration: 432000
+  refreshable-duration: 864000
