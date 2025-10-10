@@ -17,7 +17,7 @@ public enum ErrorCode {
     PASSWORD_INVALID(1007, "Password must be at least {min} characters", HttpStatus.BAD_REQUEST),
     PHONE_INVALID(1008, "Phone number is not valid", HttpStatus.BAD_REQUEST),
 
-    ;
+    ROLE_NOT_EXISTED(1009, "Role not exited", HttpStatus.NOT_FOUND);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

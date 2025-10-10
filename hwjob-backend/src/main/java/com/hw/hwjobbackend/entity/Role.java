@@ -14,8 +14,8 @@ import lombok.experimental.FieldDefaults;
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    String id;
     String name;
     String description;
 }

@@ -54,8 +54,14 @@ public class ApplicationInitConfiguration {
             if (userRepository.findByUsername(ADMIN_USERNAME).isEmpty()) {
                 roleRepository.save(
                         Role.builder()
-                                .name(PredefinedRole.USER_ROLE)
-                                .description("Role User")
+                                .name(PredefinedRole.RECRUITER_ROLE)
+                                .description("Role Recruiter")
+                                .build()
+                );
+                roleRepository.save(
+                        Role.builder()
+                                .name(PredefinedRole.CANDIDATE_ROLE)
+                                .description("Role Candidate")
                                 .build()
                 );
                 Role adninRole = roleRepository.save(

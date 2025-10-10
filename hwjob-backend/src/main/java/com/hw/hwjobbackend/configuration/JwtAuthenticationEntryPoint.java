@@ -3,6 +3,7 @@ package com.hw.hwjobbackend.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hw.hwjobbackend.dto.response.ApiResponse;
 import com.hw.hwjobbackend.enums.ErrorCode;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -15,7 +16,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(
             HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
-            throws IOException {
+            throws IOException, ServletException {
         ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
 
         response.setStatus(errorCode.getStatusCode().value());

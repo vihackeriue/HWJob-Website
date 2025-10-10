@@ -1,5 +1,9 @@
 package com.hw.hwjobbackend.configuration;
 
+
+import java.util.Objects;
+import javax.crypto.spec.SecretKeySpec;
+
 import com.hw.hwjobbackend.dto.request.IntrospectRequest;
 import com.hw.hwjobbackend.service.AuthenticationService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,14 +16,9 @@ import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.spec.SecretKeySpec;
-
-import java.util.Objects;
-
 @Component
 @Slf4j
-public class JwtDecoderConfiguration implements JwtDecoder {
-
+public class CustomJwtDecoder implements JwtDecoder {
     @Value("${jwt.signerKey}")
     private String signerKey;
 
@@ -30,7 +29,7 @@ public class JwtDecoderConfiguration implements JwtDecoder {
 
     @Override
     public Jwt decode(String token) throws JwtException {
-        log.info("decode token: {}", token);
+
         var response = authenticationService.introspect(
                 IntrospectRequest.builder().token(token).build());
 
@@ -42,6 +41,7 @@ public class JwtDecoderConfiguration implements JwtDecoder {
                     .macAlgorithm(MacAlgorithm.HS512)
                     .build();
         }
+
         return nimbusJwtDecoder.decode(token);
     }
 }
