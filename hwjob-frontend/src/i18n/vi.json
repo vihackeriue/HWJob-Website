@@ -33,6 +33,25 @@
       "profile": "Hồ sơ",
       "settings": "Cài đặt",
       "signOut": "Đăng xuất"
+    },
+    "banner": {
+      "description": "HWJob là nền tảng tuyển dụng thông minh kết nối nhà tuyển dụng và ứng viên nhanh chóng, hiệu quả. Tìm việc phù hợp – Tuyển đúngngười – Tất cả trên một nền tảng.",
+      "slide1": {
+        "title": "Tìm công việc mơ ước của bạn",
+        "desc": "Khám phá hàng ngàn cơ hội việc làm phù hợp với kỹ năng và sở thích của bạn."
+      },
+      "slide2": {
+        "title": "Tuyển đúng người, phát triển đội ngũ mạnh mẽ",
+        "desc": "Đăng tin tuyển dụng và tiếp cận hàng ngàn ứng viên tiềm năng chỉ với vài thao tác."
+      },
+      "slide3": {
+        "title": "Trở thành Freelancer chuyên nghiệp",
+        "desc": "Làm việc tự do, kiếm tiền theo cách của bạn."
+      }
+    },
+    "resumeIntroduction": {
+      "title": "Hoàn thiện hồ sơ & thêm CV chuyên nghiệp",
+      "desc": "Cập nhật đầy đủ thông tin cá nhân, kỹ năng và kinh nghiệm để tạo ấn tượng mạnh với nhà tuyển dụng."
     }
   }
 }

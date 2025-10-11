@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = "";
+const BASE_URL = "http://localhost:8080/hwjob/api/";
+export const DEFAULT_LIMIT = 6;
 
 export const axiosPublic = axios.create({
   baseURL: BASE_URL,

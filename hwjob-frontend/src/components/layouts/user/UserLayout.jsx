@@ -7,7 +7,7 @@ export default function UserLayout() {
   return (
     <div>
       <Navbar />
-      <div className="container min-h-150">{<Outlet />}</div>
+      <div className="container min-h-150 mb-10">{<Outlet />}</div>
       <Footer />
     </div>
   );

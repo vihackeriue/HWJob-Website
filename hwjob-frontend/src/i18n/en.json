@@ -25,5 +25,34 @@
     "haveAccount": "Have an account?",
     "signUp": "Sign Up",
     "login": "Login"
+  },
+  "user": {
+    "navbar": {
+      "home": "Home",
+      "jobPosts": "Job Posts",
+      "history": "History",
+      "profile": "Profile",
+      "settings": "Settings",
+      "signOut": "Sign Out"
+    },
+    "banner": {
+      "description": "HWJob is a smart recruitment platform that connects employers and job seekers efficiently. Find the right job, hire the right person — all in one place.",
+      "slide1": {
+        "title": "Find Your Dream Job",
+        "desc": "Explore thousands of job opportunities that match your skills and interests."
+      },
+      "slide2": {
+        "title": "Hire the Right People, Build a Strong Team",
+        "desc": "Post job listings and reach thousands of potential candidates with just a few clicks."
+      },
+      "slide3": {
+        "title": "Become a Professional Freelancer",
+        "desc": "Work independently, earn money your way."
+      }
+    },
+    "resumeIntroduction": {
+      "title": "Complete your profile & add a professional CV",
+      "desc": "Fully update your personal information, skills and experience to make a strong impression on employers."
+    }
   }
 }

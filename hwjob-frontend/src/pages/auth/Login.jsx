@@ -36,8 +36,7 @@ function Login() {
         <Lottie
           animationData={Browsing}
           loop={true}
-          style={{ width: 300, height: 300 }}
-          className="absolute  -left-1/4 -top-1/4 hidden sm:block"
+          className="absolute  -left-1/4 -top-1/4 hidden sm:block w-80 h-80"
         />
         <div className="sm:w-2/3 px-16">
           <h2 className="text-6xl font-bold font-imperial ">
@@ -113,7 +112,7 @@ function Login() {
           <Lottie
             animationData={jobSeeking}
             loop={true}
-            style={{ width: 450, height: 450 }}
+            className="w-100 h-100"
           />
         </div>
       </div>

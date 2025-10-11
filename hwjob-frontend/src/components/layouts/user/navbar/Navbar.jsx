@@ -10,10 +10,11 @@ import DarkMode from "../../../ui/DarkMode";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { LANGUAGES } from "../../../../constants/language";
 import LanguageSwitcher from "../../../ui/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 export default function Navbar() {
   return (
-    <div className="relative z-10 w-full bg-teal-900">
+    <div className="relative z-10 w-full bg-teal-900 text-gray-100">
       <div className="container py-3 md:py-2">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -69,6 +70,7 @@ const linkClasses =
   "text-lg font-medium  hover:text-primary py-2 hover:border-primary transition-colors duration-500 ";
 function NavbarLink({ item }) {
   const { pathname } = useLocation();
+  const { t } = useTranslation();
   return (
     <Link
       to={item.path}
@@ -77,7 +79,7 @@ function NavbarLink({ item }) {
         linkClasses
       )}
     >
-      {item.label}
+      {t(item.label)}
     </Link>
   );
 }
@@ -85,6 +87,7 @@ const menuItemClasses =
   "group flex w-full items-center gap-2 rounded-sm px-4 py-2 data-focus:bg-gray-200";
 function MenuItemLink({ item }) {
   const { pathname } = useLocation();
+  const { t } = useTranslation();
   return (
     <MenuItem>
       <Link
@@ -94,7 +97,7 @@ function MenuItemLink({ item }) {
           menuItemClasses
         )}
       >
-        {item.label}
+        {t(item.label)}
       </Link>
     </MenuItem>
   );

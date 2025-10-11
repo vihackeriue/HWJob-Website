@@ -2,16 +2,18 @@ import React from "react";
 import { NAVBAR_USER_LINKS } from "../../../constants/user/navigation";
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
   return (
-    <div className="bg-teal-900 ">
+    <div className="bg-teal-900 text-gray-100">
       <section className="container p-10">
         <div className="py-8 px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Cột 1 */}
           <div>
-            <h1 className="sm:text-3xl text-xl font-bold text-center sm:text-left mb-3">
-              Wain Voting
+            <h1 className="sm:text-3xl text-xl font-bold text-center sm:text-left mb-3 text-brightOrange font-vollkorn">
+              HWJOB
             </h1>
             <p className="text-sm text-secondary-700 text-center sm:text-left">
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -35,7 +37,7 @@ export default function Footer() {
                   key={item.key}
                   className="text-lg font-medium hover:text-primary py-2 transition-colors duration-500"
                 >
-                  {item.label}
+                  {t(item.label)}
                 </Link>
               ))}
             </div>

@@ -25,10 +25,11 @@
   /* Background Dark Color */
   --color-darkBlue: #0d1117;
 
-  --color-brightOrange: #e96a2b;
+  --color-brightOrange: #fa5b0f;
 }
 html.dark {
   --color-teal-900: #112d32;
+  --color-brightOrange: #e96a2b;
 }
 
 @layer base {

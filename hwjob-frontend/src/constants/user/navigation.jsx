@@ -1,18 +1,18 @@
 export const NAVBAR_USER_LINKS = [
   {
     key: "home",
-    label: "Home",
+    label: "user.navbar.home",
     path: "/",
   },
   {
     key: "jobPosts",
-    label: "Job Posts",
+    label: "user.navbar.jobPosts",
     path: "/job-posts",
   },
 
   {
     key: "history",
-    label: "Lịch sử",
+    label: "user.navbar.history",
     path: "/history",
   },
 ];
@@ -20,17 +20,17 @@ export const NAVBAR_USER_LINKS = [
 export const DROPDOWN_USER_LINKS = [
   {
     key: "profile",
-    label: "Profile",
+    label: "user.navbar.profile",
     path: "/profile",
   },
   {
     key: "settings",
-    label: "Settings",
+    label: "user.navbar.settings",
     path: "/settings",
   },
   {
     key: "singOut",
-    label: "Sign out",
+    label: "user.navbar.signOut",
     path: "/sign-out",
   },
 ];
