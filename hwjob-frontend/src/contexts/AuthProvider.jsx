@@ -29,9 +29,9 @@ export const AuthProvider = ({ children }) => {
         } else {
           const username = decoded.sub;
           const roles = decoded.scope ? decoded.scope.split(" ") : [];
-          const walletAddress = decoded.walletAddress;
-
-          setAuth({ username, roles, walletAddress, accessToken });
+          // const walletAddress = decoded.walletAddress;
+          // setAuth({ username, roles, walletAddress, accessToken });
+          setAuth({ username, roles, accessToken });
         }
       } catch (err) {
         console.error("Invalid token:", err);
@@ -45,21 +45,21 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await loginService(data);
 
-      if (res.code === 1000 && res.data.authenticated) {
-        const accessToken = res.data.token;
+      if (res.code === 1000 && res.result.authenticated) {
+        const accessToken = res.result.token;
         const decoded = jwtDecode(accessToken);
 
         // setToken(accessToken);
         const username = decoded.sub;
         const roles = decoded.scope ? decoded.scope.split(" ") : [];
-        const walletAddress = decoded.walletAddress;
-
-        setAuth({ username, roles, walletAddress, accessToken });
+        // const walletAddress = decoded.walletAddress;
+        // setAuth({ username, roles, walletAddress, accessToken });
+        setAuth({ username, roles, accessToken });
 
         localStorage.setItem("site", accessToken);
 
         if (roles.includes("ROLE_ADMIN")) {
-          navigate("/manager");
+          navigate("/admin");
         } else if (roles.includes("ROLE_USER")) {
           navigate("/");
         } else {
@@ -121,7 +121,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setAuth(null);
       localStorage.removeItem("site");
-      navigate("/login");
+      navigate("/");
     }
   };
 
@@ -133,3 +133,4 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+export default AuthContext;

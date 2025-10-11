@@ -86,9 +86,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void logout(LogoutRequest request) {
+    public void logout(String token) {
         try {
-            var signToken = verifyToken(request.getToken(), true);
+            var signToken = verifyToken(token, true);
             String jit = String.valueOf(signToken.getJWTClaimsSet().getExpirationTime());
             Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
             InvalidateToken invalidateToken = InvalidateToken.builder()

@@ -35,8 +35,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    ApiResponse<Void> logout(@RequestBody LogoutRequest request) {
-        authenticationService.logout(request);
+    ApiResponse<Void> logout(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.substring(7);
+        authenticationService.logout(token);
         return ApiResponse.<Void>builder().build();
     }
 
@@ -53,6 +54,4 @@ public class AuthenticationController {
         var result = authenticationService.refreshToken(request);
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }
-
-
 }

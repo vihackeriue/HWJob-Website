@@ -17,5 +17,5 @@ public interface AuthenticationService {
 
     AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException;
 
-    void logout(LogoutRequest request);
+    void logout(String token);
 }

@@ -5,8 +5,11 @@ import Browsing from "../../assets/lottie/Browsing.json";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import useAuth from "../../hooks/useAuth";
+
 function Login() {
   const { t } = useTranslation();
+  const { login } = useAuth();
 
   const [input, setInput] = useState({
     username: "",
@@ -24,7 +27,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (input.username !== "" && input.password !== "") {
-      // await login(input);
+      await login(input);
       return;
     }
     alert("please provide a valid input");

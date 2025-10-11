@@ -28,9 +28,4 @@ export const DROPDOWN_USER_LINKS = [
     label: "user.navbar.settings",
     path: "/settings",
   },
-  {
-    key: "singOut",
-    label: "user.navbar.signOut",
-    path: "/sign-out",
-  },
 ];
