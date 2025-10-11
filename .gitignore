@@ -21,6 +21,8 @@ hwjob-backend/.settings/
 hwjob-backend/.springBeans
 hwjob-backend/.sts4-cache/
 hwjob-backend/.factorypath
+hwjob-backend/.idea
+hwjob-backend/.gitignore
 
 # ------------------------------
 # Node.js / ReactJS
