@@ -3,8 +3,9 @@ package com.hw.hwjobbackend.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Getter
+
 @Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
