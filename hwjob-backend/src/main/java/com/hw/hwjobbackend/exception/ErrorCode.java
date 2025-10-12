@@ -21,7 +21,10 @@ public enum ErrorCode {
     EMAIL_INVALID(1009, "error.email_invalid", HttpStatus.BAD_REQUEST),
     ROLE_NOT_EXISTED(1010, "error.role_not_existed", HttpStatus.NOT_FOUND),
     EMAIL_EXISTED(1011, "error.email_existed", HttpStatus.BAD_REQUEST),
-    USER_EXISTED(1012, "error.user_existed", HttpStatus.BAD_REQUEST);
+    USER_EXISTED(1012, "error.user_existed", HttpStatus.BAD_REQUEST),
+    USERNAME_PASSWORD_INVALID(1013, "error.username_password_invalid", HttpStatus.BAD_REQUEST)
+    ;
+
 
     private final int code;
     private final String message;
