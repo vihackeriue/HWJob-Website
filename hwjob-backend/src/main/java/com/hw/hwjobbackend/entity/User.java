@@ -5,6 +5,7 @@ import com.hw.hwjobbackend.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -25,7 +27,7 @@ public class User {
     String password;
     String phone;
     String imageUrl;
-    //    Region region;
+
     UserStatus userStatus;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
@@ -33,4 +35,6 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> roles;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    Region region;
 }

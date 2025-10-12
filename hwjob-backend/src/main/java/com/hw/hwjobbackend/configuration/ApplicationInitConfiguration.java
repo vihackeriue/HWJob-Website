@@ -79,7 +79,7 @@ public class ApplicationInitConfiguration {
                         .password(passwordEncoder.encode(ADMIN_PASSWORD))
                         .build();
                 userRepository.save(user);
-                log.warn("admin user has been created");
+                log.warn("admin has been created");
             }
             log.info("Application initialization completed .....");
         };
