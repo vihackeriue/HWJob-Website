@@ -1,15 +1,13 @@
 package com.hw.hwjobbackend.service.implement;
 
+import com.hw.hwjobbackend.configuration.Translator;
 import com.hw.hwjobbackend.dto.request.AuthenticationRequest;
 import com.hw.hwjobbackend.dto.request.IntrospectRequest;
-import com.hw.hwjobbackend.dto.request.LogoutRequest;
-import com.hw.hwjobbackend.dto.request.RefreshRequest;
 import com.hw.hwjobbackend.dto.response.AuthenticationResponse;
 import com.hw.hwjobbackend.dto.response.IntrospectResponse;
 import com.hw.hwjobbackend.entity.InvalidateToken;
-import com.hw.hwjobbackend.entity.Role;
 import com.hw.hwjobbackend.entity.User;
-import com.hw.hwjobbackend.enums.ErrorCode;
+import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.repository.RedisTokenRepository;
 import com.hw.hwjobbackend.repository.UserRepository;
@@ -60,28 +58,25 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
     @Override
-    public IntrospectResponse introspect(IntrospectRequest request) {
-        var token = request.getToken();
+    public IntrospectResponse introspect(String token) throws ParseException, JOSEException {
         boolean isValid = true;
         try {
             verifyToken(token, false);
-        } catch (AppException | JOSEException | ParseException e) {
+        } catch (AppException e) {
             isValid = false;
         }
         return IntrospectResponse.builder().valid(isValid).build();
     }
+
 
     @Override
     public AuthenticationResponse login(AuthenticationRequest request) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
-
         if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
         var token = generateToken(user);
-
         return AuthenticationResponse.builder().token(token).authenticated(true).build();
     }
 
@@ -102,8 +97,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
-        var signedJWT = verifyToken(request.getToken(), true);
+    public AuthenticationResponse refreshToken(String token) throws ParseException, JOSEException {
+        var signedJWT = verifyToken(token, true);
 
         var jit = signedJWT.getJWTClaimsSet().getJWTID();
         var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
@@ -116,16 +111,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var userName = signedJWT.getJWTClaimsSet().getSubject();
         var user = userRepository.findByUsername(userName)
                 .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
-
-        var token = generateToken(user);
-
-        return AuthenticationResponse.builder().token(token).authenticated(true).build();
+        var newToken = generateToken(user);
+        return AuthenticationResponse.builder().token(newToken).authenticated(true).build();
     }
 
 
     private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
-        log.info("Verify token run");
         SignedJWT signedJWT = SignedJWT.parse(token);
 
         Date expiryTime = (isRefresh)

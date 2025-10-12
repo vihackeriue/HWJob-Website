@@ -8,6 +8,5 @@ import com.hw.hwjobbackend.dto.response.UserResponse;
 
 public interface UserService {
     UserCreationResponse createUser(UserCreationRequest request);
-
     UserResponse getMyInfo();
 }
