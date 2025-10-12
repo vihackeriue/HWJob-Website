@@ -73,9 +73,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationResponse login(AuthenticationRequest request) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         var user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_PASSWORD_INVALID));
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
-        if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
+        if (!authenticated) throw new AppException(ErrorCode.USERNAME_PASSWORD_INVALID);
         var token = generateToken(user);
         return AuthenticationResponse.builder().token(token).authenticated(true).build();
     }
@@ -84,7 +84,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void logout(String token) {
         try {
             var signToken = verifyToken(token, true);
-            String jit = String.valueOf(signToken.getJWTClaimsSet().getExpirationTime());
+            String jit = String.valueOf(signToken.getJWTClaimsSet().getJWTID());
             Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
             InvalidateToken invalidateToken = InvalidateToken.builder()
                     .id(jit)
@@ -99,7 +99,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public AuthenticationResponse refreshToken(String token) throws ParseException, JOSEException {
         var signedJWT = verifyToken(token, true);
-
         var jit = signedJWT.getJWTClaimsSet().getJWTID();
         var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
@@ -115,11 +114,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return AuthenticationResponse.builder().token(newToken).authenticated(true).build();
     }
 
-
     private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
-
         Date expiryTime = (isRefresh)
                 ? new Date(signedJWT
                 .getJWTClaimsSet()
