@@ -35,7 +35,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfiguration {
 
     private final String[] PUBLIC_ENDPOINTS = {
-            "/users/create", "/auth/login"
+            "/users", "/auth/login"
     };
 
     @Autowired
@@ -61,6 +61,7 @@ public class SecurityConfiguration {
     /**
      * Cấu hình CORS cho phép tất cả domain, phương thức và header.
      */
+
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();

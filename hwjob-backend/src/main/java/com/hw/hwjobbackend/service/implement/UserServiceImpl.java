@@ -4,6 +4,8 @@ import com.hw.hwjobbackend.constant.PredefinedRole;
 import com.hw.hwjobbackend.dto.request.UserCreationRequest;
 import com.hw.hwjobbackend.dto.response.UserCreationResponse;
 import com.hw.hwjobbackend.dto.response.UserResponse;
+import com.hw.hwjobbackend.entity.Candidate;
+import com.hw.hwjobbackend.entity.Recruiter;
 import com.hw.hwjobbackend.entity.Role;
 import com.hw.hwjobbackend.entity.User;
 import com.hw.hwjobbackend.exception.ErrorCode;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,33 +40,38 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserCreationResponse createUser(UserCreationRequest request) {
-
-        if (userRepository.existsByUsername(request.getUsername())) {
+        if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USERNAME_EXISTED);
-        }
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXISTED);
-        }
 
-        User user = userMapper.toUser(request);
+        Set<Role> roles = request.getRoles().stream()
+                .map(roleName -> roleRepository.findByName(roleName)
+                        .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED)))
+                .collect(Collectors.toSet());
+
+        User user;
+        if (roles.stream().anyMatch(r -> r.getName().equals("CANDIDATE"))) {
+            user = new Candidate();
+        } else if (roles.stream().anyMatch(r -> r.getName().equals("RECRUITER"))) {
+            user = new Recruiter();
+        } else {
+            throw new AppException(ErrorCode.ROLE_NOT_EXISTED);
+        }
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        Role candidateRole = roleRepository.findByName(PredefinedRole.CANDIDATE_ROLE)
-                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
-        user.setRoles(new HashSet<>() {{
-            add(candidateRole);
-        }});
+        user.setRoles(roles);
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
-        try {
-            user = userRepository.save(user);
-        } catch (DataIntegrityViolationException exception) {
-            throw new AppException(ErrorCode.USER_EXISTED);
-        }
+
+        userRepository.save(user);
         return userMapper.toUserCreationResponse(user);
     }
 
+
     @Override
-//    @PreAuthorize("hasRole('ADMIN')")
+    //    @PreAuthorize("hasRole('ADMIN')")
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();

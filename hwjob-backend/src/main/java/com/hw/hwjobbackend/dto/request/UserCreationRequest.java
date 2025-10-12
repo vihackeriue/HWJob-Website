@@ -1,11 +1,13 @@
 package com.hw.hwjobbackend.dto.request;
 
 
-import com.hw.hwjobbackend.validator.phone_validator.PhoneConstraint;
+import com.hw.hwjobbackend.validator.role_validator.RoleConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.Set;
 
 
 @Getter
@@ -23,7 +25,6 @@ public class UserCreationRequest {
     @Size(min = 8, message = "PASSWORD_INVALID")
     String password;
 
-
-//    @PhoneConstraint(message = "PHONE_INVALID")
-//    String phone;
+    @RoleConstraint(message = "ROLE_NOT_EXISTED")
+    Set<String> roles;
 }
