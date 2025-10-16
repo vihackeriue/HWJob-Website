@@ -27,8 +27,12 @@ initial-app:
     password: admin
     name: Admin
 
+api:
+  api-province: https://provinces.open-api.vn/api/v2/?depth=2
+
 
 jwt:
   signerKey: qigjqDCrJgeiYotGVUsT80cPLvHqd6VNzHk3+hgI8Ujq+Ke/4YrDzYa10slbXog1dWvcaqMlsXBPSrPdOGUXBwO7W7/fSLUtuPTwgrwThn4=
-  valid-duration: 432000
-  refreshable-duration: 864000
+  #  valid-duration: 432000
+  valid-duration: 3600
+  refreshable-duration: 604800

@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.enums;
 
-public enum UserStatus {
+public enum UserStatusEnum {
     ACTIVE,
     INACTIVE
 }

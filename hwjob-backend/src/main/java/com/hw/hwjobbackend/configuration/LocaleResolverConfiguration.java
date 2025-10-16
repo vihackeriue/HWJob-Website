@@ -24,6 +24,7 @@ import java.util.Locale;
 public class LocaleResolverConfiguration extends AcceptHeaderLocaleResolver implements WebMvcConfigurer {
 
     @Override
+
     public Locale resolveLocale(HttpServletRequest request) {
 
         String language = request.getHeader("Accept-Language");

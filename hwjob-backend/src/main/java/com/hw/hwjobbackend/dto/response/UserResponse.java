@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.dto.response;
 
-import com.hw.hwjobbackend.enums.UserStatus;
+import com.hw.hwjobbackend.enums.UserStatusEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,6 +21,6 @@ public class UserResponse {
     String phone;
     String imageUrl;
     //    Region region;
-    UserStatus userStatus;
+    UserStatusEnum userStatus;
     Set<RoleResponse> roles;
 }

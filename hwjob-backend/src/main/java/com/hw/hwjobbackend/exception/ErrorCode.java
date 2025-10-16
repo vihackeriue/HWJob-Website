@@ -3,6 +3,7 @@ package com.hw.hwjobbackend.exception;
 
 import com.hw.hwjobbackend.configuration.Translator;
 import lombok.Getter;
+import org.mapstruct.Mapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
@@ -22,8 +23,9 @@ public enum ErrorCode {
     ROLE_NOT_EXISTED(1010, "error.role_not_existed", HttpStatus.NOT_FOUND),
     EMAIL_EXISTED(1011, "error.email_existed", HttpStatus.BAD_REQUEST),
     USER_EXISTED(1012, "error.user_existed", HttpStatus.BAD_REQUEST),
-    USERNAME_PASSWORD_INVALID(1013, "error.username_password_invalid", HttpStatus.BAD_REQUEST)
-    ;
+    USERNAME_PASSWORD_INVALID(1013, "error.username_password_invalid", HttpStatus.BAD_REQUEST),
+    CREATE_USER_FAIL(1014,"error.create_user_fail" , HttpStatus.BAD_REQUEST),
+    PROVINCE_NOT_EXISTED(1015,"error.province_not_existed" , HttpStatus.BAD_REQUEST),;
 
 
     private final int code;

@@ -14,20 +14,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
 
 /**
  * CustomJwtDecoder:
- *  - Tùy chỉnh bộ giải mã (decoder) cho JWT trong Spring Security.
- *  - Xác thực token bằng cách gọi AuthenticationService.introspect() để kiểm tra hợp lệ.
- *  - Nếu token hợp lệ, dùng NimbusJwtDecoder để giải mã và xác minh chữ ký HS512.
+ * - Tùy chỉnh decoder cho JWT trong Spring Security.
+ * - Xác thực token bằng cách gọi AuthenticationService.introspect() để kiểm tra hợp lệ.
+ * - Nếu token hợp lệ, dùng NimbusJwtDecoder để giải mã và xác minh chữ ký HS512.
  */
 
 @Component
 @Slf4j
-public class CustomJwtDecoder implements org.springframework.security.oauth2.jwt.JwtDecoder {
+public class CustomJwtDecoder implements JwtDecoder {
     @Value("${jwt.signerKey}")
     private String signerKey;
 

@@ -25,7 +25,7 @@ import org.springframework.web.filter.CorsFilter;
  * - Cấu hình bảo mật Spring Security cho ứng dụng.
  * - Định nghĩa các endpoint public/private.
  * - Tích hợp xác thực JWT và xử lý lỗi bảo mật.
- * - Bật CORS và vô hiệu hóa CSRF (vì dùng token thay vì session).
+ * - Bật CORS và vô hiệu hóa CSRF.
  */
 
 @Configuration
@@ -34,8 +34,13 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private final String[] PUBLIC_ENDPOINTS = {
-            "/users", "/auth/login"
+    private final String[] PUBLIC_ENDPOINTS_POST = {
+            "/users",
+            "/auth/login",
+            "/auth/refresh",
+    };
+    private final String[] PUBLIC_ENDPOINTS_GET = {
+            "/location/**"
     };
 
     @Autowired
@@ -44,8 +49,9 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request -> request
-                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                .requestMatchers(HttpMethod.GET, "/test").permitAll()
+                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST).permitAll()
+                .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
+//                .requestMatchers(HttpMethod.GET, "/test").permitAll()
                 .anyRequest().authenticated());
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(jwtConfigurer -> jwtConfigurer
