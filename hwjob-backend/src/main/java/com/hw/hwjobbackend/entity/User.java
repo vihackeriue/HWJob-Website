@@ -1,22 +1,27 @@
 package com.hw.hwjobbackend.entity;
 
 
-import com.hw.hwjobbackend.enums.UserStatus;
+import com.hw.hwjobbackend.enums.UserStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Inheritance(strategy = InheritanceType.JOINED)
+@EntityListeners(AuditingEntityListener.class)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,13 +33,28 @@ public class User {
     String phone;
     String imageUrl;
 
-    UserStatus userStatus;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+    UserStatusEnum userStatus;
+
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    Date createdAt;
+
+    @LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    Date updatedAt;
 
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> roles;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    Region region;
+    @ManyToOne(fetch = FetchType.LAZY)
+    Country country;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    Province province;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    Ward ward;
+
 }

@@ -1,87 +1,56 @@
+
 package com.hw.hwjobbackend.configuration;
 
-import com.hw.hwjobbackend.constant.PredefinedRole;
-import com.hw.hwjobbackend.entity.Role;
-import com.hw.hwjobbackend.entity.User;
-import com.hw.hwjobbackend.repository.RoleRepository;
-import com.hw.hwjobbackend.repository.UserRepository;
+import com.hw.hwjobbackend.service.InitializationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.HashSet;
-
+/**
+ * Configuration class để khởi tạo dữ liệu ban đầu khi application start
+ */
 @Configuration
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class ApplicationInitConfiguration {
 
-    PasswordEncoder passwordEncoder;
-
-    @NonFinal
-    @Value("${initial-app.admin.name}")
-    String ADMIN_NAME;
-
-    @NonFinal
-    @Value("${initial-app.admin.username}")
-    String ADMIN_USERNAME;
-
-//    @NonFinal
-//    @Value("${initial-app.admin.email}")
-//    String ADMIN_EMAIL;
-
-    @NonFinal
-    @Value("${initial-app.admin.password}")
-    String ADMIN_PASSWORD;
+    InitializationService initializationService;
 
     @Bean
     @ConditionalOnProperty(
             prefix = "spring",
             value = "datasource.driver-class-name",
             havingValue = "com.mysql.cj.jdbc.Driver")
-    ApplicationRunner applicationRunner(UserRepository userRepository,
-                                        RoleRepository roleRepository) {
+    ApplicationRunner applicationRunner() {
         return args -> {
-            if (userRepository.findByUsername(ADMIN_USERNAME).isEmpty()) {
-                roleRepository.save(
-                        Role.builder()
-                                .name(PredefinedRole.RECRUITER_ROLE)
-                                .description("Role Recruiter")
-                                .build()
-                );
-                roleRepository.save(
-                        Role.builder()
-                                .name(PredefinedRole.CANDIDATE_ROLE)
-                                .description("Role Candidate")
-                                .build()
-                );
-                Role adninRole = roleRepository.save(
-                        Role.builder()
-                                .name(PredefinedRole.ADMIN_ROLE)
-                                .description("Role Admin")
-                                .build());
-                var roles = new HashSet<Role>();
-                roles.add(adninRole);
+            long startTime = System.currentTimeMillis();
+            log.info("=== Starting application initialization ===");
 
-                User user = User.builder()
-                        .username(ADMIN_USERNAME)
-                        .name(ADMIN_NAME)
-                        .roles(roles)
-                        .password(passwordEncoder.encode(ADMIN_PASSWORD))
-                        .build();
-                userRepository.save(user);
-                log.warn("admin has been created");
+            try {
+                // Khởi tạo roles và admin user
+                initializationService.initializeRolesAndAdmin();
+
+                // Khởi tạo location data
+                initializationService.initializeLocationData();
+
+                // Khởi tạo industries
+                initializationService.initializeIndustries();
+
+                // Khởi tạo skills
+                initializationService.initializeSkills();
+
+                long duration = System.currentTimeMillis() - startTime;
+                log.info("=== Application initialization completed in {}ms ===", duration);
+            } catch (Exception e) {
+                log.error("Application initialization failed", e);
+                throw new RuntimeException("Failed to initialize application", e);
             }
-            log.info("Application initialization completed .....");
         };
     }
 }
