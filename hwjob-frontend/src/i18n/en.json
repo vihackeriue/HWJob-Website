@@ -3,7 +3,25 @@
     "welcome": "Welcome to my website",
     "language": "Language",
     "home": "Home",
-    "about": "About"
+    "about": "About",
+    "more": "Learn more",
+    "check_in": "Check-in",
+    "title": {
+      "topRecruiter": "Top Recruiters",
+      "feature": "Outstanding features",
+      "suggestedJob": "Suggested jobs for you",
+      "topJob": "Featured Recruitment News",
+      "topIndustry": "Featured industries"
+    },
+
+    "recruiter": {
+      "post": "Post",
+      "recruiting": "Recruiting"
+    },
+    "jobs": "Jobs",
+    "quantity": "Quantity",
+    "like": "Like",
+    "unlike": "Unlike"
   },
 
   "auth": {
@@ -29,10 +47,10 @@
   "user": {
     "navbar": {
       "home": "Home",
-      "jobPosts": "Job Posts",
-      "history": "History",
+      "jobPost": "Job Post",
+      "recruiter": "Recruiter",
       "profile": "Profile",
-      "settings": "Settings",
+      "setting": "Setting",
       "signOut": "Sign Out"
     },
     "banner": {
@@ -50,9 +68,33 @@
         "desc": "Work independently, earn money your way."
       }
     },
-    "resumeIntroduction": {
-      "title": "Complete your profile & add a professional CV",
-      "desc": "Fully update your personal information, skills and experience to make a strong impression on employers."
+    "feature": {
+      "resume": {
+        "title": "Complete your profile & add a professional CV",
+        "desc": "Fully update your personal information, skills and experience to make a strong impression on employers."
+      },
+      "badge": {
+        "title": "Collect badges – Upgrade your profile, assert yourself!",
+        "desc": "Badges demonstrate your ability and initiative, making your profile stand out and more attractive in the eyes of employers."
+      },
+      "streak": {
+        "title": "Check in and receive coins – The more diligent, the richer!",
+        "desc": "Just a few seconds to check in every day, you will receive bonus coins and increase your activity level. Keep up the streak to get the hard-working badge.",
+        "coin": "Learn about coins"
+      },
+      "recruitment": {
+        "title": "Employers – Post ads, find candidates easily",
+        "desc": [
+          "Post jobs easily, reach thousands of potential candidates in just minutes.",
+          "Manage job postings, profiles and recruitment processes intuitively and conveniently.",
+          "Quickly connect with the right talent, helping businesses hire the right people – at the right time."
+        ],
+        "benefit": [
+          "Đăng tin đầu tiên Premium miễn phí",
+          "Tặng gói lọc & tìm kiếm ứng viên nâng cao",
+          "Giảm 50% đăng ký xác thực tài khoản"
+        ]
+      }
     }
   }
 }
