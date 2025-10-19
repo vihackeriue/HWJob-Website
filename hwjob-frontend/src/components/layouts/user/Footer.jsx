@@ -1,5 +1,5 @@
 import React from "react";
-import { NAVBAR_USER_LINKS } from "../../../constants/user/navigation";
+import { NAVBAR_USER_LINKS } from "../../../constants/navigation";
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 export default function Footer() {
   const { t } = useTranslation();
   return (
-    <div className="bg-teal-900 text-gray-100">
+    <div className="bg-teal-900 text-gray-100 mt-10">
       <section className="container p-10">
         <div className="py-8 px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Cột 1 */}

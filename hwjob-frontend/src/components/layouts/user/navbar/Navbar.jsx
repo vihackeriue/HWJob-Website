@@ -3,8 +3,8 @@ import { GiVote } from "react-icons/gi";
 import {
   DROPDOWN_USER_LINKS,
   NAVBAR_USER_LINKS,
-} from "../../../../constants/user/navigation";
-import { Link, useLocation } from "react-router-dom";
+} from "../../../../constants/navigation";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import DarkMode from "../../../ui/DarkMode";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
@@ -14,13 +14,16 @@ import { useTranslation } from "react-i18next";
 import useAuth from "../../../../hooks/useAuth";
 import ResponsiveMenu from "./ResponsiveMenu";
 import { HiMenuAlt1, HiMenuAlt3 } from "react-icons/hi";
+import PrimaryButton from "../../../ui/button/PrimaryButton";
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const { auth, logout } = useAuth();
   const [showMenu, setShowMenu] = useState(false);
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
+  const { t } = useTranslation();
 
   return (
     <div className="relative z-10 w-full bg-teal-900 text-gray-100">
@@ -77,7 +80,9 @@ export default function Navbar() {
                   </Menu>
                 </>
               ) : (
-                <Link to="/login">Login</Link>
+                <PrimaryButton onClick={() => navigate("/login")}>
+                  {t("auth.login")}
+                </PrimaryButton>
               )}
             </div>
           </div>
@@ -104,7 +109,7 @@ export default function Navbar() {
   );
 }
 const linkClasses =
-  "text-lg font-medium  hover:text-primary py-2 hover:border-primary transition-colors duration-500 ";
+  "text-lg font-medium  hover:text-primary py-2 hover-underline transition-colors duration-500 ";
 function NavbarLink({ item }) {
   const { pathname } = useLocation();
   const { t } = useTranslation();
@@ -112,7 +117,7 @@ function NavbarLink({ item }) {
     <Link
       to={item.path}
       className={classNames(
-        pathname === item.path ? "text-primary font-semibold" : "",
+        pathname === item.path ? "text-brightOrange font-semibold" : "",
         linkClasses
       )}
     >
@@ -130,7 +135,7 @@ function MenuItemLink({ item }) {
       <Link
         to={item.path}
         className={classNames(
-          pathname === item.path ? "text-primary font-semibold" : "",
+          pathname === item.path ? "text-brightOrange font-semibold" : "",
           menuItemClasses
         )}
       >

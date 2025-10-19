@@ -1,5 +1,5 @@
 import React from "react";
-import { NAVBAR_USER_LINKS } from "../../../../constants/user/navigation";
+import { NAVBAR_USER_LINKS } from "../../../../constants/navigation";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
 
