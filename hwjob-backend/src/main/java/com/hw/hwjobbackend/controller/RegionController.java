@@ -14,8 +14,8 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/location")
-public class LocationController {
+@RequestMapping("/regions")
+public class RegionController {
 
     ProvinceService provinceService;
 

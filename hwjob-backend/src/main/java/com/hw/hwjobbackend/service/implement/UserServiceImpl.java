@@ -2,27 +2,28 @@ package com.hw.hwjobbackend.service.implement;
 
 import com.hw.hwjobbackend.constant.PredefinedRole;
 import com.hw.hwjobbackend.dto.request.UserCreationRequest;
+import com.hw.hwjobbackend.dto.request.UserUpdateRequest;
 import com.hw.hwjobbackend.dto.response.UserCreationResponse;
 import com.hw.hwjobbackend.dto.response.UserResponse;
-import com.hw.hwjobbackend.entity.Candidate;
-import com.hw.hwjobbackend.entity.Recruiter;
-import com.hw.hwjobbackend.entity.Role;
-import com.hw.hwjobbackend.entity.User;
+import com.hw.hwjobbackend.entity.*;
 import com.hw.hwjobbackend.enums.UserStatusEnum;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.mapper.UserMapper;
 import com.hw.hwjobbackend.repository.UserRepository;
 import com.hw.hwjobbackend.service.RoleService;
+import com.hw.hwjobbackend.service.RegionService;
 import com.hw.hwjobbackend.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -34,6 +35,7 @@ public class UserServiceImpl implements UserService {
     RoleService roleService;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+    RegionService regionService;
 
     @Override
     @Transactional
@@ -59,11 +61,52 @@ public class UserServiceImpl implements UserService {
         String username = context.getAuthentication().getName();
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> {
-                    return new AppException(ErrorCode.USER_NOT_EXISTED);
-                });
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         return userMapper.toUserResponse(user);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserResponse> getAllUser() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(userMapper::toUserResponse)
+                .toList();
+    }
+
+    @Override
+    public void updatePassword(User user, String newPassword) {
+        if (newPassword != null && !newPassword.isEmpty()) {
+            user.setPassword(passwordEncoder.encode(newPassword));
+        }
+    }
+
+    @Override
+    public void updateLocation(User user, UserUpdateRequest request) {
+        String countryCode = request.getCountryCode();
+        int provinceCode = request.getProvinceCode();
+        int wardCode = request.getWardCode();
+
+        if (countryCode != null && !countryCode.isEmpty()) {
+            Country country = regionService.getCountryByCode(countryCode);
+            user.setCountry(country);
+
+            if (provinceCode != 0) {
+                Province province = regionService.getProvinceByCodeAndCountry(provinceCode, country);
+                user.setProvince(province);
+
+                if (wardCode != 0) {
+                    Ward ward = regionService.getWardByCodeAndProvince(wardCode, province);
+                    user.setWard(ward);
+                } else {
+                    user.setWard(null);
+                }
+            } else {
+                user.setProvince(null);
+                user.setWard(null);
+            }
+        }
     }
 
     private void validateUserDoesNotExist(String username, String email) {
@@ -114,11 +157,7 @@ public class UserServiceImpl implements UserService {
 //                    .website("Recruiter website")
                     .build();
 
-            default -> {
-                throw new AppException(ErrorCode.CREATE_USER_FAIL);
-            }
+            default -> throw new AppException(ErrorCode.CREATE_USER_FAIL);
         };
     }
 }
-
-

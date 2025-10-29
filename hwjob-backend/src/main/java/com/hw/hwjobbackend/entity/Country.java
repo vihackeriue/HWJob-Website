@@ -19,14 +19,9 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Country {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
-    String name;
     String code;
-
+    String name;
     @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Province> provinces;
-
 }

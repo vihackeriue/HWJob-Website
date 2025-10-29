@@ -1,16 +1,15 @@
-package com.hw.hwjobbackend.dto.response;
+package com.hw.hwjobbackend.dto.request;
+
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RecruiterResponse extends UserResponse {
+public class RecruiterUpdateRequest extends UserUpdateRequest {
     String description;
     String website;
     String specificAddress;

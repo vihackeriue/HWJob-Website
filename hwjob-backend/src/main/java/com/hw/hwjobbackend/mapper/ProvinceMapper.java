@@ -6,6 +6,7 @@ import com.hw.hwjobbackend.dto.response.ProvinceResponse;
 import com.hw.hwjobbackend.entity.Province;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring", uses = {WardMapper.class})
 public interface ProvinceMapper {
@@ -14,10 +15,9 @@ public interface ProvinceMapper {
     @Mapping(target = "wards", ignore = true)
     Province toProvince(ProvinceApiResponse response);
 
-    //    @Mapping(target = "countryId", source = "country.id")
-//    @Mapping(target = "countryName", source = "country.name")
+    @Named("toProvinceResponseWithWards")
     ProvinceResponse toProvinceResponse(Province province);
-    
-    @Mapping(target = "wards", ignore = true)
+
+    @Named("toProvinceResponseWithoutWards")
     ProvinceResponse toProvinceResponseWithoutWard(Province province);
 }

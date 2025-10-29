@@ -3,6 +3,8 @@ package com.hw.hwjobbackend.service.implement;
 import com.hw.hwjobbackend.dto.api_response.WardApiResponse;
 import com.hw.hwjobbackend.entity.Province;
 import com.hw.hwjobbackend.entity.Ward;
+import com.hw.hwjobbackend.exception.AppException;
+import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.mapper.WardMapper;
 import com.hw.hwjobbackend.repository.WardRepository;
 import com.hw.hwjobbackend.service.WardService;
@@ -30,5 +32,11 @@ public class WardServiceImpl implements WardService {
 
         ward = wardRepository.save(ward);
         log.debug("Created ward: {} (code: {})", ward.getName(), ward.getCode());
+    }
+
+    @Override
+    public Ward getWard(int code) {
+        return wardRepository.findById(code)
+                .orElseThrow(() -> new AppException(ErrorCode.WARD_NOT_EXISTED));
     }
 }

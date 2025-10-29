@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class WardApiResponse {
     String name;
-    Integer code;
+    int code;
     @JsonProperty("codename")
     String codeName;
     @JsonProperty("division_type")

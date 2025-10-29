@@ -8,15 +8,13 @@ public interface InitializationService {
 
     void initializeRolesAndAdmin();
 
-    void initializeLocationData();
+    void initializeRegionData();
 
-    Set<Role> createPredefinedRoles();
+    void initializePredefinedRoles();
 
     void createAdminUser(Set<Role> roles);
 
     void initializeIndustries();
 
     void initializeSkills();
-
-
 }

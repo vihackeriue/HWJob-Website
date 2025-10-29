@@ -55,4 +55,9 @@ public class ProvinceServiceImpl implements ProvinceService {
         return provinceMapper.toProvinceResponse(province);
     }
 
+    @Override
+    public Province getProvince(int code) {
+        return provinceRepository.findById(code)
+                .orElseThrow(() -> new AppException(ErrorCode.PROVINCE_NOT_EXISTED));
+    }
 }

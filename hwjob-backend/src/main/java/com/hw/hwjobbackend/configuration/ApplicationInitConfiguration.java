@@ -36,8 +36,8 @@ public class ApplicationInitConfiguration {
                 // Khởi tạo roles và admin user
                 initializationService.initializeRolesAndAdmin();
 
-                // Khởi tạo location data
-                initializationService.initializeLocationData();
+                // Khởi tạo region data
+                initializationService.initializeRegionData();
 
                 // Khởi tạo industries
                 initializationService.initializeIndustries();
