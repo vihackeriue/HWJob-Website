@@ -37,10 +37,13 @@ public class SecurityConfiguration {
     private final String[] PUBLIC_ENDPOINTS_POST = {
             "/users",
             "/auth/login",
-            "/auth/refresh"
+            "/auth/refresh",
+
     };
     private final String[] PUBLIC_ENDPOINTS_GET = {
-            "/regions/**"
+            "/regions/**",
+            "/skills",
+            "skills/**",
     };
 
     @Autowired
@@ -50,7 +53,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request -> request
                 .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST).permitAll()
-                .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll() // Thêm các endpoint GET công khai khác nếu cần
+                .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
 //                .requestMatchers(HttpMethod.GET, "/test").permitAll()
                 .anyRequest().authenticated());
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2

@@ -29,6 +29,8 @@ public enum ErrorCode {
     SKILL_NOT_EXISTED(1016, "error.skill_not_existed", HttpStatus.BAD_REQUEST),
     COUNTRY_NOT_EXISTED(1017, "error.country_not_existed", HttpStatus.BAD_REQUEST),
     WARD_NOT_EXISTED(1018, "error.ward_not_existed", HttpStatus.BAD_REQUEST),
+    SKILL_NOT_BLANK(1019, "error.skill_not_blank", HttpStatus.BAD_REQUEST),
+    Skill_EXISTED(1020, "error.skill_existed", HttpStatus.BAD_REQUEST)
     ;
 
 

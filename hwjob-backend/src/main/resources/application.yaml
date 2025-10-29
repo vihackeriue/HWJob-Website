@@ -23,7 +23,7 @@ spring:
 initial-app:
   admin:
     username: admin
-    email: admin@email.com
+#    email: admin@email.com
     password: admin
     name: Admin
 
