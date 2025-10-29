@@ -1,7 +1,6 @@
 package com.hw.hwjobbackend.controller;
 
 import com.hw.hwjobbackend.dto.request.AuthenticationRequest;
-import com.hw.hwjobbackend.dto.request.IntrospectRequest;
 import com.hw.hwjobbackend.dto.response.ApiResponse;
 import com.hw.hwjobbackend.dto.response.AuthenticationResponse;
 import com.hw.hwjobbackend.dto.response.IntrospectResponse;
@@ -11,7 +10,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
