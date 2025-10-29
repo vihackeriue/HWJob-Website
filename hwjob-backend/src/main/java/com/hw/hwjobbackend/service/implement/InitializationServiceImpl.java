@@ -9,7 +9,7 @@ import com.hw.hwjobbackend.enums.IndustryEnum;
 import com.hw.hwjobbackend.enums.SkillEnum;
 import com.hw.hwjobbackend.repository.*;
 import com.hw.hwjobbackend.service.InitializationService;
-import com.hw.hwjobbackend.service.LocationService;
+import com.hw.hwjobbackend.service.RegionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -34,7 +34,7 @@ public class InitializationServiceImpl implements InitializationService {
     CountryRepository countryRepository;
     IndustryRepository industryRepository;
     SkillRepository skillRepository;
-    LocationService locationService;
+    RegionService locationService;
     PasswordEncoder passwordEncoder;
 
     @NonFinal
@@ -53,34 +53,36 @@ public class InitializationServiceImpl implements InitializationService {
     @Transactional
     public void initializeRolesAndAdmin() {
         if (userRepository.existsByUsername(ADMIN_USERNAME)) {
+            log.info("Admin user already exists. Skipping initialization.");
             return;
         }
-        Set<Role> roles = createPredefinedRoles();
-        createAdminUser(roles);
-        log.info("Roles and admin user initialized successfully");
+        initializePredefinedRoles();
+        Role adminRole = roleRepository.findByName(PredefinedRole.ADMIN_ROLE)
+                .orElseThrow(() -> new RuntimeException("Admin role not found after initialization."));
+
+        createAdminUser(Set.of(adminRole));
+        log.info("Predefined roles and admin user initialized successfully.");
     }
 
     @Override
     @Transactional
-    public void initializeLocationData() {
+    public void initializeRegionData() {
         if (countryRepository.count() > 0) {
             return;
         }
-        locationService.initializeLocationData();
+        locationService.initializeRegionData();
     }
 
     @Override
     @Transactional
-    public Set<Role> createPredefinedRoles() {
+    public void initializePredefinedRoles() {
         Map<String, String> roleMappings = Map.of(
                 PredefinedRole.RECRUITER_ROLE, "Role Recruiter",
                 PredefinedRole.CANDIDATE_ROLE, "Role Candidate",
                 PredefinedRole.ADMIN_ROLE, "Role Admin"
         );
 
-        return roleMappings.entrySet().stream()
-                .map(entry -> createRoleIfNotExists(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toSet());
+        roleMappings.forEach(this::createRoleIfNotExists);
     }
 
     @Override
@@ -128,8 +130,8 @@ public class InitializationServiceImpl implements InitializationService {
         skillRepository.saveAll(skills);
     }
 
-    private Role createRoleIfNotExists(String name, String description) {
-        return roleRepository.findByName(name)
+    private void createRoleIfNotExists(String name, String description) {
+        roleRepository.findByName(name)
                 .orElseGet(() -> {
                     Role role = Role.builder()
                             .name(name)

@@ -1,25 +1,24 @@
-package com.hw.hwjobbackend.dto.response;
+package com.hw.hwjobbackend.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
 import java.util.Set;
 
 @Getter
 @Setter
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CandidateResponse extends UserResponse {
+public class CandidateUpdateRequest extends UserUpdateRequest {
     LocalDate dob;
     String summary;
     String gender;
     String address;
     String education;
     BigDecimal expectSalary;
-    Set<SkillResponse> skills;
+    Set<Long> skillIds;
 }

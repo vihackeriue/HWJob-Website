@@ -7,9 +7,7 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CountryResponse {
-    String code;
+public class SkillResponse {
     String name;
 }

@@ -16,7 +16,7 @@ import java.util.List;
 public class Province {
 
     @Id
-    Integer code;
+    int code;
 
     String name;
     String codeName;

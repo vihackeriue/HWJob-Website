@@ -9,6 +9,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public class Candidate extends User {
     String gender;
     String address;
     String education;
-    Double expectSalary;
+    BigDecimal expectSalary;
 
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Skill> skills;

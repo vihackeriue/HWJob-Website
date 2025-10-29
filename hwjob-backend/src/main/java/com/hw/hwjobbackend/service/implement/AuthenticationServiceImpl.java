@@ -1,8 +1,6 @@
 package com.hw.hwjobbackend.service.implement;
 
-import com.hw.hwjobbackend.configuration.Translator;
 import com.hw.hwjobbackend.dto.request.AuthenticationRequest;
-import com.hw.hwjobbackend.dto.request.IntrospectRequest;
 import com.hw.hwjobbackend.dto.response.AuthenticationResponse;
 import com.hw.hwjobbackend.dto.response.IntrospectResponse;
 import com.hw.hwjobbackend.entity.InvalidateToken;
@@ -83,15 +81,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public void logout(String token) {
         try {
-            var signToken = verifyToken(token, true);
-            String jit = String.valueOf(signToken.getJWTClaimsSet().getJWTID());
-            Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            String jit = signedJWT.getJWTClaimsSet().getJWTID();
+            Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
             InvalidateToken invalidateToken = InvalidateToken.builder()
                     .id(jit)
                     .expiredTime(expiryTime.getTime())
                     .build();
             redisTokenRepository.save(invalidateToken);
-        } catch (AppException | ParseException | JOSEException exception) {
+        } catch (ParseException exception) {
             log.info("Token already expired");
         }
     }
@@ -117,20 +115,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
-        Date expiryTime = (isRefresh)
-                ? new Date(signedJWT
-                .getJWTClaimsSet()
-                .getIssueTime()
-                .toInstant()
-                .plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS)
-                .toEpochMilli())
-                : signedJWT.getJWTClaimsSet().getExpirationTime();
 
-        var verified = signedJWT.verify(verifier);
-
-        if (!(verified && expiryTime.after(new Date())))
+        boolean isSignatureValid = signedJWT.verify(verifier);
+        if (!isSignatureValid) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
 
+        Date expiryTime;
+        if (isRefresh) {
+            expiryTime = new Date(signedJWT.getJWTClaimsSet().getIssueTime().toInstant()
+                    .plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS).toEpochMilli());
+        } else {
+            expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+        }
+
+        if (expiryTime.before(new Date())) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
         if (redisTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
             throw new AppException(ErrorCode.UNAUTHENTICATED);
 

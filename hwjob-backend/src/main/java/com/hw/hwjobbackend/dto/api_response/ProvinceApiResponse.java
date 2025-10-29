@@ -15,7 +15,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProvinceApiResponse {
     String name;
-    Integer code;
+    int code;
     @JsonProperty("codename")
     String codeName;
     @JsonProperty("division_type")

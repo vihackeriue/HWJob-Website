@@ -1,8 +1,8 @@
 package com.hw.hwjobbackend.service.implement;
 
-import com.hw.hwjobbackend.dto.response.CountryResponse;
 import com.hw.hwjobbackend.entity.Country;
-import com.hw.hwjobbackend.mapper.CountryMapper;
+import com.hw.hwjobbackend.exception.AppException;
+import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.repository.CountryRepository;
 import com.hw.hwjobbackend.service.CountryService;
 import lombok.AccessLevel;
@@ -39,7 +39,7 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public Country getCountryByCode(String code) {
         return countryRepository.findByCode(code)
-                .orElseThrow(() -> new RuntimeException("Country not found with code: " + code));
+                .orElseThrow(() -> new AppException(ErrorCode.COUNTRY_NOT_EXISTED));
     }
 
 }
