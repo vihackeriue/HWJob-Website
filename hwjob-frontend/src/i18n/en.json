@@ -44,6 +44,18 @@
     "signUp": "Sign Up",
     "login": "Login"
   },
+  "admin": {
+    "management": "Management",
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "industry": "Industry",
+      "jobType": "Job type",
+      "level": "Level",
+      "area": "Area",
+      "skill": "Skill",
+      "badge": "Badge"
+    }
+  },
   "user": {
     "navbar": {
       "home": "Home",

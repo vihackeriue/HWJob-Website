@@ -2,13 +2,14 @@ import React from "react";
 
 import classNames from "classnames";
 import { Link, useLocation } from "react-router-dom";
-import { HiOutlineLogout } from "react-icons/hi";
+import { HiOutlineLogout, HiOutlineViewGrid } from "react-icons/hi";
 import { FcBullish } from "react-icons/fc";
 import {
   ADMIN_SIDEBAR_FOOTER_LINKS,
   ADMIN_SIDEBAR_LINKS,
 } from "../../../constants/navigation";
 import MenuItemLink from "../../ui/MenuItemLink";
+import { tGlobal } from "../../../utils/translator";
 const linkClasses =
   "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 rounded-sm text-base";
 
@@ -20,6 +21,21 @@ function SideBar() {
         <span className="text-neutral-100 font-bold text-lg">HWJOB</span>
       </div>
       <div className="flex-1 py-8 flex flex-col gap-0.5">
+        <MenuItemLink
+          key={"dashboard"}
+          item={{
+            key: "dashboard",
+            label: "admin.sidebar.dashboard",
+            path: "/admin",
+            icon: <HiOutlineViewGrid />,
+          }}
+          baseClass="flex items-center text-lg gap-3 cursor-pointer rounded-lg p-2 transition-all duration-200 text-gray-400"
+          activeClass="bg-brightOrange text-white"
+          noActiveClass="hover:bg-gray-500/50 dark:hover:bg-gray-600"
+        />
+        <h2 className="border-t border-neutral-700 mt-2 text-gray-100 py-2">
+          {tGlobal("admin.management")}
+        </h2>
         {ADMIN_SIDEBAR_LINKS.map((item) => (
           <MenuItemLink
             key={item.key}
