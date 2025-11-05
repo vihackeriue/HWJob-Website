@@ -1,7 +1,7 @@
 
 package com.hw.hwjobbackend.configuration;
 
-import com.hw.hwjobbackend.service.InitializationService;
+import com.hw.hwjobbackend.service.initialization.InitializationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
