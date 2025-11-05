@@ -9,6 +9,7 @@ import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.repository.RedisTokenRepository;
 import com.hw.hwjobbackend.repository.UserRepository;
+import com.hw.hwjobbackend.service.authentication.CustomUserDetails;
 import com.hw.hwjobbackend.service.authentication.AuthenticationService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -21,8 +22,10 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -53,6 +56,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     RedisTokenRepository redisTokenRepository;
     UserRepository userRepository;
+    AuthenticationManager authenticationManager;
 
 
     @Override
@@ -69,13 +73,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse login(AuthenticationRequest request) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        var user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_PASSWORD_INVALID));
-        boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
-        if (!authenticated) throw new AppException(ErrorCode.USERNAME_PASSWORD_INVALID);
-        var token = generateToken(user);
-        return AuthenticationResponse.builder().token(token).authenticated(true).build();
+        try {
+            String username = request.getUsername() == null ? null : request.getUsername().trim();
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, request.getPassword())
+            );
+            Object principal = authentication.getPrincipal();
+            User user;
+            if (principal instanceof CustomUserDetails(User u)) {
+                user = u;
+            } else {
+                user = userRepository.findByUsername(username)
+                        .orElseThrow(() -> new AppException(ErrorCode.USERNAME_PASSWORD_INVALID));
+            }
+            var token = generateToken(user);
+            return AuthenticationResponse.builder().token(token).authenticated(true).build();
+        } catch (BadCredentialsException ex) {
+            throw new AppException(ErrorCode.USERNAME_PASSWORD_INVALID);
+        }
     }
 
     @Override

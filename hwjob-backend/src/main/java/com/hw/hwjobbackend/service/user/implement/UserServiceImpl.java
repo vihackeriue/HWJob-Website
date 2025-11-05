@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.service.user.implement;
 
-import com.hw.hwjobbackend.constant.PredefinedRole;
+import com.hw.hwjobbackend.enums.RoleEnum;
 import com.hw.hwjobbackend.dto.request.UserCreationRequest;
 import com.hw.hwjobbackend.dto.request.UserUpdateRequest;
 import com.hw.hwjobbackend.dto.response.UserCreationResponse;
@@ -120,15 +120,15 @@ public class UserServiceImpl implements UserService {
 
     private String determineUserType(Set<Role> roles) {
         boolean hasCandidate = roles.stream()
-                .anyMatch(r -> PredefinedRole.CANDIDATE_ROLE.equals(r.getName()));
+                .anyMatch(r -> RoleEnum.CANDIDATE.name().equalsIgnoreCase(r.getName()));
         boolean hasRecruiter = roles.stream()
-                .anyMatch(r -> PredefinedRole.RECRUITER_ROLE.equals(r.getName()));
+                .anyMatch(r -> RoleEnum.RECRUITER.name().equalsIgnoreCase(r.getName()));
 
         if (hasCandidate && hasRecruiter) {
             throw new AppException(ErrorCode.ROLE_NOT_EXISTED);
         }
-        if (hasCandidate) return PredefinedRole.CANDIDATE_ROLE;
-        if (hasRecruiter) return PredefinedRole.RECRUITER_ROLE;
+        if (hasCandidate) return RoleEnum.CANDIDATE.name();
+        if (hasRecruiter) return RoleEnum.RECRUITER.name();
 
         throw new AppException(ErrorCode.ROLE_NOT_EXISTED);
     }
