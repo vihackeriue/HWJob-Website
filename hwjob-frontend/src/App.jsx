@@ -15,6 +15,7 @@ import Overview from "./pages/user/profile/Overview";
 import PersonalInfo from "./pages/user/profile/PersonalInfo";
 import EditSummary from "./pages/user/profile/EditSummary";
 import SecurityInfo from "./pages/user/profile/SecurityInfo";
+import IndustryManagement from "./pages/admin/IndustryManagement";
 
 const ROLES = {
   admin: "ROLE_ADMIN",
@@ -39,6 +40,7 @@ function App() {
       </Route>
 
       <Route path="admin" element={<AdminLayout />}>
+        <Route path="industry" element={<IndustryManagement />} />
         <Route index element={<Dashboard />} />
       </Route>
 

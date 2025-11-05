@@ -41,7 +41,17 @@
     "login": "Đăng nhập"
   },
 
-  "admin": {},
+  "admin": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "industry": "Ngành nghề",
+      "jobType": "Loại công việc",
+      "level": "Cấp bậc",
+      "area": "Khu vực",
+      "skill": "Kỹ năng",
+      "badge": "Huy hiệu"
+    }
+  },
   "user": {
     "navbar": {
       "home": "Trang chủ",

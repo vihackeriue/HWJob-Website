@@ -67,27 +67,39 @@ export const PROFILE_USER_MENUS = [
 
 export const ADMIN_SIDEBAR_LINKS = [
   {
-    key: "home",
-    label: "Trang chủ",
-    path: "/admin",
-    icon: <HiOutlineViewGrid />,
-  },
-  {
-    key: "pollList",
-    label: "Cuộc bình chọn",
-    path: "/admin/poll-list",
+    key: "industry",
+    label: "admin.sidebar.industry",
+    path: "/admin/industry",
     icon: <HiOutlineCube />,
   },
   {
-    key: "category",
-    label: "Danh mục",
-    path: "/admin/category-list",
+    key: "jobType",
+    label: "admin.sidebar.jobType",
+    path: "/admin/job-type",
     icon: <HiOutlineCube />,
   },
   {
-    key: "userList",
-    label: "Quản lý người dùng",
-    path: "/admin/user-list",
+    key: "level",
+    label: "admin.sidebar.level",
+    path: "/admin/level",
+    icon: <HiOutlineCube />,
+  },
+  {
+    key: "area",
+    label: "admin.sidebar.area",
+    path: "/admin/area",
+    icon: <HiOutlineCube />,
+  },
+  {
+    key: "skill",
+    label: "admin.sidebar.skill",
+    path: "/admin/skill",
+    icon: <HiOutlineCube />,
+  },
+  {
+    key: "badge",
+    label: "admin.sidebar.badge",
+    path: "/admin/badge",
     icon: <HiOutlineCube />,
   },
 ];
