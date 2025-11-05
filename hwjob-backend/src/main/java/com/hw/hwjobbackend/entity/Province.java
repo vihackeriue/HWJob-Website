@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
-@Entity
+@Entity(name = "provinces")
 @Getter
 @Setter
 @Builder

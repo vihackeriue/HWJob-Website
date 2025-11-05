@@ -11,7 +11,7 @@ import java.util.List;
 //mappedBy: Chỉ định rằng quan hệ được quản lý bởi trường ở phía "many" (phía con)
 //mappedBy = "country" trong Country.provinces: JPA sẽ sử dụng trường country trong entity Province để quản lý quan hệ
 //mappedBy = "province" trong Province.wards: JPA sẽ sử dụng trường province trong entity Ward để quản lý quan hệ
-@Entity
+@Entity(name = "countries")
 @Getter
 @Setter
 @Builder

@@ -8,7 +8,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Entity
+@Entity(name = "wards")
 @Getter
 @Setter
 @Builder

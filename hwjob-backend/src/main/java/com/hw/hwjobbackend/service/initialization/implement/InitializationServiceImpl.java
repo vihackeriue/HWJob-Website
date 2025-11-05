@@ -1,12 +1,13 @@
 package com.hw.hwjobbackend.service.initialization.implement;
 
-import com.hw.hwjobbackend.constant.PredefinedRole;
+import com.hw.hwjobbackend.enums.RoleEnum;
 import com.hw.hwjobbackend.entity.Industry;
 import com.hw.hwjobbackend.entity.Role;
 import com.hw.hwjobbackend.entity.Skill;
 import com.hw.hwjobbackend.entity.User;
 import com.hw.hwjobbackend.enums.IndustryEnum;
 import com.hw.hwjobbackend.enums.SkillEnum;
+import com.hw.hwjobbackend.enums.UserStatusEnum;
 import com.hw.hwjobbackend.repository.*;
 import com.hw.hwjobbackend.service.initialization.InitializationService;
 import com.hw.hwjobbackend.service.region.RegionService;
@@ -57,7 +58,7 @@ public class InitializationServiceImpl implements InitializationService {
             return;
         }
         initializePredefinedRoles();
-        Role adminRole = roleRepository.findByName(PredefinedRole.ADMIN_ROLE)
+        Role adminRole = roleRepository.findByName(RoleEnum.ADMIN.name())
                 .orElseThrow(() -> new RuntimeException("Admin role not found after initialization."));
 
         createAdminUser(Set.of(adminRole));
@@ -77,9 +78,9 @@ public class InitializationServiceImpl implements InitializationService {
     @Transactional
     public void initializePredefinedRoles() {
         Map<String, String> roleMappings = Map.of(
-                PredefinedRole.RECRUITER_ROLE, "Role Recruiter",
-                PredefinedRole.CANDIDATE_ROLE, "Role Candidate",
-                PredefinedRole.ADMIN_ROLE, "Role Admin"
+                RoleEnum.RECRUITER.name(), "Role Recruiter",
+                RoleEnum.CANDIDATE.name(), "Role Candidate",
+                RoleEnum.ADMIN.name(), "Role Admin"
         );
 
         roleMappings.forEach(this::createRoleIfNotExists);
@@ -91,6 +92,7 @@ public class InitializationServiceImpl implements InitializationService {
         User adminUser = User.builder()
                 .username(ADMIN_USERNAME)
                 .name(ADMIN_NAME)
+                .userStatus(UserStatusEnum.ACTIVE)
                 .roles(roles)
                 .password(passwordEncoder.encode(ADMIN_PASSWORD))
                 .build();

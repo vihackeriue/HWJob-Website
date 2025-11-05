@@ -7,7 +7,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-@Entity
+@Entity(name = "recruiters")
 @Getter
 @Setter
 @SuperBuilder

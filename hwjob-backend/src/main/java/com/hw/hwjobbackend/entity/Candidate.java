@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
-@Entity
+@Entity(name = "candidates")
 @Getter
 @Setter
 @SuperBuilder

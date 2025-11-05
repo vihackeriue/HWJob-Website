@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.util.Date;
 import java.util.Set;
 
-@Entity
+@Entity(name = "users")
 @Getter
 @Setter
 @SuperBuilder
@@ -56,5 +56,6 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY)
     Ward ward;
+
 
 }
