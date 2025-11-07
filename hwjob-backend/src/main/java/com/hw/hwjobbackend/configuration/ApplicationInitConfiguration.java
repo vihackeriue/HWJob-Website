@@ -45,6 +45,10 @@ public class ApplicationInitConfiguration {
                 // Khởi tạo skills
                 initializationService.initializeSkills();
 
+                // Khởi tạo job types
+                initializationService.initializeJobTypes();
+
+
                 long duration = System.currentTimeMillis() - startTime;
                 log.info("=== Application initialization completed in {}ms ===", duration);
             } catch (Exception e) {

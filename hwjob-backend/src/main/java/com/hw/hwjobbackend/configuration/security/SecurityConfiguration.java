@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.configuration;
+package com.hw.hwjobbackend.configuration.security;
 
 
 import com.hw.hwjobbackend.service.authentication.CustomUserDetailsService;
@@ -52,10 +52,12 @@ public class SecurityConfiguration {
             "/skills/**",
             "/levels",
             "/levels/**",
+            "/job-types",
+            "/job-types/**"
     };
 
-    @Autowired
-    private CustomJwtDecoder customJwtDecoder;
+    //    @Autowired
+    private final CustomJwtDecoder customJwtDecoder;
 
     private final CustomUserDetailsService userDetailsService;
 
@@ -77,9 +79,6 @@ public class SecurityConfiguration {
         return httpSecurity.build();
     }
 
-    /**
-     * DaoAuthenticationProvider wired with our CustomUserDetailsService
-     */
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -92,6 +91,7 @@ public class SecurityConfiguration {
     public AuthenticationManager authenticationManager(DaoAuthenticationProvider daoAuthenticationProvider) {
         return new ProviderManager(List.of(daoAuthenticationProvider));
     }
+
 
     /**
      * Cấu hình CORS cho phép tất cả domain, phương thức và header.

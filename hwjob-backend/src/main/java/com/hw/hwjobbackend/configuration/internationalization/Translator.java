@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.configuration;
+package com.hw.hwjobbackend.configuration.internationalization;
 
 
 import lombok.extern.slf4j.Slf4j;

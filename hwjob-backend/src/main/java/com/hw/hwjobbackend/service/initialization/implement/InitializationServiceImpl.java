@@ -1,13 +1,11 @@
 package com.hw.hwjobbackend.service.initialization.implement;
 
-import com.hw.hwjobbackend.enums.RoleEnum;
+import com.hw.hwjobbackend.entity.JobType;
+import com.hw.hwjobbackend.enums.*;
 import com.hw.hwjobbackend.entity.Industry;
 import com.hw.hwjobbackend.entity.Role;
 import com.hw.hwjobbackend.entity.Skill;
 import com.hw.hwjobbackend.entity.User;
-import com.hw.hwjobbackend.enums.IndustryEnum;
-import com.hw.hwjobbackend.enums.SkillEnum;
-import com.hw.hwjobbackend.enums.UserStatusEnum;
 import com.hw.hwjobbackend.repository.*;
 import com.hw.hwjobbackend.service.initialization.InitializationService;
 import com.hw.hwjobbackend.service.region.RegionService;
@@ -21,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,7 +33,9 @@ public class InitializationServiceImpl implements InitializationService {
     RoleRepository roleRepository;
     CountryRepository countryRepository;
     IndustryRepository industryRepository;
+    JobTypeRepository jobTypeRepository;
     SkillRepository skillRepository;
+
     RegionService locationService;
     PasswordEncoder passwordEncoder;
 
@@ -130,6 +131,20 @@ public class InitializationServiceImpl implements InitializationService {
                 .collect(Collectors.toList());
 
         skillRepository.saveAll(skills);
+    }
+
+    @Override
+    public void initializeJobTypes() {
+        if (jobTypeRepository.count() > 0) {
+            return;
+        }
+        List<JobType> jobTypes = Arrays.stream(JobTypeEnum.values())
+                .map(j -> JobType.builder()
+                        .name(j.getName())
+                        .code(j.name())
+                        .build())
+                .collect(Collectors.toList());
+        jobTypeRepository.saveAll(jobTypes);
     }
 
     private void createRoleIfNotExists(String name, String description) {
