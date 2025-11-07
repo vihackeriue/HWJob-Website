@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,31 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.StringJoiner;
 import java.util.UUID;
+
+//        ┌─────────────────────────────────────────────────────────────┐
+//        │                         LOGIN FLOW                          │
+//        └─────────────────────────────────────────────────────────────┘
+//        1 User gửi request login với username + password
+//
+//        2  Spring Security gọi CustomUserDetailsService.loadUserByUsername()
+//
+//        3️  Tìm user trong DB qua UserRepository.findByUsername()
+//
+//                            ┌─────────────────────────┐
+//                            │  User tồn tại không?    │
+//                            └─────────────────────────┘
+//                           Không                    Có
+//
+//                          Throw                  4️  Tạo CustomUserDetails(user)
+//                UsernameNotFoundException
+//                                                 5️  Spring Security verify password
+//
+//                                                 6️  CustomUserDetails.getAuthorities()
+//                                                      lấy quyền hạn (roles)
+//
+//                                                 7️  Tạo JWT token với roles
+//
+//                                                 8️  Return token cho client
 
 @Service
 @RequiredArgsConstructor
@@ -74,24 +100,25 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public AuthenticationResponse login(AuthenticationRequest request) {
         try {
-            String username = request.getUsername() == null ? null : request.getUsername().trim();
+            String username = request.getUsername() == null ? null : request.getUsername().trim(); // Xóa khoảng trắng ở đầu và cuối
+            String password = request.getPassword();
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, request.getPassword())
+                    new UsernamePasswordAuthenticationToken(username, password)
             );
             Object principal = authentication.getPrincipal();
             User user;
             if (principal instanceof CustomUserDetails(User u)) {
                 user = u;
             } else {
-                user = userRepository.findByUsername(username)
-                        .orElseThrow(() -> new AppException(ErrorCode.USERNAME_PASSWORD_INVALID));
+                throw new AppException(ErrorCode.USERNAME_PASSWORD_INVALID);
             }
             var token = generateToken(user);
             return AuthenticationResponse.builder().token(token).authenticated(true).build();
-        } catch (BadCredentialsException ex) {
+        } catch (BadCredentialsException | DisabledException ex) {
             throw new AppException(ErrorCode.USERNAME_PASSWORD_INVALID);
         }
     }
+
 
     @Override
     public void logout(String token) {
