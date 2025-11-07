@@ -58,6 +58,7 @@ public class GlobalExceptionHandler {
                         .build());
     }
 
+
     // Xử lý lỗi validation từ @Valid
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     ResponseEntity<ApiResponse<?>> handlingValidation(MethodArgumentNotValidException exception) {
@@ -89,7 +90,6 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest().body(apiResponse);
     }
-
 
 
     private String mapAttribute(String message, Map<String, Object> attributes) {

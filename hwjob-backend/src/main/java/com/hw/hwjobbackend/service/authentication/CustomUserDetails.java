@@ -69,4 +69,5 @@ public record CustomUserDetails(User user) implements UserDetails {
         return user.getUserStatus() == UserStatusEnum.ACTIVE;
     }
 
+
 }
