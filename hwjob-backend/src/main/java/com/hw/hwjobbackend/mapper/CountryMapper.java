@@ -1,9 +1,8 @@
 package com.hw.hwjobbackend.mapper;
 
-import com.hw.hwjobbackend.dto.response.CountryResponse;
+import com.hw.hwjobbackend.dto.response.region.CountryResponse;
 import com.hw.hwjobbackend.entity.Country;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring", uses = {ProvinceMapper.class})

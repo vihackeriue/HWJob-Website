@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.dto.request;
+package com.hw.hwjobbackend.dto.request.user;
 
 import com.hw.hwjobbackend.validator.phone_validator.PhoneConstraint;
 import jakarta.validation.constraints.Email;

@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.dto.response;
+package com.hw.hwjobbackend.dto.response.user;
 
 import lombok.AccessLevel;
 import lombok.Builder;

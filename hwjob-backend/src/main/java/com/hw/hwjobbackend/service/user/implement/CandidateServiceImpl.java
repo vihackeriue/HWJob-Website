@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.service.user.implement;
 
-import com.hw.hwjobbackend.dto.request.CandidateUpdateRequest;
-import com.hw.hwjobbackend.dto.response.CandidateResponse;
+import com.hw.hwjobbackend.dto.request.user.CandidateUpdateRequest;
+import com.hw.hwjobbackend.dto.response.user.CandidateResponse;
 import com.hw.hwjobbackend.entity.Skill;
 import com.hw.hwjobbackend.entity.Candidate;
 import com.hw.hwjobbackend.exception.AppException;

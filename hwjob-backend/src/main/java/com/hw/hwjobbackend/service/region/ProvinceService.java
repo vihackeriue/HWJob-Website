@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.service.region;
 
 import com.hw.hwjobbackend.dto.api_response.ProvinceApiResponse;
-import com.hw.hwjobbackend.dto.response.ProvinceResponse;
+import com.hw.hwjobbackend.dto.response.region.ProvinceResponse;
 import com.hw.hwjobbackend.entity.Country;
 import com.hw.hwjobbackend.entity.Province;
 

@@ -1,9 +1,9 @@
 package com.hw.hwjobbackend.controller;
 
 
-import com.hw.hwjobbackend.dto.request.SkillRequest;
+import com.hw.hwjobbackend.dto.request.skill.SkillRequest;
 import com.hw.hwjobbackend.dto.response.ApiResponse;
-import com.hw.hwjobbackend.dto.response.SkillResponse;
+import com.hw.hwjobbackend.dto.response.skill.SkillResponse;
 import com.hw.hwjobbackend.service.skill.SkillService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,9 @@
-package com.hw.hwjobbackend.dto.response;
+package com.hw.hwjobbackend.dto.response.user;
 
+import com.hw.hwjobbackend.dto.response.role.RoleResponse;
+import com.hw.hwjobbackend.dto.response.region.CountryResponse;
+import com.hw.hwjobbackend.dto.response.region.ProvinceResponse;
+import com.hw.hwjobbackend.dto.response.region.WardResponse;
 import com.hw.hwjobbackend.enums.UserStatusEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

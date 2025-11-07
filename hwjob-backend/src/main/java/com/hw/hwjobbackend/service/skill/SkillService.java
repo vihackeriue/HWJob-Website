@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.service.skill;
 
-import com.hw.hwjobbackend.dto.request.SkillRequest;
-import com.hw.hwjobbackend.dto.response.SkillResponse;
+import com.hw.hwjobbackend.dto.request.skill.SkillRequest;
+import com.hw.hwjobbackend.dto.response.skill.SkillResponse;
 
 import java.util.List;
 

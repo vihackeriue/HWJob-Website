@@ -1,10 +1,10 @@
 package com.hw.hwjobbackend.service.user;
 
 
-import com.hw.hwjobbackend.dto.request.UserCreationRequest;
-import com.hw.hwjobbackend.dto.request.UserUpdateRequest;
-import com.hw.hwjobbackend.dto.response.UserCreationResponse;
-import com.hw.hwjobbackend.dto.response.UserResponse;
+import com.hw.hwjobbackend.dto.request.user.UserCreationRequest;
+import com.hw.hwjobbackend.dto.request.user.UserUpdateRequest;
+import com.hw.hwjobbackend.dto.response.user.UserCreationResponse;
+import com.hw.hwjobbackend.dto.response.user.UserResponse;
 import com.hw.hwjobbackend.entity.User;
 
 import java.util.List;

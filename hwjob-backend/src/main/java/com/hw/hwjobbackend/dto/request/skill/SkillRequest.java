@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.dto.request;
+package com.hw.hwjobbackend.dto.request.skill;
 
 
 import jakarta.validation.constraints.NotBlank;

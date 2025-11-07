@@ -1,16 +1,15 @@
-package com.hw.hwjobbackend.dto.response;
+package com.hw.hwjobbackend.dto.response.region;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-
-@Setter
 @Getter
-@Builder
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationResponse {
-    String token;
-    boolean authenticated;
+public class CountryResponse {
+    String code;
+    String name;
 }

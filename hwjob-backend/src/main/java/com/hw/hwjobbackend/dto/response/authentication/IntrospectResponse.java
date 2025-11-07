@@ -1,5 +1,4 @@
-package com.hw.hwjobbackend.dto.response;
-
+package com.hw.hwjobbackend.dto.response.authentication;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RoleResponse {
-    String name;
-    String description;
+public class IntrospectResponse {
+    boolean valid;
 }

@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.mapper;
 
 import com.hw.hwjobbackend.dto.api_response.WardApiResponse;
-import com.hw.hwjobbackend.dto.response.WardResponse;
+import com.hw.hwjobbackend.dto.response.region.WardResponse;
 import com.hw.hwjobbackend.entity.Ward;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

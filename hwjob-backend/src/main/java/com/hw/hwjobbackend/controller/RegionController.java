@@ -2,7 +2,7 @@ package com.hw.hwjobbackend.controller;
 
 
 import com.hw.hwjobbackend.dto.response.ApiResponse;
-import com.hw.hwjobbackend.dto.response.ProvinceResponse;
+import com.hw.hwjobbackend.dto.response.region.ProvinceResponse;
 import com.hw.hwjobbackend.service.region.ProvinceService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

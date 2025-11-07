@@ -1,9 +1,9 @@
 package com.hw.hwjobbackend.controller;
 
-import com.hw.hwjobbackend.dto.request.AuthenticationRequest;
+import com.hw.hwjobbackend.dto.request.authentication.AuthenticationRequest;
 import com.hw.hwjobbackend.dto.response.ApiResponse;
-import com.hw.hwjobbackend.dto.response.AuthenticationResponse;
-import com.hw.hwjobbackend.dto.response.IntrospectResponse;
+import com.hw.hwjobbackend.dto.response.authentication.AuthenticationResponse;
+import com.hw.hwjobbackend.dto.response.authentication.IntrospectResponse;
 import com.hw.hwjobbackend.service.authentication.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;
