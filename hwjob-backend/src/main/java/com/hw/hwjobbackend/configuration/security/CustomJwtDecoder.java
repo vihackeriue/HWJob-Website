@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.configuration;
+package com.hw.hwjobbackend.configuration.security;
 
 
 import java.util.Objects;

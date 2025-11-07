@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.configuration;
+package com.hw.hwjobbackend.configuration.internationalization;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

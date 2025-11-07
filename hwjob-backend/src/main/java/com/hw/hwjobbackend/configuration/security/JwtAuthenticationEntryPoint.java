@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.configuration;
+package com.hw.hwjobbackend.configuration.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hw.hwjobbackend.dto.response.ApiResponse;

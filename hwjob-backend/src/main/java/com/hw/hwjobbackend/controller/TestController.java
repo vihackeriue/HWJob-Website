@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.controller;
 
 
-import com.hw.hwjobbackend.configuration.Translator;
+import com.hw.hwjobbackend.configuration.internationalization.Translator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
