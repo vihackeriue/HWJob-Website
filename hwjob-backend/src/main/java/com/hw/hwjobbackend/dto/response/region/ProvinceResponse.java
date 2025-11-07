@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.dto.response;
+package com.hw.hwjobbackend.dto.response.region;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CountryResponse {
-    String code;
+public class ProvinceResponse {
+    Integer code;
     String name;
 }

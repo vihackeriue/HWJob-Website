@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.mapper;
 
-import com.hw.hwjobbackend.dto.request.RecruiterUpdateRequest;
-import com.hw.hwjobbackend.dto.response.RecruiterResponse;
+import com.hw.hwjobbackend.dto.request.user.RecruiterUpdateRequest;
+import com.hw.hwjobbackend.dto.response.user.RecruiterResponse;
 import com.hw.hwjobbackend.entity.Recruiter;
 import org.mapstruct.*;
 

@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.dto.response;
+package com.hw.hwjobbackend.dto.response.industry;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

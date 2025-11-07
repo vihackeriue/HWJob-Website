@@ -1,9 +1,13 @@
 package com.hw.hwjobbackend.controller;
 
-import com.hw.hwjobbackend.dto.request.CandidateUpdateRequest;
-import com.hw.hwjobbackend.dto.request.RecruiterUpdateRequest;
-import com.hw.hwjobbackend.dto.request.UserCreationRequest;
+import com.hw.hwjobbackend.dto.request.user.CandidateUpdateRequest;
+import com.hw.hwjobbackend.dto.request.user.RecruiterUpdateRequest;
+import com.hw.hwjobbackend.dto.request.user.UserCreationRequest;
 import com.hw.hwjobbackend.dto.response.*;
+import com.hw.hwjobbackend.dto.response.user.CandidateResponse;
+import com.hw.hwjobbackend.dto.response.user.RecruiterResponse;
+import com.hw.hwjobbackend.dto.response.user.UserCreationResponse;
+import com.hw.hwjobbackend.dto.response.user.UserResponse;
 import com.hw.hwjobbackend.service.user.CandidateService;
 import com.hw.hwjobbackend.service.user.RecruiterService;
 import com.hw.hwjobbackend.service.user.UserService;

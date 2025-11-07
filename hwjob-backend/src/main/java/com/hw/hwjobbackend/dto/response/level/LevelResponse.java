@@ -1,5 +1,6 @@
-package com.hw.hwjobbackend.dto.response;
+package com.hw.hwjobbackend.dto.response.level;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -7,9 +8,8 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class WardResponse {
-    Integer code;
+public class LevelResponse {
+    long id;
     String name;
 }

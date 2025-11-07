@@ -49,7 +49,9 @@ public class SecurityConfiguration {
     private final String[] PUBLIC_ENDPOINTS_GET = {
             "/regions/**",
             "/skills",
-            "skills/**",
+            "/skills/**",
+            "/levels",
+            "/levels/**",
     };
 
     @Autowired

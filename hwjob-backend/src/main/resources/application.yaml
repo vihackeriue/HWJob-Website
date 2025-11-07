@@ -23,7 +23,7 @@ spring:
 initial-app:
   admin:
     username: admin
-#    email: admin@email.com
+    #    email: admin@email.com
     password: admin
     name: Admin
 
@@ -33,6 +33,6 @@ api:
 
 jwt:
   signerKey: qigjqDCrJgeiYotGVUsT80cPLvHqd6VNzHk3+hgI8Ujq+Ke/4YrDzYa10slbXog1dWvcaqMlsXBPSrPdOGUXBwO7W7/fSLUtuPTwgrwThn4=
-  #  valid-duration: 3600
+  valid-duration: 3600
   refreshable-duration: 604800
-  valid-duration: 3
+

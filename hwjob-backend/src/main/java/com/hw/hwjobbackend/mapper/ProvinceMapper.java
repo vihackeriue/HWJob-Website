@@ -2,7 +2,7 @@ package com.hw.hwjobbackend.mapper;
 
 
 import com.hw.hwjobbackend.dto.api_response.ProvinceApiResponse;
-import com.hw.hwjobbackend.dto.response.ProvinceResponse;
+import com.hw.hwjobbackend.dto.response.region.ProvinceResponse;
 import com.hw.hwjobbackend.entity.Province;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

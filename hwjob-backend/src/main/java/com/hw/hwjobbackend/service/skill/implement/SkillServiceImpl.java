@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.service.skill.implement;
 
-import com.hw.hwjobbackend.dto.request.SkillRequest;
-import com.hw.hwjobbackend.dto.response.SkillResponse;
+import com.hw.hwjobbackend.dto.request.skill.SkillRequest;
+import com.hw.hwjobbackend.dto.response.skill.SkillResponse;
 import com.hw.hwjobbackend.entity.Skill;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
@@ -44,7 +44,7 @@ public class SkillServiceImpl implements SkillService {
     @PreAuthorize("hasRole('ADMIN')")
     public SkillResponse createSkill(SkillRequest request) {
         if (skillRepository.existsByName((request.getName()))) {
-            throw new AppException(ErrorCode.Skill_EXISTED);
+            throw new AppException(ErrorCode.SKILL_EXISTED);
         }
         Skill skill = skillMapper.toSkill(request);
         skill = skillRepository.save(skill);

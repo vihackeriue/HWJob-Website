@@ -1,10 +1,10 @@
 package com.hw.hwjobbackend.service.user.implement;
 
 import com.hw.hwjobbackend.enums.RoleEnum;
-import com.hw.hwjobbackend.dto.request.UserCreationRequest;
-import com.hw.hwjobbackend.dto.request.UserUpdateRequest;
-import com.hw.hwjobbackend.dto.response.UserCreationResponse;
-import com.hw.hwjobbackend.dto.response.UserResponse;
+import com.hw.hwjobbackend.dto.request.user.UserCreationRequest;
+import com.hw.hwjobbackend.dto.request.user.UserUpdateRequest;
+import com.hw.hwjobbackend.dto.response.user.UserCreationResponse;
+import com.hw.hwjobbackend.dto.response.user.UserResponse;
 import com.hw.hwjobbackend.entity.*;
 import com.hw.hwjobbackend.enums.UserStatusEnum;
 import com.hw.hwjobbackend.exception.ErrorCode;

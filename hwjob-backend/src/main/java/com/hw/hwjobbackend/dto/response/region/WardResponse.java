@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.dto.response;
+package com.hw.hwjobbackend.dto.response.region;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -7,7 +7,9 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SkillResponse {
+public class WardResponse {
+    Integer code;
     String name;
 }
