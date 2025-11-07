@@ -2,8 +2,7 @@ package com.hw.hwjobbackend.service.job_type;
 
 import com.hw.hwjobbackend.dto.request.job_type.JobTypeRequest;
 import com.hw.hwjobbackend.dto.response.job_type.JobTypeResponse;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface JobTypeService {
 
@@ -11,7 +10,7 @@ public interface JobTypeService {
 
     JobTypeResponse getJobTypeById(Long id);
 
-    List<JobTypeResponse> getAllJobTypes();
+    Page<JobTypeResponse> getAllJobTypes(int page, int size);
 
     JobTypeResponse updateJobType(Long id, JobTypeRequest request);
 

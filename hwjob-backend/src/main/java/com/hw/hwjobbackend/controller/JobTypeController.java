@@ -8,6 +8,7 @@ import com.hw.hwjobbackend.service.job_type.JobTypeService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,9 +22,15 @@ public class JobTypeController {
     JobTypeService jobTypeService;
 
     @GetMapping
-    ApiResponse<List<JobTypeResponse>> getAllJobTypes() {
+    ApiResponse<List<JobTypeResponse>> getAllJobTypes(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        Page<JobTypeResponse> responsePage = jobTypeService.getAllJobTypes(page, size);
         return ApiResponse.<List<JobTypeResponse>>builder()
-                .result(jobTypeService.getAllJobTypes())
+                .page(responsePage.getNumber())
+                .totalPages(responsePage.getTotalPages())
+                .result(responsePage.getContent())
                 .build();
     }
 
