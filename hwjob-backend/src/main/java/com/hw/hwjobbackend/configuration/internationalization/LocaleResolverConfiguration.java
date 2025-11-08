@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.configuration.internationalization;
 
+import io.micrometer.common.lang.NonNullApi;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +24,8 @@ import java.util.Locale;
 @Slf4j
 public class LocaleResolverConfiguration extends AcceptHeaderLocaleResolver implements WebMvcConfigurer {
 
-    @Override
 
+    @Override
     public Locale resolveLocale(HttpServletRequest request) {
 
         String language = request.getHeader("Accept-Language");

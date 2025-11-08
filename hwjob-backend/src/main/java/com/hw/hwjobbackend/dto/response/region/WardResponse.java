@@ -10,6 +10,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class WardResponse {
-    Integer code;
+    int code;
     String name;
 }

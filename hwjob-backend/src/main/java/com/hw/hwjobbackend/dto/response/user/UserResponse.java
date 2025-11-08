@@ -1,7 +1,6 @@
 package com.hw.hwjobbackend.dto.response.user;
 
 import com.hw.hwjobbackend.dto.response.role.RoleResponse;
-import com.hw.hwjobbackend.dto.response.region.CountryResponse;
 import com.hw.hwjobbackend.dto.response.region.ProvinceResponse;
 import com.hw.hwjobbackend.dto.response.region.WardResponse;
 import com.hw.hwjobbackend.enums.UserStatusEnum;
@@ -27,7 +26,6 @@ public class UserResponse {
     String imageUrl;
     UserStatusEnum userStatus;
     Set<RoleResponse> roles;
-    CountryResponse country;
     ProvinceResponse province;
     WardResponse ward;
 }

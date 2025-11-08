@@ -10,7 +10,7 @@ public interface InitializationService {
 
     void initializeRegionData();
 
-    void initializePredefinedRoles();
+    void initializeRoles();
 
     void createAdminUser(Set<Role> roles);
 
