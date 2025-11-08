@@ -84,30 +84,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateLocation(User user, UserUpdateRequest request) {
-        String countryCode = request.getCountryCode();
+
         int provinceCode = request.getProvinceCode();
         int wardCode = request.getWardCode();
 
-        if (countryCode != null && !countryCode.isEmpty()) {
-            Country country = regionService.getCountryByCode(countryCode);
-            user.setCountry(country);
+        if (provinceCode != 0) {
+            Province province = regionService.getProvinceByCode(provinceCode);
+            user.setProvince(province);
 
-            if (provinceCode != 0) {
-                Province province = regionService.getProvinceByCodeAndCountry(provinceCode, country);
-                user.setProvince(province);
-
-                if (wardCode != 0) {
-                    Ward ward = regionService.getWardByCodeAndProvince(wardCode, province);
-                    user.setWard(ward);
-                } else {
-                    user.setWard(null);
-                }
+            if (wardCode != 0) {
+                Ward ward = regionService.getWardByCodeAndProvince(wardCode, province);
+                user.setWard(ward);
             } else {
-                user.setProvince(null);
                 user.setWard(null);
             }
+        } else {
+            user.setProvince(null);
+            user.setWard(null);
         }
     }
+
 
     private void validateUserDoesNotExist(String username, String email) {
         if (userRepository.existsByUsername(username)) {
@@ -161,3 +157,4 @@ public class UserServiceImpl implements UserService {
         };
     }
 }
+

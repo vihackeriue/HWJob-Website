@@ -27,7 +27,6 @@ public class UserUpdateRequest {
     String imageUrl;
     String userStatus;
 
-    String countryCode;
     int provinceCode;
     int wardCode;
 }

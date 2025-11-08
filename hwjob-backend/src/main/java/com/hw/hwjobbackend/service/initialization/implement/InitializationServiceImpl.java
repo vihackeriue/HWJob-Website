@@ -19,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,12 +30,13 @@ public class InitializationServiceImpl implements InitializationService {
 
     UserRepository userRepository;
     RoleRepository roleRepository;
-    CountryRepository countryRepository;
     IndustryRepository industryRepository;
     JobTypeRepository jobTypeRepository;
     SkillRepository skillRepository;
+    ProvinceRepository provinceRepository;
 
-    RegionService locationService;
+
+    RegionService regionService;
     PasswordEncoder passwordEncoder;
 
     @NonFinal
@@ -58,7 +58,7 @@ public class InitializationServiceImpl implements InitializationService {
             log.info("Admin user already exists. Skipping initialization.");
             return;
         }
-        initializePredefinedRoles();
+        initializeRoles();
         Role adminRole = roleRepository.findByName(RoleEnum.ADMIN.name())
                 .orElseThrow(() -> new RuntimeException("Admin role not found after initialization."));
 
@@ -69,21 +69,18 @@ public class InitializationServiceImpl implements InitializationService {
     @Override
     @Transactional
     public void initializeRegionData() {
-        if (countryRepository.count() > 0) {
-            return;
-        }
-        locationService.initializeRegionData();
+        if (provinceRepository.count() == 0)
+            regionService.initializeRegionData();
     }
 
     @Override
     @Transactional
-    public void initializePredefinedRoles() {
+    public void initializeRoles() {
         Map<String, String> roleMappings = Map.of(
                 RoleEnum.RECRUITER.name(), "Role Recruiter",
                 RoleEnum.CANDIDATE.name(), "Role Candidate",
                 RoleEnum.ADMIN.name(), "Role Admin"
         );
-
         roleMappings.forEach(this::createRoleIfNotExists);
     }
 

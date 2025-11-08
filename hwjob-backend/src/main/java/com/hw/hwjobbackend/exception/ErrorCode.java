@@ -15,16 +15,22 @@ public enum ErrorCode {
 
 
     USERNAME_EXISTED(1003, "error.username_existed", HttpStatus.BAD_REQUEST),
-    USER_NOT_EXISTED(1004, "error.username_not_existed", HttpStatus.NOT_FOUND),
-    UNAUTHENTICATED(1005, "error.unauthenticated", HttpStatus.UNAUTHORIZED),
     USERNAME_INVALID(1006, "error.username_invalid", HttpStatus.BAD_REQUEST),
+    USERNAME_PASSWORD_INVALID(1013, "error.username_password_invalid", HttpStatus.BAD_REQUEST),
+
     PASSWORD_INVALID(1007, "error.password_invalid", HttpStatus.BAD_REQUEST),
+
+    USER_NOT_EXISTED(1004, "error.username_not_existed", HttpStatus.NOT_FOUND),
+    USER_EXISTED(1012, "error.user_existed", HttpStatus.BAD_REQUEST),
+
+    UNAUTHENTICATED(1005, "error.unauthenticated", HttpStatus.UNAUTHORIZED),
+
     PHONE_INVALID(1008, "error.phone_invalid", HttpStatus.BAD_REQUEST),
     EMAIL_INVALID(1009, "error.email_invalid", HttpStatus.BAD_REQUEST),
     ROLE_NOT_EXISTED(1010, "error.role_not_existed", HttpStatus.NOT_FOUND),
     EMAIL_EXISTED(1011, "error.email_existed", HttpStatus.BAD_REQUEST),
-    USER_EXISTED(1012, "error.user_existed", HttpStatus.BAD_REQUEST),
-    USERNAME_PASSWORD_INVALID(1013, "error.username_password_invalid", HttpStatus.BAD_REQUEST),
+
+
     CREATE_USER_FAIL(1014, "error.create_user_fail", HttpStatus.BAD_REQUEST),
     PROVINCE_NOT_EXISTED(1015, "error.province_not_existed", HttpStatus.BAD_REQUEST),
 

@@ -11,7 +11,6 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring", uses = {WardMapper.class})
 public interface ProvinceMapper {
 
-    @Mapping(target = "country", ignore = true)
     @Mapping(target = "wards", ignore = true)
     Province toProvince(ProvinceApiResponse response);
 

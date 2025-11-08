@@ -2,7 +2,6 @@ package com.hw.hwjobbackend.service.region.implement;
 
 import com.hw.hwjobbackend.dto.api_response.ProvinceApiResponse;
 import com.hw.hwjobbackend.dto.response.region.ProvinceResponse;
-import com.hw.hwjobbackend.entity.Country;
 import com.hw.hwjobbackend.entity.Province;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
@@ -30,9 +29,8 @@ public class ProvinceServiceImpl implements ProvinceService {
 
     @Override
     @Transactional
-    public Province createProvinceFromApi(ProvinceApiResponse apiResponse, Country country) {
+    public Province createProvinceFromApi(ProvinceApiResponse apiResponse) {
         Province province = provinceMapper.toProvince(apiResponse);
-        province.setCountry(country);
         province.setWards(new ArrayList<>());
 
         province = provinceRepository.save(province);

@@ -2,13 +2,11 @@ package com.hw.hwjobbackend.service.region.implement;
 
 import com.hw.hwjobbackend.dto.api_response.ProvinceApiResponse;
 import com.hw.hwjobbackend.dto.api_response.WardApiResponse;
-import com.hw.hwjobbackend.entity.Country;
 import com.hw.hwjobbackend.entity.Ward;
 import com.hw.hwjobbackend.entity.Province;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.service.api.ApiClientService;
-import com.hw.hwjobbackend.service.region.CountryService;
 import com.hw.hwjobbackend.service.region.ProvinceService;
 import com.hw.hwjobbackend.service.region.RegionService;
 import com.hw.hwjobbackend.service.region.WardService;
@@ -31,7 +29,6 @@ import java.util.List;
 @Slf4j
 public class RegionServiceImpl implements RegionService {
 
-    CountryService countryService;
     ProvinceService provinceService;
     WardService wardService;
     ApiClientService apiClientService;
@@ -44,16 +41,13 @@ public class RegionServiceImpl implements RegionService {
     @Transactional
     public void initializeRegionData() {
         try {
-            Country vietnam = countryService.createCountry("Việt Nam", "VN"); // Thay đổi lại sau
-            countryService.createCountry("Nước ngoài", "FOREIGN");
-
             List<ProvinceApiResponse> provinceApiResponses = apiClientService.get(
                     PROVINCE_API_URL,
                     new ParameterizedTypeReference<>() {
                     }
             );
             if (provinceApiResponses != null && !provinceApiResponses.isEmpty()) {
-                processProvinceData(provinceApiResponses, vietnam);
+                processProvinceData(provinceApiResponses);
             }
         } catch (Exception e) {
             log.error("Error initializing location data: {}", e.getMessage(), e);
@@ -62,17 +56,8 @@ public class RegionServiceImpl implements RegionService {
     }
 
     @Override
-    public Country getCountryByCode(String code) {
-        return countryService.getCountryByCode(code);
-    }
-
-    @Override
-    public Province getProvinceByCodeAndCountry(int provinceCode, Country country) {
-        Province province = provinceService.getProvince(provinceCode);
-        if (!Objects.equals(province.getCountry().getCode(), country.getCode())) {
-            throw new AppException(ErrorCode.PROVINCE_NOT_EXISTED);
-        }
-        return province;
+    public Province getProvinceByCode(int provinceCode) {
+        return provinceService.getProvince(provinceCode);
     }
 
     @Override
@@ -84,10 +69,9 @@ public class RegionServiceImpl implements RegionService {
         return ward;
     }
 
-    private void processProvinceData(List<ProvinceApiResponse> provinceApiResponses, Country vietnam) {
-
+    private void processProvinceData(List<ProvinceApiResponse> provinceApiResponses) {
         for (ProvinceApiResponse provinceApiResponse : provinceApiResponses) {
-            Province province = provinceService.createProvinceFromApi(provinceApiResponse, vietnam);
+            Province province = provinceService.createProvinceFromApi(provinceApiResponse);
             if (provinceApiResponse.getWards() != null && !provinceApiResponse.getWards().isEmpty()) {
                 processWardData(provinceApiResponse.getWards(), province);
             }

@@ -1,6 +1,5 @@
 package com.hw.hwjobbackend.dto.response.level;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

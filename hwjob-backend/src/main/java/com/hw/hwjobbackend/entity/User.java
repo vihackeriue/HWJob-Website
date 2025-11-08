@@ -49,9 +49,6 @@ public class User {
     Set<Role> roles;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    Country country;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     Province province;
 
     @ManyToOne(fetch = FetchType.LAZY)

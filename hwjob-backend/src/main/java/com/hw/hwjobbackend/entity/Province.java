@@ -23,9 +23,6 @@ public class Province {
     String divisionType;
     Integer phoneCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    Country country;
-
     @OneToMany(mappedBy = "province", fetch = FetchType.LAZY)
     List<Ward> wards;
 }
