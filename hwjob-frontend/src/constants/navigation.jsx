@@ -67,35 +67,18 @@ export const PROFILE_USER_MENUS = [
 
 export const ADMIN_SIDEBAR_LINKS = [
   {
-    key: "industry",
-    label: "admin.sidebar.industry",
-    path: "/admin/industry",
+    key: "user",
+    label: "admin.sidebar.user",
+    path: "/admin/user",
     icon: <HiOutlineCube />,
   },
   {
-    key: "jobType",
-    label: "admin.sidebar.jobType",
-    path: "/admin/job-type",
+    key: "category",
+    label: "admin.sidebar.category",
+    path: "/admin/category",
     icon: <HiOutlineCube />,
   },
-  {
-    key: "level",
-    label: "admin.sidebar.level",
-    path: "/admin/level",
-    icon: <HiOutlineCube />,
-  },
-  {
-    key: "area",
-    label: "admin.sidebar.area",
-    path: "/admin/area",
-    icon: <HiOutlineCube />,
-  },
-  {
-    key: "skill",
-    label: "admin.sidebar.skill",
-    path: "/admin/skill",
-    icon: <HiOutlineCube />,
-  },
+
   {
     key: "badge",
     label: "admin.sidebar.badge",

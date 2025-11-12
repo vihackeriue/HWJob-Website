@@ -15,7 +15,10 @@ import Overview from "./pages/user/profile/Overview";
 import PersonalInfo from "./pages/user/profile/PersonalInfo";
 import EditSummary from "./pages/user/profile/EditSummary";
 import SecurityInfo from "./pages/user/profile/SecurityInfo";
-import IndustryManagement from "./pages/admin/IndustryManagement";
+
+import CategoryManagement from "./pages/admin/CategoryManagement";
+import BadgeManagement from "./pages/admin/BadgeManagement";
+import UserManagement from "./pages/admin/UserManagement";
 
 const ROLES = {
   admin: "ROLE_ADMIN",
@@ -40,8 +43,10 @@ function App() {
       </Route>
 
       <Route path="admin" element={<AdminLayout />}>
-        <Route path="industry" element={<IndustryManagement />} />
         <Route index element={<Dashboard />} />
+        <Route path="category" element={<CategoryManagement />} />
+        <Route path="badge" element={<BadgeManagement />} />
+        <Route path="user" element={<UserManagement />} />
       </Route>
 
       <Route element={<PrivateRoute allowedRoles={ROLES.admin} />}></Route>

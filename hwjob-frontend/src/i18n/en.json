@@ -48,12 +48,10 @@
     "management": "Management",
     "sidebar": {
       "dashboard": "Dashboard",
-      "industry": "Industry",
-      "jobType": "Job type",
-      "level": "Level",
-      "area": "Area",
-      "skill": "Skill",
-      "badge": "Badge"
+
+      "category": "Category",
+      "badge": "Badge",
+      "user": "User"
     }
   },
   "user": {

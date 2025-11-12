@@ -1,10 +1,10 @@
 import React from "react";
 
-const PrimaryButton = ({ children, onclick }) => {
+const PrimaryButton = ({ children, onClick }) => {
   return (
     <button
       className="text-lg px-3 py-2 bg-brightOrange text-gray-100 rounded-xl "
-      onclick={onclick}
+      onClick={onClick}
     >
       {children}
     </button>
