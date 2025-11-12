@@ -44,12 +44,9 @@
   "admin": {
     "sidebar": {
       "dashboard": "Dashboard",
-      "industry": "Ngành nghề",
-      "jobType": "Loại công việc",
-      "level": "Cấp bậc",
-      "area": "Khu vực",
-      "skill": "Kỹ năng",
-      "badge": "Huy hiệu"
+      "category": "Danh mục",
+      "badge": "Huy hiệu",
+      "user": "Người dùng"
     }
   },
   "user": {
