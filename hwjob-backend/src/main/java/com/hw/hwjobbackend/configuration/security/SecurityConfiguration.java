@@ -1,0 +1,132 @@
+package com.hw.hwjobbackend.configuration.security;
+
+
+import com.hw.hwjobbackend.service.authentication.CustomUserDetailsService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.List;
+
+/**
+ * SecurityConfiguration:
+ * - Cấu hình bảo mật Spring Security cho ứng dụng.
+ * - Định nghĩa các endpoint public/private.
+ * - Tích hợp xác thực JWT và xử lý lỗi bảo mật.
+ * - Bật CORS và vô hiệu hóa CSRF.
+ */
+
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+@RequiredArgsConstructor
+public class SecurityConfiguration {
+
+    private final String[] PUBLIC_ENDPOINTS_POST = {
+            "/users",
+            "/auth/login",
+            "/auth/refresh",
+
+    };
+    private final String[] PUBLIC_ENDPOINTS_GET = {
+            "/regions/**",
+            "/skills",
+            "/skills/**",
+            "/levels",
+            "/levels/**",
+            "/job-types",
+            "/job-types/**"
+    };
+
+    //    @Autowired
+    private final CustomJwtDecoder customJwtDecoder;
+
+    private final CustomUserDetailsService userDetailsService;
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.authorizeHttpRequests(request -> request
+                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST).permitAll()
+                .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
+//                .requestMatchers(HttpMethod.GET, "/test").permitAll()
+                .anyRequest().authenticated());
+        httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwtConfigurer -> jwtConfigurer
+                        .decoder(customJwtDecoder)
+                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        httpSecurity.cors(Customizer.withDefaults());
+
+        return httpSecurity.build();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider(PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder);
+        provider.setUserDetailsService(userDetailsService);
+        return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(DaoAuthenticationProvider daoAuthenticationProvider) {
+        return new ProviderManager(List.of(daoAuthenticationProvider));
+    }
+
+
+    /**
+     * Cấu hình CORS cho phép tất cả domain, phương thức và header.
+     */
+
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+
+        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addAllowedHeader("*");
+
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+
+        return new CorsFilter(urlBasedCorsConfigurationSource);
+    }
+
+    /**
+     * Chuyển đổi thông tin JWT thành GrantedAuthority trong Spring Security.
+     */
+    @Bean
+    JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
+
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+
+        return jwtAuthenticationConverter;
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(10);
+    }
+}

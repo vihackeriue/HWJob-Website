@@ -1,13 +1,10 @@
 package com.hw.hwjobbackend.controller;
 
-import com.hw.hwjobbackend.dto.request.AuthenticationRequest;
-import com.hw.hwjobbackend.dto.request.IntrospectRequest;
-import com.hw.hwjobbackend.dto.request.LogoutRequest;
-import com.hw.hwjobbackend.dto.request.RefreshRequest;
+import com.hw.hwjobbackend.dto.request.authentication.AuthenticationRequest;
 import com.hw.hwjobbackend.dto.response.ApiResponse;
-import com.hw.hwjobbackend.dto.response.AuthenticationResponse;
-import com.hw.hwjobbackend.dto.response.IntrospectResponse;
-import com.hw.hwjobbackend.service.AuthenticationService;
+import com.hw.hwjobbackend.dto.response.authentication.AuthenticationResponse;
+import com.hw.hwjobbackend.dto.response.authentication.IntrospectResponse;
+import com.hw.hwjobbackend.service.authentication.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -35,23 +32,23 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    ApiResponse<Void> logout(@RequestHeader("Authorization") String authHeader) {
+    public ApiResponse<Void> logout(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.substring(7);
         authenticationService.logout(token);
         return ApiResponse.<Void>builder().build();
     }
 
     @PostMapping("/introspect")
-    ApiResponse<IntrospectResponse> authenticate(@RequestBody IntrospectRequest request)
-            throws ParseException, JOSEException {
-        var result = authenticationService.introspect(request);
+    public ApiResponse<IntrospectResponse> introspect(@RequestHeader("Authorization") String authHeader) throws ParseException, JOSEException {
+        String token = authHeader.substring(7);
+        var result = authenticationService.introspect(token);
         return ApiResponse.<IntrospectResponse>builder().result(result).build();
     }
 
     @PostMapping("/refresh")
-    ApiResponse<AuthenticationResponse> authenticate(@RequestBody RefreshRequest request)
-            throws ParseException, JOSEException {
-        var result = authenticationService.refreshToken(request);
+    public ApiResponse<AuthenticationResponse> refresh(@RequestHeader("Authorization") String authHeader) throws ParseException, JOSEException {
+        String token = authHeader.substring(7);
+        var result = authenticationService.refreshToken(token);
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }
 }
