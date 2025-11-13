@@ -3,6 +3,7 @@ package com.hw.hwjobbackend.controller;
 import com.hw.hwjobbackend.dto.request.user.CandidateUpdateRequest;
 import com.hw.hwjobbackend.dto.request.user.RecruiterUpdateRequest;
 import com.hw.hwjobbackend.dto.request.user.UserCreationRequest;
+import com.hw.hwjobbackend.dto.request.user.UserStatusRequest;
 import com.hw.hwjobbackend.dto.response.*;
 import com.hw.hwjobbackend.dto.response.user.CandidateResponse;
 import com.hw.hwjobbackend.dto.response.user.RecruiterResponse;
@@ -59,22 +60,27 @@ public class UserController {
                 .build();
     }
 
-    @PutMapping("/candidates/{id}")
+    @PutMapping("/candidates")
     ApiResponse<CandidateResponse> updateCandidate(
-            @PathVariable String id,
             @RequestBody @Valid CandidateUpdateRequest request) {
         return ApiResponse.<CandidateResponse>builder()
-                .result(candidateService.updateCandidateInfo(id, request))
+                .result(candidateService.updateCandidateInfo(request))
                 .build();
     }
 
-    @PutMapping("/recruiters/{id}")
+    @PutMapping("/recruiters")
     ApiResponse<RecruiterResponse> updateRecruiter(
-            @PathVariable String id,
             @RequestBody @Valid RecruiterUpdateRequest request
     ) {
         return ApiResponse.<RecruiterResponse>builder()
-                .result(recruiterService.updateRecruiterInfo(id, request))
+                .result(recruiterService.updateRecruiterInfo(request))
                 .build();
+    }
+
+    @PutMapping("/change-status/{id}")
+    ApiResponse<Void> changeUserStatus(@PathVariable String id,
+                                       @RequestBody UserStatusRequest request) {
+        userService.changeUserStatus(id, request);
+        return ApiResponse.<Void>builder().build();
     }
 }
