@@ -1,11 +1,7 @@
 package com.hw.hwjobbackend.service.initialization.implement;
 
-import com.hw.hwjobbackend.entity.JobType;
+import com.hw.hwjobbackend.entity.*;
 import com.hw.hwjobbackend.enums.*;
-import com.hw.hwjobbackend.entity.Industry;
-import com.hw.hwjobbackend.entity.Role;
-import com.hw.hwjobbackend.entity.Skill;
-import com.hw.hwjobbackend.entity.User;
 import com.hw.hwjobbackend.repository.*;
 import com.hw.hwjobbackend.service.initialization.InitializationService;
 import com.hw.hwjobbackend.service.region.RegionService;
@@ -32,8 +28,8 @@ public class InitializationServiceImpl implements InitializationService {
     RoleRepository roleRepository;
     IndustryRepository industryRepository;
     JobTypeRepository jobTypeRepository;
-    SkillRepository skillRepository;
     ProvinceRepository provinceRepository;
+    LevelRepository levelRepository;
 
 
     RegionService regionService;
@@ -103,32 +99,15 @@ public class InitializationServiceImpl implements InitializationService {
         if (industryRepository.count() > 0) {
             return;
         }
-        Map<IndustryEnum, Industry> parentIndustries = Arrays.stream(IndustryEnum.values())
-                .filter(e -> e.getParent() == null)
-                .map(this::buildIndustry)
-                .collect(Collectors.toMap(
-                        industry -> findIndustryEnum(industry.getName()),
-                        industryRepository::save
-                ));
-        List<Industry> childIndustries = Arrays.stream(IndustryEnum.values())
-                .filter(e -> e.getParent() != null)
-                .map(e -> buildIndustryWithParent(e, parentIndustries.get(e.getParent())))
-                .collect(Collectors.toList());
-
-        industryRepository.saveAll(childIndustries);
+        List<Industry> industries = Arrays.stream(IndustryEnum.values())
+                .map(i -> Industry.builder()
+                        .name(i.getName())
+                        .description(i.getDescription())
+                        .build()
+                ).collect(Collectors.toList());
+        industryRepository.saveAll(industries);
     }
 
-    @Transactional
-    public void initializeSkills() {
-        if (skillRepository.count() > 0) {
-            return;
-        }
-        List<Skill> skills = Arrays.stream(SkillEnum.values())
-                .map(s -> Skill.builder().name(s.getName()).build())
-                .collect(Collectors.toList());
-
-        skillRepository.saveAll(skills);
-    }
 
     @Override
     public void initializeJobTypes() {
@@ -144,6 +123,20 @@ public class InitializationServiceImpl implements InitializationService {
         jobTypeRepository.saveAll(jobTypes);
     }
 
+    @Override
+    public void initializeLevel() {
+        if (levelRepository.count() > 0) {
+            return;
+        }
+
+        List<Level> levels = Arrays.stream(LevelEnum.values())
+                .map(l -> Level.builder()
+                        .name(l.getName())
+                        .build())
+                .collect(Collectors.toList());
+        levelRepository.saveAll(levels);
+    }
+
     private void createRoleIfNotExists(String name, String description) {
         roleRepository.findByName(name)
                 .orElseGet(() -> {
@@ -157,25 +150,5 @@ public class InitializationServiceImpl implements InitializationService {
                 });
     }
 
-    private Industry buildIndustry(IndustryEnum industryEnum) {
-        return Industry.builder()
-                .name(industryEnum.getName())
-                .description(industryEnum.getDescription())
-                .build();
-    }
 
-    private Industry buildIndustryWithParent(IndustryEnum industryEnum, Industry parent) {
-        return Industry.builder()
-                .name(industryEnum.getName())
-                .description(industryEnum.getDescription())
-                .parent(parent)
-                .build();
-    }
-
-    private IndustryEnum findIndustryEnum(String name) {
-        return Arrays.stream(IndustryEnum.values())
-                .filter(e -> e.getName().equals(name))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Industry not found: " + name));
-    }
 }

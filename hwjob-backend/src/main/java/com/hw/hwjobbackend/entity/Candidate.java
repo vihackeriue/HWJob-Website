@@ -1,10 +1,7 @@
 package com.hw.hwjobbackend.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -23,12 +20,11 @@ import java.util.Set;
 @PrimaryKeyJoinColumn(name = "id")
 public class Candidate extends User {
     LocalDate dob;
+    @Column(columnDefinition = "TEXT")
     String summary;
     String gender;
     String address;
     String education;
     BigDecimal expectSalary;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    Set<Skill> skills;
 }

@@ -16,7 +16,7 @@ public interface InitializationService {
 
     void initializeIndustries();
 
-    void initializeSkills();
-
     void initializeJobTypes();
+
+    void initializeLevel();
 }

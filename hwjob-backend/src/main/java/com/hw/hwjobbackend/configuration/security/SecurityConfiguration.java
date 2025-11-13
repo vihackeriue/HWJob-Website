@@ -48,15 +48,12 @@ public class SecurityConfiguration {
     };
     private final String[] PUBLIC_ENDPOINTS_GET = {
             "/regions/**",
-            "/skills",
-            "/skills/**",
             "/levels",
             "/levels/**",
             "/job-types",
             "/job-types/**"
     };
 
-    //    @Autowired
     private final CustomJwtDecoder customJwtDecoder;
 
     private final CustomUserDetailsService userDetailsService;
@@ -66,7 +63,6 @@ public class SecurityConfiguration {
         httpSecurity.authorizeHttpRequests(request -> request
                 .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST).permitAll()
                 .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
-//                .requestMatchers(HttpMethod.GET, "/test").permitAll()
                 .anyRequest().authenticated());
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(jwtConfigurer -> jwtConfigurer

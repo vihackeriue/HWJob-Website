@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,9 +23,15 @@ public class LevelController {
     LevelService levelService;
 
     @GetMapping
-    public ApiResponse<List<LevelResponse>> getAllLevels() {
+    public ApiResponse<List<LevelResponse>> getAllLevels(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        Page<LevelResponse> response = levelService.getAllLevels(page - 1, size);
         return ApiResponse.<List<LevelResponse>>builder()
-                .result(levelService.getAllLevels())
+                .page(response.getNumber() + 1)
+                .totalPages(response.getTotalPages())
+                .result(response.getContent())
                 .build();
     }
 

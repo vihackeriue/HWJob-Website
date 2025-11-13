@@ -42,11 +42,11 @@ public class ApplicationInitConfiguration {
                 // Khởi tạo industries
                 initializationService.initializeIndustries();
 
-                // Khởi tạo skills
-                initializationService.initializeSkills();
-
                 // Khởi tạo job types
                 initializationService.initializeJobTypes();
+
+                // Khởi tạo level
+                initializationService.initializeLevel();
 
 
                 long duration = System.currentTimeMillis() - startTime;
