@@ -18,11 +18,6 @@ public class Industry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
+    @Column(columnDefinition = "TEXT")
     String description;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    Industry parent;
-
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    List<Industry> children;
 }

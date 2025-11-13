@@ -2,13 +2,12 @@ package com.hw.hwjobbackend.service.level;
 
 import com.hw.hwjobbackend.dto.request.level.LevelRequest;
 import com.hw.hwjobbackend.dto.response.level.LevelResponse;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface LevelService {
     LevelResponse createLevel(LevelRequest request);
 
-    List<LevelResponse> getAllLevels();
+    Page<LevelResponse> getAllLevels(int page, int size);
 
     LevelResponse getLevelById(Long id);
 

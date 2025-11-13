@@ -37,10 +37,6 @@ public enum ErrorCode {
     COUNTRY_NOT_EXISTED(1017, "error.country_not_existed", HttpStatus.BAD_REQUEST),
     WARD_NOT_EXISTED(1018, "error.ward_not_existed", HttpStatus.BAD_REQUEST),
 
-    SKILL_NOT_EXISTED(1016, "error.skill_not_existed", HttpStatus.BAD_REQUEST),
-    SKILL_NOT_BLANK(1019, "error.skill_not_blank", HttpStatus.BAD_REQUEST),
-    SKILL_EXISTED(1020, "error.skill_existed", HttpStatus.BAD_REQUEST),
-
     LEVEL_NOT_BLANK(1021, "error.level_not_blank", HttpStatus.BAD_REQUEST),
     LEVEL_EXISTED(1022, "error.level_existed", HttpStatus.BAD_REQUEST),
     LEVEL_NOT_EXISTED(1023, "error.level_not_existed", HttpStatus.BAD_REQUEST),

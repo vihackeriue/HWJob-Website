@@ -6,6 +6,7 @@ import com.hw.hwjobbackend.dto.request.user.UserUpdateRequest;
 import com.hw.hwjobbackend.dto.response.user.UserCreationResponse;
 import com.hw.hwjobbackend.dto.response.user.UserResponse;
 import com.hw.hwjobbackend.entity.User;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface UserService {
 
     UserResponse getUserInfo();
 
-    List<UserResponse> getAllUser();
+    Page<UserResponse> getAllUser(int page, int size);
 
     void updatePassword(User user, String newPassword);
 

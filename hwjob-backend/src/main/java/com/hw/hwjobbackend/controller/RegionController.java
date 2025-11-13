@@ -2,11 +2,13 @@ package com.hw.hwjobbackend.controller;
 
 
 import com.hw.hwjobbackend.dto.response.ApiResponse;
+import com.hw.hwjobbackend.dto.response.level.LevelResponse;
 import com.hw.hwjobbackend.dto.response.region.ProvinceResponse;
 import com.hw.hwjobbackend.service.region.ProvinceService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +22,15 @@ public class RegionController {
     ProvinceService provinceService;
 
     @GetMapping
-    public ApiResponse<List<ProvinceResponse>> getProvinces() {
+    public ApiResponse<List<ProvinceResponse>> getProvinces(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        Page<ProvinceResponse> response = provinceService.getAllProvince(page - 1, size);
         return ApiResponse.<List<ProvinceResponse>>builder()
-                .result(provinceService.getAllProvince())
+                .page(response.getNumber() + 1)
+                .totalPages(response.getTotalPages())
+                .result(response.getContent())
                 .build();
     }
 
