@@ -12,6 +12,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -39,9 +42,9 @@ public class LevelServiceImpl implements LevelService {
     }
 
     @Override
-    public List<LevelResponse> getAllLevels() {
-        return levelRepository.findAll().stream().map(
-                levelMapper::toLevelResponse).toList();
+    public Page<LevelResponse> getAllLevels(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return levelRepository.findAll(pageable).map(levelMapper::toLevelResponse);
     }
 
     @Override

@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,9 +39,15 @@ public class UserController {
     }
 
     @GetMapping
-    ApiResponse<List<UserResponse>> getAllUser() {
+    ApiResponse<List<UserResponse>> getAllUser(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        Page<UserResponse> response = userService.getAllUser(page - 1, size);
         return ApiResponse.<List<UserResponse>>builder()
-                .result(userService.getAllUser())
+                .page(response.getNumber() + 1)
+                .totalPages(response.getTotalPages())
+                .result(response.getContent())
                 .build();
     }
 

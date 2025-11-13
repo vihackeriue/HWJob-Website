@@ -20,5 +20,4 @@ public class CandidateUpdateRequest extends UserUpdateRequest {
     String address;
     String education;
     BigDecimal expectSalary;
-    Set<Long> skillIds;
 }
