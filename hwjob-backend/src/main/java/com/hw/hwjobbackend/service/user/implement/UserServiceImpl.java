@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.service.user.implement;
 
+import com.hw.hwjobbackend.dto.request.user.UserStatusRequest;
 import com.hw.hwjobbackend.enums.RoleEnum;
 import com.hw.hwjobbackend.dto.request.user.UserCreationRequest;
 import com.hw.hwjobbackend.dto.request.user.UserUpdateRequest;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -58,14 +60,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    //    @PreAuthorize("hasRole('ADMIN')")
     public UserResponse getUserInfo() {
-        var context = SecurityContextHolder.getContext();
+        SecurityContext context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
-
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
         return userMapper.toUserResponse(user);
     }
 
@@ -85,7 +84,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateLocation(User user, UserUpdateRequest request) {
+    public void updateRegion(User user, UserUpdateRequest request) {
 
         int provinceCode = request.getProvinceCode();
         int wardCode = request.getWardCode();
@@ -106,6 +105,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public void changeUserStatus(String id, UserStatusRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        user.setUserStatus(UserStatusEnum.valueOf(request.getStatus()));
+        userRepository.save(user);
+    }
 
     private void validateUserDoesNotExist(String username, String email) {
         if (userRepository.existsByUsername(username)) {

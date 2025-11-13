@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +33,12 @@ public class RecruiterServiceImpl implements RecruiterService {
     @Override
     @Transactional
     @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
-    public RecruiterResponse updateRecruiterInfo(String recruiterId, RecruiterUpdateRequest request) {
-        Recruiter recruiter = recruiterRepository.findById(recruiterId)
+    public RecruiterResponse updateRecruiterInfo(RecruiterUpdateRequest request) {
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        String username = context.getAuthentication().getName();
+
+        Recruiter recruiter = recruiterRepository.findByUsername(username)
                 .filter(Recruiter.class::isInstance)
                 .map(Recruiter.class::cast)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -42,7 +48,7 @@ public class RecruiterServiceImpl implements RecruiterService {
 
         // Sử dụng service chung để cập nhật các trường của User
         userService.updatePassword(recruiter, request.getPassword());
-        userService.updateLocation(recruiter, request);
+        userService.updateRegion(recruiter, request);
 
         // Lưu lại và trả về response
         Recruiter savedRecruiter = recruiterRepository.save(recruiter);
