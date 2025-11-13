@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface IndustryRepository extends JpaRepository<Industry, Long> {
-    Optional<Industry> findByName(String name);
+    boolean existsByName(String name);
 }

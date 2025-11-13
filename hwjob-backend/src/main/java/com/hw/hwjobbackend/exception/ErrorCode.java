@@ -48,6 +48,11 @@ public enum ErrorCode {
     JOB_TYPE_CODE_NOT_BLANK(1027, "error.job_type_code_not_blank", HttpStatus.BAD_REQUEST),
     JOB_TYPE_CODE_EXISTED(1028, "error.job_type_code_existed", HttpStatus.BAD_REQUEST),
     JOB_TYPE_CODE_NOT_EXISTED(1029, "error.job_type_code_not_existed", HttpStatus.BAD_REQUEST),
+
+    INDUSTRY_NOT_BLANK(1030, "error.industry_not_blank", HttpStatus.BAD_REQUEST),
+    INDUSTRY_EXISTED(1031, "error.industry_existed", HttpStatus.BAD_REQUEST),
+    INDUSTRY_NOT_EXISTED(1032, "error.industry_not_existed", HttpStatus.BAD_REQUEST),
+
     ;
 
 

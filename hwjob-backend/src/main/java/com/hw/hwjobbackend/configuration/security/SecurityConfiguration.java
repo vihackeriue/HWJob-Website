@@ -51,7 +51,9 @@ public class SecurityConfiguration {
             "/levels",
             "/levels/**",
             "/job-types",
-            "/job-types/**"
+            "/job-types/**",
+            "/industries",
+            "/industries/**"
     };
 
     private final CustomJwtDecoder customJwtDecoder;

@@ -13,7 +13,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class JobTypeRequest {
     @NotBlank(message = "JOB_TYPE_NOT_BLANK")
-    @Size(min = 1)
     String name;
     @NotBlank(message = "JOB_TYPE_CODE_NOT_BLANK")
     String code;
