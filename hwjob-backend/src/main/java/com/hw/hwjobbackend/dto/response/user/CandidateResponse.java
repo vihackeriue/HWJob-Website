@@ -1,13 +1,12 @@
 package com.hw.hwjobbackend.dto.response.user;
 
-import com.hw.hwjobbackend.dto.response.skill.SkillResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
+
 
 @Getter
 @Setter
@@ -22,5 +21,4 @@ public class CandidateResponse extends UserResponse {
     String address;
     String education;
     BigDecimal expectSalary;
-    Set<SkillResponse> skills;
 }

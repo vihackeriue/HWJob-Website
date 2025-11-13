@@ -18,6 +18,9 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,11 +71,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public List<UserResponse> getAllUser() {
-        List<User> users = userRepository.findAll();
-        return users.stream()
-                .map(userMapper::toUserResponse)
-                .toList();
+    public Page<UserResponse> getAllUser(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        return userRepository.findAll(pageable).map(userMapper::toUserResponse);
     }
 
     @Override
