@@ -15,12 +15,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-
-import java.util.HashSet;
-import java.util.Set;
 
 
 @Service
@@ -36,9 +34,11 @@ public class CandidateServiceImpl implements CandidateService {
     @Override
     @Transactional
     @PreAuthorize("hasRole('CANDIDATE') or hasRole('ADMIN') ")
-    public CandidateResponse updateCandidateInfo(String candidateId, CandidateUpdateRequest request) {
+    public CandidateResponse updateCandidateInfo(CandidateUpdateRequest request) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        String username = context.getAuthentication().getName();
 
-        Candidate candidate = candidateRepository.findById(candidateId)
+        Candidate candidate = candidateRepository.findByUsername(username)
                 .filter(Candidate.class::isInstance)
                 .map(Candidate.class::cast)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -46,7 +46,7 @@ public class CandidateServiceImpl implements CandidateService {
         candidateMapper.updateCandidate(candidate, request);
 
         userService.updatePassword(candidate, request.getPassword());
-        userService.updateLocation(candidate, request);
+        userService.updateRegion(candidate, request);
 
         Candidate savedCandidate = candidateRepository.save(candidate);
 
