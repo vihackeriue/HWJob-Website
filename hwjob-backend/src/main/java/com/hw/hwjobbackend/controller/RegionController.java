@@ -23,8 +23,8 @@ public class RegionController {
 
     @GetMapping
     public ApiResponse<List<ProvinceResponse>> getProvinces(
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "34") int size
     ) {
         Page<ProvinceResponse> response = provinceService.getAllProvince(page - 1, size);
         return ApiResponse.<List<ProvinceResponse>>builder()
