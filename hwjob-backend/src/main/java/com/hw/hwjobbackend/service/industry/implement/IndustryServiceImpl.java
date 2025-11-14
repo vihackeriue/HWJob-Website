@@ -1,8 +1,73 @@
 package com.hw.hwjobbackend.service.industry.implement;
 
+import com.hw.hwjobbackend.dto.request.industry.IndustryRequest;
+import com.hw.hwjobbackend.dto.response.industry.IndustryResponse;
+import com.hw.hwjobbackend.entity.Industry;
+import com.hw.hwjobbackend.exception.AppException;
+import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.mapper.IndustryMapper;
+import com.hw.hwjobbackend.repository.IndustryRepository;
 import com.hw.hwjobbackend.service.industry.IndustryService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class IndustryServiceImpl implements IndustryService {
+
+    IndustryRepository industryRepository;
+    IndustryMapper industryMapper;
+
+    @Override
+    public Page<IndustryResponse> getAllIndustryNames(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return industryRepository.findAll(pageable)
+                .map(industryMapper::toIndustryResponse);
+    }
+
+    @Override
+    public IndustryResponse getIndustryById(long id) {
+        return industryRepository.findById(id)
+                .map(industryMapper::toIndustryResponse)
+                .orElseThrow(() -> new AppException(ErrorCode.INDUSTRY_NOT_EXISTED));
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public IndustryResponse createIndustry(IndustryRequest request) {
+        if (industryRepository.existsByName((request.getName()))) {
+            throw new AppException(ErrorCode.INDUSTRY_EXISTED);
+        }
+        Industry industry = industryMapper.toIndustry(request);
+        industry = industryRepository.save(industry);
+        return industryMapper.toIndustryResponse(industry);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public IndustryResponse updateIndustry(long id, IndustryRequest request) {
+        Industry industry = industryRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.INDUSTRY_NOT_EXISTED));
+        industry.setName(request.getName());
+        industry.setDescription(request.getDescription());
+        industry = industryRepository.save(industry);
+        return industryMapper.toIndustryResponse(industry);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteIndustry(long id) {
+        Industry industry = industryRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.INDUSTRY_NOT_EXISTED));
+        industryRepository.delete(industry);
+    }
 }
