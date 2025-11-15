@@ -2,7 +2,7 @@ import React from "react";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 
 const Pagination = ({ pagination }) => {
-  if (pagination.totalPages <= 1) return null;
+  if (!pagination || pagination.totalPages <= 1) return null;
 
   let start = 1;
   let end = pagination.totalPages;

@@ -6,7 +6,7 @@ export const createUser = async (data) => {
 };
 
 export const getUsers = async (page = 1, limit = DEFAULT_LIMIT) => {
-  const response = await axiosPrivate.get(`/users?page=${page}&limit=${limit}`);
+  const response = await axiosPrivate.get(`users?page=${page}&limit=${limit}`);
 
   return response.data;
 };

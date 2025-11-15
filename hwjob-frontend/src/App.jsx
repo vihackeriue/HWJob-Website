@@ -19,6 +19,7 @@ import SecurityInfo from "./pages/user/profile/SecurityInfo";
 import CategoryManagement from "./pages/admin/CategoryManagement";
 import BadgeManagement from "./pages/admin/BadgeManagement";
 import UserManagement from "./pages/admin/UserManagement";
+import AddJobPost from "./pages/user/recruiter/AddJobPost";
 
 const ROLES = {
   admin: "ROLE_ADMIN",
@@ -40,6 +41,8 @@ function App() {
           <Route path="security" element={<SecurityInfo />} />
           <Route path="edit-summary" element={<EditSummary />} />
         </Route>
+
+        <Route path="add-job-post" element={<AddJobPost />} />
       </Route>
 
       <Route path="admin" element={<AdminLayout />}>

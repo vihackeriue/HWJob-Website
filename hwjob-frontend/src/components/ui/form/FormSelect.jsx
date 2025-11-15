@@ -23,6 +23,8 @@ export default function FormSelect({
   selected,
   onChange,
   placeholder = "Chọn một mục...",
+  name, // 🚀 ADD name để giống input
+  error,
 }) {
   const [query, setQuery] = useState("");
 
@@ -35,14 +37,26 @@ export default function FormSelect({
 
   return (
     <div className="w-full">
-      {label && (
-        <label className="block text-md font-medium mb-1 ">{label}</label>
-      )}
+      <div className="flex justify-between items-center mb-1">
+        {label && (
+          <label className="text-md font-medium" htmlFor={name}>
+            {label}
+          </label>
+        )}
+        {error && <span className="text-red-500 text-sm">{error}</span>}
+      </div>
 
       <Combobox
-        value={selected}
+        value={selected ?? null}
         onChange={(value) => {
-          onChange(value);
+          // 🚀 Quan trọng nhất → trả event giống input
+          onChange({
+            target: {
+              name,
+              value: value.id ?? value.code ?? value.name,
+            },
+          });
+
           setQuery("");
         }}
         onClose={() => setQuery("")}
@@ -51,7 +65,7 @@ export default function FormSelect({
           <ComboboxInput
             className={classNames(
               "w-full rounded-lg border border-gray-300 bg-gray-100 dark:bg-stoneBrown-900 dark:border-gray-500 px-3 py-2 text-md",
-              "focus:outline-none focus:ring-1 focus:ring-amber-500 dark:focus:ring-amber-100 "
+              "focus:outline-none focus:ring-1 focus:ring-amber-100 dark:focus:border-ring-amber-500 "
             )}
             placeholder={placeholder}
             displayValue={(item) => item?.name || ""}
@@ -78,7 +92,7 @@ export default function FormSelect({
           ) : (
             filtered.map((item) => (
               <ComboboxOption
-                key={item.id}
+                key={item.id ?? item.code}
                 value={item}
                 className={({ active, selected }) =>
                   classNames(

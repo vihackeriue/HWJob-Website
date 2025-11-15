@@ -24,6 +24,14 @@ export const NAVBAR_USER_LINKS = [
   },
 ];
 
+export const NAVBAR_RECRUITER_LINKS = [
+  {
+    key: "jobPost",
+    label: "user.navbar.addJobPost",
+    path: "/add-job-post",
+  },
+];
+
 export const DROPDOWN_USER_LINKS = [
   {
     key: "profile",
