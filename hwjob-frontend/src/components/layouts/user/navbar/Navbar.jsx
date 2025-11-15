@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { GiVote } from "react-icons/gi";
 import {
   DROPDOWN_USER_LINKS,
+  NAVBAR_RECRUITER_LINKS,
   NAVBAR_USER_LINKS,
 } from "../../../../constants/navigation";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -37,7 +38,12 @@ export default function Navbar() {
           </div>
           <div className="hidden md:block">
             <div className="flex items-center gap-8">
+              {/* navbar role public */}
               {NAVBAR_USER_LINKS.map((item) => (
+                <NavbarLink key={item.key} item={item}></NavbarLink>
+              ))}
+              {/* navbar role recruiter */}
+              {NAVBAR_RECRUITER_LINKS.map((item) => (
                 <NavbarLink key={item.key} item={item}></NavbarLink>
               ))}
               <DarkMode />

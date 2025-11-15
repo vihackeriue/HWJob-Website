@@ -1,27 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import FormTable from "../../components/ui/form/FormTable";
 import PrimaryTitle from "../../components/ui/title/PrimaryTitle";
 import { HiOutlineSearch } from "react-icons/hi";
 import PrimaryButton from "../../components/ui/button/PrimaryButton";
+import { getUsers } from "../../services/userService";
+import { useList } from "../../hooks/useList";
 
 const columns = [
   { key: "id", label: "ID" },
-  { key: "name", label: "Tên đăng nhập" },
+  { key: "username", label: "Tên đăng nhập" },
   { key: "email", label: "Email" },
   { key: "phone", label: "Số điện thoại" },
   { key: "role", label: "Vai trò" },
 ];
-const fakeData = [
-  { id: 1, name: "Công nghệ thông tin", status: "ACTIVE" },
-  { id: 2, name: "Kế toán", status: "INACTIVE" },
-  { id: 3, name: "Kế toán", status: "INACTIVE" },
-  { id: 4, name: "Kế toán", status: "INACTIVE" },
-  { id: 5, name: "Kế toán", status: "INACTIVE" },
-];
+
 const UserManagement = () => {
-  const [page, setPage] = useState(1);
-  const perPage = 3;
-  const totalPages = Math.ceil(fakeData.length / perPage);
+  const users = useList(getUsers);
   return (
     <div className="flex flex-col gap-3">
       <div>
@@ -45,10 +39,14 @@ const UserManagement = () => {
       </div>
       <FormTable
         columns={columns}
-        data={fakeData}
+        data={users.data}
         isAct={false}
         isLock={true}
-        pagination={{ page, totalPages, setPage }}
+        pagination={{
+          page: users.page,
+          totalPages: users.totalPages,
+          setPage: users.setPage,
+        }}
       />
     </div>
   );

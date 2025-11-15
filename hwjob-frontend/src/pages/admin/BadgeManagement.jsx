@@ -3,6 +3,7 @@ import FormTable from "../../components/ui/form/FormTable";
 import PrimaryTitle from "../../components/ui/title/PrimaryTitle";
 import { HiOutlineSearch } from "react-icons/hi";
 import PrimaryButton from "../../components/ui/button/PrimaryButton";
+import AddBadgeDialog from "../../components/dialog/AddBadgeDialog";
 const columns = [
   { key: "id", label: "ID" },
   { key: "name", label: "Tên huy hiệu" },
@@ -22,10 +23,16 @@ const BadgeManagement = () => {
   const [page, setPage] = useState(1);
   const perPage = 3;
   const totalPages = Math.ceil(fakeData.length / perPage);
+  const [openDialog, setOpenDialog] = useState(false);
+  const handleAddBadge = (newBadge) => {
+    console.log("Ngành nghề mới:", newBadge);
+    // Gọi API thêm dữ liệu, ví dụ:
+    // await api.post("/badges", newBadge);
+  };
   return (
     <div className="flex flex-col gap-3">
       <div className="flex-2">
-        <PrimaryTitle>Ngành nghề</PrimaryTitle>
+        <PrimaryTitle>Huy hiệu</PrimaryTitle>
         <div className="flex justify-between items-center bg-white p-3 rounded-2xl">
           <div className="relative">
             <HiOutlineSearch
@@ -40,13 +47,20 @@ const BadgeManagement = () => {
               className="text-sm focus:outline-none active:outline-none h-10 w-[24rem] border border-gray-300 rounded-sm pr-4 pl-11"
             />
           </div>
-          <PrimaryButton>Tạo mới</PrimaryButton>
+          <PrimaryButton onClick={() => setOpenDialog(true)}>
+            Tạo mới
+          </PrimaryButton>
         </div>
       </div>
       <FormTable
         columns={columns}
         data={fakeData}
         pagination={{ page, totalPages, setPage }}
+      />
+      <AddBadgeDialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        onSubmit={handleAddBadge}
       />
     </div>
   );

@@ -7,6 +7,9 @@ import FormSelect from "../../components/ui/form/FormSelect";
 import FormSwitch from "../../components/ui/form/FormSwitch";
 import PrimaryButton from "../../components/ui/button/PrimaryButton";
 import RangeInput from "../../components/ui/RangeInput";
+import { useList } from "../../hooks/useList";
+import { getRegionsNotPagination } from "../../services/regionService";
+import { getJobTypesNotPagination } from "../../services/jobTypeService";
 
 const JobPost = () => {
   const jobPosts = [
@@ -127,11 +130,6 @@ const JobPost = () => {
     { id: 2, name: "Hà Nội" },
     { id: 3, name: "Đà Nẵng" },
   ];
-  const jobTypes = [
-    { id: 1, title: "Freelancer" },
-    { id: 2, title: "Toàn thời gian" },
-    { id: 3, title: "Bán thời gian" },
-  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -139,6 +137,9 @@ const JobPost = () => {
   };
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [range, setRange] = useState({ from: 1, to: 10 });
+
+  const regions = useList(getRegionsNotPagination);
+  const jobTypes = useList(getJobTypesNotPagination);
   return (
     <>
       <div className="flex justify-center mt-5">
@@ -150,14 +151,14 @@ const JobPost = () => {
             label="Ngành nghề"
             name="gender"
             onChange={handleChange}
-            options={location}
+            options={regions.data}
             placeholder="Chọn ngành nghề"
           />
           <FormSelect
             label="Loại công việc"
             name="gender"
             onChange={handleChange}
-            options={location}
+            options={jobTypes.data}
             placeholder="Loại công việc"
           />
           <FormSelect
@@ -168,7 +169,7 @@ const JobPost = () => {
             placeholder="Chọn Ngày đăng"
           />
           <FormSwitch
-            options={jobTypes}
+            options={jobTypes.data}
             selected={selectedTypes}
             onChange={setSelectedTypes}
             title={"Loại công việc"}

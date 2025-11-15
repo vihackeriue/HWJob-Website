@@ -6,16 +6,21 @@ const FormInput = ({
   value,
   onChange,
   name,
+  error,
   className = "",
   ...props
 }) => {
   return (
     <div className="flex flex-col">
-      {label && (
-        <label className="block text-md font-medium mb-1" htmlFor={name}>
-          {label}
-        </label>
-      )}
+      <div className="flex justify-between items-center mb-1">
+        {label && (
+          <label className="text-md font-medium" htmlFor={name}>
+            {label}
+          </label>
+        )}
+        {error && <span className="text-red-500 text-sm">{error}</span>}
+      </div>
+
       <input
         id={name}
         name={name}

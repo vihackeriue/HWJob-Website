@@ -2,7 +2,7 @@ import React from "react";
 
 import { FaMinus, FaPlus } from "react-icons/fa";
 
-const RangeInput = ({ labelFrom = "Từ", labelTo = "Đến", value, onChange }) => {
+const RangeInput = ({ value, onChange }) => {
   const { from, to } = value;
 
   // Hàm thay đổi giá trị
@@ -31,7 +31,7 @@ const RangeInput = ({ labelFrom = "Từ", labelTo = "Đến", value, onChange })
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <h1 className="text-md font-medium mb-1 ">Lương</h1>
+      <h1 className="text-md font-medium mb-1 ">Mức lương</h1>
 
       <div className="flex justify-between gap-5">
         {/* Ô bên trái */}
