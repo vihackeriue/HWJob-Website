@@ -48,7 +48,6 @@ public class ApplicationInitConfiguration {
                 // Khởi tạo level
                 initializationService.initializeLevel();
 
-
                 long duration = System.currentTimeMillis() - startTime;
                 log.info("=== Application initialization completed in {}ms ===", duration);
             } catch (Exception e) {

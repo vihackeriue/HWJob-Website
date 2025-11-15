@@ -48,6 +48,13 @@ public class ProvinceServiceImpl implements ProvinceService {
     }
 
     @Override
+    public List<ProvinceResponse> getAllProvince() {
+        return provinceRepository.findAll().stream()
+                .map(provinceMapper::toProvinceResponse)
+                .toList();
+    }
+
+    @Override
     public ProvinceResponse getProvinceByCode(int code) {
         Province province = provinceRepository.findById(code)
                 .orElseThrow(() -> new AppException(ErrorCode.PROVINCE_NOT_EXISTED));
