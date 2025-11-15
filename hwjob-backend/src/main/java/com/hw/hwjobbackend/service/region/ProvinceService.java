@@ -17,4 +17,6 @@ public interface ProvinceService {
 
     Page<ProvinceResponse> getAllProvince(int page, int size);
 
+    List<ProvinceResponse> getAllProvince();
+
 }
