@@ -8,10 +8,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-@Mapper(componentModel = "spring", uses = {WardMapper.class})
+@Mapper(componentModel = "spring")
 public interface ProvinceMapper {
 
-    @Mapping(target = "wards", ignore = true)
+
     Province toProvince(ProvinceApiResponse response);
 
     @Named("toProvinceResponseWithWards")

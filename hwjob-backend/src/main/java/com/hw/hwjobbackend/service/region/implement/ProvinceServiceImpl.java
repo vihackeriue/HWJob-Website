@@ -62,7 +62,7 @@ public class ProvinceServiceImpl implements ProvinceService {
     }
 
     @Override
-    public Province getProvince(int code) {
+    public Province getProvince(Integer code) {
         return provinceRepository.findById(code)
                 .orElseThrow(() -> new AppException(ErrorCode.PROVINCE_NOT_EXISTED));
     }

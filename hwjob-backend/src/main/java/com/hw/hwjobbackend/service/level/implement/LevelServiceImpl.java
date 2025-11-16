@@ -18,8 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -71,4 +69,12 @@ public class LevelServiceImpl implements LevelService {
                 .orElseThrow(() -> new AppException(ErrorCode.LEVEL_NOT_EXISTED));
         levelRepository.delete(level);
     }
+
+    @Override
+    public Level getLevelEntityById(Long id) {
+        return levelRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.LEVEL_NOT_EXISTED)
+        );
+    }
+
 }

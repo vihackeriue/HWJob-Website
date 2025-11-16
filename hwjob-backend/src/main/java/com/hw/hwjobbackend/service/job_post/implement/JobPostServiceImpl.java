@@ -1,0 +1,103 @@
+package com.hw.hwjobbackend.service.job_post.implement;
+
+import com.hw.hwjobbackend.dto.request.job_post.JobPostCreationRequest;
+import com.hw.hwjobbackend.dto.response.job_post.JobPostResponse;
+import com.hw.hwjobbackend.entity.*;
+import com.hw.hwjobbackend.mapper.JobPostMapper;
+import com.hw.hwjobbackend.repository.*;
+import com.hw.hwjobbackend.service.industry.IndustryService;
+import com.hw.hwjobbackend.service.job_post.JobPostService;
+import com.hw.hwjobbackend.service.job_type.JobTypeService;
+import com.hw.hwjobbackend.service.level.LevelService;
+import com.hw.hwjobbackend.service.region.ProvinceService;
+import com.hw.hwjobbackend.service.region.RegionService;
+import com.hw.hwjobbackend.service.region.WardService;
+import com.hw.hwjobbackend.service.user.RecruiterService;
+import com.hw.hwjobbackend.service.user.UserService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
+public class JobPostServiceImpl implements JobPostService {
+
+    JobPostRepository jobPostRepository;
+    JobPostMapper jobPostMapper;
+
+    LevelService levelService;
+    JobTypeService jobTypeService;
+    IndustryService industryService;
+    RecruiterService recruiterService;
+    RegionService regionService;
+
+
+    @Override
+    public Page<JobPostResponse> getAllJobPosts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return jobPostRepository.findAll(pageable)
+                .map(jobPostMapper::toJobPostResponse);
+
+    }
+
+    @Override
+    public List<JobPostResponse> getAllJobPosts() {
+        return jobPostRepository.findAll().stream()
+                .map(jobPostMapper::toJobPostResponse)
+                .toList();
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN') or hasRole('RECRUITER')")
+    public JobPostResponse createJobPost(JobPostCreationRequest request) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Recruiter recruiter = recruiterService.getRecruiterEntityByName(username);
+
+        JobPost jobPost = jobPostMapper.toJobPost(request);
+
+        jobPost.setRecruiter(recruiter);
+
+        jobPost.setLevel(
+                request.getLevelId() != null ?
+                        levelService.getLevelEntityById(request.getLevelId())
+                        : null
+        );
+
+        jobPost.setJobType(
+                request.getJobTypeId() != null
+                        ? jobTypeService.getJobTypeEntityById(request.getJobTypeId())
+                        : null
+        );
+
+        jobPost.setIndustry(
+                request.getIndustryId() != null
+                        ? industryService.getIndustryEntityById(request.getIndustryId())
+                        : null
+        );
+
+        jobPost.setProvince(
+                request.getProvinceId() != null
+                        ? regionService.getProvinceByCode(request.getProvinceId())
+                        : null
+        );
+
+        jobPost = jobPostRepository.save(jobPost);
+
+        return jobPostMapper.toJobPostResponse(jobPost);
+    }
+
+}

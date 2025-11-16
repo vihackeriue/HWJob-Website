@@ -6,7 +6,7 @@ import com.hw.hwjobbackend.entity.Candidate;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        uses = {ProvinceMapper.class, WardMapper.class})
+        uses = {ProvinceMapper.class})
 public interface CandidateMapper {
 
     @Mapping(source = "province", target = "province", qualifiedByName = "toProvinceResponseWithoutWards")

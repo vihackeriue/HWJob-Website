@@ -28,7 +28,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -41,6 +40,7 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
     RegionService regionService;
+
 
     @Override
     @Transactional
@@ -87,21 +87,12 @@ public class UserServiceImpl implements UserService {
     public void updateRegion(User user, UserUpdateRequest request) {
 
         int provinceCode = request.getProvinceCode();
-        int wardCode = request.getWardCode();
 
         if (provinceCode != 0) {
             Province province = regionService.getProvinceByCode(provinceCode);
             user.setProvince(province);
-
-            if (wardCode != 0) {
-                Ward ward = regionService.getWardByCodeAndProvince(wardCode, province);
-                user.setWard(ward);
-            } else {
-                user.setWard(null);
-            }
         } else {
             user.setProvince(null);
-            user.setWard(null);
         }
     }
 
@@ -113,6 +104,7 @@ public class UserServiceImpl implements UserService {
         user.setUserStatus(UserStatusEnum.valueOf(request.getStatus()));
         userRepository.save(user);
     }
+
 
     private void validateUserDoesNotExist(String username, String email) {
         if (userRepository.existsByUsername(username)) {

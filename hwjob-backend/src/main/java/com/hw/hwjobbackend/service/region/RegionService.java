@@ -8,5 +8,6 @@ public interface RegionService {
     void initializeRegionData();
 
     Province getProvinceByCode(int provinceCode);
+
     Ward getWardByCodeAndProvince(int wardCode, Province province);
 }
