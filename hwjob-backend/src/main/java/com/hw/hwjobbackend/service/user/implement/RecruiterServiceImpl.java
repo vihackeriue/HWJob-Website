@@ -38,11 +38,7 @@ public class RecruiterServiceImpl implements RecruiterService {
         SecurityContext context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
 
-        Recruiter recruiter = recruiterRepository.findByUsername(username)
-                .filter(Recruiter.class::isInstance)
-                .map(Recruiter.class::cast)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
+        Recruiter recruiter = getRecruiterEntityByName(username);
         // Ánh xạ các trường riêng của Recruiter
         recruiterMapper.updateRecruiter(recruiter, request);
 
@@ -54,5 +50,12 @@ public class RecruiterServiceImpl implements RecruiterService {
         Recruiter savedRecruiter = recruiterRepository.save(recruiter);
 
         return recruiterMapper.toRecruiterResponse(savedRecruiter);
+    }
+
+    @Override
+    public Recruiter getRecruiterEntityByName(String username) {
+        return recruiterRepository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
+        );
     }
 }

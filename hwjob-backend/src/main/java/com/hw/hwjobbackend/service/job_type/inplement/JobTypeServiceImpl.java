@@ -75,4 +75,11 @@ public class JobTypeServiceImpl implements JobTypeService {
                 .orElseThrow(() -> new AppException(ErrorCode.JOB_TYPE_NOT_EXISTED));
         jobTypeRepository.delete(jobType);
     }
+
+    @Override
+    public JobType getJobTypeEntityById(Long id) {
+        return jobTypeRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.JOB_TYPE_NOT_EXISTED)
+        );
+    }
 }

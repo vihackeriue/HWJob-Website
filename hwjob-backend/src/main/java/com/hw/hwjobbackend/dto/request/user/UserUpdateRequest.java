@@ -28,5 +28,4 @@ public class UserUpdateRequest {
     String userStatus;
 
     int provinceCode;
-    int wardCode;
 }

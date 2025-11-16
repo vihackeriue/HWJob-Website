@@ -38,10 +38,7 @@ public class CandidateServiceImpl implements CandidateService {
         SecurityContext context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
 
-        Candidate candidate = candidateRepository.findByUsername(username)
-                .filter(Candidate.class::isInstance)
-                .map(Candidate.class::cast)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        Candidate candidate = getCandidateEntityByName(username);
 
         candidateMapper.updateCandidate(candidate, request);
 
@@ -52,5 +49,13 @@ public class CandidateServiceImpl implements CandidateService {
 
         return candidateMapper.toCandidateResponse(savedCandidate);
     }
+
+    @Override
+    public Candidate getCandidateEntityByName(String username) {
+        return candidateRepository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
+        );
+    }
+
 
 }

@@ -24,11 +24,6 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public boolean existsByName(String name) {
-        return roleRepository.findByName(name).isPresent();
-    }
-
-    @Override
     public Set<Role> getRolesByNames(Set<String> roleNames) {
         return roleNames.stream()
                 .map(roleName -> roleRepository.findByName(roleName)

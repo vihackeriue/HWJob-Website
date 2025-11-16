@@ -13,7 +13,7 @@ public interface ProvinceService {
 
     ProvinceResponse getProvinceByCode(int code);
 
-    Province getProvince(int code);
+    Province getProvince(Integer code);
 
     Page<ProvinceResponse> getAllProvince(int page, int size);
 

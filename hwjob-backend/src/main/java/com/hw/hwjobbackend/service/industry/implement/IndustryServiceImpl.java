@@ -70,4 +70,11 @@ public class IndustryServiceImpl implements IndustryService {
                 .orElseThrow(() -> new AppException(ErrorCode.INDUSTRY_NOT_EXISTED));
         industryRepository.delete(industry);
     }
+
+    @Override
+    public Industry getIndustryEntityById(Long id) {
+        return industryRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.INDUSTRY_NOT_EXISTED)
+        );
+    }
 }
