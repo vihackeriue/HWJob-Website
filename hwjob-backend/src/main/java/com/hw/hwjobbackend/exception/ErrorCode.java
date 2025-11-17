@@ -53,6 +53,8 @@ public enum ErrorCode {
     INDUSTRY_EXISTED(1031, "error.industry_existed", HttpStatus.BAD_REQUEST),
     INDUSTRY_NOT_EXISTED(1032, "error.industry_not_existed", HttpStatus.BAD_REQUEST),
 
+    FILE_NOT_FOUND(1008, "File not found", HttpStatus.NOT_FOUND),
+
     ;
 
 

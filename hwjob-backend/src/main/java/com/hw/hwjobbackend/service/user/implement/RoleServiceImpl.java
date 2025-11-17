@@ -3,7 +3,7 @@ package com.hw.hwjobbackend.service.user.implement;
 import com.hw.hwjobbackend.entity.Role;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.repository.RoleRepository;
+import com.hw.hwjobbackend.repository.user.RoleRepository;
 import com.hw.hwjobbackend.service.user.RoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

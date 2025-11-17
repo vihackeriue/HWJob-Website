@@ -56,6 +56,7 @@ public class SecurityConfiguration {
             "/industries",
             "/industries/**",
             "/job-posts",
+            "/media/**",
     };
 
     private final CustomJwtDecoder customJwtDecoder;

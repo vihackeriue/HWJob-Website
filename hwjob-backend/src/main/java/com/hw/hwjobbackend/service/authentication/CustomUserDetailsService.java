@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.service.authentication;
 
 import com.hw.hwjobbackend.entity.User;
-import com.hw.hwjobbackend.repository.UserRepository;
+import com.hw.hwjobbackend.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

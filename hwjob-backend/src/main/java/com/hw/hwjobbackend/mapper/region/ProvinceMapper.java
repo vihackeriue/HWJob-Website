@@ -1,0 +1,21 @@
+package com.hw.hwjobbackend.mapper.region;
+
+
+import com.hw.hwjobbackend.dto.api_response.ProvinceApiResponse;
+import com.hw.hwjobbackend.dto.response.region.ProvinceResponse;
+import com.hw.hwjobbackend.entity.Province;
+import org.mapstruct.Mapper;
+import org.mapstruct.Named;
+
+@Mapper(componentModel = "spring")
+public interface ProvinceMapper {
+
+
+    Province toProvince(ProvinceApiResponse response);
+
+    @Named("toProvinceResponseWithWards")
+    ProvinceResponse toProvinceResponse(Province province);
+
+    @Named("toProvinceResponseWithoutWards")
+    ProvinceResponse toProvinceResponseWithoutWard(Province province);
+}

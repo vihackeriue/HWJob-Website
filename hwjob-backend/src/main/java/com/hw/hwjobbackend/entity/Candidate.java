@@ -26,5 +26,4 @@ public class Candidate extends User {
     String address;
     String education;
     BigDecimal expectSalary;
-
 }
