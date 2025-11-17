@@ -51,8 +51,4 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     Province province;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    Ward ward;
-
-
 }

@@ -1,6 +1,7 @@
 package com.hw.hwjobbackend.service.user.implement;
 
 import com.hw.hwjobbackend.dto.request.user.UserStatusRequest;
+import com.hw.hwjobbackend.dto.response.file.FileResponse;
 import com.hw.hwjobbackend.enums.RoleEnum;
 import com.hw.hwjobbackend.dto.request.user.UserCreationRequest;
 import com.hw.hwjobbackend.dto.request.user.UserUpdateRequest;
@@ -10,8 +11,9 @@ import com.hw.hwjobbackend.entity.*;
 import com.hw.hwjobbackend.enums.UserStatusEnum;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.exception.AppException;
-import com.hw.hwjobbackend.mapper.UserMapper;
-import com.hw.hwjobbackend.repository.UserRepository;
+import com.hw.hwjobbackend.mapper.user.UserMapper;
+import com.hw.hwjobbackend.repository.user.UserRepository;
+import com.hw.hwjobbackend.service.file.FileService;
 import com.hw.hwjobbackend.service.user.RoleService;
 import com.hw.hwjobbackend.service.region.RegionService;
 import com.hw.hwjobbackend.service.user.UserService;
@@ -27,6 +29,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
 
@@ -40,7 +43,7 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
     RegionService regionService;
-
+    FileService fileService;
 
     @Override
     @Transactional
@@ -55,6 +58,15 @@ public class UserServiceImpl implements UserService {
         User user = createUserByType(userType, request, roles);
 
         User savedUser = userRepository.save(user);
+
+        // Gán avatar mặc định cho user mới tạo
+        try {
+            FileResponse avatarResponse = fileService.copyDefaultAvatarForUser(savedUser.getUsername());
+            savedUser.setImageUrl(avatarResponse.getUrl());
+            savedUser = userRepository.save(savedUser);
+        } catch (Exception e) {
+            // Ghi log nếu cần, nhưng không chặn luồng tạo user
+        }
 
         return userMapper.toUserCreationResponse(savedUser);
     }
@@ -103,6 +115,30 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         user.setUserStatus(UserStatusEnum.valueOf(request.getStatus()));
         userRepository.save(user);
+    }
+
+    @Override
+    public UserResponse updateAvatar(MultipartFile file) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = getUserByUserName(username);
+
+        // Xóa avatar cũ nếu có
+        if (user.getImageUrl() != null && !user.getImageUrl().isBlank()) {
+            fileService.deleteFileByUrl(user.getImageUrl());
+        }
+
+        FileResponse response = fileService.uploadFile(file);
+
+        user.setImageUrl(response.getUrl());
+
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    @Override
+    public User getUserByUserName(String username) {
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
+        );
     }
 
 

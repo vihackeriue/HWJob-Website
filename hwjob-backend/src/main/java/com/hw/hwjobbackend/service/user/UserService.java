@@ -8,6 +8,7 @@ import com.hw.hwjobbackend.dto.response.user.UserCreationResponse;
 import com.hw.hwjobbackend.dto.response.user.UserResponse;
 import com.hw.hwjobbackend.entity.User;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
 
@@ -22,5 +23,9 @@ public interface UserService {
     void updateRegion(User user, UserUpdateRequest request);
 
     void changeUserStatus(String id, UserStatusRequest request);
+
+    UserResponse updateAvatar(MultipartFile file);
+
+    User getUserByUserName(String username);
 
 }

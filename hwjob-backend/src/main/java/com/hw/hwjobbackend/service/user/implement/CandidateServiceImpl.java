@@ -5,9 +5,9 @@ import com.hw.hwjobbackend.dto.response.user.CandidateResponse;
 import com.hw.hwjobbackend.entity.Candidate;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.CandidateMapper;
-import com.hw.hwjobbackend.repository.*;
+import com.hw.hwjobbackend.mapper.user.CandidateMapper;
 
+import com.hw.hwjobbackend.repository.user.CandidateRepository;
 import com.hw.hwjobbackend.service.user.CandidateService;
 import com.hw.hwjobbackend.service.user.UserService;
 import lombok.AccessLevel;
