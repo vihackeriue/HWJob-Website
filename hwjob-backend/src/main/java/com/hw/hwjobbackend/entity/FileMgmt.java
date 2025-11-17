@@ -1,20 +1,20 @@
 package com.hw.hwjobbackend.entity;
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Setter
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "file-system")
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Entity(name = "file_mgmt")
 public class FileMgmt {
-    @MongoId
+    @Id
     String id;
     String ownerId;
     String contentType;
