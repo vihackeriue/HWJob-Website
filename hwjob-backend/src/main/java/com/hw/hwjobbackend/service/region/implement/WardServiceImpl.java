@@ -1,8 +1,8 @@
 package com.hw.hwjobbackend.service.region.implement;
 
 import com.hw.hwjobbackend.dto.api_response.WardApiResponse;
-import com.hw.hwjobbackend.entity.Province;
-import com.hw.hwjobbackend.entity.Ward;
+import com.hw.hwjobbackend.entity.region.Province;
+import com.hw.hwjobbackend.entity.region.Ward;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.mapper.region.WardMapper;

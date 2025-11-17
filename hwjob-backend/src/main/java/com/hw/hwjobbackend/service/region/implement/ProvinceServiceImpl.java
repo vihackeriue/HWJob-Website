@@ -2,7 +2,7 @@ package com.hw.hwjobbackend.service.region.implement;
 
 import com.hw.hwjobbackend.dto.api_response.ProvinceApiResponse;
 import com.hw.hwjobbackend.dto.response.region.ProvinceResponse;
-import com.hw.hwjobbackend.entity.Province;
+import com.hw.hwjobbackend.entity.region.Province;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.mapper.region.ProvinceMapper;

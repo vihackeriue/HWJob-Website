@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.service.user.implement;
 
-import com.hw.hwjobbackend.entity.Role;
+import com.hw.hwjobbackend.entity.user.Role;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.repository.user.RoleRepository;

@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.entity;
+package com.hw.hwjobbackend.entity.user;
 
 
 import jakarta.persistence.Column;

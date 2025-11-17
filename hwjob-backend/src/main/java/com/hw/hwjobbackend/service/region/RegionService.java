@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.service.region;
 
-import com.hw.hwjobbackend.entity.Province;
-import com.hw.hwjobbackend.entity.Ward;
+import com.hw.hwjobbackend.entity.region.Province;
+import com.hw.hwjobbackend.entity.region.Ward;
 
 public interface RegionService {
 

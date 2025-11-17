@@ -2,12 +2,16 @@ package com.hw.hwjobbackend.service.user.implement;
 
 import com.hw.hwjobbackend.dto.request.user.UserStatusRequest;
 import com.hw.hwjobbackend.dto.response.file.FileResponse;
+import com.hw.hwjobbackend.entity.region.Province;
+import com.hw.hwjobbackend.entity.user.Candidate;
+import com.hw.hwjobbackend.entity.user.Recruiter;
+import com.hw.hwjobbackend.entity.user.Role;
+import com.hw.hwjobbackend.entity.user.User;
 import com.hw.hwjobbackend.enums.RoleEnum;
 import com.hw.hwjobbackend.dto.request.user.UserCreationRequest;
 import com.hw.hwjobbackend.dto.request.user.UserUpdateRequest;
 import com.hw.hwjobbackend.dto.response.user.UserCreationResponse;
 import com.hw.hwjobbackend.dto.response.user.UserResponse;
-import com.hw.hwjobbackend.entity.*;
 import com.hw.hwjobbackend.enums.UserStatusEnum;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.exception.AppException;
@@ -49,7 +53,12 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserCreationResponse createUser(UserCreationRequest request) {
 
-        validateUserDoesNotExist(request.getUsername(), request.getEmail());
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new AppException(ErrorCode.USERNAME_EXISTED);
+        }
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
 
         Set<Role> roles = roleService.getRolesByNames(request.getRoles());
 
@@ -141,15 +150,6 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-
-    private void validateUserDoesNotExist(String username, String email) {
-        if (userRepository.existsByUsername(username)) {
-            throw new AppException(ErrorCode.USERNAME_EXISTED);
-        }
-        if (userRepository.existsByEmail(email)) {
-            throw new AppException(ErrorCode.EMAIL_EXISTED);
-        }
-    }
 
     private String determineUserType(Set<Role> roles) {
         boolean hasCandidate = roles.stream()

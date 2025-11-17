@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.repository.user;
 
-import com.hw.hwjobbackend.entity.Recruiter;
+import com.hw.hwjobbackend.entity.user.Recruiter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

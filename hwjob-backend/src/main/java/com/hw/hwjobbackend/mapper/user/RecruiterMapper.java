@@ -1,8 +1,9 @@
 package com.hw.hwjobbackend.mapper.user;
 
 import com.hw.hwjobbackend.dto.request.user.RecruiterUpdateRequest;
+import com.hw.hwjobbackend.dto.response.user.RecruiterProfileResponse;
 import com.hw.hwjobbackend.dto.response.user.RecruiterResponse;
-import com.hw.hwjobbackend.entity.Recruiter;
+import com.hw.hwjobbackend.entity.user.Recruiter;
 import com.hw.hwjobbackend.mapper.region.ProvinceMapper;
 import com.hw.hwjobbackend.mapper.region.WardMapper;
 import org.mapstruct.*;
@@ -17,4 +18,11 @@ public interface RecruiterMapper {
 
     @Mapping(target = "password", ignore = true)
     void updateRecruiter(@MappingTarget Recruiter recruiter, RecruiterUpdateRequest request);
+
+    @Mapping(
+            target = "province",
+            expression = "java(recruiter.getProvince() != null " +
+                    "? recruiter.getProvince().getName() : null)")
+    RecruiterProfileResponse toRecruiterProfileResponse(Recruiter recruiter);
+
 }
