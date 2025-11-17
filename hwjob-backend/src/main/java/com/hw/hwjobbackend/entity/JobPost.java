@@ -1,5 +1,7 @@
 package com.hw.hwjobbackend.entity;
 
+import com.hw.hwjobbackend.entity.region.Province;
+import com.hw.hwjobbackend.entity.user.Recruiter;
 import com.hw.hwjobbackend.enums.JobPostStatus;
 import com.hw.hwjobbackend.enums.SalaryType;
 import jakarta.persistence.*;
@@ -25,6 +27,7 @@ public class JobPost {
 
     String title;
 
+    @Lob
     @Column(columnDefinition = "TEXT")
     String description;
 

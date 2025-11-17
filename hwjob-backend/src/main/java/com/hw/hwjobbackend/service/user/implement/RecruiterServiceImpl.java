@@ -1,8 +1,9 @@
 package com.hw.hwjobbackend.service.user.implement;
 
 import com.hw.hwjobbackend.dto.request.user.RecruiterUpdateRequest;
+import com.hw.hwjobbackend.dto.response.user.RecruiterProfileResponse;
 import com.hw.hwjobbackend.dto.response.user.RecruiterResponse;
-import com.hw.hwjobbackend.entity.Recruiter;
+import com.hw.hwjobbackend.entity.user.Recruiter;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.mapper.user.RecruiterMapper;
@@ -57,5 +58,17 @@ public class RecruiterServiceImpl implements RecruiterService {
         return recruiterRepository.findByUsername(username).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_EXISTED)
         );
+    }
+
+    @Override
+    public RecruiterProfileResponse getRecruiterProfile(String id) {
+        Recruiter recruiter = recruiterRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
+        );
+
+        RecruiterProfileResponse response = recruiterMapper.toRecruiterProfileResponse(recruiter);
+        response.setFollowed(false);
+
+        return response;
     }
 }

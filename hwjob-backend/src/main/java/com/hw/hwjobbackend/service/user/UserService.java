@@ -6,7 +6,7 @@ import com.hw.hwjobbackend.dto.request.user.UserStatusRequest;
 import com.hw.hwjobbackend.dto.request.user.UserUpdateRequest;
 import com.hw.hwjobbackend.dto.response.user.UserCreationResponse;
 import com.hw.hwjobbackend.dto.response.user.UserResponse;
-import com.hw.hwjobbackend.entity.User;
+import com.hw.hwjobbackend.entity.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 

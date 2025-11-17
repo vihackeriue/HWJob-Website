@@ -3,6 +3,9 @@ package com.hw.hwjobbackend.service.job_post.implement;
 import com.hw.hwjobbackend.dto.request.job_post.JobPostCreationRequest;
 import com.hw.hwjobbackend.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.entity.*;
+import com.hw.hwjobbackend.entity.user.Recruiter;
+import com.hw.hwjobbackend.exception.AppException;
+import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.mapper.job_post.JobPostMapper;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
 import com.hw.hwjobbackend.service.industry.IndustryService;
@@ -94,5 +97,13 @@ public class JobPostServiceImpl implements JobPostService {
 
         return jobPostMapper.toJobPostResponse(jobPost);
     }
+
+    @Override
+    public JobPost getJobPostEntityById(String id) {
+        return jobPostRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED)
+        );
+    }
+
 
 }

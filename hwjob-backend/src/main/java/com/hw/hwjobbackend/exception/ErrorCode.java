@@ -55,6 +55,9 @@ public enum ErrorCode {
 
     FILE_NOT_FOUND(1008, "File not found", HttpStatus.NOT_FOUND),
 
+
+    JOB_POST_NOT_EXISTED(1033, "error.job_post_not_existed", HttpStatus.NOT_FOUND),
+    JOB_POST_ALREADY_APPLIED(1034, "error.job_post_already_applied", HttpStatus.BAD_REQUEST),
     ;
 
 

@@ -9,7 +9,6 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
-
 @Setter
 @Getter
 @NoArgsConstructor
@@ -26,4 +25,7 @@ public class UserResponse {
     UserStatusEnum userStatus;
     Set<RoleResponse> roles;
     ProvinceResponse province;
+    String description;
+    String website;
+    String specificAddress;
 }

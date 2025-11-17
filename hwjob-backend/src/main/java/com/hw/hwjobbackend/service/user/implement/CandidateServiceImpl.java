@@ -2,7 +2,7 @@ package com.hw.hwjobbackend.service.user.implement;
 
 import com.hw.hwjobbackend.dto.request.user.CandidateUpdateRequest;
 import com.hw.hwjobbackend.dto.response.user.CandidateResponse;
-import com.hw.hwjobbackend.entity.Candidate;
+import com.hw.hwjobbackend.entity.user.Candidate;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.mapper.user.CandidateMapper;

@@ -22,4 +22,6 @@ public class JobPostResponse {
 
     String imageUrl;
     String recruiterName;
+
+    boolean isSaved;
 }

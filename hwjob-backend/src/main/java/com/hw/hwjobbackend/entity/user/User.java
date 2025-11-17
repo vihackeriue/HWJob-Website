@@ -1,6 +1,7 @@
-package com.hw.hwjobbackend.entity;
+package com.hw.hwjobbackend.entity.user;
 
 
+import com.hw.hwjobbackend.entity.region.Province;
 import com.hw.hwjobbackend.enums.UserStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;

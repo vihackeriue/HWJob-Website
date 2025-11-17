@@ -1,6 +1,8 @@
 package com.hw.hwjobbackend.service.initialization.implement;
 
 import com.hw.hwjobbackend.entity.*;
+import com.hw.hwjobbackend.entity.user.Role;
+import com.hw.hwjobbackend.entity.user.User;
 import com.hw.hwjobbackend.enums.*;
 import com.hw.hwjobbackend.repository.industry.IndustryRepository;
 import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
