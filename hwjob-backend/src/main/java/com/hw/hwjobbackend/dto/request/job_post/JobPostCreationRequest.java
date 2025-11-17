@@ -31,5 +31,4 @@ public class JobPostCreationRequest {
     Long industryId;
 
     Integer provinceId;
-
 }

@@ -68,7 +68,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public FileResponse copyDefaultAvatarForUser(String username) {
         try {
-            // Đọc ảnh avatar mặc định từ classpath
+            // Đọc ảnh avatar mặc định
             Resource defaultAvatar = new ClassPathResource("static/images/default-avatar.png");
             if (!defaultAvatar.exists()) {
                 throw new AppException(ErrorCode.FILE_NOT_FOUND);
@@ -77,7 +77,7 @@ public class FileServiceImpl implements FileService {
             // Lưu file vào thư mục của user
             var fileInfo = fileRepository.storeDefaultAvatar(username, defaultAvatar);
 
-            // Lưu metadata vào Mongo
+            // Lưu metadata vào database
             FileMgmt fileMgmt = fileMgmtMapper.toFileMgmt(fileInfo);
             fileMgmt.setOwnerId(username);
             fileMgmtRepository.save(fileMgmt);
