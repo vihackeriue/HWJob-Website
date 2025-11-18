@@ -1,9 +1,11 @@
 package com.hw.hwjobbackend.service.job_post.implement;
 
 import com.hw.hwjobbackend.dto.request.job_post.JobPostCreationRequest;
+import com.hw.hwjobbackend.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.entity.*;
 import com.hw.hwjobbackend.entity.user.Recruiter;
+import com.hw.hwjobbackend.enums.JobPostStatus;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.mapper.job_post.JobPostMapper;
@@ -92,6 +94,9 @@ public class JobPostServiceImpl implements JobPostService {
                         ? regionService.getProvinceByCode(request.getProvinceId())
                         : null
         );
+        jobPost.setSalaryType(request.getSalaryType());
+
+        jobPost.setStatus(JobPostStatus.PUBLIC);
 
         jobPost = jobPostRepository.save(jobPost);
 
@@ -103,6 +108,16 @@ public class JobPostServiceImpl implements JobPostService {
         return jobPostRepository.findById(id).orElseThrow(
                 () -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED)
         );
+    }
+
+    @Override
+    public JobPostDetailResponse getJobPostDetail(String id) {
+
+        JobPost jobPost = jobPostRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED)
+        );
+
+        return null;
     }
 
 

@@ -9,6 +9,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -20,6 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EntityListeners(AuditingEntityListener.class)
 public class JobPost {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -33,11 +35,11 @@ public class JobPost {
 
     Integer quantity;
 
-    Long salaryMin;
+    Long salary;
 
     SalaryType salaryType;
 
-    JobPostStatus postStatus;
+    JobPostStatus status;
 
     LocalDateTime endedTime;
 
@@ -56,8 +58,6 @@ public class JobPost {
     @ManyToOne(fetch = FetchType.LAZY)
     Province province;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    Ward ward;
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)

@@ -9,6 +9,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
@@ -20,6 +21,7 @@ import java.util.Date;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity(name = "applications")
+@EntityListeners(AuditingEntityListener.class)
 public class Application {
 
     @EmbeddedId
@@ -51,3 +53,4 @@ public class Application {
     Date updatedAt;
 
 }
+

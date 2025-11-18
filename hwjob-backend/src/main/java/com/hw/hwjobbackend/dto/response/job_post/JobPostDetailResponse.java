@@ -1,8 +1,12 @@
 package com.hw.hwjobbackend.dto.response.job_post;
 
 
+import com.hw.hwjobbackend.enums.JobPostStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -19,14 +23,19 @@ public class JobPostDetailResponse {
     String jobType;
 
     String quantity;
-    String salary;
-    String address;
+    Long salary;
 
     String recruiterId;
     String recruiterName;
     String recruiterImageUrl;
 
-    String status;
+    JobPostStatus status;
+    Date createdAt;
+    LocalDateTime endedTime;
+
+    String province;
+
+
     boolean isApplied;
     boolean isSaved;
 

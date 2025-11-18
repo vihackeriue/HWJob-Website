@@ -3,6 +3,7 @@ package com.hw.hwjobbackend.controller;
 
 import com.hw.hwjobbackend.dto.request.job_post.JobPostCreationRequest;
 import com.hw.hwjobbackend.dto.response.ApiResponse;
+import com.hw.hwjobbackend.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.service.job_post.JobPostService;
 import lombok.AccessLevel;
@@ -47,4 +48,10 @@ public class JobPostController {
                 .build();
     }
 
+    @GetMapping("/{id}")
+    public ApiResponse<JobPostDetailResponse> getJobPostById(@PathVariable Long id) {
+        return ApiResponse.<JobPostDetailResponse>builder()
+                .result(null)
+                .build();
+    }
 }
