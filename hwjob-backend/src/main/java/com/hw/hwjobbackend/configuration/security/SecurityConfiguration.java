@@ -54,6 +54,7 @@ public class SecurityConfiguration {
             "/industries",
             "/industries/**",
             "/job-posts",
+            "/job-posts/**",
             "/media/**",
             "/profiles/**"
     };

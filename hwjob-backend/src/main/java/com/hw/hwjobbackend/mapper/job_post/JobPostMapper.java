@@ -2,6 +2,7 @@ package com.hw.hwjobbackend.mapper.job_post;
 
 
 import com.hw.hwjobbackend.dto.request.job_post.JobPostCreationRequest;
+import com.hw.hwjobbackend.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.entity.JobPost;
 import org.mapstruct.Mapper;
@@ -26,4 +27,11 @@ public interface JobPostMapper {
     @Mapping(source = "jobType.name", target = "jobType")
     @Mapping(source = "province.name", target = "province")
     JobPostResponse toJobPostResponse(JobPost jobPost);
+
+//    @Mapping(source = "industry.name", target = "industry")
+//    @Mapping(source = "recruiter.username", target = "recruiterName")
+//    @Mapping(source = "recruiter.imageUrl", target = "imageUrl")
+//    @Mapping(source = "level.name", target = "level")
+//    JobPostDetailResponse toJobPostDetailResponse(JobPost jobPost);
+
 }

@@ -4,6 +4,7 @@ import com.hw.hwjobbackend.dto.request.application.ApplicationRequest;
 import com.hw.hwjobbackend.dto.response.application.ApplicationResponse;
 import com.hw.hwjobbackend.entity.JobPost;
 import com.hw.hwjobbackend.entity.application.Application;
+import com.hw.hwjobbackend.entity.application.ApplicationId;
 import com.hw.hwjobbackend.entity.user.Candidate;
 import com.hw.hwjobbackend.enums.ApplicationStatus;
 import com.hw.hwjobbackend.exception.AppException;
@@ -45,8 +46,13 @@ public class ApplicationServiceImpl implements ApplicationService {
         if (applicationRepository.existsApplicationByCandidateAndJobPost(candidate, jobPost)) {
             throw new AppException(ErrorCode.JOB_POST_ALREADY_APPLIED);
         }
+        ApplicationId applicationId = ApplicationId.builder()
+                .candidateId(candidate.getId())
+                .jobPostId(jobPost.getId())
+                .build();
 
         Application application = Application.builder()
+                .id(applicationId)
                 .candidate(candidate)
                 .jobPost(jobPost)
                 .status(ApplicationStatus.PENDING)

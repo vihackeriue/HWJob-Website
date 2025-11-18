@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.dto.request.job_post;
 
+import com.hw.hwjobbackend.enums.SalaryType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,9 +19,9 @@ public class JobPostCreationRequest {
 
     Integer quantity;
 
-    Long salaryMin;
+    Long salary;
 
-    String salaryType;
+    SalaryType salaryType;
 
     LocalDateTime endedTime;
 
