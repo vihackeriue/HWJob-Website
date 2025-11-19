@@ -24,5 +24,5 @@ public class UserUpdateRequest {
     String password;
     @PhoneConstraint(message = "PHONE_INVALID")
     String phone;
-    Integer provinceCode;
+    Integer regionId;
 }

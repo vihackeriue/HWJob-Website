@@ -58,6 +58,8 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .status(ApplicationStatus.PENDING)
                 .build();
 
+        log.info("Applying job post {}", application.getCreatedAt());
+
         applicationRepository.save(application);
         return applicationMapper.toApplicationResponse(application);
     }

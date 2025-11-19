@@ -25,7 +25,7 @@ public interface JobPostMapper {
     @Mapping(source = "industry.name", target = "industry")
     @Mapping(source = "level.name", target = "level")
     @Mapping(source = "jobType.name", target = "jobType")
-    @Mapping(source = "province.name", target = "province")
+    @Mapping(source = "province.name", target = "region")
     JobPostResponse toJobPostResponse(JobPost jobPost);
 
 //    @Mapping(source = "industry.name", target = "industry")

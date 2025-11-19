@@ -18,7 +18,8 @@ public class RecruiterProfileResponse {
     String phone;
     String imageUrl;
 
-    String province;
+//    String province;
+    String region;
 
     String description;
     String website;

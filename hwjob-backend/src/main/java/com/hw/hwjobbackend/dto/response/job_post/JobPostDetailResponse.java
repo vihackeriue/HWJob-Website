@@ -33,9 +33,8 @@ public class JobPostDetailResponse {
     Date createdAt;
     LocalDateTime endedTime;
 
-    String province;
-
-
+    String region;
+    
     boolean isApplied;
     boolean isSaved;
 

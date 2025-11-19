@@ -90,8 +90,8 @@ public class JobPostServiceImpl implements JobPostService {
         );
 
         jobPost.setProvince(
-                request.getProvinceId() != null
-                        ? regionService.getProvinceByCode(request.getProvinceId())
+                request.getRegionId() != null
+                        ? regionService.getProvinceByCode(request.getRegionId())
                         : null
         );
         jobPost.setSalaryType(request.getSalaryType());
