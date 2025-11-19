@@ -1,10 +1,7 @@
 package com.hw.hwjobbackend.configuration.security;
 
 
-import com.hw.hwjobbackend.service.authentication.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -45,6 +42,7 @@ public class SecurityConfiguration {
             "/users",
             "/auth/login",
             "/auth/refresh",
+            "/auth/introspect",
 
     };
     private final String[] PUBLIC_ENDPOINTS_GET = {
@@ -54,12 +52,14 @@ public class SecurityConfiguration {
             "/job-types",
             "/job-types/**",
             "/industries",
-            "/industries/**"
+            "/industries/**",
+            "/job-posts",
+            "/job-posts/**",
+            "/media/**",
+            "/profiles/**"
     };
 
     private final CustomJwtDecoder customJwtDecoder;
-
-    private final CustomUserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -77,20 +77,6 @@ public class SecurityConfiguration {
 
         return httpSecurity.build();
     }
-
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(PasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(passwordEncoder);
-        provider.setUserDetailsService(userDetailsService);
-        return provider;
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(DaoAuthenticationProvider daoAuthenticationProvider) {
-        return new ProviderManager(List.of(daoAuthenticationProvider));
-    }
-
 
     /**
      * Cấu hình CORS cho phép tất cả domain, phương thức và header.

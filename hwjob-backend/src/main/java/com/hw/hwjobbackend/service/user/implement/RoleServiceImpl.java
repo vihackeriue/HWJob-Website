@@ -1,9 +1,9 @@
 package com.hw.hwjobbackend.service.user.implement;
 
-import com.hw.hwjobbackend.entity.Role;
+import com.hw.hwjobbackend.entity.user.Role;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.repository.RoleRepository;
+import com.hw.hwjobbackend.repository.user.RoleRepository;
 import com.hw.hwjobbackend.service.user.RoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +22,6 @@ public class RoleServiceImpl implements RoleService {
 
     RoleRepository roleRepository;
 
-
-    @Override
-    public boolean existsByName(String name) {
-        return roleRepository.findByName(name).isPresent();
-    }
 
     @Override
     public Set<Role> getRolesByNames(Set<String> roleNames) {

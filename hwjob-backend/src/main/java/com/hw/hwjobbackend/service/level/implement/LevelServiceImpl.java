@@ -5,8 +5,8 @@ import com.hw.hwjobbackend.dto.response.level.LevelResponse;
 import com.hw.hwjobbackend.entity.Level;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.LevelMapper;
-import com.hw.hwjobbackend.repository.LevelRepository;
+import com.hw.hwjobbackend.mapper.level.LevelMapper;
+import com.hw.hwjobbackend.repository.level.LevelRepository;
 import com.hw.hwjobbackend.service.level.LevelService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -71,4 +69,12 @@ public class LevelServiceImpl implements LevelService {
                 .orElseThrow(() -> new AppException(ErrorCode.LEVEL_NOT_EXISTED));
         levelRepository.delete(level);
     }
+
+    @Override
+    public Level getLevelEntityById(Long id) {
+        return levelRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.LEVEL_NOT_EXISTED)
+        );
+    }
+
 }

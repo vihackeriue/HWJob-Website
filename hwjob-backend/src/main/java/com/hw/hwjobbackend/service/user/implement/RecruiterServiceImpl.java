@@ -1,12 +1,13 @@
 package com.hw.hwjobbackend.service.user.implement;
 
 import com.hw.hwjobbackend.dto.request.user.RecruiterUpdateRequest;
+import com.hw.hwjobbackend.dto.response.user.RecruiterProfileResponse;
 import com.hw.hwjobbackend.dto.response.user.RecruiterResponse;
-import com.hw.hwjobbackend.entity.Recruiter;
+import com.hw.hwjobbackend.entity.user.Recruiter;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.RecruiterMapper;
-import com.hw.hwjobbackend.repository.RecruiterRepository;
+import com.hw.hwjobbackend.mapper.user.RecruiterMapper;
+import com.hw.hwjobbackend.repository.user.RecruiterRepository;
 import com.hw.hwjobbackend.service.user.RecruiterService;
 import com.hw.hwjobbackend.service.user.UserService;
 import lombok.AccessLevel;
@@ -38,11 +39,7 @@ public class RecruiterServiceImpl implements RecruiterService {
         SecurityContext context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
 
-        Recruiter recruiter = recruiterRepository.findByUsername(username)
-                .filter(Recruiter.class::isInstance)
-                .map(Recruiter.class::cast)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
+        Recruiter recruiter = getRecruiterEntityByName(username);
         // Ánh xạ các trường riêng của Recruiter
         recruiterMapper.updateRecruiter(recruiter, request);
 
@@ -54,5 +51,24 @@ public class RecruiterServiceImpl implements RecruiterService {
         Recruiter savedRecruiter = recruiterRepository.save(recruiter);
 
         return recruiterMapper.toRecruiterResponse(savedRecruiter);
+    }
+
+    @Override
+    public Recruiter getRecruiterEntityByName(String username) {
+        return recruiterRepository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
+        );
+    }
+
+    @Override
+    public RecruiterProfileResponse getRecruiterProfile(String id) {
+        Recruiter recruiter = recruiterRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
+        );
+
+        RecruiterProfileResponse response = recruiterMapper.toRecruiterProfileResponse(recruiter);
+        response.setFollowed(false);
+
+        return response;
     }
 }

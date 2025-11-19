@@ -1,8 +1,15 @@
 package com.hw.hwjobbackend.service.initialization.implement;
 
 import com.hw.hwjobbackend.entity.*;
+import com.hw.hwjobbackend.entity.user.Role;
+import com.hw.hwjobbackend.entity.user.User;
 import com.hw.hwjobbackend.enums.*;
-import com.hw.hwjobbackend.repository.*;
+import com.hw.hwjobbackend.repository.industry.IndustryRepository;
+import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
+import com.hw.hwjobbackend.repository.level.LevelRepository;
+import com.hw.hwjobbackend.repository.region.ProvinceRepository;
+import com.hw.hwjobbackend.repository.user.RoleRepository;
+import com.hw.hwjobbackend.repository.user.UserRepository;
 import com.hw.hwjobbackend.service.initialization.InitializationService;
 import com.hw.hwjobbackend.service.region.RegionService;
 import lombok.AccessLevel;

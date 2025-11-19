@@ -4,6 +4,7 @@ import com.hw.hwjobbackend.dto.request.authentication.AuthenticationRequest;
 import com.hw.hwjobbackend.dto.response.authentication.AuthenticationResponse;
 import com.hw.hwjobbackend.dto.response.authentication.IntrospectResponse;
 import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jwt.SignedJWT;
 
 import java.text.ParseException;
 
@@ -15,4 +16,5 @@ public interface AuthenticationService {
     AuthenticationResponse refreshToken(String token) throws ParseException, JOSEException;
 
     void logout(String token);
+
 }

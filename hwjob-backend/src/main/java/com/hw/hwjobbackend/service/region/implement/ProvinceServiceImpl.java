@@ -2,11 +2,11 @@ package com.hw.hwjobbackend.service.region.implement;
 
 import com.hw.hwjobbackend.dto.api_response.ProvinceApiResponse;
 import com.hw.hwjobbackend.dto.response.region.ProvinceResponse;
-import com.hw.hwjobbackend.entity.Province;
+import com.hw.hwjobbackend.entity.region.Province;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.ProvinceMapper;
-import com.hw.hwjobbackend.repository.ProvinceRepository;
+import com.hw.hwjobbackend.mapper.region.ProvinceMapper;
+import com.hw.hwjobbackend.repository.region.ProvinceRepository;
 import com.hw.hwjobbackend.service.region.ProvinceService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +48,13 @@ public class ProvinceServiceImpl implements ProvinceService {
     }
 
     @Override
+    public List<ProvinceResponse> getAllProvince() {
+        return provinceRepository.findAll().stream()
+                .map(provinceMapper::toProvinceResponse)
+                .toList();
+    }
+
+    @Override
     public ProvinceResponse getProvinceByCode(int code) {
         Province province = provinceRepository.findById(code)
                 .orElseThrow(() -> new AppException(ErrorCode.PROVINCE_NOT_EXISTED));
@@ -55,7 +62,7 @@ public class ProvinceServiceImpl implements ProvinceService {
     }
 
     @Override
-    public Province getProvince(int code) {
+    public Province getProvince(Integer code) {
         return provinceRepository.findById(code)
                 .orElseThrow(() -> new AppException(ErrorCode.PROVINCE_NOT_EXISTED));
     }
