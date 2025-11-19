@@ -5,6 +5,7 @@ import com.hw.hwjobbackend.dto.response.authentication.AuthenticationResponse;
 import com.hw.hwjobbackend.dto.response.authentication.IntrospectResponse;
 import com.hw.hwjobbackend.entity.InvalidateToken;
 import com.hw.hwjobbackend.entity.user.User;
+import com.hw.hwjobbackend.enums.UserStatusEnum;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.repository.token.RedisTokenRepository;
@@ -99,7 +100,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_PASSWORD_INVALID));
-
+        if (user.getUserStatus() == UserStatusEnum.INACTIVE) {
+            throw new AppException(ErrorCode.USERNAME_PASSWORD_INVALID);
+        }
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!authenticated) {

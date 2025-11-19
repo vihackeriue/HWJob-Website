@@ -8,4 +8,6 @@ public interface CandidateService {
     CandidateResponse updateCandidateInfo(CandidateUpdateRequest request);
 
     Candidate getCandidateEntityByName(String name);
+
+    Candidate getCandidateEntityById(String id);
 }
