@@ -8,4 +8,6 @@ public interface ApplicationService {
 
     ApplicationResponse applyJob(ApplicationRequest request);
 
+    boolean isCandidateApplied(String candidateId, String jobPostId);
+
 }

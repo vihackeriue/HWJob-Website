@@ -3,6 +3,7 @@ package com.hw.hwjobbackend.service.job_post;
 import com.hw.hwjobbackend.dto.request.job_post.JobPostCreationRequest;
 import com.hw.hwjobbackend.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.dto.response.job_post.JobPostResponse;
+import com.hw.hwjobbackend.dto.response.job_post.SaveJobPostResponse;
 import com.hw.hwjobbackend.entity.JobPost;
 import org.springframework.data.domain.Page;
 
@@ -19,5 +20,7 @@ public interface JobPostService {
     JobPost getJobPostEntityById(String id);
 
     JobPostDetailResponse getJobPostDetail(String id);
+
+    SaveJobPostResponse saveJobPost(String id);
 
 }

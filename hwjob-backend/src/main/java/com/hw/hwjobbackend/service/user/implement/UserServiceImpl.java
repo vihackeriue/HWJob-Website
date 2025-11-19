@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateRegion(User user, UserUpdateRequest request) {
 
-        int provinceCode = request.getProvinceCode();
+        int provinceCode = request.getRegionId();
 
         if (provinceCode != 0) {
             Province province = regionService.getProvinceByCode(provinceCode);

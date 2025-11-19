@@ -24,7 +24,7 @@ public class UserResponse {
     String imageUrl;
     UserStatusEnum userStatus;
     Set<RoleResponse> roles;
-    ProvinceResponse province;
+    String region;
     String description;
     String website;
     String specificAddress;

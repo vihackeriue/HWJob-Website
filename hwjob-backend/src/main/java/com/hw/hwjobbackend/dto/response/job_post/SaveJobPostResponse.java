@@ -1,4 +1,5 @@
-package com.hw.hwjobbackend.dto.response.region;
+package com.hw.hwjobbackend.dto.response.job_post;
+
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -7,9 +8,8 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProvinceResponse {
-    Integer id;
-    String name;
+@Builder
+public class SaveJobPostResponse {
+    String id;
 }

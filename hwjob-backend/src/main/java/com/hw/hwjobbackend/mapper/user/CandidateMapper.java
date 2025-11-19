@@ -10,7 +10,7 @@ import org.mapstruct.*;
         uses = {ProvinceMapper.class})
 public interface CandidateMapper {
 
-    @Mapping(source = "province", target = "province", qualifiedByName = "toProvinceResponseWithoutWards")
+    @Mapping(source = "province.name", target = "region")
     CandidateResponse toCandidateResponse(Candidate candidate);
 
     @Mapping(target = "password", ignore = true)

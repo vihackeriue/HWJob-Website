@@ -25,13 +25,18 @@ public interface JobPostMapper {
     @Mapping(source = "industry.name", target = "industry")
     @Mapping(source = "level.name", target = "level")
     @Mapping(source = "jobType.name", target = "jobType")
-    @Mapping(source = "province.name", target = "province")
+    @Mapping(source = "province.name", target = "region")
     JobPostResponse toJobPostResponse(JobPost jobPost);
 
-//    @Mapping(source = "industry.name", target = "industry")
-//    @Mapping(source = "recruiter.username", target = "recruiterName")
-//    @Mapping(source = "recruiter.imageUrl", target = "imageUrl")
-//    @Mapping(source = "level.name", target = "level")
-//    JobPostDetailResponse toJobPostDetailResponse(JobPost jobPost);
+    @Mapping(source = "industry.name", target = "industry")
+    @Mapping(source = "level.name", target = "level")
+    @Mapping(source = "jobType.name", target = "jobType")
+    @Mapping(source = "recruiter.id", target = "recruiterId")
+    @Mapping(source = "recruiter.username", target = "recruiterName")
+    @Mapping(source = "recruiter.imageUrl", target = "recruiterImageUrl")
+    @Mapping(source = "province.name", target = "region")
+    @Mapping(target = "isApplied", ignore = true)
+    @Mapping(target = "isSaved", ignore = true)
+    JobPostDetailResponse toJobPostDetailResponse(JobPost jobPost);
 
 }

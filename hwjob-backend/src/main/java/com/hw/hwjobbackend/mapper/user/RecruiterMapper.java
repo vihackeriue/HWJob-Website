@@ -13,14 +13,14 @@ import org.mapstruct.*;
         uses = {ProvinceMapper.class, WardMapper.class})
 public interface RecruiterMapper {
 
-    @Mapping(source = "province", target = "province", qualifiedByName = "toProvinceResponseWithoutWards")
+    @Mapping(source = "province.name", target = "region")
     RecruiterResponse toRecruiterResponse(Recruiter recruiter);
 
     @Mapping(target = "password", ignore = true)
     void updateRecruiter(@MappingTarget Recruiter recruiter, RecruiterUpdateRequest request);
 
     @Mapping(
-            target = "province",
+            target = "region",
             expression = "java(recruiter.getProvince() != null " +
                     "? recruiter.getProvince().getName() : null)")
     RecruiterProfileResponse toRecruiterProfileResponse(Recruiter recruiter);

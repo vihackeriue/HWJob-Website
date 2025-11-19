@@ -3,18 +3,27 @@ package com.hw.hwjobbackend.service.job_post.implement;
 import com.hw.hwjobbackend.dto.request.job_post.JobPostCreationRequest;
 import com.hw.hwjobbackend.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.dto.response.job_post.JobPostResponse;
+import com.hw.hwjobbackend.dto.response.job_post.SaveJobPostResponse;
 import com.hw.hwjobbackend.entity.*;
+import com.hw.hwjobbackend.entity.candidate_save_job.CandidateSaveJob;
+import com.hw.hwjobbackend.entity.candidate_save_job.CandidateSaveJobId;
+import com.hw.hwjobbackend.entity.user.Candidate;
 import com.hw.hwjobbackend.entity.user.Recruiter;
+import com.hw.hwjobbackend.entity.user.User;
 import com.hw.hwjobbackend.enums.JobPostStatus;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.mapper.job_post.JobPostMapper;
+import com.hw.hwjobbackend.repository.application.ApplicationRepository;
+import com.hw.hwjobbackend.repository.candidate_save_job.CandidateSaveJobRepository;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
+import com.hw.hwjobbackend.service.application.ApplicationService;
 import com.hw.hwjobbackend.service.industry.IndustryService;
 import com.hw.hwjobbackend.service.job_post.JobPostService;
 import com.hw.hwjobbackend.service.job_type.JobTypeService;
 import com.hw.hwjobbackend.service.level.LevelService;
 import com.hw.hwjobbackend.service.region.RegionService;
+import com.hw.hwjobbackend.service.user.CandidateService;
 import com.hw.hwjobbackend.service.user.RecruiterService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +33,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +53,12 @@ public class JobPostServiceImpl implements JobPostService {
     IndustryService industryService;
     RecruiterService recruiterService;
     RegionService regionService;
+    CandidateSaveJobRepository candidateSaveJobRepository;
+
+    CandidateService candidateService;
+
+
+    ApplicationRepository applicationRepository;
 
 
     @Override
@@ -90,8 +106,8 @@ public class JobPostServiceImpl implements JobPostService {
         );
 
         jobPost.setProvince(
-                request.getProvinceId() != null
-                        ? regionService.getProvinceByCode(request.getProvinceId())
+                request.getRegionId() != null
+                        ? regionService.getProvinceByCode(request.getRegionId())
                         : null
         );
         jobPost.setSalaryType(request.getSalaryType());
@@ -113,12 +129,54 @@ public class JobPostServiceImpl implements JobPostService {
     @Override
     public JobPostDetailResponse getJobPostDetail(String id) {
 
-        JobPost jobPost = jobPostRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED)
-        );
+        JobPost jobPost = getJobPostEntityById(id);
+        JobPostDetailResponse response = jobPostMapper.toJobPostDetailResponse(jobPost);
 
-        return null;
+        // Kiểm tra có token hợp lệ hay không (authenticated và không phải anonymous)
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean hasValidToken = authentication != null && authentication.isAuthenticated()
+                && !"anonymousUser".equals(authentication.getName());
+
+        if (hasValidToken) {
+            // Có token hợp lệ: Kiểm tra isApplied
+            String username = authentication.getName();
+            Candidate candidate = candidateService.getCandidateEntityByName(username);
+            response.setIsApplied(applicationRepository.existsApplicationByCandidateAndJobPost(candidate, jobPost));
+            response.setIsSaved(candidateSaveJobRepository.existsCandidateSaveJobByCandidateAndJobPost(candidate, jobPost));
+        } else {
+            // Không có token hoặc anonymous: Set mặc định false
+            response.setIsApplied(false);
+            response.setIsSaved(false);
+        }
+
+        return response;
     }
 
+    @Override
+    public SaveJobPostResponse saveJobPost(String id) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Candidate candidate = candidateService.getCandidateEntityByName(username);
+        JobPost jobPost = getJobPostEntityById(id);
 
+        if (candidateSaveJobRepository.existsCandidateSaveJobByCandidateAndJobPost(candidate, jobPost)) {
+            throw new AppException(ErrorCode.JOB_POST_ALREADY_SAVED);
+        }
+
+        CandidateSaveJobId candidateSaveJobId = CandidateSaveJobId.builder()
+                .candidateId(candidate.getId())
+                .jobPostId(jobPost.getId())
+                .build();
+
+        CandidateSaveJob candidateSaveJob = CandidateSaveJob.builder()
+                .id(candidateSaveJobId)
+                .candidate(candidate)
+                .jobPost(jobPost)
+                .build();
+
+        candidateSaveJobRepository.save(candidateSaveJob);
+
+        return SaveJobPostResponse.builder()
+                .id(candidateSaveJob.getJobPost().getId())
+                .build();
+    }
 }

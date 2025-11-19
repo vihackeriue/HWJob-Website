@@ -58,9 +58,16 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .status(ApplicationStatus.PENDING)
                 .build();
 
+        log.info("Applying job post {}", application.getCreatedAt());
+
         applicationRepository.save(application);
         return applicationMapper.toApplicationResponse(application);
     }
 
-
+    @Override
+    public boolean isCandidateApplied(String candidateId, String jobPostId) {
+        Candidate candidate = candidateService.getCandidateEntityById(candidateId);
+        JobPost jobPost = jobPostService.getJobPostEntityById(jobPostId);
+        return applicationRepository.existsApplicationByCandidateAndJobPost(candidate, jobPost);
+    }
 }

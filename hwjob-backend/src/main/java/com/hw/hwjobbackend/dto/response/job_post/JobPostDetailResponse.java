@@ -17,14 +17,12 @@ public class JobPostDetailResponse {
     String id;
     String title;
     String description;
+    String quantity;
+    Long salary;
 
     String industry;
     String level;
     String jobType;
-
-    String quantity;
-    Long salary;
-
     String recruiterId;
     String recruiterName;
     String recruiterImageUrl;
@@ -33,10 +31,9 @@ public class JobPostDetailResponse {
     Date createdAt;
     LocalDateTime endedTime;
 
-    String province;
+    String region;
 
-
-    boolean isApplied;
-    boolean isSaved;
+    Boolean isApplied;
+    Boolean isSaved;
 
 }
