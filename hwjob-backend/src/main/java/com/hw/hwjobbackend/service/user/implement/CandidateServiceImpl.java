@@ -57,5 +57,12 @@ public class CandidateServiceImpl implements CandidateService {
         );
     }
 
+    @Override
+    public Candidate getCandidateEntityById(String id) {
+        return candidateRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
+        );
+    }
+
 
 }

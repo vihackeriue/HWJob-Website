@@ -16,7 +16,4 @@ public class CandidateSaveJobId {
     String candidateId;
 
     String jobPostId;
-
-
-
 }

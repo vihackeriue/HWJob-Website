@@ -5,6 +5,7 @@ import com.hw.hwjobbackend.dto.request.job_post.JobPostCreationRequest;
 import com.hw.hwjobbackend.dto.response.ApiResponse;
 import com.hw.hwjobbackend.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.dto.response.job_post.JobPostResponse;
+import com.hw.hwjobbackend.dto.response.job_post.SaveJobPostResponse;
 import com.hw.hwjobbackend.service.job_post.JobPostService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -49,9 +50,18 @@ public class JobPostController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<JobPostDetailResponse> getJobPostById(@PathVariable Long id) {
+    public ApiResponse<JobPostDetailResponse> getJobPostById(@PathVariable String id) {
         return ApiResponse.<JobPostDetailResponse>builder()
-                .result(null)
+                .result(jobPostService.getJobPostDetail(id))
                 .build();
     }
+
+    @PostMapping("/saved-posts/{id}")
+    public ApiResponse<SaveJobPostResponse> saveJobPost(@PathVariable String id) {
+        return ApiResponse.<SaveJobPostResponse>builder()
+                .result(jobPostService.saveJobPost(id))
+                .build();
+    }
+
+
 }
