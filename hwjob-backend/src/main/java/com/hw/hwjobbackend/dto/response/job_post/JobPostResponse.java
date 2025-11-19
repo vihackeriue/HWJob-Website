@@ -18,7 +18,7 @@ public class JobPostResponse {
     String level;
     String jobType;
 
-    String province;
+    String region;
 
     String imageUrl;
     String recruiterName;

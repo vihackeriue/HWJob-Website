@@ -4,8 +4,6 @@ import com.hw.hwjobbackend.enums.ApplicationStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Date;
-
 
 @Getter
 @Setter
@@ -16,5 +14,4 @@ import java.util.Date;
 public class ApplicationResponse {
     String jobPostId;
     ApplicationStatus status;
-    Date createdAt;
 }

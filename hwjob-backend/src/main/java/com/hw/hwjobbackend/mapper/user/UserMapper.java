@@ -23,6 +23,7 @@ public interface UserMapper {
 
     @SubclassMapping(source = Candidate.class, target = CandidateResponse.class)
     @SubclassMapping(source = Recruiter.class, target = RecruiterResponse.class)
+    @Mapping(source = "province.name", target = "region")
     UserResponse toUserResponse(User user);
 
 }
