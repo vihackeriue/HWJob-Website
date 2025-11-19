@@ -5,8 +5,8 @@ import com.hw.hwjobbackend.dto.response.industry.IndustryResponse;
 import com.hw.hwjobbackend.entity.Industry;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.IndustryMapper;
-import com.hw.hwjobbackend.repository.IndustryRepository;
+import com.hw.hwjobbackend.mapper.industry.IndustryMapper;
+import com.hw.hwjobbackend.repository.industry.IndustryRepository;
 import com.hw.hwjobbackend.service.industry.IndustryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -69,5 +69,12 @@ public class IndustryServiceImpl implements IndustryService {
         Industry industry = industryRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.INDUSTRY_NOT_EXISTED));
         industryRepository.delete(industry);
+    }
+
+    @Override
+    public Industry getIndustryEntityById(Long id) {
+        return industryRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.INDUSTRY_NOT_EXISTED)
+        );
     }
 }

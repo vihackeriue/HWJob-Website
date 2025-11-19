@@ -4,12 +4,11 @@ import com.hw.hwjobbackend.dto.request.authentication.AuthenticationRequest;
 import com.hw.hwjobbackend.dto.response.authentication.AuthenticationResponse;
 import com.hw.hwjobbackend.dto.response.authentication.IntrospectResponse;
 import com.hw.hwjobbackend.entity.InvalidateToken;
-import com.hw.hwjobbackend.entity.User;
+import com.hw.hwjobbackend.entity.user.User;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.exception.AppException;
-import com.hw.hwjobbackend.repository.RedisTokenRepository;
-import com.hw.hwjobbackend.repository.UserRepository;
-import com.hw.hwjobbackend.service.authentication.CustomUserDetails;
+import com.hw.hwjobbackend.repository.token.RedisTokenRepository;
+import com.hw.hwjobbackend.repository.user.UserRepository;
 import com.hw.hwjobbackend.service.authentication.AuthenticationService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -23,10 +22,8 @@ import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -82,7 +79,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     RedisTokenRepository redisTokenRepository;
     UserRepository userRepository;
-    AuthenticationManager authenticationManager;
 
 
     @Override
@@ -99,24 +95,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse login(AuthenticationRequest request) {
-        try {
-            String username = request.getUsername() == null ? null : request.getUsername().trim(); // Xóa khoảng trắng ở đầu và cuối
-            String password = request.getPassword();
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password)
-            );
-            Object principal = authentication.getPrincipal();
-            User user;
-            if (principal instanceof CustomUserDetails(User u)) {
-                user = u;
-            } else {
-                throw new AppException(ErrorCode.USERNAME_PASSWORD_INVALID);
-            }
-            var token = generateToken(user);
-            return AuthenticationResponse.builder().token(token).authenticated(true).build();
-        } catch (BadCredentialsException | DisabledException ex) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_PASSWORD_INVALID));
+
+        boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
+
+        if (!authenticated) {
             throw new AppException(ErrorCode.USERNAME_PASSWORD_INVALID);
         }
+        var token = generateToken(user);
+        return AuthenticationResponse.builder().token(token).authenticated(true).build();
     }
 
 
@@ -153,6 +143,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var newToken = generateToken(user);
         return AuthenticationResponse.builder().token(newToken).authenticated(true).build();
     }
+
 
     private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());

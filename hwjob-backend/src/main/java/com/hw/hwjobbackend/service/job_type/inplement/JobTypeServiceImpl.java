@@ -5,8 +5,8 @@ import com.hw.hwjobbackend.dto.response.job_type.JobTypeResponse;
 import com.hw.hwjobbackend.entity.JobType;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.JobTypeMapper;
-import com.hw.hwjobbackend.repository.JobTypeRepository;
+import com.hw.hwjobbackend.mapper.job_type.JobTypeMapper;
+import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
 import com.hw.hwjobbackend.service.job_type.JobTypeService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -74,5 +74,12 @@ public class JobTypeServiceImpl implements JobTypeService {
         JobType jobType = jobTypeRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.JOB_TYPE_NOT_EXISTED));
         jobTypeRepository.delete(jobType);
+    }
+
+    @Override
+    public JobType getJobTypeEntityById(Long id) {
+        return jobTypeRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.JOB_TYPE_NOT_EXISTED)
+        );
     }
 }

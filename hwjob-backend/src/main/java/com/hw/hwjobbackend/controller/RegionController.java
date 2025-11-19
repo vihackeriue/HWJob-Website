@@ -2,7 +2,6 @@ package com.hw.hwjobbackend.controller;
 
 
 import com.hw.hwjobbackend.dto.response.ApiResponse;
-import com.hw.hwjobbackend.dto.response.level.LevelResponse;
 import com.hw.hwjobbackend.dto.response.region.ProvinceResponse;
 import com.hw.hwjobbackend.service.region.ProvinceService;
 import lombok.AccessLevel;
@@ -23,14 +22,20 @@ public class RegionController {
 
     @GetMapping
     public ApiResponse<List<ProvinceResponse>> getProvinces(
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size
     ) {
-        Page<ProvinceResponse> response = provinceService.getAllProvince(page - 1, size);
+
+        if (page != null && size != null) {
+            Page<ProvinceResponse> response = provinceService.getAllProvince(page - 1, size);
+            return ApiResponse.<List<ProvinceResponse>>builder()
+                    .page(response.getNumber() + 1)
+                    .totalPages(response.getTotalPages())
+                    .result(response.getContent())
+                    .build();
+        }
         return ApiResponse.<List<ProvinceResponse>>builder()
-                .page(response.getNumber() + 1)
-                .totalPages(response.getTotalPages())
-                .result(response.getContent())
+                .result(provinceService.getAllProvince())
                 .build();
     }
 

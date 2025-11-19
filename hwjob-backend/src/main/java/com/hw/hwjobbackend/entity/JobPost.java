@@ -1,17 +1,18 @@
 package com.hw.hwjobbackend.entity;
 
-
-import com.hw.hwjobbackend.enums.PostStatus;
+import com.hw.hwjobbackend.entity.region.Province;
+import com.hw.hwjobbackend.entity.user.Recruiter;
+import com.hw.hwjobbackend.enums.JobPostStatus;
+import com.hw.hwjobbackend.enums.SalaryType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.Date;
-
 
 @Entity(name = "job-posts")
 @Getter
@@ -20,36 +21,43 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EntityListeners(AuditingEntityListener.class)
 public class JobPost {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
-    @ManyToOne
-    Recruiter recruiter;
-
-    @ManyToOne
-    Level level;
-
     String title;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String description;
 
-    int quantity;
+    Integer quantity;
 
-    String requirements;
+    Long salary;
 
-    String salaryRange;
+    SalaryType salaryType;
 
-    PostStatus postStatus;
+    JobPostStatus status;
 
     LocalDateTime endedTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    Province province;
+    Recruiter recruiter;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    Ward ward;
+    Level level;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    JobType jobType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    Industry industry;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    Province province;
+
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)

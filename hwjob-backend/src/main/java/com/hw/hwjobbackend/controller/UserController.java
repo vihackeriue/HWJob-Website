@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -82,5 +83,13 @@ public class UserController {
                                        @RequestBody UserStatusRequest request) {
         userService.changeUserStatus(id, request);
         return ApiResponse.<Void>builder().build();
+    }
+
+    @PutMapping("/upload-avatar")
+    ApiResponse<UserResponse> updateAvatar(
+            @RequestParam("file") MultipartFile file) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.updateAvatar(file))
+                .build();
     }
 }

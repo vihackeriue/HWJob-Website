@@ -2,6 +2,7 @@ package com.hw.hwjobbackend.service.level;
 
 import com.hw.hwjobbackend.dto.request.level.LevelRequest;
 import com.hw.hwjobbackend.dto.response.level.LevelResponse;
+import com.hw.hwjobbackend.entity.Level;
 import org.springframework.data.domain.Page;
 
 public interface LevelService {
@@ -14,4 +15,7 @@ public interface LevelService {
     LevelResponse updateLevel(Long id, LevelRequest request);
 
     void deleteLevel(Long id);
+
+    Level getLevelEntityById(Long id);
+
 }
