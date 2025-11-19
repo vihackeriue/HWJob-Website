@@ -64,5 +64,10 @@ public class ApplicationServiceImpl implements ApplicationService {
         return applicationMapper.toApplicationResponse(application);
     }
 
-
+    @Override
+    public boolean isCandidateApplied(String candidateId, String jobPostId) {
+        Candidate candidate = candidateService.getCandidateEntityById(candidateId);
+        JobPost jobPost = jobPostService.getJobPostEntityById(jobPostId);
+        return applicationRepository.existsApplicationByCandidateAndJobPost(candidate, jobPost);
+    }
 }
