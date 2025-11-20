@@ -26,7 +26,8 @@ public class JobPostController {
     @GetMapping
     public ApiResponse<List<JobPostResponse>> getAllJobPosts(
             @RequestParam(value = "page", defaultValue = "1") Integer page,
-            @RequestParam(value = "size", defaultValue = "10") Integer size
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+
     ) {
         if (page != null && size != null) {
             Page<JobPostResponse> response = jobPostService.getAllJobPosts(page - 1, size);

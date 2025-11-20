@@ -2,6 +2,7 @@ package com.hw.hwjobbackend.dto.response.job_post;
 
 
 import com.hw.hwjobbackend.enums.JobPostStatus;
+import com.hw.hwjobbackend.enums.SalaryType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,6 +20,7 @@ public class JobPostDetailResponse {
     String description;
     String quantity;
     Long salary;
+    SalaryType salaryType;
 
     String industry;
     String level;
