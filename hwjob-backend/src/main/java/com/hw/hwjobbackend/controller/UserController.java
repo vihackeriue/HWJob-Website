@@ -5,10 +5,7 @@ import com.hw.hwjobbackend.dto.request.user.RecruiterUpdateRequest;
 import com.hw.hwjobbackend.dto.request.user.UserCreationRequest;
 import com.hw.hwjobbackend.dto.request.user.UserStatusRequest;
 import com.hw.hwjobbackend.dto.response.*;
-import com.hw.hwjobbackend.dto.response.user.CandidateResponse;
-import com.hw.hwjobbackend.dto.response.user.RecruiterResponse;
-import com.hw.hwjobbackend.dto.response.user.UserCreationResponse;
-import com.hw.hwjobbackend.dto.response.user.UserResponse;
+import com.hw.hwjobbackend.dto.response.user.*;
 import com.hw.hwjobbackend.service.user.CandidateService;
 import com.hw.hwjobbackend.service.user.RecruiterService;
 import com.hw.hwjobbackend.service.user.UserService;
@@ -86,9 +83,9 @@ public class UserController {
     }
 
     @PutMapping("/upload-avatar")
-    ApiResponse<UserResponse> updateAvatar(
+    ApiResponse<UpdateAvatarResponse> updateAvatar(
             @RequestParam("file") MultipartFile file) {
-        return ApiResponse.<UserResponse>builder()
+        return ApiResponse.<UpdateAvatarResponse>builder()
                 .result(userService.updateAvatar(file))
                 .build();
     }
