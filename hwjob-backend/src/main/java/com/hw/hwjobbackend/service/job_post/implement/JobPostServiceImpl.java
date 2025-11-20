@@ -131,24 +131,10 @@ public class JobPostServiceImpl implements JobPostService {
 
         JobPost jobPost = getJobPostEntityById(id);
         JobPostDetailResponse response = jobPostMapper.toJobPostDetailResponse(jobPost);
-
-        // Kiểm tra có token hợp lệ hay không (authenticated và không phải anonymous)
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean hasValidToken = authentication != null && authentication.isAuthenticated()
-                && !"anonymousUser".equals(authentication.getName());
-
-        if (hasValidToken) {
-            // Có token hợp lệ: Kiểm tra isApplied
-            String username = authentication.getName();
-            Candidate candidate = candidateService.getCandidateEntityByName(username);
-            response.setIsApplied(applicationRepository.existsApplicationByCandidateAndJobPost(candidate, jobPost));
-            response.setIsSaved(candidateSaveJobRepository.existsCandidateSaveJobByCandidateAndJobPost(candidate, jobPost));
-        } else {
-            // Không có token hoặc anonymous: Set mặc định false
-            response.setIsApplied(false);
-            response.setIsSaved(false);
-        }
-
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Candidate candidate = candidateService.getCandidateEntityByName(username);
+        response.setIsApplied(applicationRepository.existsApplicationByCandidateAndJobPost(candidate, jobPost));
+        response.setIsSaved(candidateSaveJobRepository.existsCandidateSaveJobByCandidateAndJobPost(candidate, jobPost));
         return response;
     }
 
