@@ -2,6 +2,7 @@ package com.hw.hwjobbackend.service.user.implement;
 
 import com.hw.hwjobbackend.dto.request.user.UserStatusRequest;
 import com.hw.hwjobbackend.dto.response.file.FileResponse;
+import com.hw.hwjobbackend.dto.response.user.UpdateAvatarResponse;
 import com.hw.hwjobbackend.entity.region.Province;
 import com.hw.hwjobbackend.entity.user.Candidate;
 import com.hw.hwjobbackend.entity.user.Recruiter;
@@ -127,7 +128,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse updateAvatar(MultipartFile file) {
+    public UpdateAvatarResponse updateAvatar(MultipartFile file) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = getUserByUserName(username);
 
@@ -140,7 +141,11 @@ public class UserServiceImpl implements UserService {
 
         user.setImageUrl(response.getUrl());
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        userRepository.save(user);
+
+        return UpdateAvatarResponse.builder()
+                .imageUrl(user.getImageUrl())
+                .build();
     }
 
     @Override

@@ -4,6 +4,7 @@ package com.hw.hwjobbackend.service.user;
 import com.hw.hwjobbackend.dto.request.user.UserCreationRequest;
 import com.hw.hwjobbackend.dto.request.user.UserStatusRequest;
 import com.hw.hwjobbackend.dto.request.user.UserUpdateRequest;
+import com.hw.hwjobbackend.dto.response.user.UpdateAvatarResponse;
 import com.hw.hwjobbackend.dto.response.user.UserCreationResponse;
 import com.hw.hwjobbackend.dto.response.user.UserResponse;
 import com.hw.hwjobbackend.entity.user.User;
@@ -24,7 +25,7 @@ public interface UserService {
 
     void changeUserStatus(String id, UserStatusRequest request);
 
-    UserResponse updateAvatar(MultipartFile file);
+    UpdateAvatarResponse updateAvatar(MultipartFile file);
 
     User getUserByUserName(String username);
 

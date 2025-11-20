@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.dto.response.authentication;
 
+import com.hw.hwjobbackend.dto.response.user.UserLoginResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,4 +14,5 @@ import lombok.experimental.FieldDefaults;
 public class AuthenticationResponse {
     String token;
     boolean authenticated;
+    UserLoginResponse user;
 }
