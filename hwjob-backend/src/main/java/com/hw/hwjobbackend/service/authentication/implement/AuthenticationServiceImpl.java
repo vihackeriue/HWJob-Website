@@ -3,11 +3,13 @@ package com.hw.hwjobbackend.service.authentication.implement;
 import com.hw.hwjobbackend.dto.request.authentication.AuthenticationRequest;
 import com.hw.hwjobbackend.dto.response.authentication.AuthenticationResponse;
 import com.hw.hwjobbackend.dto.response.authentication.IntrospectResponse;
+import com.hw.hwjobbackend.dto.response.user.UserLoginResponse;
 import com.hw.hwjobbackend.entity.InvalidateToken;
 import com.hw.hwjobbackend.entity.user.User;
 import com.hw.hwjobbackend.enums.UserStatusEnum;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.exception.AppException;
+import com.hw.hwjobbackend.mapper.user.UserMapper;
 import com.hw.hwjobbackend.repository.token.RedisTokenRepository;
 import com.hw.hwjobbackend.repository.user.UserRepository;
 import com.hw.hwjobbackend.service.authentication.AuthenticationService;
@@ -80,6 +82,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     RedisTokenRepository redisTokenRepository;
     UserRepository userRepository;
+    UserMapper userMapper;
 
 
     @Override
@@ -108,8 +111,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (!authenticated) {
             throw new AppException(ErrorCode.USERNAME_PASSWORD_INVALID);
         }
-        var token = generateToken(user);
-        return AuthenticationResponse.builder().token(token).authenticated(true).build();
+        UserLoginResponse userLoginResponse = userMapper.toUserLoginResponse(user);
+        String token = generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(token)
+                .authenticated(true)
+                .user(userLoginResponse)
+                .build();
     }
 
 
@@ -144,7 +152,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user = userRepository.findByUsername(userName)
                 .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
         var newToken = generateToken(user);
-        return AuthenticationResponse.builder().token(newToken).authenticated(true).build();
+        UserLoginResponse userLoginResponse = userMapper.toUserLoginResponse(user);
+        return AuthenticationResponse.builder().token(newToken)
+                .user(userLoginResponse)
+                .authenticated(true).build();
     }
 
 
