@@ -1,6 +1,8 @@
 package com.hw.hwjobbackend.dto.response.job_post;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.hw.hwjobbackend.dto.response.user.RecruiterProfileResponse;
 import com.hw.hwjobbackend.enums.JobPostStatus;
 import com.hw.hwjobbackend.enums.SalaryType;
 import lombok.*;
@@ -14,6 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JobPostDetailResponse {
     String id;
     String title;
@@ -25,9 +28,8 @@ public class JobPostDetailResponse {
     String industry;
     String level;
     String jobType;
-    String recruiterId;
-    String recruiterName;
-    String recruiterImageUrl;
+
+    RecruiterProfileResponse recruiter;
 
     JobPostStatus status;
     Date createdAt;

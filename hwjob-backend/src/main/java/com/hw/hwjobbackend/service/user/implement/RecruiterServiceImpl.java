@@ -65,10 +65,11 @@ public class RecruiterServiceImpl implements RecruiterService {
         Recruiter recruiter = recruiterRepository.findById(id).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_EXISTED)
         );
-
         RecruiterProfileResponse response = recruiterMapper.toRecruiterProfileResponse(recruiter);
-        response.setFollowed(false);
 
+        response.setRegion(recruiter.getProvince() != null ? recruiter.getProvince().getName() : null);
+
+        response.setFollowed(false);
         return response;
     }
 }

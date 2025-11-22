@@ -9,8 +9,7 @@ import com.hw.hwjobbackend.mapper.region.WardMapper;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring",
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        uses = {ProvinceMapper.class, WardMapper.class})
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface RecruiterMapper {
 
     @Mapping(source = "province.name", target = "region")
@@ -19,10 +18,7 @@ public interface RecruiterMapper {
     @Mapping(target = "password", ignore = true)
     void updateRecruiter(@MappingTarget Recruiter recruiter, RecruiterUpdateRequest request);
 
-    @Mapping(
-            target = "region",
-            expression = "java(recruiter.getProvince() != null " +
-                    "? recruiter.getProvince().getName() : null)")
+    @Mapping(target = "region", ignore = true)
     RecruiterProfileResponse toRecruiterProfileResponse(Recruiter recruiter);
 
 }
