@@ -12,4 +12,5 @@ import lombok.experimental.FieldDefaults;
 @Builder
 public class SaveJobPostResponse {
     String id;
+    boolean isSaved;
 }

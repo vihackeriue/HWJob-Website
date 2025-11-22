@@ -43,13 +43,14 @@ public class ApplicationServiceImpl implements ApplicationService {
         Candidate candidate = candidateService.getCandidateEntityByName(username);
         JobPost jobPost = jobPostService.getJobPostEntityById(request.getJobPostId());
 
-        if (applicationRepository.existsApplicationByCandidateAndJobPost(candidate, jobPost)) {
-            throw new AppException(ErrorCode.JOB_POST_ALREADY_APPLIED);
-        }
         ApplicationId applicationId = ApplicationId.builder()
                 .candidateId(candidate.getId())
                 .jobPostId(jobPost.getId())
                 .build();
+
+        if (applicationRepository.existsApplicationById(applicationId)) {
+            throw new AppException(ErrorCode.JOB_POST_ALREADY_APPLIED);
+        }
 
         Application application = Application.builder()
                 .id(applicationId)
@@ -68,6 +69,10 @@ public class ApplicationServiceImpl implements ApplicationService {
     public boolean isCandidateApplied(String candidateId, String jobPostId) {
         Candidate candidate = candidateService.getCandidateEntityById(candidateId);
         JobPost jobPost = jobPostService.getJobPostEntityById(jobPostId);
-        return applicationRepository.existsApplicationByCandidateAndJobPost(candidate, jobPost);
+        ApplicationId applicationId = ApplicationId.builder()
+                .candidateId(candidate.getId())
+                .jobPostId(jobPost.getId())
+                .build();
+        return applicationRepository.existsApplicationById(applicationId);
     }
 }

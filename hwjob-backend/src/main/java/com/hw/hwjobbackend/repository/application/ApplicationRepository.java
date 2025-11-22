@@ -10,6 +10,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, ApplicationId> {
-
-    boolean existsApplicationByCandidateAndJobPost(Candidate candidate, JobPost jobPost);
+    boolean existsApplicationById(ApplicationId id);
 }

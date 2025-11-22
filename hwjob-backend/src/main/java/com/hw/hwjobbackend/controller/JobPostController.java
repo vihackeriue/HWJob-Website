@@ -27,8 +27,9 @@ public class JobPostController {
     public ApiResponse<List<JobPostResponse>> getAllJobPosts(
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "industryId", required = false) Long industryId
 
-    ) {
+            ) {
         if (page != null && size != null) {
             Page<JobPostResponse> response = jobPostService.getAllJobPosts(page - 1, size);
             return ApiResponse.<List<JobPostResponse>>builder()
