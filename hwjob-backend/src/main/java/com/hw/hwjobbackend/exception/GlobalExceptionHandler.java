@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.exception;
 
-import com.hw.hwjobbackend.dto.response.ApiResponse;
+import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

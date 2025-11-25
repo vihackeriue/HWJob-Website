@@ -18,6 +18,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 
+/**
+ * Sử dụng để get dữ liệu từ API
+ */
+
 @Configuration
 public class RestTemplateConfiguration {
 

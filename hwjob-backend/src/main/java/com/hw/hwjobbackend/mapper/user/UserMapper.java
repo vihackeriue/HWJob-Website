@@ -1,15 +1,13 @@
 package com.hw.hwjobbackend.mapper.user;
 
 
-import com.hw.hwjobbackend.dto.request.user.UserCreationRequest;
-import com.hw.hwjobbackend.dto.request.user.UserUpdateRequest;
-import com.hw.hwjobbackend.dto.response.user.*;
-import com.hw.hwjobbackend.entity.user.Candidate;
-import com.hw.hwjobbackend.entity.user.Recruiter;
-import com.hw.hwjobbackend.entity.user.User;
+import com.hw.hwjobbackend.model.dto.request.user.UserCreationRequest;
+import com.hw.hwjobbackend.model.dto.response.user.*;
+import com.hw.hwjobbackend.model.entity.user.Candidate;
+import com.hw.hwjobbackend.model.entity.user.Recruiter;
+import com.hw.hwjobbackend.model.entity.user.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.SubclassMapping;
 
 @Mapper(componentModel = "spring")

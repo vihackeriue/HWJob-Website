@@ -1,9 +1,9 @@
 package com.hw.hwjobbackend.controller;
 
 
-import com.hw.hwjobbackend.dto.request.job_type.JobTypeRequest;
-import com.hw.hwjobbackend.dto.response.ApiResponse;
-import com.hw.hwjobbackend.dto.response.job_type.JobTypeResponse;
+import com.hw.hwjobbackend.model.dto.request.job_type.JobTypeRequest;
+import com.hw.hwjobbackend.model.dto.response.ApiResponse;
+import com.hw.hwjobbackend.model.dto.response.job_type.JobTypeResponse;
 import com.hw.hwjobbackend.service.job_type.JobTypeService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

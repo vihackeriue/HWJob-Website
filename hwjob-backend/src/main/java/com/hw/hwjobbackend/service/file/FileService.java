@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.service.file;
 
-import com.hw.hwjobbackend.dto.response.file.FileData;
-import com.hw.hwjobbackend.dto.response.file.FileResponse;
+import com.hw.hwjobbackend.model.dto.response.file.FileData;
+import com.hw.hwjobbackend.model.dto.response.file.FileResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

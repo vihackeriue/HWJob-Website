@@ -1,6 +1,7 @@
 package com.hw.hwjobbackend.configuration.security;
 
 
+import com.hw.hwjobbackend.service.user.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,6 +60,7 @@ public class SecurityConfiguration {
     };
 
     private final CustomJwtDecoder customJwtDecoder;
+    private final CustomUserDetailService customUserDetailService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -70,7 +72,8 @@ public class SecurityConfiguration {
                 .jwt(jwtConfigurer -> jwtConfigurer
                         .decoder(customJwtDecoder)
                         .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint()))
+        ;
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.cors(Customizer.withDefaults());
 
@@ -113,4 +116,13 @@ public class SecurityConfiguration {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
+
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(customUserDetailService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+
+        return new ProviderManager(authenticationProvider);
+    }
+
 }

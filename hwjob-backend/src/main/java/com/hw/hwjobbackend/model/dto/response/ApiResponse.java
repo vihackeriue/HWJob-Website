@@ -1,0 +1,24 @@
+package com.hw.hwjobbackend.model.dto.response;
+
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+
+@Setter
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ApiResponse<T> {
+
+    @Builder.Default
+    int code = 1000;
+    String message;
+    Integer page;
+    Integer totalPages;
+    T result;
+}
