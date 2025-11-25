@@ -2,15 +2,20 @@ package com.hw.hwjobbackend.configuration.security;
 
 
 import java.text.ParseException;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.Objects;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.hw.hwjobbackend.dto.response.authentication.IntrospectResponse;
-import com.hw.hwjobbackend.repository.token.RedisTokenRepository;
+import com.hw.hwjobbackend.exception.AppException;
+import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.model.dto.response.authentication.IntrospectResponse;
 import com.hw.hwjobbackend.service.authentication.AuthenticationService;
+import com.hw.hwjobbackend.service.authentication.JwtService;
 import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.SignedJWT;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,26 +34,21 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-@Slf4j
+@RequiredArgsConstructor
 public class CustomJwtDecoder implements JwtDecoder {
     @Value("${jwt.signerKey}")
     private String signerKey;
 
     private NimbusJwtDecoder nimbusJwtDecoder = null;
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    private final JwtService jwtService;
 
 
     @Override
     public Jwt decode(String token) throws JwtException {
 
-        try {
-            IntrospectResponse response = authenticationService.introspect(token);
-            if (!response.isValid()) throw new JwtException("Token invalid");
-        } catch (JOSEException | ParseException e) {
-            throw new JwtException(e.getMessage());
-        }
+        IntrospectResponse response = jwtService.introspect(token);
+        if (!response.isValid()) throw new JwtException("Token invalid");
         if (Objects.isNull(nimbusJwtDecoder)) {
             SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512");
             nimbusJwtDecoder = NimbusJwtDecoder.withSecretKey(secretKeySpec)
@@ -57,4 +57,5 @@ public class CustomJwtDecoder implements JwtDecoder {
         }
         return nimbusJwtDecoder.decode(token);
     }
+
 }

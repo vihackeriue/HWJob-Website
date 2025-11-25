@@ -1,8 +1,8 @@
 package com.hw.hwjobbackend.service.job_type;
 
-import com.hw.hwjobbackend.dto.request.job_type.JobTypeRequest;
-import com.hw.hwjobbackend.dto.response.job_type.JobTypeResponse;
-import com.hw.hwjobbackend.entity.JobType;
+import com.hw.hwjobbackend.model.dto.request.job_type.JobTypeRequest;
+import com.hw.hwjobbackend.model.dto.response.job_type.JobTypeResponse;
+import com.hw.hwjobbackend.model.entity.JobType;
 import org.springframework.data.domain.Page;
 
 public interface JobTypeService {

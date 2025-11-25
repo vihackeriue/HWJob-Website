@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.configuration.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hw.hwjobbackend.dto.response.ApiResponse;
+import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.mapper.file;
 
-import com.hw.hwjobbackend.dto.file.FileInfo;
-import com.hw.hwjobbackend.entity.FileMgmt;
+import com.hw.hwjobbackend.model.dto.file.FileInfo;
+import com.hw.hwjobbackend.model.entity.FileMgmt;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

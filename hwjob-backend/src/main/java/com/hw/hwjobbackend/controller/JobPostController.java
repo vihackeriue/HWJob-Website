@@ -1,11 +1,11 @@
 package com.hw.hwjobbackend.controller;
 
 
-import com.hw.hwjobbackend.dto.request.job_post.JobPostCreationRequest;
-import com.hw.hwjobbackend.dto.response.ApiResponse;
-import com.hw.hwjobbackend.dto.response.job_post.JobPostDetailResponse;
-import com.hw.hwjobbackend.dto.response.job_post.JobPostResponse;
-import com.hw.hwjobbackend.dto.response.job_post.SaveJobPostResponse;
+import com.hw.hwjobbackend.model.dto.request.job_post.JobPostCreationRequest;
+import com.hw.hwjobbackend.model.dto.response.ApiResponse;
+import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
+import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
+import com.hw.hwjobbackend.model.dto.response.job_post.SaveJobPostResponse;
 import com.hw.hwjobbackend.service.job_post.JobPostService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.validator.role_validator;
 
 
-import com.hw.hwjobbackend.enums.RoleEnum;
+import com.hw.hwjobbackend.model.enums.RoleEnum;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

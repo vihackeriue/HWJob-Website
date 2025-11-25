@@ -1,10 +1,11 @@
 package com.hw.hwjobbackend.controller;
 
-import com.hw.hwjobbackend.dto.request.authentication.AuthenticationRequest;
-import com.hw.hwjobbackend.dto.response.ApiResponse;
-import com.hw.hwjobbackend.dto.response.authentication.AuthenticationResponse;
-import com.hw.hwjobbackend.dto.response.authentication.IntrospectResponse;
+import com.hw.hwjobbackend.model.dto.request.authentication.AuthenticationRequest;
+import com.hw.hwjobbackend.model.dto.response.ApiResponse;
+import com.hw.hwjobbackend.model.dto.response.authentication.AuthenticationResponse;
+import com.hw.hwjobbackend.model.dto.response.authentication.IntrospectResponse;
 import com.hw.hwjobbackend.service.authentication.AuthenticationService;
+import com.hw.hwjobbackend.service.authentication.JwtService;
 import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.text.ParseException;
 public class AuthenticationController {
 
     AuthenticationService authenticationService;
+    JwtService jwtService;
 
     @PostMapping("/login")
     public ApiResponse<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
@@ -41,14 +43,14 @@ public class AuthenticationController {
     @PostMapping("/introspect")
     public ApiResponse<IntrospectResponse> introspect(@RequestHeader("Authorization") String authHeader) throws ParseException, JOSEException {
         String token = authHeader.substring(7);
-        var result = authenticationService.introspect(token);
+        var result = jwtService.introspect(token);
         return ApiResponse.<IntrospectResponse>builder().result(result).build();
     }
 
     @PostMapping("/refresh")
     public ApiResponse<AuthenticationResponse> refresh(@RequestHeader("Authorization") String authHeader) throws ParseException, JOSEException {
         String token = authHeader.substring(7);
-        var result = authenticationService.refreshToken(token);
+        var result = jwtService.refreshToken(token);
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }
 }

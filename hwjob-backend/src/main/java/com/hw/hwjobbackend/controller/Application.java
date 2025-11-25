@@ -1,9 +1,9 @@
 package com.hw.hwjobbackend.controller;
 
 
-import com.hw.hwjobbackend.dto.request.application.ApplicationRequest;
-import com.hw.hwjobbackend.dto.response.ApiResponse;
-import com.hw.hwjobbackend.dto.response.application.ApplicationResponse;
+import com.hw.hwjobbackend.model.dto.request.application.ApplicationRequest;
+import com.hw.hwjobbackend.model.dto.response.ApiResponse;
+import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
 import com.hw.hwjobbackend.service.application.ApplicationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +29,4 @@ public class Application {
                 .result(applicationService.applyJob(request))
                 .build();
     }
-
-
 }

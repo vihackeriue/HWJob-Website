@@ -1,9 +1,9 @@
 package com.hw.hwjobbackend.mapper.level;
 
 
-import com.hw.hwjobbackend.dto.request.level.LevelRequest;
-import com.hw.hwjobbackend.dto.response.level.LevelResponse;
-import com.hw.hwjobbackend.entity.Level;
+import com.hw.hwjobbackend.model.dto.request.level.LevelRequest;
+import com.hw.hwjobbackend.model.dto.response.level.LevelResponse;
+import com.hw.hwjobbackend.model.entity.Level;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

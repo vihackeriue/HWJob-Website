@@ -1,8 +1,8 @@
 package com.hw.hwjobbackend.controller;
 
 
-import com.hw.hwjobbackend.dto.response.ApiResponse;
-import com.hw.hwjobbackend.dto.response.user.RecruiterProfileResponse;
+import com.hw.hwjobbackend.model.dto.response.ApiResponse;
+import com.hw.hwjobbackend.model.dto.response.user.RecruiterProfileResponse;
 import com.hw.hwjobbackend.service.user.RecruiterService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
