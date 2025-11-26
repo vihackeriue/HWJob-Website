@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.configuration.security;
 
 
-import com.hw.hwjobbackend.service.user.CustomUserDetailService;
+import com.hw.hwjobbackend.service.authentication.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,7 +54,7 @@ public class SecurityConfiguration {
             "/industries/**",
             "/job-posts",
             "/media/**",
-            "/profiles/**"
+            "/users/recruiter-profiles/**"
     };
 
     private final CustomJwtDecoder customJwtDecoder;
