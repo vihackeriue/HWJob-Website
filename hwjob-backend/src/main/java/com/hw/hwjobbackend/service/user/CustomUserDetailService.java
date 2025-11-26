@@ -25,4 +25,5 @@ public class CustomUserDetailService implements UserDetailsService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
+
 }

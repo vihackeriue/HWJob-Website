@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.model.entity;
+package com.hw.hwjobbackend.model.entity.level;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

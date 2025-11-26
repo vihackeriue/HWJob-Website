@@ -2,7 +2,7 @@ package com.hw.hwjobbackend.service.level;
 
 import com.hw.hwjobbackend.model.dto.request.level.LevelRequest;
 import com.hw.hwjobbackend.model.dto.response.level.LevelResponse;
-import com.hw.hwjobbackend.model.entity.Level;
+import com.hw.hwjobbackend.model.entity.level.Level;
 import org.springframework.data.domain.Page;
 
 public interface LevelService {

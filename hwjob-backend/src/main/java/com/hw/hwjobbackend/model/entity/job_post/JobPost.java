@@ -1,5 +1,8 @@
-package com.hw.hwjobbackend.model.entity;
+package com.hw.hwjobbackend.model.entity.job_post;
 
+import com.hw.hwjobbackend.model.entity.job_type.JobType;
+import com.hw.hwjobbackend.model.entity.level.Level;
+import com.hw.hwjobbackend.model.entity.industry.Industry;
 import com.hw.hwjobbackend.model.entity.region.Province;
 import com.hw.hwjobbackend.model.entity.user.Recruiter;
 import com.hw.hwjobbackend.model.enums.JobPostStatus;

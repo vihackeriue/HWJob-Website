@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.model.entity;
+package com.hw.hwjobbackend.model.entity.file;
 
 
 import jakarta.persistence.Entity;

@@ -1,10 +1,8 @@
-package com.hw.hwjobbackend.model.entity;
+package com.hw.hwjobbackend.model.entity.industry;
 
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Entity(name = "industries")
 @Getter

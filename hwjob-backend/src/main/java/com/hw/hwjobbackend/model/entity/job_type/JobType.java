@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.model.entity;
+package com.hw.hwjobbackend.model.entity.job_type;
 
 
 import jakarta.persistence.*;

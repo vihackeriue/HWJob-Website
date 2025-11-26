@@ -7,8 +7,9 @@ import com.hw.hwjobbackend.mapper.user.UserMapper;
 import com.hw.hwjobbackend.model.dto.response.authentication.AuthenticationResponse;
 import com.hw.hwjobbackend.model.dto.response.authentication.IntrospectResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserLoginResponse;
-import com.hw.hwjobbackend.model.entity.InvalidateToken;
+import com.hw.hwjobbackend.model.entity.invalidate_token.InvalidateToken;
 import com.hw.hwjobbackend.model.entity.user.User;
+import com.hw.hwjobbackend.model.enums.UserStatusEnum;
 import com.hw.hwjobbackend.repository.token.RedisTokenRepository;
 import com.hw.hwjobbackend.repository.user.UserRepository;
 import com.nimbusds.jose.*;
@@ -113,9 +114,15 @@ public class JwtServiceImpl implements JwtService {
         if (expiryTime.before(new Date())) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
-        if (redisTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
+        if (redisTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID())) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
-
+        }
+        String username = signedJWT.getJWTClaimsSet().getSubject();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+        if (user.getUserStatus() == UserStatusEnum.INACTIVE) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
         return signedJWT;
     }
 

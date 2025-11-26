@@ -5,7 +5,7 @@ import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.SaveJobPostResponse;
 import com.hw.hwjobbackend.model.dto.response.user.RecruiterProfileResponse;
-import com.hw.hwjobbackend.model.entity.JobPost;
+import com.hw.hwjobbackend.model.entity.job_post.JobPost;
 import com.hw.hwjobbackend.model.entity.application.ApplicationId;
 import com.hw.hwjobbackend.model.entity.candidate_save_job.CandidateSaveJob;
 import com.hw.hwjobbackend.model.entity.candidate_save_job.CandidateSaveJobId;

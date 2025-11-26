@@ -2,22 +2,16 @@ package com.hw.hwjobbackend.service.authentication;
 
 import com.hw.hwjobbackend.model.dto.request.authentication.AuthenticationRequest;
 import com.hw.hwjobbackend.model.dto.response.authentication.AuthenticationResponse;
-import com.hw.hwjobbackend.model.dto.response.authentication.IntrospectResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserLoginResponse;
-import com.hw.hwjobbackend.model.entity.InvalidateToken;
+import com.hw.hwjobbackend.model.entity.invalidate_token.InvalidateToken;
 import com.hw.hwjobbackend.model.entity.user.User;
-import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.mapper.user.UserMapper;
 import com.hw.hwjobbackend.repository.token.RedisTokenRepository;
-import com.hw.hwjobbackend.repository.user.UserRepository;
-import com.nimbusds.jose.*;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -82,7 +76,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .user(userLoginResponse)
                 .build();
     }
-
 
     @Override
     public void logout(String token) {

@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.model.entity.application;
 
 
-import com.hw.hwjobbackend.model.entity.JobPost;
+import com.hw.hwjobbackend.model.entity.job_post.JobPost;
 import com.hw.hwjobbackend.model.entity.user.Candidate;
 import com.hw.hwjobbackend.model.enums.ApplicationStatus;
 import jakarta.persistence.*;

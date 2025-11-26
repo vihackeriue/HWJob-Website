@@ -3,7 +3,7 @@ package com.hw.hwjobbackend.service.file;
 import com.hw.hwjobbackend.model.dto.file.FileInfo;
 import com.hw.hwjobbackend.model.dto.response.file.FileData;
 import com.hw.hwjobbackend.model.dto.response.file.FileResponse;
-import com.hw.hwjobbackend.model.entity.FileMgmt;
+import com.hw.hwjobbackend.model.entity.file.FileMgmt;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.mapper.file.FileMgmtMapper;

@@ -2,7 +2,7 @@ package com.hw.hwjobbackend.service.application;
 
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationRequest;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
-import com.hw.hwjobbackend.model.entity.JobPost;
+import com.hw.hwjobbackend.model.entity.job_post.JobPost;
 import com.hw.hwjobbackend.model.entity.application.Application;
 import com.hw.hwjobbackend.model.entity.application.ApplicationId;
 import com.hw.hwjobbackend.model.entity.user.Candidate;
@@ -39,6 +39,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     public ApplicationResponse applyJob(ApplicationRequest request) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
         Candidate candidate = candidateService.getCandidateEntityByName(username);
         JobPost jobPost = jobPostService.getJobPostEntityById(request.getJobPostId());
 
