@@ -12,7 +12,7 @@ import com.hw.hwjobbackend.repository.level.LevelRepository;
 import com.hw.hwjobbackend.repository.region.ProvinceRepository;
 import com.hw.hwjobbackend.repository.user.RoleRepository;
 import com.hw.hwjobbackend.repository.user.UserRepository;
-import com.hw.hwjobbackend.service.region.RegionService;
+import com.hw.hwjobbackend.service.shared.region.RegionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
