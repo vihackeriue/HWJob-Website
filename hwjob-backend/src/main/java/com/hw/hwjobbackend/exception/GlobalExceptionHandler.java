@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -49,7 +50,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {
             BadCredentialsException.class,
             InternalAuthenticationServiceException.class,
-            UsernameNotFoundException.class
+            UsernameNotFoundException.class,
+            DisabledException.class
     })
     public ResponseEntity<ApiResponse<?>> handlingBadCredentialsException(Exception exception) {
         log.error("Login failed: {}", exception.getMessage());

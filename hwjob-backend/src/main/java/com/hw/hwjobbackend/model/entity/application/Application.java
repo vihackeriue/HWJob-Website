@@ -20,7 +20,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Entity(name = "applications")
+@Entity
+@Table(name = "applications")
 @EntityListeners(AuditingEntityListener.class)
 public class Application {
 

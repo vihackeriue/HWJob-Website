@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -49,9 +51,18 @@ public class JobTypeServiceImpl implements JobTypeService {
     }
 
     @Override
-    public Page<JobTypeResponse> getAllJobTypes(int page, int size) {
+    public Page<JobTypeResponse> getJobTypes(int page, int size) {
+
+        page = Math.max(page, 0);
+        size = size <= 0 ? 10 : size;
+
         Pageable pageable = PageRequest.of(page, size);
         return jobTypeRepository.findAll(pageable).map(jobTypeMapper::toJobTypeResponse);
+    }
+
+    @Override
+    public List<JobTypeResponse> getAllJobTypes() {
+        return jobTypeRepository.findAll().stream().map(jobTypeMapper::toJobTypeResponse).toList();
     }
 
     @Override

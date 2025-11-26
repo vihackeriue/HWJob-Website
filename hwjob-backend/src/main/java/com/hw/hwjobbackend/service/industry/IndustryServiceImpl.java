@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -27,10 +29,17 @@ public class IndustryServiceImpl implements IndustryService {
     IndustryMapper industryMapper;
 
     @Override
-    public Page<IndustryResponse> getAllIndustryNames(int page, int size) {
+    public Page<IndustryResponse> getIndustries(int page, int size) {
+        page = Math.max(page, 0);
+        size = size <= 0 ? 10 : size;
         Pageable pageable = PageRequest.of(page, size);
         return industryRepository.findAll(pageable)
                 .map(industryMapper::toIndustryResponse);
+    }
+
+    @Override
+    public List<IndustryResponse> getAllIndustries() {
+        return industryRepository.findAll().stream().map(industryMapper::toIndustryResponse).toList();
     }
 
     @Override

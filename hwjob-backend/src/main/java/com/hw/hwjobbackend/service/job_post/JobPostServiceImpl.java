@@ -1,6 +1,7 @@
 package com.hw.hwjobbackend.service.job_post;
 
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostCreationRequest;
+import com.hw.hwjobbackend.model.dto.request.job_post.JobPostFilterRequest;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.SaveJobPostResponse;
@@ -65,10 +66,21 @@ public class JobPostServiceImpl implements JobPostService {
 
 
     @Override
-    public Page<JobPostResponse> getAllJobPosts(int page, int size) {
+    public Page<JobPostResponse> getJobPosts(Integer page, Integer size, JobPostFilterRequest filter
+    ) {
+        page = Math.max(page, 0);
+        size = size <= 0 ? 10 : size;
         Pageable pageable = PageRequest.of(page, size);
-        return jobPostRepository.findAll(pageable)
-                .map(jobPostMapper::toJobPostResponse);
+
+        Page<JobPost> jobPosts = jobPostRepository.getJobPosts(
+                JobPostStatus.PUBLIC,
+                filter.getIndustryId(),
+                filter.getLevelId(),
+                filter.getJobTypeId(),
+                filter.getRegionId(),
+                pageable
+        );
+        return jobPosts.map(jobPostMapper::toJobPostResponse);
 
     }
 

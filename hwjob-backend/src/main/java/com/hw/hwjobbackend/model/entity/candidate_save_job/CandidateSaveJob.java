@@ -16,7 +16,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Entity(name = "candidate_save_job")
+@Entity
+@Table(name = "candidate_save_job")
 @EntityListeners(AuditingEntityListener.class)
 public class CandidateSaveJob {
 

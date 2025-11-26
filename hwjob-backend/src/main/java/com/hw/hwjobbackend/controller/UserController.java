@@ -39,14 +39,19 @@ public class UserController {
 
     @GetMapping
     ApiResponse<List<UserResponse>> getAllUser(
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size
     ) {
-        Page<UserResponse> response = userService.getAllUser(page - 1, size);
+        if (page != null && size != null) {
+            Page<UserResponse> response = userService.getUsers(page - 1, size);
+            return ApiResponse.<List<UserResponse>>builder()
+                    .page(response.getNumber() + 1)
+                    .totalPages(response.getTotalPages())
+                    .result(response.getContent())
+                    .build();
+        }
         return ApiResponse.<List<UserResponse>>builder()
-                .page(response.getNumber() + 1)
-                .totalPages(response.getTotalPages())
-                .result(response.getContent())
+                .result(userService.getAllUsers())
                 .build();
     }
 

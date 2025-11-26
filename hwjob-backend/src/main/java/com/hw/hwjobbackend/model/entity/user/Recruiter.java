@@ -1,15 +1,13 @@
 package com.hw.hwjobbackend.model.entity.user;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
-import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-@Entity(name = "recruiters")
+@Entity
+@Table(name = "recruiters")
 @Getter
 @Setter
 @SuperBuilder
