@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.repository.job_post;
 
-import com.hw.hwjobbackend.model.entity.JobPost;
+import com.hw.hwjobbackend.model.entity.job_post.JobPost;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

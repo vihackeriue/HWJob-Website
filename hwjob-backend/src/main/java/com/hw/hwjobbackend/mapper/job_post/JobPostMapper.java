@@ -4,7 +4,7 @@ package com.hw.hwjobbackend.mapper.job_post;
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostCreationRequest;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
-import com.hw.hwjobbackend.model.entity.JobPost;
+import com.hw.hwjobbackend.model.entity.job_post.JobPost;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

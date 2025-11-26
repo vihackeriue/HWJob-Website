@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.repository.file;
 
 import com.hw.hwjobbackend.model.dto.file.FileInfo;
-import com.hw.hwjobbackend.model.entity.FileMgmt;
+import com.hw.hwjobbackend.model.entity.file.FileMgmt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;

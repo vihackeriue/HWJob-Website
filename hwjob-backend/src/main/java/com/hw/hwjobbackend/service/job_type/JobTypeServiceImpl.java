@@ -2,7 +2,7 @@ package com.hw.hwjobbackend.service.job_type;
 
 import com.hw.hwjobbackend.model.dto.request.job_type.JobTypeRequest;
 import com.hw.hwjobbackend.model.dto.response.job_type.JobTypeResponse;
-import com.hw.hwjobbackend.model.entity.JobType;
+import com.hw.hwjobbackend.model.entity.job_type.JobType;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.mapper.job_type.JobTypeMapper;

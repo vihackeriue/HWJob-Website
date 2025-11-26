@@ -2,7 +2,7 @@ package com.hw.hwjobbackend.service.industry;
 
 import com.hw.hwjobbackend.model.dto.request.industry.IndustryRequest;
 import com.hw.hwjobbackend.model.dto.response.industry.IndustryResponse;
-import com.hw.hwjobbackend.model.entity.Industry;
+import com.hw.hwjobbackend.model.entity.industry.Industry;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.mapper.industry.IndustryMapper;
