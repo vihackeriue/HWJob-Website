@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Entity(name = "job_types")
+@Entity
+@Table(name = "job_types")
 @Getter
 @Setter
 @Builder

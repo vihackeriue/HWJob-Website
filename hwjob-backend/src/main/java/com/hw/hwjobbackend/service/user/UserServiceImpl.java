@@ -34,6 +34,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -80,6 +81,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserCreationResponse(savedUser);
     }
 
+
     @Override
     public UserResponse getUserInfo() {
         SecurityContext context = SecurityContextHolder.getContext();
@@ -91,10 +93,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public Page<UserResponse> getAllUser(int page, int size) {
-
+    public Page<UserResponse> getUsers(int page, int size) {
+        page = Math.max(page, 0);
+        size = size <= 0 ? 10 : size;
         Pageable pageable = PageRequest.of(page, size);
         return userRepository.findAll(pageable).map(userMapper::toUserResponse);
+    }
+
+    @Override
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(userMapper::toUserResponse)
+                .toList();
     }
 
     @Override

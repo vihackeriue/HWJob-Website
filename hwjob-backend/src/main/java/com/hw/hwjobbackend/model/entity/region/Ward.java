@@ -1,14 +1,12 @@
 package com.hw.hwjobbackend.model.entity.region;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Entity(name = "wards")
+@Entity
+@Table(name = "wards")
 @Getter
 @Setter
 @Builder

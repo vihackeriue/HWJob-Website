@@ -1,13 +1,11 @@
 package com.hw.hwjobbackend.model.entity.level;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Entity(name = "levels")
+@Entity
+@Table(name = "levels")
 @Getter
 @Setter
 @Builder

@@ -9,7 +9,8 @@ import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity(name = "candidates")
+@Entity
+@Table(name = "candidates")
 @Getter
 @Setter
 @SuperBuilder

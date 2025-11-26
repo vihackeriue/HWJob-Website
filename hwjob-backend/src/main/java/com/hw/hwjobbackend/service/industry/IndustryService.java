@@ -5,9 +5,13 @@ import com.hw.hwjobbackend.model.dto.response.industry.IndustryResponse;
 import com.hw.hwjobbackend.model.entity.industry.Industry;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface IndustryService {
 
-    Page<IndustryResponse> getAllIndustryNames(int page, int size);
+    Page<IndustryResponse> getIndustries(int page, int size);
+
+    List<IndustryResponse> getAllIndustries();
 
     IndustryResponse getIndustryById(long id);
 

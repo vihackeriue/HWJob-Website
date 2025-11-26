@@ -24,15 +24,23 @@ public class LevelController {
 
     @GetMapping
     public ApiResponse<List<LevelResponse>> getAllLevels(
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size
     ) {
-        Page<LevelResponse> response = levelService.getAllLevels(page - 1, size);
+
+        if (page != null && size != null) {
+            Page<LevelResponse> response = levelService.getLevels(page - 1, size);
+            return ApiResponse.<List<LevelResponse>>builder()
+                    .page(response.getNumber() + 1)
+                    .totalPages(response.getTotalPages())
+                    .result(response.getContent())
+                    .build();
+        }
         return ApiResponse.<List<LevelResponse>>builder()
-                .page(response.getNumber() + 1)
-                .totalPages(response.getTotalPages())
-                .result(response.getContent())
+                .result(levelService.getAllLevels())
                 .build();
+
+
     }
 
     @GetMapping("/{id}")

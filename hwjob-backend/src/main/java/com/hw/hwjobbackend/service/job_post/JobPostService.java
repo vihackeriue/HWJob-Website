@@ -1,6 +1,7 @@
 package com.hw.hwjobbackend.service.job_post;
 
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostCreationRequest;
+import com.hw.hwjobbackend.model.dto.request.job_post.JobPostFilterRequest;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.SaveJobPostResponse;
@@ -11,7 +12,8 @@ import java.util.List;
 
 public interface JobPostService {
 
-    Page<JobPostResponse> getAllJobPosts(int page, int size);
+    Page<JobPostResponse> getJobPosts(Integer page, Integer size, JobPostFilterRequest filter
+    );
 
     List<JobPostResponse> getAllJobPosts();
 

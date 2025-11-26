@@ -23,15 +23,21 @@ public class JobTypeController {
 
     @GetMapping
     ApiResponse<List<JobTypeResponse>> getAllJobTypes(
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size
     ) {
-        Page<JobTypeResponse> response = jobTypeService.getAllJobTypes(page - 1, size);
+        if (page != null && size != null) {
+            Page<JobTypeResponse> response = jobTypeService.getJobTypes(page - 1, size);
+            return ApiResponse.<List<JobTypeResponse>>builder()
+                    .page(response.getNumber() + 1)
+                    .totalPages(response.getTotalPages())
+                    .result(response.getContent())
+                    .build();
+        }
         return ApiResponse.<List<JobTypeResponse>>builder()
-                .page(response.getNumber() + 1)
-                .totalPages(response.getTotalPages())
-                .result(response.getContent())
+                .result(jobTypeService.getAllJobTypes())
                 .build();
+
     }
 
     @GetMapping("/{id}")

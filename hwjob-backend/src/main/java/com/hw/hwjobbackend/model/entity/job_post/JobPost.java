@@ -17,7 +17,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Entity(name = "job-posts")
+@Entity
+@Table(name = "job_posts")
 @Getter
 @Setter
 @Builder
@@ -40,8 +41,10 @@ public class JobPost {
 
     Long salary;
 
+    @Enumerated(EnumType.STRING)
     SalaryType salaryType;
 
+    @Enumerated(EnumType.STRING)
     JobPostStatus status;
 
     LocalDateTime endedTime;

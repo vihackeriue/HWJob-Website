@@ -23,15 +23,21 @@ public class IndustryController {
 
     @GetMapping
     ApiResponse<List<IndustryResponse>> getAllIndustries(
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size
     ) {
-        Page<IndustryResponse> response = industryService.getAllIndustryNames(page - 1, size);
+        if (page != null && size != null) {
+            Page<IndustryResponse> response = industryService.getIndustries(page - 1, size);
+            return ApiResponse.<List<IndustryResponse>>builder()
+                    .page(response.getNumber() + 1)
+                    .totalPages(response.getTotalPages())
+                    .result(response.getContent())
+                    .build();
+        }
         return ApiResponse.<List<IndustryResponse>>builder()
-                .page(response.getNumber() + 1)
-                .totalPages(response.getTotalPages())
-                .result(response.getContent())
+                .result(industryService.getAllIndustries())
                 .build();
+
     }
 
     @GetMapping("/{id}")

@@ -11,13 +11,17 @@ import com.hw.hwjobbackend.model.entity.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface UserService {
 
     UserCreationResponse createUser(UserCreationRequest request);
 
     UserResponse getUserInfo();
 
-    Page<UserResponse> getAllUser(int page, int size);
+    Page<UserResponse> getUsers(int page, int size);
+
+    List<UserResponse> getAllUsers();
 
     void updatePassword(User user, String newPassword);
 

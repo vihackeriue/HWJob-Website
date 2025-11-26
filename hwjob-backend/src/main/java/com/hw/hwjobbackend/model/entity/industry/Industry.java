@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Entity(name = "industries")
+@Entity
+@Table(name = "industries")
 @Getter
 @Setter
 @Builder
