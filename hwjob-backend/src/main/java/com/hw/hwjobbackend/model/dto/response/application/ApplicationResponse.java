@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.model.dto.response.application;
 
-import com.hw.hwjobbackend.model.enums.ApplicationStatus;
+import com.hw.hwjobbackend.model.enums.ApplicationStatusEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,5 +13,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ApplicationResponse {
     String jobPostId;
-    ApplicationStatus status;
+    ApplicationStatusEnum status;
 }

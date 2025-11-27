@@ -3,7 +3,7 @@ package com.hw.hwjobbackend.model.entity.application;
 
 import com.hw.hwjobbackend.model.entity.job_post.JobPost;
 import com.hw.hwjobbackend.model.entity.user.Candidate;
-import com.hw.hwjobbackend.model.enums.ApplicationStatus;
+import com.hw.hwjobbackend.model.enums.ApplicationStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -11,6 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -36,22 +37,19 @@ public class Application {
     @MapsId("jobPostId")
     JobPost jobPost;
 
-    ApplicationStatus status;
+    @Enumerated(EnumType.STRING)
+    ApplicationStatusEnum status;
+
     Double rating;
 
     @Lob
-    @Column(columnDefinition = "TEXT")
     String feedback;
 
     @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    Date createdAt;
+    @Column(updatable = false)
+    LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    Date updatedAt;
-
+    LocalDateTime updatedAt;
 }
 

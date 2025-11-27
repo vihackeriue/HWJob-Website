@@ -16,9 +16,5 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @PrimaryKeyJoinColumn(name = "id")
 public class Recruiter extends User {
-    @Column(columnDefinition = "TEXT")
-    @Lob
-    String description;
     String website;
-    String specificAddress;
 }

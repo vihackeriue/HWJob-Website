@@ -3,7 +3,8 @@ package com.hw.hwjobbackend.service.recruiter.recruiter_user;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.user.RecruiterMapper;
+import com.hw.hwjobbackend.repository.user.UserRepository;
+import com.hw.hwjobbackend.service.mapper.user.RecruiterMapper;
 import com.hw.hwjobbackend.model.dto.request.user.RecruiterUpdateRequest;
 import com.hw.hwjobbackend.model.dto.response.user.RecruiterResponse;
 import com.hw.hwjobbackend.model.entity.user.Recruiter;
@@ -28,6 +29,7 @@ public class RecruiterUserServiceImpl implements RecruiterUserService {
     RecruiterRepository recruiterRepository;
     RecruiterMapper recruiterMapper;
     UserService userService;
+    UserRepository userRepository;
 
     @Override
     @Transactional
@@ -41,13 +43,16 @@ public class RecruiterUserServiceImpl implements RecruiterUserService {
                 () -> new AppException(ErrorCode.USER_NOT_EXISTED)
         );
 
+        if (request.getEmail() != null) {
+            userService.validateEmail(recruiter.getEmail(), request.getEmail());
+        }
+
+        if (request.getRegionId() != null) {
+            userService.updateRegion(recruiter, request);
+        }
+
         recruiterMapper.updateRecruiter(recruiter, request);
 
-        // Sử dụng service chung để cập nhật các trường của User
-        userService.updatePassword(recruiter, request.getPassword());
-        userService.updateRegion(recruiter, request);
-
-        // Lưu lại và trả về response
         Recruiter savedRecruiter = recruiterRepository.save(recruiter);
 
         return recruiterMapper.toRecruiterResponse(savedRecruiter);

@@ -10,7 +10,7 @@ import java.util.List;
 public interface JobPostService {
     Page<JobPostResponse> getJobPosts(Integer page, Integer size, JobPostFilterRequest filter);
 
-    List<JobPostResponse> getAllJobPosts();
+    List<JobPostResponse> getAllJobPosts(JobPostFilterRequest filter);
 
     JobPostDetailResponse getJobPostDetail(String id);
 

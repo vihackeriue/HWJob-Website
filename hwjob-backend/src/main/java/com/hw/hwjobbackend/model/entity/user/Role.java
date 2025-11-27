@@ -18,6 +18,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
     String name;
-    @Column(columnDefinition = "TEXT")
+
+    @Lob
     String description;
 }

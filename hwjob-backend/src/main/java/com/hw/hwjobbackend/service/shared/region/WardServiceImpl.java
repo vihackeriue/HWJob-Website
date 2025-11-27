@@ -5,7 +5,7 @@ import com.hw.hwjobbackend.model.entity.region.Province;
 import com.hw.hwjobbackend.model.entity.region.Ward;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.region.WardMapper;
+import com.hw.hwjobbackend.service.mapper.region.WardMapper;
 import com.hw.hwjobbackend.repository.region.WardRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

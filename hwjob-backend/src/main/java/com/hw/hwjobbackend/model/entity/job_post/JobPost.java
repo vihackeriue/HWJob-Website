@@ -5,8 +5,8 @@ import com.hw.hwjobbackend.model.entity.level.Level;
 import com.hw.hwjobbackend.model.entity.industry.Industry;
 import com.hw.hwjobbackend.model.entity.region.Province;
 import com.hw.hwjobbackend.model.entity.user.Recruiter;
-import com.hw.hwjobbackend.model.enums.JobPostStatus;
-import com.hw.hwjobbackend.model.enums.SalaryType;
+import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
+import com.hw.hwjobbackend.model.enums.SalaryTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -34,7 +34,6 @@ public class JobPost {
     String title;
 
     @Lob
-    @Column(columnDefinition = "TEXT")
     String description;
 
     Integer quantity;
@@ -42,10 +41,10 @@ public class JobPost {
     Long salary;
 
     @Enumerated(EnumType.STRING)
-    SalaryType salaryType;
+    SalaryTypeEnum salaryType;
 
     @Enumerated(EnumType.STRING)
-    JobPostStatus status;
+    JobPostStatusEnum status;
 
     LocalDateTime endedTime;
 
@@ -64,15 +63,11 @@ public class JobPost {
     @ManyToOne(fetch = FetchType.LAZY)
     Province province;
 
-
     @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    Date createdAt;
+    @Column(updatable = false)
+    LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    Date updatedAt;
+    LocalDateTime updatedAt;
 
 }

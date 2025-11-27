@@ -3,7 +3,7 @@ package com.hw.hwjobbackend.service.shared.job_type;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.job_type.JobTypeMapper;
+import com.hw.hwjobbackend.service.mapper.job_type.JobTypeMapper;
 import com.hw.hwjobbackend.model.dto.response.job_type.JobTypeResponse;
 import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
 import lombok.AccessLevel;
@@ -48,6 +48,4 @@ public class JobTypeServiceImpl implements JobTypeService {
     public List<JobTypeResponse> getAllJobTypes() {
         return jobTypeRepository.findAll().stream().map(jobTypeMapper::toJobTypeResponse).toList();
     }
-
-
 }

@@ -2,7 +2,7 @@ package com.hw.hwjobbackend.service.shared.level;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.level.LevelMapper;
+import com.hw.hwjobbackend.service.mapper.level.LevelMapper;
 import com.hw.hwjobbackend.model.dto.response.level.LevelResponse;
 import com.hw.hwjobbackend.repository.level.LevelRepository;
 import lombok.AccessLevel;

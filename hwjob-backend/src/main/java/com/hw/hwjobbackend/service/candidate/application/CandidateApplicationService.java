@@ -5,6 +5,4 @@ import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
 
 public interface CandidateApplicationService {
     ApplicationResponse applyJob(ApplicationRequest request);
-
-    boolean isCandidateApplied(String candidateId, String jobPostId);
 }

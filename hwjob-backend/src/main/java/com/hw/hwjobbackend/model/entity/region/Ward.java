@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Ward {
     @Id
-    int code;
+    Integer code;
     String name;
     String codeName;
     String divisionType;

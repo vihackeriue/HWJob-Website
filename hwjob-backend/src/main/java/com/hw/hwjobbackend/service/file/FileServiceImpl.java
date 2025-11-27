@@ -6,7 +6,7 @@ import com.hw.hwjobbackend.model.dto.response.file.FileResponse;
 import com.hw.hwjobbackend.model.entity.file.FileMgmt;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.file.FileMgmtMapper;
+import com.hw.hwjobbackend.service.mapper.file.FileMgmtMapper;
 import com.hw.hwjobbackend.repository.file.FileMgmtRepository;
 import com.hw.hwjobbackend.repository.file.FileRepository;
 import lombok.AccessLevel;
@@ -65,7 +65,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public FileResponse copyDefaultAvatarForUser(String username) {
+    public FileResponse setDefaultAvatarForUser(String username) {
         try {
             // Đọc ảnh avatar mặc định
             Resource defaultAvatar = new ClassPathResource("static/images/default-avatar.png");

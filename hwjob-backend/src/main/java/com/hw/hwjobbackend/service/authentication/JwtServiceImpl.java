@@ -3,7 +3,7 @@ package com.hw.hwjobbackend.service.authentication;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.user.UserMapper;
+import com.hw.hwjobbackend.service.mapper.user.UserMapper;
 import com.hw.hwjobbackend.model.dto.response.authentication.AuthenticationResponse;
 import com.hw.hwjobbackend.model.dto.response.authentication.IntrospectResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserLoginResponse;
@@ -82,6 +82,7 @@ public class JwtServiceImpl implements JwtService {
                 .expirationTime(Date.from(expiry))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
+                .claim("user_full_name", user.getFullName())
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());

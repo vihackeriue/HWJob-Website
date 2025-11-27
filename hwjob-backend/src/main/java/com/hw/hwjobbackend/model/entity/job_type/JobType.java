@@ -17,8 +17,9 @@ public class JobType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     String name;
+
     @Column(unique = true, nullable = false)
     String code;
-
 }

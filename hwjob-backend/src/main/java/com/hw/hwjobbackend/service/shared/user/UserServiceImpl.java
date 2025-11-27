@@ -3,11 +3,16 @@ package com.hw.hwjobbackend.service.shared.user;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.user.RecruiterMapper;
-import com.hw.hwjobbackend.mapper.user.UserMapper;
+import com.hw.hwjobbackend.model.dto.request.user.UserUpdatePasswordRequest;
+import com.hw.hwjobbackend.model.dto.response.profile.CandidateProfileResponse;
+import com.hw.hwjobbackend.repository.user.CandidateRepository;
+import com.hw.hwjobbackend.service.mapper.user.CandidateMapper;
+import com.hw.hwjobbackend.service.mapper.user.RecruiterMapper;
+import com.hw.hwjobbackend.service.mapper.user.UserMapper;
 import com.hw.hwjobbackend.model.dto.request.user.UserCreationRequest;
 import com.hw.hwjobbackend.model.dto.request.user.UserUpdateRequest;
 import com.hw.hwjobbackend.model.dto.response.file.FileResponse;
+import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.user.*;
 import com.hw.hwjobbackend.model.entity.region.Province;
 import com.hw.hwjobbackend.model.entity.user.Candidate;
@@ -47,6 +52,9 @@ public class UserServiceImpl implements UserService {
     FileService fileService;
     RecruiterMapper recruiterMapper;
     RecruiterRepository recruiterRepository;
+    CandidateRepository candidateRepository;
+    CandidateMapper candidateMapper;
+
 
     @Override
     @Transactional
@@ -64,20 +72,13 @@ public class UserServiceImpl implements UserService {
         String userType = determineUserType(roles);
 
         User user = createUserByType(userType, request, roles);
-
-        User savedUser = userRepository.save(user);
-
         // Gán avatar mặc định cho user mới tạo
+        FileResponse avatarResponse = fileService
+                .setDefaultAvatarForUser(user.getUsername());
+        user.setImageUrl(avatarResponse.getUrl());
 
-        try {
-            FileResponse avatarResponse = fileService.copyDefaultAvatarForUser(savedUser.getUsername());
-            savedUser.setImageUrl(avatarResponse.getUrl());
-            savedUser = userRepository.save(savedUser);
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.CREATE_USER_FAIL);
-        }
-
-        return userMapper.toUserCreationResponse(savedUser);
+        userRepository.save(user);
+        return userMapper.toUserCreationResponse(user);
     }
 
     @Override
@@ -90,17 +91,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePassword(User user, String newPassword) {
-        if (newPassword != null && !newPassword.isEmpty()) {
-            user.setPassword(passwordEncoder.encode(newPassword));
+    public void validateEmail(String currentEmail, String newEmail) {
+        if (newEmail.equals(currentEmail)) {
+            if (userRepository.existsByEmail(newEmail)) {
+                throw new AppException(ErrorCode.EMAIL_EXISTED);
+            }
         }
     }
 
     @Override
+    @Transactional
+    public void updatePassword(UserUpdatePasswordRequest request) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new AppException(ErrorCode.OLD_PASSWORD_INVALID);
+        }
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+    }
+
+    @Override
     public void updateRegion(User user, UserUpdateRequest request) {
-
-        int provinceCode = request.getRegionId();
-
+        Integer provinceCode = request.getRegionId();
         if (provinceCode != 0) {
             Province province = regionService.getProvinceByCode(provinceCode);
             user.setProvince(province);
@@ -138,10 +154,18 @@ public class UserServiceImpl implements UserService {
                 () -> new AppException(ErrorCode.USER_NOT_EXISTED)
         );
         RecruiterProfileResponse response = recruiterMapper.toRecruiterProfileResponse(recruiter);
-
         response.setRegion(recruiter.getProvince() != null ? recruiter.getProvince().getName() : null);
-
         response.setFollowed(false);
+        return response;
+    }
+
+    @Override
+    public CandidateProfileResponse getCandidateProfile(String id) {
+        Candidate candidate = candidateRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
+        );
+        CandidateProfileResponse response = candidateMapper.toCandidateProfileResponse(candidate);
+        response.setRegion(candidate.getProvince() != null ? candidate.getProvince().getName() : null);
         return response;
     }
 
@@ -167,6 +191,7 @@ public class UserServiceImpl implements UserService {
         return switch (userType) {
             case "CANDIDATE" -> Candidate.builder()
                     .username(request.getUsername())
+                    .fullName(request.getUsername())
                     .email(request.getEmail())
                     .password(encodedPassword)
                     .roles(roles)
@@ -175,6 +200,7 @@ public class UserServiceImpl implements UserService {
 
             case "RECRUITER" -> Recruiter.builder()
                     .username(request.getUsername())
+                    .fullName(request.getUsername())
                     .email(request.getEmail())
                     .password(encodedPassword)
                     .roles(roles)

@@ -6,6 +6,9 @@ import com.hw.hwjobbackend.model.entity.level.Level;
 import com.hw.hwjobbackend.model.entity.user.Role;
 import com.hw.hwjobbackend.model.entity.user.User;
 import com.hw.hwjobbackend.model.enums.*;
+import com.hw.hwjobbackend.model.enums.data.IndustryEnum;
+import com.hw.hwjobbackend.model.enums.data.JobTypeEnum;
+import com.hw.hwjobbackend.model.enums.data.LevelEnum;
 import com.hw.hwjobbackend.repository.industry.IndustryRepository;
 import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
 import com.hw.hwjobbackend.repository.level.LevelRepository;
@@ -93,7 +96,7 @@ public class InitializationServiceImpl implements InitializationService {
     public void createAdminUser(Set<Role> roles) {
         User adminUser = User.builder()
                 .username(ADMIN_USERNAME)
-                .name(ADMIN_NAME)
+                .fullName(ADMIN_NAME)
                 .userStatus(UserStatusEnum.ACTIVE)
                 .roles(roles)
                 .password(passwordEncoder.encode(ADMIN_PASSWORD))

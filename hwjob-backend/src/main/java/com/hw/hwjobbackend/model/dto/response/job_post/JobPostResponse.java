@@ -21,5 +21,6 @@ public class JobPostResponse {
     String region;
 
     String imageUrl;
+
     String recruiterName;
 }
