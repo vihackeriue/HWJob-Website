@@ -20,8 +20,11 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
+import java.util.List;
 
 /**
  * SecurityConfiguration:
@@ -68,6 +71,10 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST).permitAll()
                         .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
+//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/candidate/**").hasAuthority("ROLE_CANDIDATE")
+                        .requestMatchers("/recruiter/**").hasAuthority("ROLE_RECRUITER")
                         .anyRequest().authenticated());
         httpSecurity
                 .oauth2ResourceServer(oauth2 -> oauth2
@@ -100,6 +107,22 @@ public class SecurityConfiguration {
 
         return new CorsFilter(urlBasedCorsConfigurationSource);
     }
+
+//    @Value("${cors.allowed-origins}")
+//    private String allowedOrigins;
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.setAllowedOrigins(List.of(allowedOrigins));
+//        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+//        config.setAllowedHeaders(List.of("*"));
+//        config.setAllowCredentials(true);
+//        config.setExposedHeaders(List.of("Location"));
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", config);
+//        return source;
+//    }
+
 
     /**
      * Chuyển đổi thông tin JWT thành GrantedAuthority trong Spring Security.

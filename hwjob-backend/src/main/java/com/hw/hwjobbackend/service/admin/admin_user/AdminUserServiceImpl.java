@@ -2,7 +2,7 @@ package com.hw.hwjobbackend.service.admin.admin_user;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.user.UserMapper;
+import com.hw.hwjobbackend.service.mapper.user.UserMapper;
 import com.hw.hwjobbackend.model.dto.request.user.UserStatusRequest;
 import com.hw.hwjobbackend.model.dto.response.user.UserResponse;
 import com.hw.hwjobbackend.model.entity.user.User;
@@ -48,7 +48,6 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
     public void changeUserStatus(String id, UserStatusRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));

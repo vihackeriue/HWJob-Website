@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.model.dto.request.application;
 
+import com.hw.hwjobbackend.model.enums.ApplicationStatusEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,4 +12,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ApplicationRequest {
     String jobPostId;
+    String candidateId;
+    ApplicationStatusEnum status;
 }

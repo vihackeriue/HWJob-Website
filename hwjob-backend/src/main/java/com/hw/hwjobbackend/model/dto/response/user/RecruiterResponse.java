@@ -11,7 +11,5 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RecruiterResponse extends UserResponse {
-    String description;
     String website;
-    String specificAddress;
 }

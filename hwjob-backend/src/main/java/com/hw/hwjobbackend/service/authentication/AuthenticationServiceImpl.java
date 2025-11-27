@@ -5,7 +5,7 @@ import com.hw.hwjobbackend.model.dto.response.authentication.AuthenticationRespo
 import com.hw.hwjobbackend.model.dto.response.user.UserLoginResponse;
 import com.hw.hwjobbackend.model.entity.invalidate_token.InvalidateToken;
 import com.hw.hwjobbackend.model.entity.user.User;
-import com.hw.hwjobbackend.mapper.user.UserMapper;
+import com.hw.hwjobbackend.service.mapper.user.UserMapper;
 import com.hw.hwjobbackend.repository.token.RedisTokenRepository;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.AccessLevel;

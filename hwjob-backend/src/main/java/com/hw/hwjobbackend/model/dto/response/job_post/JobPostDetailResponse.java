@@ -2,9 +2,9 @@ package com.hw.hwjobbackend.model.dto.response.job_post;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.hw.hwjobbackend.model.dto.response.user.RecruiterProfileResponse;
-import com.hw.hwjobbackend.model.enums.JobPostStatus;
-import com.hw.hwjobbackend.model.enums.SalaryType;
+import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
+import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
+import com.hw.hwjobbackend.model.enums.SalaryTypeEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -23,15 +23,15 @@ public class JobPostDetailResponse {
     String description;
     String quantity;
     Long salary;
-    SalaryType salaryType;
+    SalaryTypeEnum salaryType;
 
     String industry;
     String level;
     String jobType;
 
-    RecruiterProfileResponse recruiter;
+    JobPostRecruiterProfileResponse recruiter;
 
-    JobPostStatus status;
+    JobPostStatusEnum status;
     Date createdAt;
     LocalDateTime endedTime;
 

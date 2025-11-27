@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.model.dto.request.user;
 
 
-import com.hw.hwjobbackend.validator.role_validator.RoleConstraint;
+import com.hw.hwjobbackend.validation.role_validator.RoleConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.*;

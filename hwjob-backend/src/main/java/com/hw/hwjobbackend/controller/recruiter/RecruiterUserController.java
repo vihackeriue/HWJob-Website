@@ -5,10 +5,11 @@ import com.hw.hwjobbackend.model.dto.request.user.RecruiterUpdateRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.user.RecruiterResponse;
 import com.hw.hwjobbackend.service.recruiter.recruiter_user.RecruiterUserService;
-import jakarta.validation.Valid;
+import com.hw.hwjobbackend.validation.groups.OnUpdate;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,7 +22,7 @@ public class RecruiterUserController {
 
     @PutMapping
     ApiResponse<RecruiterResponse> updateRecruiter(
-            @RequestBody @Valid RecruiterUpdateRequest request
+            @Validated(OnUpdate.class) @RequestBody RecruiterUpdateRequest request
     ) {
         return ApiResponse.<RecruiterResponse>builder()
                 .result(recruiterUserService.updateRecruiterInfo(request))

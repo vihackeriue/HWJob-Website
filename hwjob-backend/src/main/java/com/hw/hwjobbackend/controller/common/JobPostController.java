@@ -29,15 +29,14 @@ public class JobPostController {
             @RequestParam(value = "levelId", required = false) Long levelId,
             @RequestParam(value = "jobTypeId", required = false) Long jobTypeId,
             @RequestParam(value = "regionId", required = false) Integer regionId
-
     ) {
+        JobPostFilterRequest filterRequest = JobPostFilterRequest.builder()
+                .industryId(industryId)
+                .levelId(levelId)
+                .jobTypeId(jobTypeId)
+                .regionId(regionId)
+                .build();
         if (page != null && size != null) {
-            JobPostFilterRequest filterRequest = JobPostFilterRequest.builder()
-                    .industryId(industryId)
-                    .levelId(levelId)
-                    .jobTypeId(jobTypeId)
-                    .regionId(regionId)
-                    .build();
             Page<JobPostResponse> response = jobPostService.getJobPosts(page - 1, size, filterRequest);
             return ApiResponse.<List<JobPostResponse>>builder()
                     .page(response.getNumber() + 1)
@@ -46,7 +45,7 @@ public class JobPostController {
                     .build();
         }
         return ApiResponse.<List<JobPostResponse>>builder()
-                .result(jobPostService.getAllJobPosts())
+                .result(jobPostService.getAllJobPosts(filterRequest))
                 .build();
     }
 

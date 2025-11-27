@@ -3,7 +3,7 @@ package com.hw.hwjobbackend.service.shared.industry;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.industry.IndustryMapper;
+import com.hw.hwjobbackend.service.mapper.industry.IndustryMapper;
 import com.hw.hwjobbackend.model.dto.response.industry.IndustryResponse;
 import com.hw.hwjobbackend.repository.industry.IndustryRepository;
 import lombok.AccessLevel;

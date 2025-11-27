@@ -3,7 +3,8 @@ package com.hw.hwjobbackend.service.candidate.candidate_user;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.user.CandidateMapper;
+import com.hw.hwjobbackend.repository.user.UserRepository;
+import com.hw.hwjobbackend.service.mapper.user.CandidateMapper;
 import com.hw.hwjobbackend.model.dto.request.user.CandidateUpdateRequest;
 import com.hw.hwjobbackend.model.dto.response.user.CandidateResponse;
 import com.hw.hwjobbackend.model.entity.user.Candidate;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @PreAuthorize("hasRole('CANDIDATE')")
 public class CandidateUserServiceImpl implements CandidateUserService {
     CandidateRepository candidateRepository;
+    UserRepository userRepository;
     CandidateMapper candidateMapper;
     UserService userService;
 
@@ -38,15 +40,17 @@ public class CandidateUserServiceImpl implements CandidateUserService {
         Candidate candidate = candidateRepository.findByUsername(username).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_EXISTED)
         );
+        if(request.getEmail()!= null){
+            userService.validateEmail(candidate.getEmail(), request.getEmail());
+        }
+        if (request.getRegionId() != null) {
+            userService.updateRegion(candidate, request);
+        }
 
         candidateMapper.updateCandidate(candidate, request);
-
-        userService.updatePassword(candidate, request.getPassword());
-        userService.updateRegion(candidate, request);
 
         Candidate savedCandidate = candidateRepository.save(candidate);
 
         return candidateMapper.toCandidateResponse(savedCandidate);
     }
-
 }

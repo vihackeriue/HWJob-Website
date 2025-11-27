@@ -5,7 +5,7 @@ import com.hw.hwjobbackend.model.dto.response.region.ProvinceResponse;
 import com.hw.hwjobbackend.model.entity.region.Province;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.mapper.region.ProvinceMapper;
+import com.hw.hwjobbackend.service.mapper.region.ProvinceMapper;
 import com.hw.hwjobbackend.repository.region.ProvinceRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

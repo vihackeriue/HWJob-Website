@@ -1,6 +1,7 @@
 package com.hw.hwjobbackend.model.entity.user;
 
 
+import com.hw.hwjobbackend.model.enums.CandidateGenderEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,11 +20,12 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @PrimaryKeyJoinColumn(name = "id")
 public class Candidate extends User {
+
     LocalDate dob;
-    @Column(columnDefinition = "TEXT")
-    String summary;
-    String gender;
-    String address;
+
+    CandidateGenderEnum gender;
+
     String education;
+
     BigDecimal expectSalary;
 }

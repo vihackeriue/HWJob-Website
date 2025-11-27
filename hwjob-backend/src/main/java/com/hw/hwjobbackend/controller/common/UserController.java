@@ -2,8 +2,10 @@ package com.hw.hwjobbackend.controller.common;
 
 
 import com.hw.hwjobbackend.model.dto.request.user.UserCreationRequest;
+import com.hw.hwjobbackend.model.dto.request.user.UserUpdatePasswordRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
-import com.hw.hwjobbackend.model.dto.response.user.RecruiterProfileResponse;
+import com.hw.hwjobbackend.model.dto.response.profile.CandidateProfileResponse;
+import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UpdateAvatarResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserCreationResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserResponse;
@@ -46,12 +48,30 @@ public class UserController {
                 .build();
     }
 
+    @PutMapping("/update-password")
+    ApiResponse<Void> updatePassword(
+            @RequestBody UserUpdatePasswordRequest request
+    ) {
+        userService.updatePassword(request);
+        return ApiResponse.<Void>builder()
+                .build();
+    }
+
     @GetMapping("/recruiter-profiles/{id}")
     public ApiResponse<RecruiterProfileResponse> getRecruiterProfile(
             @PathVariable String id
     ) {
         return ApiResponse.<RecruiterProfileResponse>builder()
                 .result(userService.getRecruiterProfile(id))
+                .build();
+    }
+
+    @GetMapping("/candidate-profiles/{id}")
+    public ApiResponse<CandidateProfileResponse> getCandidateProfile(
+            @PathVariable String id
+    ) {
+        return ApiResponse.<CandidateProfileResponse>builder()
+                .result(userService.getCandidateProfile(id))
                 .build();
     }
 }

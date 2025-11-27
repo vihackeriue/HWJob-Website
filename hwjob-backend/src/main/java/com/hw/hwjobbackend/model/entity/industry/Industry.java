@@ -17,6 +17,7 @@ public class Industry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
-    @Column(columnDefinition = "TEXT")
+
+    @Lob
     String description;
 }

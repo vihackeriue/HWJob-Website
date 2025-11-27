@@ -5,7 +5,4 @@ public enum RoleEnum {
     RECRUITER,
     CANDIDATE;
 
-    public String withPrefix() {
-        return "ROLE_" + this.name();
-    }
 }

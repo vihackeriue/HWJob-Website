@@ -14,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -36,17 +37,21 @@ public class User implements UserDetails {
     @Column(updatable = false, nullable = false)
     String id;
 
-    String name;
-
-    @Column(nullable = false, unique = true)
+    @Column(updatable = false, nullable = false, unique = true)
     String username;
 
     String email;
 
+    String phone;
+
     @Column(nullable = false)
     String password;
 
-    String phone;
+    String fullName;
+
+    @Lob
+    String summary;
+
     String imageUrl;
 
     @Enumerated(EnumType.STRING)
@@ -54,14 +59,11 @@ public class User implements UserDetails {
     UserStatusEnum userStatus;
 
     @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    Date createdAt;
+    @Column(updatable = false)
+    LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    Date updatedAt;
+    LocalDateTime updatedAt;
 
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> roles;

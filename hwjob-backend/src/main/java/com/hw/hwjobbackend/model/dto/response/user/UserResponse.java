@@ -16,15 +16,12 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
     String id;
-    String name;
     String username;
     String email;
     String phone;
+    String fullName;
+    String summary;
     String imageUrl;
-    UserStatusEnum userStatus;
     Set<RoleResponse> roles;
     String region;
-    String description;
-    String website;
-    String specificAddress;
 }

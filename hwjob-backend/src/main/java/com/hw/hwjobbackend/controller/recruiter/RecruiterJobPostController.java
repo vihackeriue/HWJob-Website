@@ -1,17 +1,18 @@
 package com.hw.hwjobbackend.controller.recruiter;
 
 
-import com.hw.hwjobbackend.model.dto.request.job_post.JobPostCreationRequest;
+import com.hw.hwjobbackend.model.dto.request.job_post.JobPostRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
+import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.service.recruiter.job_post.RecruiterJobPostService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,11 +24,37 @@ public class RecruiterJobPostController {
 
     @PostMapping
     public ApiResponse<JobPostResponse> createJobPost(
-            @RequestBody JobPostCreationRequest request) {
+            @RequestBody JobPostRequest request) {
         return ApiResponse.<JobPostResponse>builder()
                 .result(recruiterJobPostService.createJobPost(request))
                 .build();
     }
 
+    @GetMapping
+    public ApiResponse<List<JobPostResponse>> getPostedJobPosts(
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size
+    ) {
+        if (page != null && size != null) {
+            Page<JobPostResponse> response = recruiterJobPostService.getPostedJobPosts(page - 1, size);
+            return ApiResponse.<List<JobPostResponse>>builder()
+                    .page(response.getNumber() + 1)
+                    .totalPages(response.getTotalPages())
+                    .result(response.getContent())
+                    .build();
+        }
+        return ApiResponse.<List<JobPostResponse>>builder()
+                .result(recruiterJobPostService.getAllPostedJobPosts())
+                .build();
+    }
 
+    @PutMapping("/{id}")
+    public ApiResponse<JobPostDetailResponse> updateJobPost(
+            @PathVariable String id,
+            @RequestBody JobPostRequest request
+    ) {
+        return ApiResponse.<JobPostDetailResponse>builder()
+                .result(recruiterJobPostService.editJobPost(id, request))
+                .build();
+    }
 }

@@ -1,8 +1,8 @@
 package com.hw.hwjobbackend.model.dto.request.user;
 
-import com.hw.hwjobbackend.validator.phone_validator.PhoneConstraint;
+import com.hw.hwjobbackend.validation.groups.OnUpdate;
+import com.hw.hwjobbackend.validation.phone_validator.PhoneConstraint;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -15,14 +15,16 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
 
-    @NotBlank(message = "USERNAME_INVALID")
-    @Size(min = 6, message = "USERNAME_INVALID")
-    String name;
-    @Email(message = "EMAIL_INVALID")
+    @Size(min = 6, message = "USERNAME_INVALID", groups = OnUpdate.class)
+    String fullName;
+
+    @Email(message = "EMAIL_INVALID", groups = OnUpdate.class)
     String email;
-    @Size(min = 8, message = "PASSWORD_INVALID")
-    String password;
-    @PhoneConstraint(message = "PHONE_INVALID")
+
+    @PhoneConstraint(message = "PHONE_INVALID", groups = OnUpdate.class)
     String phone;
+
+    String summary;
+
     Integer regionId;
 }
