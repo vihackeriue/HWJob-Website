@@ -82,7 +82,8 @@ public class JwtServiceImpl implements JwtService {
                 .expirationTime(Date.from(expiry))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
-                .claim("user_full_name", user.getFullName())
+                .claim("userId", user.getId())
+                .claim("userFullName", user.getFullName())
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -153,7 +154,7 @@ public class JwtServiceImpl implements JwtService {
 
         if (!CollectionUtils.isEmpty(user.getRoles())) {
             user.getRoles().forEach(role ->
-                    scopeJoiner.add("ROLE_" + role.getName().toUpperCase())
+                    scopeJoiner.add(STR."ROLE_\{role.getName().toUpperCase()}")
             );
         }
         return scopeJoiner.toString();

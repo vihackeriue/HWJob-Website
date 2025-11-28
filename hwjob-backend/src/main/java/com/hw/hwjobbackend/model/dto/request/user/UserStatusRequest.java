@@ -1,7 +1,9 @@
 package com.hw.hwjobbackend.model.dto.request.user;
 
 
+import com.hw.hwjobbackend.model.enums.UserStatusEnum;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserStatusRequest {
-    @NotBlank
-    String status;
+
+    @NotNull(message = "USER_STATUS_REQUIRED")
+    UserStatusEnum status;
 }

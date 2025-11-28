@@ -6,7 +6,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JobTypeRepository extends JpaRepository<JobType, Long> {
-    boolean existsByName(String name);
+    boolean existsByNameIgnoreCase(String name);
 
-    boolean existsByCode(String code);
+    boolean existsByNameIgnoreCaseAndIdNot(String name, Long id);
+
+    boolean existsByCodeIgnoreCase(String code);
+
+    boolean existsByCodeIgnoreCaseAndIdNot(String code, Long id);
 }

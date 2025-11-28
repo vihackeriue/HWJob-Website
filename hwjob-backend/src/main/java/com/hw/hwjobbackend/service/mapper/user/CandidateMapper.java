@@ -17,7 +17,6 @@ public interface CandidateMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateCandidate(@MappingTarget Candidate candidate, CandidateUpdateRequest request);
 
-
     CandidateProfileResponse toCandidateProfileResponse(Candidate candidate);
 
 }

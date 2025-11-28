@@ -2,22 +2,23 @@ package com.hw.hwjobbackend.service.admin.admin_user;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.service.mapper.user.UserMapper;
 import com.hw.hwjobbackend.model.dto.request.user.UserStatusRequest;
 import com.hw.hwjobbackend.model.dto.response.user.UserResponse;
 import com.hw.hwjobbackend.model.entity.user.User;
 import com.hw.hwjobbackend.model.enums.UserStatusEnum;
 import com.hw.hwjobbackend.repository.user.UserRepository;
+import com.hw.hwjobbackend.service.mapper.user.UserMapper;
+import com.hw.hwjobbackend.util.PaginationUtils;
+import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,30 +33,48 @@ public class AdminUserServiceImpl implements AdminUserService {
     UserMapper userMapper;
 
     @Override
-
+    @Transactional(readOnly = true)
     public Page<UserResponse> getUsers(int page, int size) {
-        page = Math.max(page, 0);
-        size = size <= 0 ? 10 : size;
-        Pageable pageable = PageRequest.of(page, size);
-        return userRepository.findAll(pageable).map(userMapper::toUserResponse);
+
+        Pageable pageable = PaginationUtils.buildPageable(page, size);
+
+        return userRepository.findAllOrderByCreatedAtDesc(pageable)
+                .map(userMapper::toUserResponse);
     }
 
     @Override
-    public List<UserResponse> getAllUsers() {
-        return userRepository.findAll().stream()
+    @Transactional(readOnly = true)
+    public List<UserResponse> getUsers() {
+        return userRepository.findAllOrderByCreatedAtDesc()
+                .stream()
                 .map(userMapper::toUserResponse)
                 .toList();
     }
 
     @Override
+    @Transactional
     public void changeUserStatus(String id, UserStatusRequest request) {
+        String currentUsername = SecurityUtils.getCurrentUsername();
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (user.getUsername().equals(username)) {
-            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+
+        validateNotSelfUpdate(user.getUsername(), currentUsername);
+
+        UserStatusEnum newStatus = request.getStatus();
+        UserStatusEnum oldStatus = user.getUserStatus();
+
+        if (oldStatus == newStatus) {
+            return;
         }
-        user.setUserStatus(UserStatusEnum.valueOf(request.getStatus()));
-        userRepository.save(user);
+
+        user.setUserStatus(newStatus);
+
+    }
+
+    private void validateNotSelfUpdate(String targetUsername, String currentUsername) {
+        if (targetUsername.equals(currentUsername)) {
+            throw new AppException(ErrorCode.CANNOT_CHANGE_OWN_STATUS);
+        }
     }
 }

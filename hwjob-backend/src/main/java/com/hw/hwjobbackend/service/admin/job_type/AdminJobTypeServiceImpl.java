@@ -13,6 +13,9 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -25,37 +28,66 @@ public class AdminJobTypeServiceImpl implements AdminJobTypeService {
     JobTypeMapper jobTypeMapper;
 
     @Override
+    @Transactional
     public JobTypeResponse createJobType(JobTypeRequest request) {
-        if (jobTypeRepository.existsByName(request.getName())) {
-            throw new AppException(ErrorCode.JOB_TYPE_EXISTED);
-        }
-        if (jobTypeRepository.existsByCode(request.getCode())) {
-            throw new AppException(ErrorCode.JOB_TYPE_CODE_EXISTED);
-        }
+        validateJobTypeNameNotExists(request.getName(), null);
+        validateJobTypeCodeNotExists(request.getCode(), null);
+
         JobType jobType = jobTypeMapper.toJobType(request);
         jobType = jobTypeRepository.save(jobType);
+
         return jobTypeMapper.toJobTypeResponse(jobType);
     }
 
-
     @Override
+    @Transactional
     public JobTypeResponse updateJobType(Long id, JobTypeRequest request) {
         JobType jobType = jobTypeRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.JOB_TYPE_NOT_EXISTED));
 
-        jobType.setName(request.getName());
-        jobType.setCode(request.getCode());
-        jobType = jobTypeRepository.save(jobType);
+        validateJobTypeNameNotExists(request.getName(), id);
+        validateJobTypeCodeNotExists(request.getCode(), id);
+
+        if (hasNoChanges(jobType, request)) {
+            return jobTypeMapper.toJobTypeResponse(jobType);
+        }
+
+        jobTypeMapper.updateJobType(request, jobType);
 
         return jobTypeMapper.toJobTypeResponse(jobType);
     }
 
     @Override
+    @Transactional
     public void deleteJobType(Long id) {
         JobType jobType = jobTypeRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.JOB_TYPE_NOT_EXISTED));
+
         jobTypeRepository.delete(jobType);
     }
 
+    private void validateJobTypeNameNotExists(String name, Long excludeId) {
+        boolean exists = (excludeId == null)
+                ? jobTypeRepository.existsByNameIgnoreCase(name)
+                : jobTypeRepository.existsByNameIgnoreCaseAndIdNot(name, excludeId);
 
+        if (exists) {
+            throw new AppException(ErrorCode.JOB_TYPE_EXISTED);
+        }
+    }
+
+    private void validateJobTypeCodeNotExists(String code, Long excludeId) {
+        boolean exists = (excludeId == null)
+                ? jobTypeRepository.existsByCodeIgnoreCase(code)
+                : jobTypeRepository.existsByCodeIgnoreCaseAndIdNot(code, excludeId);
+
+        if (exists) {
+            throw new AppException(ErrorCode.JOB_TYPE_CODE_EXISTED);
+        }
+    }
+
+    private boolean hasNoChanges(JobType jobType, JobTypeRequest request) {
+        return Objects.equals(jobType.getName(), request.getName())
+                && Objects.equals(jobType.getCode(), request.getCode());
+    }
 }

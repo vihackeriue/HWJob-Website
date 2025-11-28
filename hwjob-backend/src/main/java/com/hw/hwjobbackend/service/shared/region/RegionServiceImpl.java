@@ -6,6 +6,7 @@ import com.hw.hwjobbackend.model.entity.region.Ward;
 import com.hw.hwjobbackend.model.entity.region.Province;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.repository.region.ProvinceRepository;
 import com.hw.hwjobbackend.service.api.ApiClientService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,8 @@ public class RegionServiceImpl implements RegionService {
     ProvinceService provinceService;
     WardService wardService;
     ApiClientService apiClientService;
+
+    ProvinceRepository provinceRepository;
 
     @NonFinal
     @Value("${api.api-province}")
@@ -55,6 +58,15 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public Province getProvinceByCode(int provinceCode) {
         return provinceService.getProvince(provinceCode);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Province getProvinceReferenceByCode(Integer code) {
+        if (!provinceRepository.existsById(code)) {
+            throw new AppException(ErrorCode.PROVINCE_NOT_EXISTED);
+        }
+        return provinceRepository.getReferenceById(code);
     }
 
     @Override

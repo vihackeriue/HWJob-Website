@@ -1,10 +1,10 @@
 package com.hw.hwjobbackend.controller.admin;
 
-
 import com.hw.hwjobbackend.model.dto.request.user.UserStatusRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserResponse;
 import com.hw.hwjobbackend.service.admin.admin_user.AdminUserService;
+import com.hw.hwjobbackend.util.PaginationUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,25 +23,32 @@ public class AdminUserController {
 
     @GetMapping
     ApiResponse<List<UserResponse>> getAllUser(
-            @RequestParam(value = "page", defaultValue = "1") Integer page,
-            @RequestParam(value = "size", defaultValue = "10") Integer size
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size
     ) {
         if (page != null && size != null) {
-            Page<UserResponse> response = adminUserService.getUsers(page - 1, size);
+            // Chuyển từ 1-based sang 0-based
+            int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
+
+            Page<UserResponse> response = adminUserService.getUsers(zeroBasedPage, size);
+
             return ApiResponse.<List<UserResponse>>builder()
-                    .page(response.getNumber() + 1)
+                    .page(PaginationUtils.toOneBasedPage(response.getNumber()))
                     .totalPages(response.getTotalPages())
                     .result(response.getContent())
                     .build();
         }
+
         return ApiResponse.<List<UserResponse>>builder()
-                .result(adminUserService.getAllUsers())
+                .result(adminUserService.getUsers())
                 .build();
     }
 
     @PutMapping("/change-status/{id}")
-    ApiResponse<Void> changeUserStatus(@PathVariable String id,
-                                       @RequestBody UserStatusRequest request) {
+    ApiResponse<Void> changeUserStatus(
+            @PathVariable String id,
+            @RequestBody UserStatusRequest request
+    ) {
         adminUserService.changeUserStatus(id, request);
         return ApiResponse.<Void>builder().build();
     }

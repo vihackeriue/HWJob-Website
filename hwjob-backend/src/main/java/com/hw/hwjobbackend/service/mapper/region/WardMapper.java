@@ -13,5 +13,4 @@ public interface WardMapper {
     @Mapping(target = "province", ignore = true)
     Ward toWard(WardApiResponse response);
 
-    WardResponse toWardResponse(Ward ward);
 }

@@ -14,7 +14,6 @@ public interface ProvinceMapper {
 
     Province toProvince(ProvinceApiResponse response);
 
-    @Named("toProvinceResponseWithWards")
     @Mapping(source = "province.code", target = "id")
     ProvinceResponse toProvinceResponse(Province province);
 }

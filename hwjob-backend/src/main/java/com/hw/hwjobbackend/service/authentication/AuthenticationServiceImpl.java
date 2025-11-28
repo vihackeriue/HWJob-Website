@@ -1,5 +1,7 @@
 package com.hw.hwjobbackend.service.authentication;
 
+import com.hw.hwjobbackend.exception.AppException;
+import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.request.authentication.AuthenticationRequest;
 import com.hw.hwjobbackend.model.dto.response.authentication.AuthenticationResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserLoginResponse;
@@ -90,6 +92,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             redisTokenRepository.save(invalidateToken);
         } catch (ParseException exception) {
             log.info("Token already expired");
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }
 }

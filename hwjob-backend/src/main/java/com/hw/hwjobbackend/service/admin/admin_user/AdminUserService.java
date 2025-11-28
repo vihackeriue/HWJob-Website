@@ -10,7 +10,7 @@ public interface AdminUserService {
 
     Page<UserResponse> getUsers(int page, int size);
 
-    List<UserResponse> getAllUsers();
+    List<UserResponse> getUsers();
 
     void changeUserStatus(String id, UserStatusRequest request);
 }

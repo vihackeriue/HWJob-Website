@@ -5,6 +5,7 @@ import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.service.shared.job_post.JobPostService;
+import com.hw.hwjobbackend.util.PaginationUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,8 +24,8 @@ public class JobPostController {
 
     @GetMapping
     public ApiResponse<List<JobPostResponse>> getJobPosts(
-            @RequestParam(value = "page", defaultValue = "1") Integer page,
-            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             @RequestParam(value = "industryId", required = false) Long industryId,
             @RequestParam(value = "levelId", required = false) Long levelId,
             @RequestParam(value = "jobTypeId", required = false) Long jobTypeId,
@@ -36,14 +37,20 @@ public class JobPostController {
                 .jobTypeId(jobTypeId)
                 .regionId(regionId)
                 .build();
+
         if (page != null && size != null) {
-            Page<JobPostResponse> response = jobPostService.getJobPosts(page - 1, size, filterRequest);
+            int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
+
+            Page<JobPostResponse> response = jobPostService.getJobPosts(
+                    zeroBasedPage, size, filterRequest);
+
             return ApiResponse.<List<JobPostResponse>>builder()
-                    .page(response.getNumber() + 1)
+                    .page(PaginationUtils.toOneBasedPage(response.getNumber()))
                     .totalPages(response.getTotalPages())
                     .result(response.getContent())
                     .build();
         }
+
         return ApiResponse.<List<JobPostResponse>>builder()
                 .result(jobPostService.getAllJobPosts(filterRequest))
                 .build();

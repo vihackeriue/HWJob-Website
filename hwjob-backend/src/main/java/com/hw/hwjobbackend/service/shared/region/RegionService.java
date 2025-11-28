@@ -9,5 +9,7 @@ public interface RegionService {
 
     Province getProvinceByCode(int provinceCode);
 
+    Province getProvinceReferenceByCode(Integer code);
+
     Ward getWardByCodeAndProvince(int wardCode, Province province);
 }

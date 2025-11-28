@@ -1,9 +1,9 @@
 package com.hw.hwjobbackend.controller.common;
 
-
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.level.LevelResponse;
 import com.hw.hwjobbackend.service.shared.level.LevelService;
+import com.hw.hwjobbackend.util.PaginationUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,31 +21,31 @@ public class LevelController {
     LevelService levelService;
 
     @GetMapping
-    public ApiResponse<List<LevelResponse>> getAllLevels(
-            @RequestParam(value = "page", defaultValue = "1") Integer page,
-            @RequestParam(value = "size", defaultValue = "10") Integer size
+    ApiResponse<List<LevelResponse>> getAllLevels(
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size
     ) {
-
         if (page != null && size != null) {
-            Page<LevelResponse> response = levelService.getLevels(page - 1, size);
+            int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
+
+            Page<LevelResponse> response = levelService.getLevels(zeroBasedPage, size);
+
             return ApiResponse.<List<LevelResponse>>builder()
-                    .page(response.getNumber() + 1)
+                    .page(PaginationUtils.toOneBasedPage(response.getNumber()))
                     .totalPages(response.getTotalPages())
                     .result(response.getContent())
                     .build();
         }
+
         return ApiResponse.<List<LevelResponse>>builder()
                 .result(levelService.getAllLevels())
                 .build();
-
-
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<LevelResponse> getLevelById(@PathVariable Long id) {
+    ApiResponse<LevelResponse> getLevelById(@PathVariable Long id) {
         return ApiResponse.<LevelResponse>builder()
                 .result(levelService.getLevelById(id))
                 .build();
     }
-
 }
