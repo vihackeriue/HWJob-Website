@@ -3,134 +3,221 @@ package com.hw.hwjobbackend.exception;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import javax.naming.AuthenticationException;
 import java.util.Map;
-import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-@ControllerAdvice
+@RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 
-    private static final String MIN_ATTRIBUTE = "min";
+    private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\{([^}]+)}");
+
+    // ========================================
+    // SYSTEM EXCEPTION HANDLERS
+    // ========================================
 
     /**
      * Bắt các lỗi hệ thống chưa được xử lý riêng
      */
-    @ExceptionHandler(value = Exception.class)
-    ResponseEntity<ApiResponse<?>> handlingUnhandledException(Exception exception) {
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    ApiResponse<?> handleUnhandledException(Exception exception) {
         log.error("Unhandled exception: ", exception);
-
-        ErrorCode errorCode = ErrorCode.UNCATEGORIZED_EXCEPTION;
-
-        return buildErrorResponse(errorCode);
+        return buildErrorResponse(ErrorCode.UNCATEGORIZED_EXCEPTION);
     }
 
     /**
      * Bắt lỗi AppException (Đã được định nghĩa trong hệ thống)
      */
-    @ExceptionHandler(value = AppException.class)
-    ResponseEntity<ApiResponse<?>> handlingAppException(AppException exception) {
+    @ExceptionHandler(AppException.class)
+    ApiResponse<?> handleAppException(AppException exception) {
         ErrorCode errorCode = exception.getErrorCode();
+        log.warn("Application exception: code={}, message={}", errorCode.getCode(), errorCode.getMessage());
         return buildErrorResponse(errorCode);
     }
+
+    // ========================================
+    // AUTHENTICATION & AUTHORIZATION HANDLERS
+    // ========================================
 
     /**
      * Lỗi đăng nhập sai (username hoặc password)
      */
-    @ExceptionHandler(value = {
+    @ExceptionHandler({
             BadCredentialsException.class,
             InternalAuthenticationServiceException.class,
             UsernameNotFoundException.class,
             DisabledException.class
     })
-    public ResponseEntity<ApiResponse<?>> handlingBadCredentialsException(Exception exception) {
-        log.error("Login failed: {}", exception.getMessage());
-
-        ErrorCode errorCode = ErrorCode.USERNAME_PASSWORD_INVALID;
-        return buildErrorResponse(errorCode);
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ApiResponse<?> handleBadCredentialsException(Exception exception) {
+        log.warn("Login failed: {}", exception.getClass().getSimpleName());
+        return buildErrorResponse(ErrorCode.USERNAME_PASSWORD_INVALID);
     }
 
     /**
      * Lỗi Authentication: chưa đăng nhập, JWT sai hoặc hết hạn
      */
-    @ExceptionHandler(value = AuthenticationException.class)
-    public ResponseEntity<ApiResponse<?>> handlingAuthenticationException(AuthenticationException exception) {
-        log.error("Authentication exception: {}", exception.getMessage());
-
-        ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
-        return buildErrorResponse(errorCode);
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    ApiResponse<?> handleAuthenticationException(AuthenticationException exception) {
+        log.warn("Authentication failed: {}", exception.getClass().getSimpleName());
+        return buildErrorResponse(ErrorCode.UNAUTHENTICATED);
     }
 
     /**
      * Lỗi AUTHORIZATION (Không có quyền truy cập)
      */
-    @ExceptionHandler(value = AccessDeniedException.class)
-    ResponseEntity<ApiResponse<?>> handlingAccessDeniedException(AccessDeniedException exception) {
-        log.error("Access denied: {}", exception.getMessage());
-        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
-        return buildErrorResponse(errorCode);
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    ApiResponse<?> handleAccessDeniedException(AccessDeniedException exception) {
+        log.warn("Access denied: {}", exception.getClass().getSimpleName());
+        return buildErrorResponse(ErrorCode.UNAUTHORIZED);
     }
 
+    // ========================================
+    // VALIDATION EXCEPTION HANDLERS
+    // ========================================
 
     /**
      * Bắt lỗi validate @Valid
      */
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    ResponseEntity<ApiResponse<?>> handlingValidation(MethodArgumentNotValidException exception) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ApiResponse<?> handleValidationException(MethodArgumentNotValidException exception) {
 
-        // Lấy key message từ annotation (ví dụ: USERNAME_INVALID)
-        String enumKey = Objects.requireNonNull(exception.getFieldError()).getDefaultMessage();
+        var fieldError = exception.getFieldError();
+        if (fieldError == null) {
+            log.error("Validation exception with null field error");
+            return buildErrorResponse(ErrorCode.INVALID_KEY);
+        }
+
+        String enumKey = fieldError.getDefaultMessage();
         ErrorCode errorCode = ErrorCode.INVALID_KEY;
         Map<String, Object> attributes = null;
 
         try {
             errorCode = ErrorCode.valueOf(enumKey);
-            var constraintViolation = exception.getBindingResult()
-                    .getAllErrors()
-                    .getFirst()
-                    .unwrap(ConstraintViolation.class);
 
-            attributes = constraintViolation.getConstraintDescriptor().getAttributes();
-            log.info("Validation attributes: {}", attributes);
-        } catch (IllegalArgumentException ignored) {
+            var allErrors = exception.getBindingResult().getAllErrors();
+            if (!allErrors.isEmpty()) {
+                var constraintViolation = allErrors.getFirst()
+                        .unwrap(ConstraintViolation.class);
+                attributes = extractAttributes(constraintViolation);
+
+                if (log.isDebugEnabled() && attributes != null && !attributes.isEmpty()) {
+                    log.debug("Validation attributes: {}", attributes);
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid error code key: {}", enumKey);
+        } catch (Exception e) {
+            log.error("Error processing validation exception", e);
         }
 
-        // Thay thế biến trong message nếu có {min}, {max}
         String message = errorCode.getLocalizedMessage();
-        if (Objects.nonNull(attributes)) {
-            message = mapAttribute(message, attributes);
+        if (attributes != null && !attributes.isEmpty()) {
+            message = mapAttributes(message, attributes);
         }
 
-        ApiResponse<?> apiResponse = ApiResponse.builder()
+        return ApiResponse.builder()
                 .code(errorCode.getCode())
                 .message(message)
                 .build();
-
-        return ResponseEntity.badRequest().body(apiResponse);
     }
 
-    private ResponseEntity<ApiResponse<?>> buildErrorResponse(ErrorCode errorCode) {
-        ApiResponse<?> apiResponse = ApiResponse.builder()
+    // ========================================
+    // HTTP REQUEST EXCEPTION HANDLERS
+    // ========================================
+
+    /**
+     * Lỗi HTTP request không hợp lệ (missing param, wrong type, etc.)
+     */
+    @ExceptionHandler({
+            MissingServletRequestParameterException.class,
+            HttpMessageNotReadableException.class,
+            MethodArgumentTypeMismatchException.class
+    })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ApiResponse<?> handleBadRequestException(Exception exception) {
+        log.warn("Bad request - type: {}, message: {}",
+                exception.getClass().getSimpleName(),
+                exception.getMessage());
+        return buildErrorResponse(ErrorCode.INVALID_KEY);
+    }
+
+    /**
+     * Lỗi HTTP method không được hỗ trợ
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    ApiResponse<?> handleMethodNotAllowed(HttpRequestMethodNotSupportedException exception) {
+        log.warn("Method not allowed: {} {}",
+                exception.getMethod(),
+                exception.getSupportedHttpMethods());
+        return buildErrorResponse(ErrorCode.INVALID_KEY);
+    }
+
+    // ========================================
+    // PRIVATE HELPER METHODS
+    // ========================================
+
+    /**
+     * Build error response từ ErrorCode
+     */
+    private ApiResponse<?> buildErrorResponse(ErrorCode errorCode) {
+        return ApiResponse.builder()
                 .code(errorCode.getCode())
                 .message(errorCode.getLocalizedMessage())
                 .build();
-
-        return ResponseEntity.status(errorCode.getStatusCode()).body(apiResponse);
     }
 
-    private String mapAttribute(String message, Map<String, Object> attributes) {
-        String minValue = String.valueOf(attributes.get(MIN_ATTRIBUTE));
-        return message.replace("{" + MIN_ATTRIBUTE + "}", minValue);
+    /**
+     * Extract attributes từ ConstraintViolation
+     */
+    private Map<String, Object> extractAttributes(ConstraintViolation<?> violation) {
+        return violation.getConstraintDescriptor().getAttributes();
+    }
+
+    /**
+     * Map các attributes vào message placeholders ({min}, {max}, {value},...)
+     */
+    private String mapAttributes(String message, Map<String, Object> attributes) {
+        if (message == null || attributes == null || attributes.isEmpty()) {
+            return message;
+        }
+
+        StringBuilder result = new StringBuilder();
+        Matcher matcher = PLACEHOLDER_PATTERN.matcher(message);
+
+        while (matcher.find()) {
+            String key = matcher.group(1);
+            Object value = attributes.get(key);
+
+            if (value != null) {
+                String replacement = Matcher.quoteReplacement(String.valueOf(value));
+                matcher.appendReplacement(result, replacement);
+            }
+        }
+        matcher.appendTail(result);
+
+        return result.toString();
     }
 }
-

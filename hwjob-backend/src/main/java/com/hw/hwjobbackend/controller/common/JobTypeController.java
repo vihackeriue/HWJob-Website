@@ -1,9 +1,9 @@
 package com.hw.hwjobbackend.controller.common;
 
-
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.job_type.JobTypeResponse;
 import com.hw.hwjobbackend.service.shared.job_type.JobTypeService;
+import com.hw.hwjobbackend.util.PaginationUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,21 +22,24 @@ public class JobTypeController {
 
     @GetMapping
     ApiResponse<List<JobTypeResponse>> getAllJobTypes(
-            @RequestParam(value = "page", defaultValue = "1") Integer page,
-            @RequestParam(value = "size", defaultValue = "10") Integer size
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size
     ) {
         if (page != null && size != null) {
-            Page<JobTypeResponse> response = jobTypeService.getJobTypes(page - 1, size);
+            int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
+
+            Page<JobTypeResponse> response = jobTypeService.getJobTypes(zeroBasedPage, size);
+
             return ApiResponse.<List<JobTypeResponse>>builder()
-                    .page(response.getNumber() + 1)
+                    .page(PaginationUtils.toOneBasedPage(response.getNumber()))
                     .totalPages(response.getTotalPages())
                     .result(response.getContent())
                     .build();
         }
+
         return ApiResponse.<List<JobTypeResponse>>builder()
                 .result(jobTypeService.getAllJobTypes())
                 .build();
-
     }
 
     @GetMapping("/{id}")
@@ -45,5 +48,4 @@ public class JobTypeController {
                 .result(jobTypeService.getJobTypeById(id))
                 .build();
     }
-
 }

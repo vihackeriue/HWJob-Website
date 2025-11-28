@@ -1,8 +1,8 @@
 package com.hw.hwjobbackend.service.candidate.job_post;
 
-
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.SaveJobPostResponse;
 import com.hw.hwjobbackend.model.entity.candidate_save_job.CandidateSaveJob;
 import com.hw.hwjobbackend.model.entity.candidate_save_job.CandidateSaveJobId;
@@ -11,13 +11,20 @@ import com.hw.hwjobbackend.model.entity.user.Candidate;
 import com.hw.hwjobbackend.repository.candidate_save_job.CandidateSaveJobRepository;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
 import com.hw.hwjobbackend.repository.user.CandidateRepository;
+import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
+import com.hw.hwjobbackend.util.PaginationUtils;
+import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,36 +33,42 @@ import org.springframework.stereotype.Service;
 @PreAuthorize("hasRole('CANDIDATE')")
 public class CandidateJobPostServiceImpl implements CandidateJobPostService {
 
-
     CandidateSaveJobRepository candidateSaveJobRepository;
     JobPostRepository jobPostRepository;
     CandidateRepository candidateRepository;
-
+    JobPostMapper jobPostMapper;
 
     @Override
-    public SaveJobPostResponse saveJobPost(String id) {
+    @Transactional
+    public SaveJobPostResponse saveJobPost(String jobPostId) {
+        if (jobPostId == null || jobPostId.isBlank()) {
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+        }
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Candidate candidate = candidateRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
-        );
-
-        JobPost jobPost = jobPostRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED)
-        );
+        String candidateId = SecurityUtils.getCurrentUserId();
 
         CandidateSaveJobId candidateSaveJobId = CandidateSaveJobId.builder()
-                .candidateId(candidate.getId())
-                .jobPostId(jobPost.getId())
+                .candidateId(candidateId)
+                .jobPostId(jobPostId)
                 .build();
 
-        if (candidateSaveJobRepository.existsCandidateSaveJobById(candidateSaveJobId)) {
+        boolean alreadySaved = candidateSaveJobRepository.existsById(candidateSaveJobId);
+
+        if (alreadySaved) {
             candidateSaveJobRepository.deleteById(candidateSaveJobId);
+
             return SaveJobPostResponse.builder()
-                    .id(candidateSaveJobId.getJobPostId())
+                    .id(jobPostId)
                     .isSaved(false)
                     .build();
         }
+
+        if (!jobPostRepository.existsById(jobPostId)) {
+            throw new AppException(ErrorCode.JOB_POST_NOT_EXISTED);
+        }
+
+        Candidate candidate = candidateRepository.getReferenceById(candidateId);
+        JobPost jobPost = jobPostRepository.getReferenceById(jobPostId);
 
         CandidateSaveJob candidateSaveJob = CandidateSaveJob.builder()
                 .id(candidateSaveJobId)
@@ -66,8 +79,33 @@ public class CandidateJobPostServiceImpl implements CandidateJobPostService {
         candidateSaveJobRepository.save(candidateSaveJob);
 
         return SaveJobPostResponse.builder()
-                .id(candidateSaveJob.getJobPost().getId())
+                .id(jobPostId)
                 .isSaved(true)
                 .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<JobPostResponse> getSavedJobPosts(int page, int size) {
+        String candidateId = SecurityUtils.getCurrentUserId();
+        Pageable pageable = PaginationUtils.buildPageable(page, size);
+
+        Page<JobPost> jobPosts = candidateSaveJobRepository
+                .findSavedJobPostsByCandidateId(candidateId, pageable);
+
+        return jobPosts.map(jobPostMapper::toJobPostResponse);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<JobPostResponse> getAllSavedJobPosts() {
+        String candidateId = SecurityUtils.getCurrentUserId();
+
+        List<JobPost> jobPosts = candidateSaveJobRepository
+                .findAllSavedJobPostsByCandidateId(candidateId);
+
+        return jobPosts.stream()
+                .map(jobPostMapper::toJobPostResponse)
+                .toList();
     }
 }

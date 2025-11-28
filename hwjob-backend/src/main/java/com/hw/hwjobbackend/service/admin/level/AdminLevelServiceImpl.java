@@ -1,6 +1,5 @@
 package com.hw.hwjobbackend.service.admin.level;
 
-
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.service.mapper.level.LevelMapper;
@@ -14,6 +13,9 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -26,29 +28,53 @@ public class AdminLevelServiceImpl implements AdminLevelService {
     LevelMapper levelMapper;
 
     @Override
+    @Transactional
     public LevelResponse createLevel(LevelRequest request) {
-        if (levelRepository.existsByName((request.getName()))) {
-            throw new AppException(ErrorCode.LEVEL_EXISTED);
-        }
+        validateLevelNameNotExists(request.getName(), null);
+
         Level level = levelMapper.toLevel(request);
         level = levelRepository.save(level);
+
         return levelMapper.toLevelResponse(level);
     }
 
     @Override
+    @Transactional
     public LevelResponse updateLevel(Long id, LevelRequest request) {
         Level level = levelRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.LEVEL_NOT_EXISTED));
-        level.setName(request.getName());
-        level = levelRepository.save(level);
+
+        validateLevelNameNotExists(request.getName(), id);
+
+        if (hasNoChanges(level, request)) {
+            return levelMapper.toLevelResponse(level);
+        }
+
+        levelMapper.updateLevel(request, level);
+
         return levelMapper.toLevelResponse(level);
     }
 
     @Override
+    @Transactional
     public void deleteLevel(Long id) {
         Level level = levelRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.LEVEL_NOT_EXISTED));
+
         levelRepository.delete(level);
     }
 
+    private void validateLevelNameNotExists(String name, Long excludeId) {
+        boolean exists = (excludeId == null)
+                ? levelRepository.existsByNameIgnoreCase(name)
+                : levelRepository.existsByNameIgnoreCaseAndIdNot(name, excludeId);
+
+        if (exists) {
+            throw new AppException(ErrorCode.LEVEL_EXISTED);
+        }
+    }
+
+    private boolean hasNoChanges(Level level, LevelRequest request) {
+        return Objects.equals(level.getName(), request.getName());
+    }
 }

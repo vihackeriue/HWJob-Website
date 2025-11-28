@@ -1,10 +1,10 @@
 package com.hw.hwjobbackend.controller.recruiter;
 
-
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationCandidateResponse;
 import com.hw.hwjobbackend.service.recruiter.application.RecruiterApplicationService;
+import com.hw.hwjobbackend.util.PaginationUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,19 +23,23 @@ public class RecruiterApplicationController {
 
     @GetMapping("/{id}")
     public ApiResponse<List<ApplicationCandidateResponse>> getCandidatesAppliedJob(
-            @RequestParam(value = "page", defaultValue = "1") Integer page,
-            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
             @PathVariable String id
     ) {
         if (page != null && size != null) {
+            int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
+
             Page<ApplicationCandidateResponse> response = recruiterJobPostService
-                    .getCandidateApplications(page - 1, size, id);
+                    .getCandidateApplications(zeroBasedPage, size, id);
+
             return ApiResponse.<List<ApplicationCandidateResponse>>builder()
-                    .page(response.getNumber() + 1)
+                    .page(PaginationUtils.toOneBasedPage(response.getNumber()))
                     .totalPages(response.getTotalPages())
                     .result(response.getContent())
                     .build();
         }
+
         return ApiResponse.<List<ApplicationCandidateResponse>>builder()
                 .result(recruiterJobPostService.getAllCandidateApplications(id))
                 .build();
@@ -48,5 +52,4 @@ public class RecruiterApplicationController {
         recruiterJobPostService.updateCandidateApplication(request);
         return ApiResponse.<Void>builder().build();
     }
-
 }

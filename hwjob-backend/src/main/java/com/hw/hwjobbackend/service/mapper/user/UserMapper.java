@@ -1,7 +1,6 @@
 package com.hw.hwjobbackend.service.mapper.user;
 
 
-import com.hw.hwjobbackend.model.dto.request.user.UserCreationRequest;
 import com.hw.hwjobbackend.model.dto.response.user.*;
 import com.hw.hwjobbackend.model.entity.user.Candidate;
 import com.hw.hwjobbackend.model.entity.user.Recruiter;

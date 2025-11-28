@@ -73,7 +73,7 @@ public class ApiClientServiceImpl implements ApiClientService {
             }
         } catch (RestClientException e) {
             log.error("Error calling API: {} - Error: {}", url, e.getMessage(), e);
-            throw new RuntimeException("Failed to fetch data from API: " + url, e);
+            throw new RuntimeException(STR."Failed to fetch data from API: \{url}", e);
         }
     }
 }

@@ -1,10 +1,11 @@
 package com.hw.hwjobbackend.service.candidate.application;
 
-
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
 import com.hw.hwjobbackend.service.mapper.application.ApplicationMapper;
+import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationRequest;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
 import com.hw.hwjobbackend.model.entity.application.Application;
@@ -15,15 +16,20 @@ import com.hw.hwjobbackend.model.enums.ApplicationStatusEnum;
 import com.hw.hwjobbackend.repository.application.ApplicationRepository;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
 import com.hw.hwjobbackend.repository.user.CandidateRepository;
+import com.hw.hwjobbackend.util.PaginationUtils;
+import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,40 +40,32 @@ public class CandidateApplicationServiceImpl implements CandidateApplicationServ
 
     ApplicationRepository applicationRepository;
     ApplicationMapper applicationMapper;
-
+    JobPostMapper jobPostMapper;
     CandidateRepository candidateRepository;
     JobPostRepository jobPostRepository;
 
     @Override
+    @Transactional
     public ApplicationResponse applyJob(ApplicationRequest request) {
+        validateApplicationRequest(request);
 
-        JobPost jobPost = jobPostRepository.findById(request.getJobPostId()).orElseThrow(
-                () -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED)
-        );
-
-        if (!jobPost.getStatus().equals(JobPostStatusEnum.PUBLIC)) {
-            throw new AppException(ErrorCode.JOB_POST_NOT_EXISTED);
-        }
-
-        LocalDateTime now = LocalDateTime.now();
-        if (jobPost.getEndedTime() != null && jobPost.getEndedTime().isBefore(now)) {
-            throw new AppException(ErrorCode.JOB_POST_EXPIRED);
-        }
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        Candidate candidate = candidateRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
-        );
+        String candidateId = SecurityUtils.getCurrentUserId();
 
         ApplicationId applicationId = ApplicationId.builder()
-                .candidateId(candidate.getId())
-                .jobPostId(jobPost.getId())
+                .candidateId(candidateId)
+                .jobPostId(request.getJobPostId())
                 .build();
 
-        if (applicationRepository.existsApplicationById(applicationId)) {
+        if (applicationRepository.existsById(applicationId)) {
             throw new AppException(ErrorCode.JOB_POST_ALREADY_APPLIED);
         }
+
+        JobPost jobPost = jobPostRepository.findById(request.getJobPostId())
+                .orElseThrow(() -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED));
+
+        validateJobPostForApplication(jobPost);
+
+        Candidate candidate = candidateRepository.getReferenceById(candidateId);
 
         Application application = Application.builder()
                 .id(applicationId)
@@ -76,7 +74,50 @@ public class CandidateApplicationServiceImpl implements CandidateApplicationServ
                 .status(ApplicationStatusEnum.PENDING)
                 .build();
 
-        applicationRepository.save(application);
+        application = applicationRepository.save(application);
+
         return applicationMapper.toApplicationResponse(application);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<JobPostResponse> getAllJobPostsApplied(int page, int size) {
+        String candidateId = SecurityUtils.getCurrentUserId();
+        Pageable pageable = PaginationUtils.buildPageable(page, size);
+
+        Page<Application> applications = applicationRepository
+                .findByCandidateIdOrderByCreatedAtDesc(candidateId, pageable);
+
+        return applications.map(application ->
+                jobPostMapper.toJobPostResponse(application.getJobPost()));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<JobPostResponse> getAllJobPostsApplied() {
+        String candidateId = SecurityUtils.getCurrentUserId();
+
+        List<Application> applications = applicationRepository
+                .findAllByCandidateIdOrderByCreatedAtDesc(candidateId);
+
+        return applications.stream()
+                .map(application -> jobPostMapper.toJobPostResponse(application.getJobPost()))
+                .toList();
+    }
+
+    private void validateApplicationRequest(ApplicationRequest request) {
+        if (request.getJobPostId() == null || request.getJobPostId().isBlank()) {
+            throw new AppException(ErrorCode.INVALID_KEY);
+        }
+    }
+
+    private void validateJobPostForApplication(JobPost jobPost) {
+        if (!JobPostStatusEnum.PUBLIC.equals(jobPost.getStatus())) {
+            throw new AppException(ErrorCode.JOB_POST_NOT_EXISTED);
+        }
+        LocalDateTime now = LocalDateTime.now();
+        if (jobPost.getEndedTime() != null && jobPost.getEndedTime().isBefore(now)) {
+            throw new AppException(ErrorCode.JOB_POST_EXPIRED);
+        }
     }
 }

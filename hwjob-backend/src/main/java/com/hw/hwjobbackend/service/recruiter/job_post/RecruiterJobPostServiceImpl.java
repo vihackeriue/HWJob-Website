@@ -1,34 +1,30 @@
 package com.hw.hwjobbackend.service.recruiter.job_post;
 
-
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostRequest;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
-import com.hw.hwjobbackend.model.entity.industry.Industry;
 import com.hw.hwjobbackend.model.entity.job_post.JobPost;
-import com.hw.hwjobbackend.model.entity.job_type.JobType;
-import com.hw.hwjobbackend.model.entity.level.Level;
 import com.hw.hwjobbackend.model.entity.region.Province;
-import com.hw.hwjobbackend.model.entity.user.Recruiter;
 import com.hw.hwjobbackend.repository.industry.IndustryRepository;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
 import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
 import com.hw.hwjobbackend.repository.level.LevelRepository;
 import com.hw.hwjobbackend.repository.user.RecruiterRepository;
+import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
 import com.hw.hwjobbackend.service.shared.region.RegionService;
+import com.hw.hwjobbackend.util.PaginationUtils;
+import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,116 +35,104 @@ import java.util.List;
 @PreAuthorize("hasRole('RECRUITER')")
 public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
 
-
     JobPostRepository jobPostRepository;
     JobPostMapper jobPostMapper;
     RegionService regionService;
-
     RecruiterRepository recruiterRepository;
     LevelRepository levelRepository;
     JobTypeRepository jobTypeRepository;
     IndustryRepository industryRepository;
 
     @Override
+    @Transactional
     public JobPostResponse createJobPost(JobPostRequest request) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        Recruiter recruiter = recruiterRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        String recruiterId = SecurityUtils.getCurrentUserId();
 
         JobPost jobPost = jobPostMapper.toJobPost(request);
-        jobPost.setRecruiter(recruiter);
+        jobPost.setRecruiter(recruiterRepository.getReferenceById(recruiterId));
 
-        jobPost.setLevel(request.getLevelId() != null
-                ? levelRepository.findById(request.getLevelId()).orElseThrow(
-                () -> new AppException(ErrorCode.LEVEL_NOT_EXISTED))
-                : null);
-        jobPost.setJobType(request.getJobTypeId() != null ?
-                jobTypeRepository.findById(request.getJobTypeId()).orElseThrow(
-                        () -> new AppException(ErrorCode.JOB_TYPE_NOT_EXISTED))
-                : null);
-        jobPost.setIndustry(request.getIndustryId() != null
-                ? industryRepository.findById(request.getIndustryId()).orElseThrow(
-                () -> new AppException(ErrorCode.INDUSTRY_NOT_EXISTED))
-                : null);
-        jobPost.setProvince(request.getRegionId() != null
-                ? regionService.getProvinceByCode(request.getRegionId())
-                : null);
-
+        setJobPostRelations(jobPost, request);
         jobPost = jobPostRepository.save(jobPost);
+
         return jobPostMapper.toJobPostResponse(jobPost);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<JobPostResponse> getPostedJobPosts(int page, int size) {
+        String recruiterId = SecurityUtils.getCurrentUserId();
 
-        page = Math.max(page, 0);
-        size = size <= 0 ? 10 : size;
+        Pageable pageable = PaginationUtils.buildPageable(page, size);
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Recruiter recruiter = recruiterRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
-        );
-
-        Pageable pageable = PageRequest.of(page, size);
-
-        Page<JobPost> jobPosts = jobPostRepository.findAllByRecruiter(recruiter, pageable);
+        Page<JobPost> jobPosts = jobPostRepository
+                .findAllByRecruiterIdOrderByCreatedAtDesc(recruiterId, pageable);
 
         return jobPosts.map(jobPostMapper::toJobPostResponse);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<JobPostResponse> getAllPostedJobPosts() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Recruiter recruiter = recruiterRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
-        );
-        return jobPostRepository.findAllByRecruiter(recruiter)
+        String recruiterId = SecurityUtils.getCurrentUserId();
+
+        return jobPostRepository
+                .findAllByRecruiterIdOrderByCreatedAtDesc(recruiterId)
                 .stream()
                 .map(jobPostMapper::toJobPostResponse)
                 .toList();
     }
 
     @Override
+    @Transactional
     public JobPostDetailResponse editJobPost(String id, JobPostRequest request) {
+        String recruiterId = SecurityUtils.getCurrentUserId();
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        Recruiter recruiter = recruiterRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
-        );
-
-        JobPost jobPost = jobPostRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED)
-        );
-
-        if (!jobPost.getRecruiter().getId().equals(recruiter.getId())) {
-            throw new AppException(ErrorCode.UNAUTHORIZED);
-        }
+        JobPost jobPost = jobPostRepository
+                .findByIdAndRecruiterId(id, recruiterId)
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
 
         jobPostMapper.updateJobPost(request, jobPost);
+        setJobPostRelations(jobPost, request);
+
+        return jobPostMapper.toJobPostDetailResponse(jobPost);
+    }
+
+    private void setJobPostRelations(JobPost jobPost, JobPostRequest request) {
+        if (request.getLevelId() != null) {
+            try {
+                jobPost.setLevel(levelRepository.getReferenceById(request.getLevelId()));
+            } catch (Exception e) {
+                throw new AppException(ErrorCode.LEVEL_NOT_EXISTED);
+            }
+        } else {
+            jobPost.setLevel(null);
+        }
 
         if (request.getJobTypeId() != null) {
-            JobType jobType = jobTypeRepository.findById(request.getJobTypeId())
-                    .orElseThrow(() -> new AppException(ErrorCode.JOB_TYPE_NOT_EXISTED));
-            jobPost.setJobType(jobType);
+            try {
+                jobPost.setJobType(jobTypeRepository.getReferenceById(request.getJobTypeId()));
+            } catch (Exception e) {
+                throw new AppException(ErrorCode.JOB_TYPE_NOT_EXISTED);
+            }
+        } else {
+            jobPost.setJobType(null);
         }
-        if (request.getLevelId() != null) {
-            Level level = levelRepository.findById(request.getLevelId())
-                    .orElseThrow(() -> new AppException(ErrorCode.LEVEL_NOT_EXISTED));
-            jobPost.setLevel(level);
-        }
+
         if (request.getIndustryId() != null) {
-            Industry industry = industryRepository.findById(request.getIndustryId())
-                    .orElseThrow(() -> new AppException(ErrorCode.INDUSTRY_NOT_EXISTED));
-            jobPost.setIndustry(industry);
+            try {
+                jobPost.setIndustry(industryRepository.getReferenceById(request.getIndustryId()));
+            } catch (Exception e) {
+                throw new AppException(ErrorCode.INDUSTRY_NOT_EXISTED);
+            }
+        } else {
+            jobPost.setIndustry(null);
         }
+
         if (request.getRegionId() != null) {
             Province province = regionService.getProvinceByCode(request.getRegionId());
             jobPost.setProvince(province);
+        } else {
+            jobPost.setProvince(null);
         }
-        jobPost = jobPostRepository.save(jobPost);
-
-        return jobPostMapper.toJobPostDetailResponse(jobPost);
     }
 }

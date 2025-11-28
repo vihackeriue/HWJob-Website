@@ -6,6 +6,7 @@ import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.service.recruiter.job_post.RecruiterJobPostService;
+import com.hw.hwjobbackend.util.PaginationUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -32,13 +33,17 @@ public class RecruiterJobPostController {
 
     @GetMapping
     public ApiResponse<List<JobPostResponse>> getPostedJobPosts(
-            @RequestParam(value = "page", defaultValue = "1") Integer page,
-            @RequestParam(value = "size", defaultValue = "10") Integer size
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size
     ) {
         if (page != null && size != null) {
-            Page<JobPostResponse> response = recruiterJobPostService.getPostedJobPosts(page - 1, size);
+
+            int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
+
+            Page<JobPostResponse> response = recruiterJobPostService
+                    .getPostedJobPosts(zeroBasedPage, size);
             return ApiResponse.<List<JobPostResponse>>builder()
-                    .page(response.getNumber() + 1)
+                    .page(PaginationUtils.toOneBasedPage(response.getNumber()))
                     .totalPages(response.getTotalPages())
                     .result(response.getContent())
                     .build();
