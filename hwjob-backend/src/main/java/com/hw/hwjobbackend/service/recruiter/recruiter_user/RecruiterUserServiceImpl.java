@@ -37,15 +37,8 @@ public class RecruiterUserServiceImpl implements RecruiterUserService {
         Recruiter recruiter = recruiterRepository.findById(recruiterId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        if (request.getEmail() != null && !Objects.equals(recruiter.getEmail(), request.getEmail())) {
-            userService.validateEmail(recruiter.getEmail(), request.getEmail());
-        }
-
-        if (request.getRegionId() != null &&
-                !Objects.equals(recruiter.getRegion().getId(),
-                        request.getRegionId())) {
-            userService.updateRegion(recruiter, request);
-        }
+        userService.validateAndUpdateEmail(recruiter, request.getEmail());
+        userService.validateAndUpdateRegion(recruiter, request.getRegionId());
 
         recruiterMapper.updateRecruiter(recruiter, request);
 

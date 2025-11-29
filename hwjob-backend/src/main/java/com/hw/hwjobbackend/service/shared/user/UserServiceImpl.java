@@ -2,19 +2,14 @@ package com.hw.hwjobbackend.service.shared.user;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.model.dto.request.user.UserUpdatePasswordRequest;
-import com.hw.hwjobbackend.model.dto.response.profile.CandidateProfileResponse;
-import com.hw.hwjobbackend.repository.region.RegionRepository;
-import com.hw.hwjobbackend.repository.user.CandidateRepository;
-import com.hw.hwjobbackend.service.authentication.RoleService;
-import com.hw.hwjobbackend.service.mapper.user.CandidateMapper;
-import com.hw.hwjobbackend.service.mapper.user.RecruiterMapper;
-import com.hw.hwjobbackend.service.mapper.user.UserMapper;
 import com.hw.hwjobbackend.model.dto.request.user.UserCreationRequest;
-import com.hw.hwjobbackend.model.dto.request.user.UserUpdateRequest;
+import com.hw.hwjobbackend.model.dto.request.user.UserUpdatePasswordRequest;
 import com.hw.hwjobbackend.model.dto.response.file.FileResponse;
+import com.hw.hwjobbackend.model.dto.response.profile.CandidateProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
-import com.hw.hwjobbackend.model.dto.response.user.*;
+import com.hw.hwjobbackend.model.dto.response.user.UpdateAvatarResponse;
+import com.hw.hwjobbackend.model.dto.response.user.UserCreationResponse;
+import com.hw.hwjobbackend.model.dto.response.user.UserResponse;
 import com.hw.hwjobbackend.model.entity.region.Region;
 import com.hw.hwjobbackend.model.entity.user.Candidate;
 import com.hw.hwjobbackend.model.entity.user.Recruiter;
@@ -22,9 +17,15 @@ import com.hw.hwjobbackend.model.entity.user.Role;
 import com.hw.hwjobbackend.model.entity.user.User;
 import com.hw.hwjobbackend.model.enums.RoleEnum;
 import com.hw.hwjobbackend.model.enums.UserStatusEnum;
+import com.hw.hwjobbackend.repository.region.RegionRepository;
+import com.hw.hwjobbackend.repository.user.CandidateRepository;
 import com.hw.hwjobbackend.repository.user.RecruiterRepository;
 import com.hw.hwjobbackend.repository.user.UserRepository;
+import com.hw.hwjobbackend.service.authentication.RoleService;
 import com.hw.hwjobbackend.service.file.FileService;
+import com.hw.hwjobbackend.service.mapper.user.CandidateMapper;
+import com.hw.hwjobbackend.service.mapper.user.RecruiterMapper;
+import com.hw.hwjobbackend.service.mapper.user.UserMapper;
 import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -47,9 +48,7 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     RoleService roleService;
     UserMapper userMapper;
-
     PasswordEncoder passwordEncoder;
-
     FileService fileService;
     RecruiterMapper recruiterMapper;
     RecruiterRepository recruiterRepository;
@@ -67,8 +66,8 @@ public class UserServiceImpl implements UserService {
         User user = createUserByType(userType, request, roles);
 
         setDefaultAvatar(user);
-
         user = userRepository.save(user);
+
         return userMapper.toUserCreationResponse(user);
     }
 
@@ -84,10 +83,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void validateEmail(String currentEmail, String newEmail) {
-        if (!Objects.equals(currentEmail, newEmail)) {
-            if (userRepository.existsByEmail(newEmail)) {
-                throw new AppException(ErrorCode.EMAIL_EXISTED);
+    public void validateAndUpdateEmail(User user, String newEmail) {
+        if (newEmail == null || Objects.equals(user.getEmail(), newEmail)) {
+            return;
+        }
+        if (userRepository.existsByEmail(newEmail)) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
+        user.setEmail(newEmail);
+        log.debug("Email updated for user: {}", user.getUsername());
+
+    }
+
+    @Override
+    public void validateAndUpdateRegion(User user, Integer newRegionId) {
+        if (newRegionId == null) {
+            return;
+        }
+        Integer currentRegionId = user.getRegion() != null ? user.getRegion().getId() : null;
+
+        if (Objects.equals(currentRegionId, newRegionId)) {
+            return;
+        }
+        if (newRegionId == 0) {
+            user.setRegion(null);
+        } else {
+            try {
+                Region region = regionRepository.getReferenceById(newRegionId);
+                user.setRegion(region);
+            } catch (Exception e) {
+                throw new AppException(ErrorCode.REGION_NOT_EXISTED);
             }
         }
     }
@@ -105,26 +130,8 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-    }
 
-    @Override
-    @Transactional
-    public void updateRegion(User user, UserUpdateRequest request) {
-
-        Integer regionId = request.getRegionId();
-
-        Integer currentRegionId = user.getRegion() != null ? user.getRegion().getId() : null;
-
-        if (Objects.equals(currentRegionId, regionId)) {
-            return;
-        }
-
-        if (regionId != null && regionId != 0) {
-            Region region = regionRepository.getReferenceById(regionId);
-            user.setRegion(region);
-        } else {
-            user.setRegion(null);
-        }
+        log.info("Password updated for user: {}", username);
     }
 
     @Override
@@ -166,15 +173,15 @@ public class UserServiceImpl implements UserService {
     public CandidateProfileResponse getCandidateProfile(String id) {
         Candidate candidate = candidateRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
         CandidateProfileResponse response = candidateMapper.toCandidateProfileResponse(candidate);
         response.setRegion(candidate.getRegion() != null ? candidate.getRegion().getName() : null);
 
         return response;
     }
 
-    /**
-     * Validate thông tin user trước khi tạo
-     */
+    // ===== PRIVATE HELPER METHODS =====
+
     private void validateUserCreation(UserCreationRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new AppException(ErrorCode.USERNAME_EXISTED);
@@ -184,9 +191,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    /**
-     * Xác định loại user dựa trên roles (CANDIDATE hoặc RECRUITER)
-     */
     private RoleEnum determineUserType(Set<Role> roles) {
         boolean hasCandidate = roles.stream()
                 .anyMatch(role -> RoleEnum.CANDIDATE.name().equalsIgnoreCase(role.getName()));
@@ -205,9 +209,6 @@ public class UserServiceImpl implements UserService {
         throw new AppException(ErrorCode.ROLE_NOT_EXISTED);
     }
 
-    /**
-     * Tạo user entity dựa trên type (CANDIDATE hoặc RECRUITER)
-     */
     private User createUserByType(RoleEnum userType, UserCreationRequest request, Set<Role> roles) {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
@@ -218,9 +219,6 @@ public class UserServiceImpl implements UserService {
         };
     }
 
-    /**
-     * Build Candidate entity
-     */
     private Candidate buildCandidate(UserCreationRequest request, String encodedPassword, Set<Role> roles) {
         return Candidate.builder()
                 .username(request.getUsername())
@@ -232,9 +230,6 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    /**
-     * Build Recruiter entity
-     */
     private Recruiter buildRecruiter(UserCreationRequest request, String encodedPassword, Set<Role> roles) {
         return Recruiter.builder()
                 .username(request.getUsername())
@@ -246,9 +241,6 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    /**
-     * Set avatar mặc định cho user mới
-     */
     private void setDefaultAvatar(User user) {
         FileResponse avatarResponse = fileService.setDefaultAvatarForUser(user.getUsername());
         user.setImageUrl(avatarResponse.getUrl());

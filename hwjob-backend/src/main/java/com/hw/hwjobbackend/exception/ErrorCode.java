@@ -52,10 +52,7 @@ public enum ErrorCode {
     // ========================================
     // REGION (12xx)
     // ========================================
-    COUNTRY_NOT_EXISTED(1201, "error.country_not_existed", HttpStatus.NOT_FOUND),
-    PROVINCE_NOT_EXISTED(1202, "error.province_not_existed", HttpStatus.NOT_FOUND),
-    WARD_NOT_EXISTED(1203, "error.ward_not_existed", HttpStatus.NOT_FOUND),
-
+    REGION_NOT_EXISTED(1201, "error.region_not_existed", HttpStatus.NOT_FOUND),
     // ========================================
     // JOB LEVEL (13xx)
     // ========================================
