@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.model.entity.user;
 
 
-import com.hw.hwjobbackend.model.entity.region.Province;
+import com.hw.hwjobbackend.model.entity.region.Region;
 import com.hw.hwjobbackend.model.enums.UserStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,8 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -69,7 +67,7 @@ public class User implements UserDetails {
     Set<Role> roles;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    Province province;
+    Region region;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

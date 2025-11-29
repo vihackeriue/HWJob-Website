@@ -42,7 +42,7 @@ public class RecruiterUserServiceImpl implements RecruiterUserService {
         }
 
         if (request.getRegionId() != null &&
-                !Objects.equals(recruiter.getProvince().getCode(),
+                !Objects.equals(recruiter.getRegion().getId(),
                         request.getRegionId())) {
             userService.updateRegion(recruiter, request);
         }

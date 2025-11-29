@@ -22,5 +22,4 @@ public class ProvinceApiResponse {
     String divisionType;
     @JsonProperty("phone_code")
     Integer phoneCode;
-    List<WardApiResponse> wards;
 }

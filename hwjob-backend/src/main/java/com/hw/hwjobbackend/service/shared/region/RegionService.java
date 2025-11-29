@@ -1,15 +1,20 @@
 package com.hw.hwjobbackend.service.shared.region;
 
-import com.hw.hwjobbackend.model.entity.region.Province;
-import com.hw.hwjobbackend.model.entity.region.Ward;
+import com.hw.hwjobbackend.model.dto.api_response.ProvinceApiResponse;
+import com.hw.hwjobbackend.model.dto.response.region.RegionResponse;
+import com.hw.hwjobbackend.model.entity.region.Region;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public interface RegionService {
 
-    void initializeRegionData();
+    RegionResponse getRegionById(int id);
 
-    Province getProvinceByCode(int provinceCode);
+    void createRegion(ProvinceApiResponse apiResponse);
 
-    Province getProvinceReferenceByCode(Integer code);
+    Page<RegionResponse> getAllRegion(int page, int size);
 
-    Ward getWardByCodeAndProvince(int wardCode, Province province);
+    List<RegionResponse> getAllRegion();
+
 }

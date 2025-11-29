@@ -41,7 +41,7 @@ import java.util.Date;
 //                                                 5️  Spring Security verify password
 //
 //                                                 6️  CustomUserDetails.getAuthorities()
-//                                                      lấy quyền hạn (roles)
+//                                                      lấy roles
 //
 //                                                 7️  Tạo JWT token với roles
 //

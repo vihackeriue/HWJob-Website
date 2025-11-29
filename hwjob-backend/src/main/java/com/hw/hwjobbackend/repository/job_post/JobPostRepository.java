@@ -23,7 +23,7 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
                AND (:industryId IS NULL OR jp.industry.id = :industryId)
                AND (:levelId IS NULL OR jp.level.id = :levelId)
                AND (:jobTypeId IS NULL OR jp.jobType.id = :jobTypeId)
-               AND (:regionId IS NULL OR jp.province.code = :regionId)
+               AND (:regionId IS NULL OR jp.region.id = :regionId)
              ORDER BY jp.createdAt DESC
             """)
     Page<JobPost> getJobPosts(
@@ -42,7 +42,7 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
                AND (:industryId IS NULL OR jp.industry.id = :industryId)
                AND (:levelId IS NULL OR jp.level.id = :levelId)
                AND (:jobTypeId IS NULL OR jp.jobType.id = :jobTypeId)
-               AND (:regionId IS NULL OR jp.province.code = :regionId)
+               AND (:regionId IS NULL OR jp.region.id = :regionId)
              ORDER BY jp.createdAt DESC
             """)
     List<JobPost> getAllJobPosts(

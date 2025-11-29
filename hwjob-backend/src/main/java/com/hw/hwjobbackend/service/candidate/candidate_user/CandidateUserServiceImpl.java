@@ -41,7 +41,7 @@ public class CandidateUserServiceImpl implements CandidateUserService {
             userService.validateEmail(candidate.getEmail(), request.getEmail());
         }
 
-        if (request.getRegionId() != null && !Objects.equals(candidate.getProvince().getCode(), request.getRegionId())) {
+        if (request.getRegionId() != null && !Objects.equals(candidate.getRegion().getId(), request.getRegionId())) {
             userService.updateRegion(candidate, request);
         }
 

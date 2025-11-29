@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.service.shared.user;
+package com.hw.hwjobbackend.service.authentication;
 
 import com.hw.hwjobbackend.model.entity.user.Role;
 import com.hw.hwjobbackend.exception.AppException;

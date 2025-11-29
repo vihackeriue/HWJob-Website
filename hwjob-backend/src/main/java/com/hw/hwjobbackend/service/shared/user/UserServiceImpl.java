@@ -4,7 +4,9 @@ import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.request.user.UserUpdatePasswordRequest;
 import com.hw.hwjobbackend.model.dto.response.profile.CandidateProfileResponse;
+import com.hw.hwjobbackend.repository.region.RegionRepository;
 import com.hw.hwjobbackend.repository.user.CandidateRepository;
+import com.hw.hwjobbackend.service.authentication.RoleService;
 import com.hw.hwjobbackend.service.mapper.user.CandidateMapper;
 import com.hw.hwjobbackend.service.mapper.user.RecruiterMapper;
 import com.hw.hwjobbackend.service.mapper.user.UserMapper;
@@ -13,7 +15,7 @@ import com.hw.hwjobbackend.model.dto.request.user.UserUpdateRequest;
 import com.hw.hwjobbackend.model.dto.response.file.FileResponse;
 import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.user.*;
-import com.hw.hwjobbackend.model.entity.region.Province;
+import com.hw.hwjobbackend.model.entity.region.Region;
 import com.hw.hwjobbackend.model.entity.user.Candidate;
 import com.hw.hwjobbackend.model.entity.user.Recruiter;
 import com.hw.hwjobbackend.model.entity.user.Role;
@@ -23,7 +25,6 @@ import com.hw.hwjobbackend.model.enums.UserStatusEnum;
 import com.hw.hwjobbackend.repository.user.RecruiterRepository;
 import com.hw.hwjobbackend.repository.user.UserRepository;
 import com.hw.hwjobbackend.service.file.FileService;
-import com.hw.hwjobbackend.service.shared.region.RegionService;
 import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -49,11 +50,11 @@ public class UserServiceImpl implements UserService {
 
     PasswordEncoder passwordEncoder;
 
-    RegionService regionService;
     FileService fileService;
     RecruiterMapper recruiterMapper;
     RecruiterRepository recruiterRepository;
     CandidateRepository candidateRepository;
+    RegionRepository regionRepository;
     CandidateMapper candidateMapper;
 
     @Override
@@ -110,19 +111,19 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updateRegion(User user, UserUpdateRequest request) {
 
-        Integer provinceCode = request.getRegionId();
+        Integer regionId = request.getRegionId();
 
-        Integer currentProvinceCode = user.getProvince() != null ? user.getProvince().getCode() : null;
+        Integer currentRegionId = user.getRegion() != null ? user.getRegion().getId() : null;
 
-        if (Objects.equals(currentProvinceCode, provinceCode)) {
+        if (Objects.equals(currentRegionId, regionId)) {
             return;
         }
 
-        if (provinceCode != null && provinceCode != 0) {
-            Province province = regionService.getProvinceReferenceByCode(provinceCode);
-            user.setProvince(province);
+        if (regionId != null && regionId != 0) {
+            Region region = regionRepository.getReferenceById(regionId);
+            user.setRegion(region);
         } else {
-            user.setProvince(null);
+            user.setRegion(null);
         }
     }
 
@@ -154,7 +155,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         RecruiterProfileResponse response = recruiterMapper.toRecruiterProfileResponse(recruiter);
-        response.setRegion(recruiter.getProvince() != null ? recruiter.getProvince().getName() : null);
+        response.setRegion(recruiter.getRegion() != null ? recruiter.getRegion().getName() : null);
         response.setFollowed(false);
 
         return response;
@@ -166,13 +167,13 @@ public class UserServiceImpl implements UserService {
         Candidate candidate = candidateRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         CandidateProfileResponse response = candidateMapper.toCandidateProfileResponse(candidate);
-        response.setRegion(candidate.getProvince() != null ? candidate.getProvince().getName() : null);
+        response.setRegion(candidate.getRegion() != null ? candidate.getRegion().getName() : null);
 
         return response;
     }
 
     /**
-     * Validate thông tin user trước khi tạo (fail-fast)
+     * Validate thông tin user trước khi tạo
      */
     private void validateUserCreation(UserCreationRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {

@@ -10,13 +10,14 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface RecruiterMapper {
 
-    @Mapping(source = "province.name", target = "region")
+    @Mapping(source = "region.name", target = "region")
     RecruiterResponse toRecruiterResponse(Recruiter recruiter);
 
     @Mapping(target = "password", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateRecruiter(@MappingTarget Recruiter recruiter, RecruiterUpdateRequest request);
 
+    @Mapping(source = "region.name", target = "region")
     RecruiterProfileResponse toRecruiterProfileResponse(Recruiter recruiter);
 
 }
