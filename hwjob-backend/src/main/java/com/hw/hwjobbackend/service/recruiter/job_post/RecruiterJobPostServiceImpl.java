@@ -6,11 +6,12 @@ import com.hw.hwjobbackend.model.dto.request.job_post.JobPostRequest;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.model.entity.job_post.JobPost;
-import com.hw.hwjobbackend.model.entity.region.Province;
+import com.hw.hwjobbackend.model.entity.region.Region;
 import com.hw.hwjobbackend.repository.industry.IndustryRepository;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
 import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
 import com.hw.hwjobbackend.repository.level.LevelRepository;
+import com.hw.hwjobbackend.repository.region.RegionRepository;
 import com.hw.hwjobbackend.repository.user.RecruiterRepository;
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
 import com.hw.hwjobbackend.service.shared.region.RegionService;
@@ -37,7 +38,7 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
 
     JobPostRepository jobPostRepository;
     JobPostMapper jobPostMapper;
-    RegionService regionService;
+    RegionRepository regionRepository;
     RecruiterRepository recruiterRepository;
     LevelRepository levelRepository;
     JobTypeRepository jobTypeRepository;
@@ -129,10 +130,10 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
         }
 
         if (request.getRegionId() != null) {
-            Province province = regionService.getProvinceByCode(request.getRegionId());
-            jobPost.setProvince(province);
+            Region region = regionRepository.getReferenceById(request.getRegionId());
+            jobPost.setRegion(region);
         } else {
-            jobPost.setProvince(null);
+            jobPost.setRegion(null);
         }
     }
 }

@@ -16,7 +16,7 @@ public interface JobPostMapper {
     @Mapping(target = "jobType", ignore = true)
     @Mapping(target = "level", ignore = true)
     @Mapping(target = "industry", ignore = true)
-    @Mapping(target = "province", ignore = true)
+    @Mapping(target = "region", ignore = true)
     @Mapping(target = "recruiter", ignore = true)
     JobPost toJobPost(JobPostRequest request);
 
@@ -25,13 +25,13 @@ public interface JobPostMapper {
     @Mapping(source = "industry.name", target = "industry")
     @Mapping(source = "level.name", target = "level")
     @Mapping(source = "jobType.name", target = "jobType")
-    @Mapping(source = "province.name", target = "region")
+    @Mapping(source = "region.name", target = "region")
     JobPostResponse toJobPostResponse(JobPost jobPost);
 
     @Mapping(source = "industry.name", target = "industry")
     @Mapping(source = "level.name", target = "level")
     @Mapping(source = "jobType.name", target = "jobType")
-    @Mapping(source = "province.name", target = "region")
+    @Mapping(source = "region.name", target = "region")
     @Mapping(target = "recruiter", ignore = true)
     @Mapping(target = "isApplied", ignore = true)
     @Mapping(target = "isSaved", ignore = true)
@@ -41,7 +41,7 @@ public interface JobPostMapper {
     @Mapping(target = "jobType", ignore = true)
     @Mapping(target = "level", ignore = true)
     @Mapping(target = "industry", ignore = true)
-    @Mapping(target = "province", ignore = true)
+    @Mapping(target = "region", ignore = true)
     @Mapping(target = "recruiter", ignore = true)
     // Nếu request field null -> bỏ qua
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

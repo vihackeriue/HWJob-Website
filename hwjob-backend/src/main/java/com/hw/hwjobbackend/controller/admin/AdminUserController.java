@@ -27,7 +27,6 @@ public class AdminUserController {
             @RequestParam(value = "size", required = false) Integer size
     ) {
         if (page != null && size != null) {
-            // Chuyển từ 1-based sang 0-based
             int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
 
             Page<UserResponse> response = adminUserService.getUsers(zeroBasedPage, size);

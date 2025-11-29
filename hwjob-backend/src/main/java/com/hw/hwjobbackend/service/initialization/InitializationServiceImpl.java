@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.service.initialization;
 
+import com.hw.hwjobbackend.model.dto.api_response.ProvinceApiResponse;
 import com.hw.hwjobbackend.model.entity.industry.Industry;
 import com.hw.hwjobbackend.model.entity.job_type.JobType;
 import com.hw.hwjobbackend.model.entity.level.Level;
@@ -12,9 +13,10 @@ import com.hw.hwjobbackend.model.enums.data.LevelEnum;
 import com.hw.hwjobbackend.repository.industry.IndustryRepository;
 import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
 import com.hw.hwjobbackend.repository.level.LevelRepository;
-import com.hw.hwjobbackend.repository.region.ProvinceRepository;
+import com.hw.hwjobbackend.repository.region.RegionRepository;
 import com.hw.hwjobbackend.repository.user.RoleRepository;
 import com.hw.hwjobbackend.repository.user.UserRepository;
+import com.hw.hwjobbackend.service.api.ApiClientService;
 import com.hw.hwjobbackend.service.shared.region.RegionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,8 +42,11 @@ public class InitializationServiceImpl implements InitializationService {
     RoleRepository roleRepository;
     IndustryRepository industryRepository;
     JobTypeRepository jobTypeRepository;
-    ProvinceRepository provinceRepository;
+    RegionRepository provinceRepository;
     LevelRepository levelRepository;
+
+
+    ApiClientService apiClientService;
 
 
     RegionService regionService;
@@ -57,6 +63,10 @@ public class InitializationServiceImpl implements InitializationService {
     @NonFinal
     @Value("${initial-app.admin.password}")
     String ADMIN_PASSWORD;
+
+    @NonFinal
+    @Value("${api.api-province}")
+    String PROVINCE_API_URL;
 
     @Override
     @Transactional
@@ -76,8 +86,24 @@ public class InitializationServiceImpl implements InitializationService {
     @Override
     @Transactional
     public void initializeRegionData() {
-        if (provinceRepository.count() == 0)
-            regionService.initializeRegionData();
+        if (provinceRepository.count() == 0) {
+            try {
+                List<ProvinceApiResponse> provinceApiResponses = apiClientService.get(
+                        PROVINCE_API_URL,
+                        new ParameterizedTypeReference<>() {
+                        }
+                );
+                if (provinceApiResponses != null && !provinceApiResponses.isEmpty()) {
+                    for (ProvinceApiResponse provinceApiResponse : provinceApiResponses) {
+                        regionService.createRegion(provinceApiResponse);
+                    }
+                }
+
+            } catch (Exception e) {
+                log.error("Error initializing region data: {}", e.getMessage(), e);
+                throw new RuntimeException("Failed to initialize region data from API", e);
+            }
+        }
     }
 
     @Override

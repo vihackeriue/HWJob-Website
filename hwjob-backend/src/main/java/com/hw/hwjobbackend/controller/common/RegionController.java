@@ -2,8 +2,9 @@ package com.hw.hwjobbackend.controller.common;
 
 
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
-import com.hw.hwjobbackend.model.dto.response.region.ProvinceResponse;
-import com.hw.hwjobbackend.service.shared.region.ProvinceService;
+import com.hw.hwjobbackend.model.dto.response.region.RegionResponse;
+import com.hw.hwjobbackend.service.shared.region.RegionService;
+import com.hw.hwjobbackend.util.PaginationUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,31 +19,32 @@ import java.util.List;
 @RequestMapping("/regions")
 public class RegionController {
 
-    ProvinceService provinceService;
+    RegionService regionService;
 
     @GetMapping
-    public ApiResponse<List<ProvinceResponse>> getProvinces(
+    public ApiResponse<List<RegionResponse>> getRegions(
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "size", required = false) Integer size
     ) {
-
         if (page != null && size != null) {
-            Page<ProvinceResponse> response = provinceService.getAllProvince(page - 1, size);
-            return ApiResponse.<List<ProvinceResponse>>builder()
-                    .page(response.getNumber() + 1)
+            int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
+
+            Page<RegionResponse> response = regionService.getAllRegion(zeroBasedPage, size);
+            return ApiResponse.<List<RegionResponse>>builder()
+                    .page(PaginationUtils.toOneBasedPage(response.getNumber()))
                     .totalPages(response.getTotalPages())
                     .result(response.getContent())
                     .build();
         }
-        return ApiResponse.<List<ProvinceResponse>>builder()
-                .result(provinceService.getAllProvince())
+        return ApiResponse.<List<RegionResponse>>builder()
+                .result(regionService.getAllRegion())
                 .build();
     }
 
-    @GetMapping("/{code}")
-    public ApiResponse<ProvinceResponse> getProvinceByCode(@PathVariable int code) {
-        return ApiResponse.<ProvinceResponse>builder()
-                .result(provinceService.getProvinceByCode(code))
+    @GetMapping("/{id}")
+    public ApiResponse<RegionResponse> getRegionById(@PathVariable int id) {
+        return ApiResponse.<RegionResponse>builder()
+                .result(regionService.getRegionById(id))
                 .build();
     }
 

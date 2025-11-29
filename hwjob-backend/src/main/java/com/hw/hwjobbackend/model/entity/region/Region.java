@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
-
 @Entity
 @Table(name = "provinces")
 @Getter
@@ -14,16 +12,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Province {
-
+public class Region {
     @Id
-    Integer code;
+    Integer id;
 
     String name;
     String codeName;
     String divisionType;
     Integer phoneCode;
-
-    @OneToMany(mappedBy = "province", fetch = FetchType.LAZY)
-    List<Ward> wards;
 }

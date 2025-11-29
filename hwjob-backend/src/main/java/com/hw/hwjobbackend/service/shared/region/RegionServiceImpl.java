@@ -1,24 +1,21 @@
 package com.hw.hwjobbackend.service.shared.region;
 
 import com.hw.hwjobbackend.model.dto.api_response.ProvinceApiResponse;
-import com.hw.hwjobbackend.model.dto.api_response.WardApiResponse;
-import com.hw.hwjobbackend.model.entity.region.Ward;
-import com.hw.hwjobbackend.model.entity.region.Province;
+import com.hw.hwjobbackend.model.dto.response.region.RegionResponse;
+import com.hw.hwjobbackend.model.entity.region.Region;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.repository.region.ProvinceRepository;
-import com.hw.hwjobbackend.service.api.ApiClientService;
+import com.hw.hwjobbackend.repository.region.RegionRepository;
+import com.hw.hwjobbackend.service.mapper.region.RegionMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
 import java.util.List;
 
 @Service
@@ -27,70 +24,34 @@ import java.util.List;
 @Slf4j
 public class RegionServiceImpl implements RegionService {
 
-    ProvinceService provinceService;
-    WardService wardService;
-    ApiClientService apiClientService;
-
-    ProvinceRepository provinceRepository;
-
-    @NonFinal
-    @Value("${api.api-province}")
-    String PROVINCE_API_URL;
+    RegionRepository regionRepository;
+    RegionMapper regionMapper;
 
     @Override
-    @Transactional
-    public void initializeRegionData() {
-        try {
-            List<ProvinceApiResponse> provinceApiResponses = apiClientService.get(
-                    PROVINCE_API_URL,
-                    new ParameterizedTypeReference<>() {
-                    }
-            );
-            if (provinceApiResponses != null && !provinceApiResponses.isEmpty()) {
-                processProvinceData(provinceApiResponses);
-            }
-        } catch (Exception e) {
-            log.error("Error initializing location data: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to initialize location data from API", e);
-        }
+    public RegionResponse getRegionById(int id) {
+        Region region = regionRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.PROVINCE_NOT_EXISTED));
+        return regionMapper.toRegionResponse(region);
     }
 
     @Override
-    public Province getProvinceByCode(int provinceCode) {
-        return provinceService.getProvince(provinceCode);
+    public void createRegion(ProvinceApiResponse apiResponse) {
+        Region region = regionMapper.toRegion(apiResponse);
+        log.debug("Created region: {} (id: {})", region.getName(), region.getId());
+        regionRepository.save(region);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Province getProvinceReferenceByCode(Integer code) {
-        if (!provinceRepository.existsById(code)) {
-            throw new AppException(ErrorCode.PROVINCE_NOT_EXISTED);
-        }
-        return provinceRepository.getReferenceById(code);
+    public Page<RegionResponse> getAllRegion(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return regionRepository.findAll(pageable).map(regionMapper::toRegionResponse);
     }
 
     @Override
-    public Ward getWardByCodeAndProvince(int wardCode, Province province) {
-        Ward ward = wardService.getWard(wardCode);
-        if (!Objects.equals(ward.getProvince().getCode(), province.getCode())) {
-            throw new AppException(ErrorCode.WARD_NOT_EXISTED);
-        }
-        return ward;
-    }
-
-    private void processProvinceData(List<ProvinceApiResponse> provinceApiResponses) {
-        for (ProvinceApiResponse provinceApiResponse : provinceApiResponses) {
-            Province province = provinceService.createProvinceFromApi(provinceApiResponse);
-            if (provinceApiResponse.getWards() != null && !provinceApiResponse.getWards().isEmpty()) {
-                processWardData(provinceApiResponse.getWards(), province);
-            }
-        }
-    }
-
-    private void processWardData(List<WardApiResponse> wards, Province province) {
-        for (WardApiResponse wardApiResponse : wards) {
-            wardService.createWardFromApi(wardApiResponse, province);
-        }
+    public List<RegionResponse> getAllRegion() {
+        return regionRepository.findAll().stream()
+                .map(regionMapper::toRegionResponse)
+                .toList();
     }
 
 }
