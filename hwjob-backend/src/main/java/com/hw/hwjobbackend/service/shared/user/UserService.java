@@ -2,7 +2,6 @@ package com.hw.hwjobbackend.service.shared.user;
 
 import com.hw.hwjobbackend.model.dto.request.user.UserCreationRequest;
 import com.hw.hwjobbackend.model.dto.request.user.UserUpdatePasswordRequest;
-import com.hw.hwjobbackend.model.dto.request.user.UserUpdateRequest;
 import com.hw.hwjobbackend.model.dto.response.profile.CandidateProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.user.*;
@@ -15,16 +14,16 @@ public interface UserService {
 
     UserResponse getUserInfo();
 
-    void validateEmail(String currentEmail, String newEmail);
-
     void updatePassword(UserUpdatePasswordRequest request);
-
-    void updateRegion(User user, UserUpdateRequest request);
 
     UpdateAvatarResponse updateAvatar(MultipartFile file);
 
     RecruiterProfileResponse getRecruiterProfile(String id);
 
     CandidateProfileResponse getCandidateProfile(String id);
+
+    void validateAndUpdateEmail(User user, String newEmail);
+
+    void validateAndUpdateRegion(User user, Integer newRegionId);
 
 }

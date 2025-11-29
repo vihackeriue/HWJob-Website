@@ -30,7 +30,7 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public RegionResponse getRegionById(int id) {
         Region region = regionRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.PROVINCE_NOT_EXISTED));
+                () -> new AppException(ErrorCode.REGION_NOT_EXISTED));
         return regionMapper.toRegionResponse(region);
     }
 

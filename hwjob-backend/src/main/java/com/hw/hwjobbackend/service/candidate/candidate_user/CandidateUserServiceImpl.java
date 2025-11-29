@@ -37,13 +37,9 @@ public class CandidateUserServiceImpl implements CandidateUserService {
         Candidate candidate = candidateRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        if (request.getEmail() != null && !Objects.equals(candidate.getEmail(), request.getEmail())) {
-            userService.validateEmail(candidate.getEmail(), request.getEmail());
-        }
+        userService.validateAndUpdateEmail(candidate, request.getEmail());
 
-        if (request.getRegionId() != null && !Objects.equals(candidate.getRegion().getId(), request.getRegionId())) {
-            userService.updateRegion(candidate, request);
-        }
+        userService.validateAndUpdateRegion(candidate, request.getRegionId());
 
         candidateMapper.updateCandidate(candidate, request);
 
