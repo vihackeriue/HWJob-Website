@@ -37,7 +37,8 @@ public enum ErrorCode {
     OLD_PASSWORD_INVALID(1104, "error.old_password_invalid", HttpStatus.BAD_REQUEST),
 
 
-    USER_NOT_EXISTED(1105, "error.username_not_existed", HttpStatus.NOT_FOUND),
+    USER_NOT_EXISTED(1105, "error.user_not_existed", HttpStatus.NOT_FOUND),
+
     USER_EXISTED(1106, "error.user_existed", HttpStatus.BAD_REQUEST),
     CREATE_USER_FAIL(1107, "error.create_user_fail", HttpStatus.BAD_REQUEST),
 
@@ -90,6 +91,12 @@ public enum ErrorCode {
     // FILE (17xx)
     // ========================================
     FILE_NOT_FOUND(1701, "error.file_not_found", HttpStatus.NOT_FOUND),
+
+    // ========================================
+    // SKILL (18xx)
+    // ========================================
+    SKILL_EXISTED(1801, "error.skill_existed", HttpStatus.BAD_REQUEST),
+    SKILL_NOT_EXISTED(1802, "error.skill_not_existed", HttpStatus.NOT_FOUND),
     ;
 
 

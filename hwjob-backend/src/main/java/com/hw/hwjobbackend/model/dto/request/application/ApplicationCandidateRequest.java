@@ -1,6 +1,8 @@
 package com.hw.hwjobbackend.model.dto.request.application;
 
-import com.hw.hwjobbackend.model.enums.ApplicationStatusEnum;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,8 +12,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ApplicationRequest {
+public class ApplicationCandidateRequest {
+    @NotNull
+    @NotBlank
     String jobPostId;
-    String candidateId;
-    ApplicationStatusEnum status;
 }

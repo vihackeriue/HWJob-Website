@@ -50,5 +50,6 @@ jwt:
 app:
   file:
     storage-dir: upload/user-avatar/
-    download-prefix: http://localhost:8080/hwjob/api/media/
+    download-prefix: http://localhost:8080/hwjob/api/common/media/
+    default-avatar-resource: static/images/default-avatar.png
 

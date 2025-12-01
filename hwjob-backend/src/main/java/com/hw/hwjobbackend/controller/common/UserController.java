@@ -25,7 +25,7 @@ public class UserController {
 
     UserService userService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ApiResponse<UserCreationResponse> create(
             @RequestBody @Valid UserCreationRequest request) {
         return ApiResponse.<UserCreationResponse>builder()
@@ -54,24 +54,6 @@ public class UserController {
     ) {
         userService.updatePassword(request);
         return ApiResponse.<Void>builder()
-                .build();
-    }
-
-    @GetMapping("/recruiter-profiles/{id}")
-    public ApiResponse<RecruiterProfileResponse> getRecruiterProfile(
-            @PathVariable String id
-    ) {
-        return ApiResponse.<RecruiterProfileResponse>builder()
-                .result(userService.getRecruiterProfile(id))
-                .build();
-    }
-
-    @GetMapping("/candidate-profiles/{id}")
-    public ApiResponse<CandidateProfileResponse> getCandidateProfile(
-            @PathVariable String id
-    ) {
-        return ApiResponse.<CandidateProfileResponse>builder()
-                .result(userService.getCandidateProfile(id))
                 .build();
     }
 }

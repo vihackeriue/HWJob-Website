@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,7 +27,6 @@ public class JobTypeServiceImpl implements JobTypeService {
     JobTypeMapper jobTypeMapper;
 
     @Override
-    @Transactional(readOnly = true)
     public JobTypeResponse getJobTypeById(Long id) {
         JobType jobType = jobTypeRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.JOB_TYPE_NOT_EXISTED));
@@ -37,7 +35,6 @@ public class JobTypeServiceImpl implements JobTypeService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Page<JobTypeResponse> getJobTypes(int page, int size) {
         Pageable pageable = PaginationUtils.buildPageable(page, size);
 
@@ -46,7 +43,6 @@ public class JobTypeServiceImpl implements JobTypeService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<JobTypeResponse> getAllJobTypes() {
         return jobTypeRepository.findAll().stream()
                 .map(jobTypeMapper::toJobTypeResponse)

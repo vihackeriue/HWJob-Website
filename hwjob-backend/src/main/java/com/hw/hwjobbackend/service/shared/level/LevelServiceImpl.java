@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,7 +27,6 @@ public class LevelServiceImpl implements LevelService {
     LevelMapper levelMapper;
 
     @Override
-    @Transactional(readOnly = true)
     public Page<LevelResponse> getLevels(int page, int size) {
         Pageable pageable = PaginationUtils.buildPageable(page, size);
 
@@ -37,7 +35,6 @@ public class LevelServiceImpl implements LevelService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<LevelResponse> getAllLevels() {
         return levelRepository.findAll().stream()
                 .map(levelMapper::toLevelResponse)
@@ -45,7 +42,6 @@ public class LevelServiceImpl implements LevelService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public LevelResponse getLevelById(Long id) {
         Level level = levelRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.LEVEL_NOT_EXISTED));

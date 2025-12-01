@@ -72,13 +72,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public UserResponse getUserInfo() {
-        String username = SecurityUtils.getCurrentUsername();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
+        String userId = SecurityUtils.getCurrentUserId();
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXISTED));
         return userMapper.toUserResponse(user);
     }
 
@@ -92,7 +89,6 @@ public class UserServiceImpl implements UserService {
         }
         user.setEmail(newEmail);
         log.debug("Email updated for user: {}", user.getUsername());
-
     }
 
     @Override
@@ -100,47 +96,40 @@ public class UserServiceImpl implements UserService {
         if (newRegionId == null) {
             return;
         }
-        Integer currentRegionId = user.getRegion() != null ? user.getRegion().getId() : null;
 
+        Integer currentRegionId = user.getRegion() != null ? user.getRegion().getId() : null;
         if (Objects.equals(currentRegionId, newRegionId)) {
             return;
         }
-        if (newRegionId == 0) {
-            user.setRegion(null);
-        } else {
-            try {
-                Region region = regionRepository.getReferenceById(newRegionId);
-                user.setRegion(region);
-            } catch (Exception e) {
-                throw new AppException(ErrorCode.REGION_NOT_EXISTED);
-            }
+
+        if (!regionRepository.existsById(newRegionId)) {
+            throw new AppException(ErrorCode.REGION_NOT_EXISTED);
         }
+        Region region = regionRepository.getReferenceById(newRegionId);
+        user.setRegion(region);
     }
 
     @Override
     @Transactional
     public void updatePassword(UserUpdatePasswordRequest request) {
-        String username = SecurityUtils.getCurrentUsername();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        String userId = SecurityUtils.getCurrentUserId();
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
             throw new AppException(ErrorCode.OLD_PASSWORD_INVALID);
         }
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-
-        log.info("Password updated for user: {}", username);
     }
 
     @Override
     @Transactional
     public UpdateAvatarResponse updateAvatar(MultipartFile file) {
-        String username = SecurityUtils.getCurrentUsername();
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        String userId = SecurityUtils.getCurrentUserId();
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         // Xóa avatar cũ nếu có
         if (user.getImageUrl() != null && !user.getImageUrl().isBlank()) {
@@ -160,11 +149,9 @@ public class UserServiceImpl implements UserService {
     public RecruiterProfileResponse getRecruiterProfile(String id) {
         Recruiter recruiter = recruiterRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
         RecruiterProfileResponse response = recruiterMapper.toRecruiterProfileResponse(recruiter);
         response.setRegion(recruiter.getRegion() != null ? recruiter.getRegion().getName() : null);
         response.setFollowed(false);
-
         return response;
     }
 

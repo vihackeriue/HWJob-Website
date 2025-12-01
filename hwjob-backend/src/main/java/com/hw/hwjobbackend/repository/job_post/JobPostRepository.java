@@ -54,30 +54,14 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
     );
 
 
-    @Query("SELECT jp FROM JobPost jp " +
-            "WHERE jp.recruiter.id = :recruiterId " +
-            "ORDER BY jp.createdAt DESC")
     Page<JobPost> findAllByRecruiterIdOrderByCreatedAtDesc(
-            @Param("recruiterId") String recruiterId,
+            String recruiterId,
             Pageable pageable
     );
 
+    List<JobPost> findAllByRecruiterIdOrderByCreatedAtDesc(String recruiterId);
 
-    @Query("SELECT jp FROM JobPost jp " +
-            "WHERE jp.recruiter.id = :recruiterId " +
-            "ORDER BY jp.createdAt DESC")
-    List<JobPost> findAllByRecruiterIdOrderByCreatedAtDesc(
-            @Param("recruiterId") String recruiterId
-    );
-
-
-    @Query("SELECT jp FROM JobPost jp " +
-            "WHERE jp.id = :jobPostId " +
-            "AND jp.recruiter.id = :recruiterId")
-    Optional<JobPost> findByIdAndRecruiterId(
-            @Param("jobPostId") String jobPostId,
-            @Param("recruiterId") String recruiterId
-    );
+    Optional<JobPost> findByIdAndRecruiterId(String jobPostId, String recruiterId);
 
     @Query("""
             SELECT jp FROM JobPost jp
@@ -94,4 +78,14 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
             @Param("userId") String userId,
             @Param("role") String role
     );
+
+    @Query("""
+                SELECT CASE WHEN COUNT(j) > 0 THEN true ELSE false END
+                FROM JobPost j
+                WHERE j.id = :jobPostId
+                  AND j.status = 'PUBLIC'
+                  AND (j.endedTime IS NULL OR j.endedTime > CURRENT_TIMESTAMP)
+            """)
+    boolean existsValidJobPost(@Param("jobPostId") String jobPostId);
+
 }

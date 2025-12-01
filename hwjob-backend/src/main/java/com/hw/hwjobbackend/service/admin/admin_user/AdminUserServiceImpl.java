@@ -9,7 +9,6 @@ import com.hw.hwjobbackend.model.enums.UserStatusEnum;
 import com.hw.hwjobbackend.repository.user.UserRepository;
 import com.hw.hwjobbackend.service.mapper.user.UserMapper;
 import com.hw.hwjobbackend.util.PaginationUtils;
-import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -54,12 +53,11 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     @Transactional
     public void changeUserStatus(String id, UserStatusRequest request) {
-        String currentUsername = SecurityUtils.getCurrentUsername();
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        validateNotSelfUpdate(user.getUsername(), currentUsername);
+        validateNotSelfUpdate(user.getId(), id);
 
         UserStatusEnum newStatus = request.getStatus();
         UserStatusEnum oldStatus = user.getUserStatus();
@@ -72,8 +70,8 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     }
 
-    private void validateNotSelfUpdate(String targetUsername, String currentUsername) {
-        if (targetUsername.equals(currentUsername)) {
+    private void validateNotSelfUpdate(String targetUserId, String currentUserId) {
+        if (targetUserId.equals(currentUserId)) {
             throw new AppException(ErrorCode.CANNOT_CHANGE_OWN_STATUS);
         }
     }

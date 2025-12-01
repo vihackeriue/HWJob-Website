@@ -15,12 +15,12 @@ import java.util.concurrent.TimeUnit;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RedisHash("RedisHas")
+@RedisHash("invalidate_tokens")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class InvalidateToken implements Serializable {
     @Id
-    String id;
+    String jwtId;
 
-    @TimeToLive(unit = TimeUnit.SECONDS)
-    Long expiredTime;
+    @TimeToLive
+    Long ttl;
 }

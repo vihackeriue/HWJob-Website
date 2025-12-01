@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.controller.recruiter;
 
-import com.hw.hwjobbackend.model.dto.request.application.ApplicationRequest;
+import com.hw.hwjobbackend.model.dto.request.application.ApplicationRecruiterRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationCandidateResponse;
 import com.hw.hwjobbackend.service.recruiter.application.RecruiterApplicationService;
@@ -47,7 +47,7 @@ public class RecruiterApplicationController {
 
     @PutMapping("/update-application")
     public ApiResponse<Void> updateCandidateApplication(
-            @RequestBody ApplicationRequest request
+            @RequestBody ApplicationRecruiterRequest request
     ) {
         recruiterJobPostService.updateCandidateApplication(request);
         return ApiResponse.<Void>builder().build();

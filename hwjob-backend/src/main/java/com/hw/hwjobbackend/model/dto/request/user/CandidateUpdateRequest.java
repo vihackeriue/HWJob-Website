@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CandidateUpdateRequest extends UserUpdateRequest {
+
+    Set<Long> skillIds;
 
     LocalDate dob;
 

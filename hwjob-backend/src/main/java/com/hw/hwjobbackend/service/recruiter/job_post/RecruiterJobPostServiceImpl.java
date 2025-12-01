@@ -6,7 +6,6 @@ import com.hw.hwjobbackend.model.dto.request.job_post.JobPostRequest;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.model.entity.job_post.JobPost;
-import com.hw.hwjobbackend.model.entity.region.Region;
 import com.hw.hwjobbackend.repository.industry.IndustryRepository;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
 import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
@@ -14,7 +13,6 @@ import com.hw.hwjobbackend.repository.level.LevelRepository;
 import com.hw.hwjobbackend.repository.region.RegionRepository;
 import com.hw.hwjobbackend.repository.user.RecruiterRepository;
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
-import com.hw.hwjobbackend.service.shared.region.RegionService;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
@@ -43,6 +41,7 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
     LevelRepository levelRepository;
     JobTypeRepository jobTypeRepository;
     IndustryRepository industryRepository;
+
 
     @Override
     @Transactional
@@ -100,38 +99,40 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
 
     private void setJobPostRelations(JobPost jobPost, JobPostRequest request) {
         if (request.getLevelId() != null) {
-            try {
-                jobPost.setLevel(levelRepository.getReferenceById(request.getLevelId()));
-            } catch (Exception e) {
+            if (!levelRepository.existsById(request.getLevelId())) {
                 throw new AppException(ErrorCode.LEVEL_NOT_EXISTED);
             }
+            jobPost.setLevel(levelRepository.getReferenceById(request.getLevelId()));
         } else {
             jobPost.setLevel(null);
         }
 
         if (request.getJobTypeId() != null) {
-            try {
-                jobPost.setJobType(jobTypeRepository.getReferenceById(request.getJobTypeId()));
-            } catch (Exception e) {
+            if (!jobTypeRepository.existsById(request.getJobTypeId())) {
                 throw new AppException(ErrorCode.JOB_TYPE_NOT_EXISTED);
             }
+            jobPost.setJobType(jobTypeRepository.getReferenceById(request.getJobTypeId()));
+
         } else {
             jobPost.setJobType(null);
         }
 
         if (request.getIndustryId() != null) {
-            try {
-                jobPost.setIndustry(industryRepository.getReferenceById(request.getIndustryId()));
-            } catch (Exception e) {
+            if (!industryRepository.existsById(request.getIndustryId())) {
                 throw new AppException(ErrorCode.INDUSTRY_NOT_EXISTED);
             }
+            jobPost.setIndustry(industryRepository.getReferenceById(request.getIndustryId()));
+
         } else {
             jobPost.setIndustry(null);
         }
 
         if (request.getRegionId() != null) {
-            Region region = regionRepository.getReferenceById(request.getRegionId());
-            jobPost.setRegion(region);
+            if (!regionRepository.existsById(request.getRegionId())) {
+                throw new AppException(ErrorCode.REGION_NOT_EXISTED);
+            }
+            jobPost.setRegion(regionRepository.getReferenceById(request.getRegionId()));
+
         } else {
             jobPost.setRegion(null);
         }

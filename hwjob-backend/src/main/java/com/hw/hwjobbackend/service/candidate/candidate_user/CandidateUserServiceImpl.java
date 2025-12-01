@@ -32,9 +32,10 @@ public class CandidateUserServiceImpl implements CandidateUserService {
     @Override
     @Transactional
     public CandidateResponse updateCandidateInfo(CandidateUpdateRequest request) {
-        String username = SecurityUtils.getCurrentUsername();
 
-        Candidate candidate = candidateRepository.findByUsername(username)
+        String userId = SecurityUtils.getCurrentUserId();
+
+        Candidate candidate = candidateRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         userService.validateAndUpdateEmail(candidate, request.getEmail());

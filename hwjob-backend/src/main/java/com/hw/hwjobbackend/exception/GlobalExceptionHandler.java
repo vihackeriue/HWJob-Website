@@ -4,6 +4,7 @@ import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,7 +16,6 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -37,20 +37,24 @@ public class GlobalExceptionHandler {
      * Bắt các lỗi hệ thống chưa được xử lý riêng
      */
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    ApiResponse<?> handleUnhandledException(Exception exception) {
+    ResponseEntity<ApiResponse<?>> handleUnhandledException(Exception exception) {
         log.error("Unhandled exception: ", exception);
-        return buildErrorResponse(ErrorCode.UNCATEGORIZED_EXCEPTION);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(buildErrorResponse(ErrorCode.UNCATEGORIZED_EXCEPTION));
     }
 
     /**
      * Bắt lỗi AppException (Đã được định nghĩa trong hệ thống)
      */
     @ExceptionHandler(AppException.class)
-    ApiResponse<?> handleAppException(AppException exception) {
+    ResponseEntity<ApiResponse<?>> handleAppException(AppException exception) {
         ErrorCode errorCode = exception.getErrorCode();
         log.warn("Application exception: code={}, message={}", errorCode.getCode(), errorCode.getMessage());
-        return buildErrorResponse(errorCode);
+
+        return ResponseEntity
+                .status(errorCode.getStatusCode())
+                .body(buildErrorResponse(errorCode));
     }
 
     // ========================================
@@ -66,30 +70,33 @@ public class GlobalExceptionHandler {
             UsernameNotFoundException.class,
             DisabledException.class
     })
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    ApiResponse<?> handleBadCredentialsException(Exception exception) {
+    ResponseEntity<ApiResponse<?>> handleBadCredentialsException(Exception exception) {
         log.warn("Login failed: {}", exception.getClass().getSimpleName());
-        return buildErrorResponse(ErrorCode.USERNAME_PASSWORD_INVALID);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(buildErrorResponse(ErrorCode.USERNAME_PASSWORD_INVALID));
     }
 
     /**
      * Lỗi Authentication: chưa đăng nhập, JWT sai hoặc hết hạn
      */
     @ExceptionHandler(AuthenticationException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    ApiResponse<?> handleAuthenticationException(AuthenticationException exception) {
+    ResponseEntity<ApiResponse<?>> handleAuthenticationException(AuthenticationException exception) {
         log.warn("Authentication failed: {}", exception.getClass().getSimpleName());
-        return buildErrorResponse(ErrorCode.UNAUTHENTICATED);
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(buildErrorResponse(ErrorCode.UNAUTHENTICATED));
     }
 
     /**
      * Lỗi AUTHORIZATION (Không có quyền truy cập)
      */
     @ExceptionHandler(AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    ApiResponse<?> handleAccessDeniedException(AccessDeniedException exception) {
+    ResponseEntity<ApiResponse<?>> handleAccessDeniedException(AccessDeniedException exception) {
         log.warn("Access denied: {}", exception.getClass().getSimpleName());
-        return buildErrorResponse(ErrorCode.UNAUTHORIZED);
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(buildErrorResponse(ErrorCode.UNAUTHORIZED));
     }
 
     // ========================================
@@ -100,13 +107,14 @@ public class GlobalExceptionHandler {
      * Bắt lỗi validate @Valid
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    ApiResponse<?> handleValidationException(MethodArgumentNotValidException exception) {
+    ResponseEntity<ApiResponse<?>> handleValidationException(MethodArgumentNotValidException exception) {
 
         var fieldError = exception.getFieldError();
         if (fieldError == null) {
             log.error("Validation exception with null field error");
-            return buildErrorResponse(ErrorCode.INVALID_KEY);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(buildErrorResponse(ErrorCode.INVALID_KEY));
         }
 
         String enumKey = fieldError.getDefaultMessage();
@@ -137,10 +145,14 @@ public class GlobalExceptionHandler {
             message = mapAttributes(message, attributes);
         }
 
-        return ApiResponse.builder()
+        ApiResponse<?> response = ApiResponse.builder()
                 .code(errorCode.getCode())
                 .message(message)
                 .build();
+
+        return ResponseEntity
+                .status(errorCode.getStatusCode())
+                .body(response);
     }
 
     // ========================================
@@ -155,24 +167,26 @@ public class GlobalExceptionHandler {
             HttpMessageNotReadableException.class,
             MethodArgumentTypeMismatchException.class
     })
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    ApiResponse<?> handleBadRequestException(Exception exception) {
+    ResponseEntity<ApiResponse<?>> handleBadRequestException(Exception exception) {
         log.warn("Bad request - type: {}, message: {}",
                 exception.getClass().getSimpleName(),
                 exception.getMessage());
-        return buildErrorResponse(ErrorCode.INVALID_KEY);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(buildErrorResponse(ErrorCode.UNCATEGORIZED_EXCEPTION));
     }
 
     /**
      * Lỗi HTTP method không được hỗ trợ
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    ApiResponse<?> handleMethodNotAllowed(HttpRequestMethodNotSupportedException exception) {
+    ResponseEntity<ApiResponse<?>> handleMethodNotAllowed(HttpRequestMethodNotSupportedException exception) {
         log.warn("Method not allowed: {} {}",
                 exception.getMethod(),
                 exception.getSupportedHttpMethods());
-        return buildErrorResponse(ErrorCode.INVALID_KEY);
+        return ResponseEntity
+                .status(HttpStatus.METHOD_NOT_ALLOWED)
+                .body(buildErrorResponse(ErrorCode.UNCATEGORIZED_EXCEPTION));
     }
 
     // ========================================

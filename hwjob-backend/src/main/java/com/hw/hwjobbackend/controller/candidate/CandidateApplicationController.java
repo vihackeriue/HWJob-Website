@@ -1,12 +1,14 @@
 package com.hw.hwjobbackend.controller.candidate;
 
 
-import com.hw.hwjobbackend.model.dto.request.application.ApplicationRequest;
+import com.hw.hwjobbackend.model.dto.request.application.ApplicationCandidateRequest;
+import com.hw.hwjobbackend.model.dto.request.application.ApplicationRecruiterRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.service.candidate.application.CandidateApplicationService;
 import com.hw.hwjobbackend.util.PaginationUtils;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,7 +26,7 @@ public class CandidateApplicationController {
 
     @PostMapping
     ApiResponse<ApplicationResponse> apply(
-            @RequestBody ApplicationRequest request
+            @Valid @RequestBody ApplicationCandidateRequest request
     ) {
         return ApiResponse.<ApplicationResponse>builder()
                 .result(candidateApplicationService.applyJob(request))

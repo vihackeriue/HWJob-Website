@@ -17,4 +17,6 @@ public interface JwtService {
     SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException;
 
     AuthenticationResponse refreshToken(String token) throws ParseException, JOSEException;
+
+    void addToBlackList(SignedJWT signedJWT) throws ParseException;
 }
