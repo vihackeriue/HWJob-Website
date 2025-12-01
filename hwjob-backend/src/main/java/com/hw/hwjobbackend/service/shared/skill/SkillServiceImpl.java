@@ -18,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +51,17 @@ public class SkillServiceImpl implements SkillService {
         Skill skill = skillRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.SKILL_NOT_EXISTED));
         return skillMapper.toSkillResponse(skill);
+    }
+
+    @Override
+    public Set<Skill> getSkillsByIds(Set<Long> skillIds) {
+        return skillIds.stream().map(
+                skillId -> {
+                    if (!skillRepository.existsById(skillId)) {
+                        throw new AppException(ErrorCode.SKILL_NOT_EXISTED);
+                    }
+                    return skillRepository.getReferenceById(skillId);
+                }
+        ).collect(Collectors.toSet());
     }
 }

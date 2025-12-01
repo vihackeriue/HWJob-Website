@@ -80,33 +80,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void validateAndUpdateEmail(User user, String newEmail) {
+    public void validateExistEmail(User user, String newEmail) {
         if (newEmail == null || Objects.equals(user.getEmail(), newEmail)) {
             return;
         }
         if (userRepository.existsByEmail(newEmail)) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
-        user.setEmail(newEmail);
-        log.debug("Email updated for user: {}", user.getUsername());
     }
 
     @Override
-    public void validateAndUpdateRegion(User user, Integer newRegionId) {
-        if (newRegionId == null) {
-            return;
-        }
-
+    public void validateRegion(User user, Integer newRegionId) {
         Integer currentRegionId = user.getRegion() != null ? user.getRegion().getId() : null;
         if (Objects.equals(currentRegionId, newRegionId)) {
             return;
         }
-
         if (!regionRepository.existsById(newRegionId)) {
             throw new AppException(ErrorCode.REGION_NOT_EXISTED);
         }
-        Region region = regionRepository.getReferenceById(newRegionId);
-        user.setRegion(region);
     }
 
     @Override

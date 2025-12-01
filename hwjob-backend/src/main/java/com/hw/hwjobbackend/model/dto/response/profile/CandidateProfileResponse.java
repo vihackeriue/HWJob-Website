@@ -1,6 +1,7 @@
 package com.hw.hwjobbackend.model.dto.response.profile;
 
 
+import com.hw.hwjobbackend.model.dto.response.skill.SkillResponse;
 import com.hw.hwjobbackend.model.enums.CandidateGenderEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -20,4 +22,5 @@ public class CandidateProfileResponse extends UserProfileResponse {
     CandidateGenderEnum gender;
     String education;
     BigDecimal expectSalary;
+    Set<SkillResponse> skills;
 }

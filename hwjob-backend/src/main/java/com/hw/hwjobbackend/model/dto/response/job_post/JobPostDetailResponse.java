@@ -3,6 +3,7 @@ package com.hw.hwjobbackend.model.dto.response.job_post;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
+import com.hw.hwjobbackend.model.dto.response.skill.SkillResponse;
 import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
 import com.hw.hwjobbackend.model.enums.SalaryTypeEnum;
 import lombok.*;
@@ -10,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -36,6 +38,8 @@ public class JobPostDetailResponse {
     LocalDateTime endedTime;
 
     String region;
+
+    Set<SkillResponse> skills;
 
     Boolean isApplied;
     Boolean isSaved;
