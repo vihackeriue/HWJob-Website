@@ -37,37 +37,16 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private final String[] PUBLIC_ENDPOINTS_POST = {
-            "/users",
-            "/auth/login",
-            "/auth/refresh",
-            "/auth/introspect",
-
-    };
-    private final String[] PUBLIC_ENDPOINTS_GET = {
-            "/regions/**",
-            "/levels",
-            "/levels/**",
-            "/job-types",
-            "/job-types/**",
-            "/industries",
-            "/industries/**",
-            "/job-posts",
-            "/media/**",
-            "/users/recruiter-profiles/**"
-    };
-
     private final CustomJwtDecoder customJwtDecoder;
     private final CustomUserDetailService customUserDetailService;
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST).permitAll()
-                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/common/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/**", "/users/create").permitAll()
 //                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/candidate/**").hasAuthority("ROLE_CANDIDATE")
@@ -144,7 +123,6 @@ public class SecurityConfiguration {
     public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(customUserDetailService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
-
         return new ProviderManager(authenticationProvider);
     }
 

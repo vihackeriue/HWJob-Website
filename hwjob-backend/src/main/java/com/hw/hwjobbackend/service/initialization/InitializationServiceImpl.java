@@ -1,22 +1,27 @@
 package com.hw.hwjobbackend.service.initialization;
 
 import com.hw.hwjobbackend.model.dto.api_response.ProvinceApiResponse;
+import com.hw.hwjobbackend.model.dto.response.file.FileResponse;
 import com.hw.hwjobbackend.model.entity.industry.Industry;
 import com.hw.hwjobbackend.model.entity.job_type.JobType;
 import com.hw.hwjobbackend.model.entity.level.Level;
+import com.hw.hwjobbackend.model.entity.skill.Skill;
 import com.hw.hwjobbackend.model.entity.user.Role;
 import com.hw.hwjobbackend.model.entity.user.User;
 import com.hw.hwjobbackend.model.enums.*;
 import com.hw.hwjobbackend.model.enums.data.IndustryEnum;
 import com.hw.hwjobbackend.model.enums.data.JobTypeEnum;
 import com.hw.hwjobbackend.model.enums.data.LevelEnum;
+import com.hw.hwjobbackend.model.enums.data.SkillEnum;
 import com.hw.hwjobbackend.repository.industry.IndustryRepository;
 import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
 import com.hw.hwjobbackend.repository.level.LevelRepository;
 import com.hw.hwjobbackend.repository.region.RegionRepository;
+import com.hw.hwjobbackend.repository.skill.SkillRepository;
 import com.hw.hwjobbackend.repository.user.RoleRepository;
 import com.hw.hwjobbackend.repository.user.UserRepository;
 import com.hw.hwjobbackend.service.api.ApiClientService;
+import com.hw.hwjobbackend.service.file.FileService;
 import com.hw.hwjobbackend.service.shared.region.RegionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +49,8 @@ public class InitializationServiceImpl implements InitializationService {
     JobTypeRepository jobTypeRepository;
     RegionRepository provinceRepository;
     LevelRepository levelRepository;
+    SkillRepository skillRepository;
+    FileService fileService;
 
 
     ApiClientService apiClientService;
@@ -70,56 +77,38 @@ public class InitializationServiceImpl implements InitializationService {
 
     @Override
     @Transactional
-    public void initializeRolesAndAdmin() {
+    public void initializeRoles() {
+        if (roleRepository.count() > 0) {
+            return;
+        }
+
+        List<Role> roles = List.of(
+                Role.builder()
+                        .name(RoleEnum.ADMIN.name())
+                        .description("Role Admin")
+                        .build(),
+                Role.builder()
+                        .name(RoleEnum.CANDIDATE.name())
+                        .description("Role Candidate")
+                        .build(),
+                Role.builder()
+                        .name(RoleEnum.RECRUITER.name())
+                        .description("Role Recruiter")
+                        .build()
+        );
+        roleRepository.saveAll(roles);
+    }
+
+    @Override
+    @Transactional
+    public void createAdminUser() {
         if (userRepository.existsByUsername(ADMIN_USERNAME)) {
             log.info("Admin user already exists. Skipping initialization.");
             return;
         }
-        initializeRoles();
-        Role adminRole = roleRepository.findByName(RoleEnum.ADMIN.name())
-                .orElseThrow(() -> new RuntimeException("Admin role not found after initialization."));
 
-        createAdminUser(Set.of(adminRole));
-        log.info("Predefined roles and admin user initialized successfully.");
-    }
+        Set<Role> roles = roleRepository.findAllByName(RoleEnum.ADMIN.name());
 
-    @Override
-    @Transactional
-    public void initializeRegionData() {
-        if (provinceRepository.count() == 0) {
-            try {
-                List<ProvinceApiResponse> provinceApiResponses = apiClientService.get(
-                        PROVINCE_API_URL,
-                        new ParameterizedTypeReference<>() {
-                        }
-                );
-                if (provinceApiResponses != null && !provinceApiResponses.isEmpty()) {
-                    for (ProvinceApiResponse provinceApiResponse : provinceApiResponses) {
-                        regionService.createRegion(provinceApiResponse);
-                    }
-                }
-
-            } catch (Exception e) {
-                log.error("Error initializing region data: {}", e.getMessage(), e);
-                throw new RuntimeException("Failed to initialize region data from API", e);
-            }
-        }
-    }
-
-    @Override
-    @Transactional
-    public void initializeRoles() {
-        Map<String, String> roleMappings = Map.of(
-                RoleEnum.RECRUITER.name(), "Role Recruiter",
-                RoleEnum.CANDIDATE.name(), "Role Candidate",
-                RoleEnum.ADMIN.name(), "Role Admin"
-        );
-        roleMappings.forEach(this::createRoleIfNotExists);
-    }
-
-    @Override
-    @Transactional
-    public void createAdminUser(Set<Role> roles) {
         User adminUser = User.builder()
                 .username(ADMIN_USERNAME)
                 .fullName(ADMIN_NAME)
@@ -128,9 +117,35 @@ public class InitializationServiceImpl implements InitializationService {
                 .password(passwordEncoder.encode(ADMIN_PASSWORD))
                 .build();
 
+        FileResponse avatarResponse = fileService.setDefaultAvatarForUser(adminUser.getUsername());
+        adminUser.setImageUrl(avatarResponse.getUrl());
         userRepository.save(adminUser);
     }
 
+    @Override
+    @Transactional
+    public void initializeRegion() {
+        if (provinceRepository.count() > 0) {
+            return;
+        }
+        try {
+            List<ProvinceApiResponse> provinceApiResponses = apiClientService.get(
+                    PROVINCE_API_URL,
+                    new ParameterizedTypeReference<>() {
+                    }
+            );
+            if (provinceApiResponses != null && !provinceApiResponses.isEmpty()) {
+                for (ProvinceApiResponse provinceApiResponse : provinceApiResponses) {
+                    regionService.createRegion(provinceApiResponse);
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error initializing region data: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to initialize region data from API", e);
+        }
+    }
+
+    @Override
     @Transactional
     public void initializeIndustries() {
         if (industryRepository.count() > 0) {
@@ -147,6 +162,7 @@ public class InitializationServiceImpl implements InitializationService {
 
 
     @Override
+    @Transactional
     public void initializeJobTypes() {
         if (jobTypeRepository.count() > 0) {
             return;
@@ -161,7 +177,8 @@ public class InitializationServiceImpl implements InitializationService {
     }
 
     @Override
-    public void initializeLevel() {
+    @Transactional
+    public void initializeLevels() {
         if (levelRepository.count() > 0) {
             return;
         }
@@ -174,18 +191,18 @@ public class InitializationServiceImpl implements InitializationService {
         levelRepository.saveAll(levels);
     }
 
-    private void createRoleIfNotExists(String name, String description) {
-        roleRepository.findByName(name)
-                .orElseGet(() -> {
-                    Role role = Role.builder()
-                            .name(name)
-                            .description(description)
-                            .build();
-                    Role savedRole = roleRepository.save(role);
-                    log.debug("Created role: {}", name);
-                    return savedRole;
-                });
+    @Override
+    @Transactional
+    public void initializeSkills() {
+        if (skillRepository.count() > 0) {
+            return;
+        }
+        Set<Skill> skills = Arrays.stream(SkillEnum.values())
+                .map(s -> Skill.builder()
+                        .name(s.getName())
+                        .description(s.getDescription())
+                        .build())
+                .collect(Collectors.toSet());
+        skillRepository.saveAll(skills);
     }
-
-
 }

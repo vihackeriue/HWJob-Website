@@ -6,6 +6,7 @@ import com.hw.hwjobbackend.model.dto.response.authentication.AuthenticationRespo
 import com.hw.hwjobbackend.model.dto.response.authentication.IntrospectResponse;
 import com.hw.hwjobbackend.service.authentication.AuthenticationService;
 import com.hw.hwjobbackend.service.authentication.JwtService;
+import com.hw.hwjobbackend.util.TokenUtils;
 import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -27,30 +28,40 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ApiResponse<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
-        var result = authenticationService.login(request);
         return ApiResponse.<AuthenticationResponse>builder()
-                .result(result)
+                .result(authenticationService.login(request))
                 .build();
     }
 
     @PostMapping("/logout")
     public ApiResponse<Void> logout(@RequestHeader("Authorization") String authHeader) {
-        String token = authHeader.substring(7);
+        String token = TokenUtils.extractToken(authHeader);
+
         authenticationService.logout(token);
+
         return ApiResponse.<Void>builder().build();
     }
 
     @PostMapping("/introspect")
-    public ApiResponse<IntrospectResponse> introspect(@RequestHeader("Authorization") String authHeader) throws ParseException, JOSEException {
-        String token = authHeader.substring(7);
-        var result = jwtService.introspect(token);
-        return ApiResponse.<IntrospectResponse>builder().result(result).build();
+    public ApiResponse<IntrospectResponse> introspect(
+            @RequestHeader("Authorization") String authHeader) {
+
+        String token = TokenUtils.extractToken(authHeader);
+
+        return ApiResponse.<IntrospectResponse>builder()
+                .result(jwtService.introspect(token))
+                .build();
     }
 
     @PostMapping("/refresh")
-    public ApiResponse<AuthenticationResponse> refresh(@RequestHeader("Authorization") String authHeader) throws ParseException, JOSEException {
-        String token = authHeader.substring(7);
-        var result = jwtService.refreshToken(token);
-        return ApiResponse.<AuthenticationResponse>builder().result(result).build();
+    public ApiResponse<AuthenticationResponse> refresh(
+            @RequestHeader("Authorization") String authHeader)
+            throws ParseException, JOSEException {
+
+        String token = TokenUtils.extractToken(authHeader);
+
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(jwtService.refreshToken(token))
+                .build();
     }
 }

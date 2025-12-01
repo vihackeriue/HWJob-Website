@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/job-types")
+@RequestMapping("/common/job-types")
 public class JobTypeController {
 
     JobTypeService jobTypeService;

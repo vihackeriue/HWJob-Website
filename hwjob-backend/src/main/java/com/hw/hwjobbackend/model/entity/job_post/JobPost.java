@@ -4,6 +4,7 @@ import com.hw.hwjobbackend.model.entity.job_type.JobType;
 import com.hw.hwjobbackend.model.entity.level.Level;
 import com.hw.hwjobbackend.model.entity.industry.Industry;
 import com.hw.hwjobbackend.model.entity.region.Region;
+import com.hw.hwjobbackend.model.entity.skill.Skill;
 import com.hw.hwjobbackend.model.entity.user.Recruiter;
 import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
 import com.hw.hwjobbackend.model.enums.SalaryTypeEnum;
@@ -15,6 +16,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "job_posts")
@@ -61,6 +63,9 @@ public class JobPost {
 
     @ManyToOne(fetch = FetchType.LAZY)
     Region region;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    Set<Skill> skills;
 
     @CreatedDate
     @Column(updatable = false)

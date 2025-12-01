@@ -15,9 +15,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +27,6 @@ public class RecruiterUserServiceImpl implements RecruiterUserService {
     UserService userService;
 
     @Override
-    @Transactional
     public RecruiterResponse updateRecruiterInfo(RecruiterUpdateRequest request) {
         String recruiterId = SecurityUtils.getCurrentUserId();
 
@@ -38,6 +34,7 @@ public class RecruiterUserServiceImpl implements RecruiterUserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         userService.validateAndUpdateEmail(recruiter, request.getEmail());
+
         userService.validateAndUpdateRegion(recruiter, request.getRegionId());
 
         recruiterMapper.updateRecruiter(recruiter, request);

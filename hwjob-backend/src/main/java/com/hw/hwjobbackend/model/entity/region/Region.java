@@ -5,7 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Entity
-@Table(name = "provinces")
+@Table(name = "regions")
 @Getter
 @Setter
 @Builder
@@ -20,4 +20,5 @@ public class Region {
     String codeName;
     String divisionType;
     Integer phoneCode;
+
 }

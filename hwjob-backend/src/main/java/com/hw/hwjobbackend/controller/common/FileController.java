@@ -15,10 +15,10 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequestMapping("/common/media")
 public class FileController {
 
     FileService fileService;
-
 
 //    @PutMapping("/upload-avatar")
 //    ApiResponse<UpdateAvatarResponse> updateAvatar(
@@ -28,7 +28,7 @@ public class FileController {
 //                .build();
 //    }
 
-    @GetMapping("/media/{fileName}")
+    @GetMapping("/{fileName}")
     ResponseEntity<Resource> downloadMedia(@PathVariable String fileName) throws IOException {
         var fileData = fileService.downloadFile(fileName);
         return ResponseEntity.<Resource>ok()

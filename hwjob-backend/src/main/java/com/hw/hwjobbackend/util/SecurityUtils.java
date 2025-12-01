@@ -17,51 +17,28 @@ public final class SecurityUtils {
 
     public static String getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
-        }
-        if (authentication.getPrincipal() instanceof Jwt jwt) {
-            String userId = jwt.getClaim("userId");
-            if (userId == null) {
-                throw new AppException(ErrorCode.UNAUTHENTICATED);
-            }
-            return userId;
-        }
-        throw new AppException(ErrorCode.UNAUTHENTICATED);
-    }
-
-
-    public static String getCurrentUsername() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
-
+        // authentication.getName() = jwt.getSubject()
         return authentication.getName();
     }
 
-    public static Jwt getCurrentJwt() {
+    public static String getCurrentUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
-
         if (authentication.getPrincipal() instanceof Jwt jwt) {
-            return jwt;
+            String username = jwt.getClaim("username");
+            if (username == null) {
+                throw new AppException(ErrorCode.UNAUTHENTICATED);
+            }
+            return username;
         }
         throw new AppException(ErrorCode.UNAUTHENTICATED);
     }
-
-//    public static boolean hasRole(String role) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication == null) {
-//            return false;
-//        }
-//        return authentication.getAuthorities().stream()
-//                .anyMatch(authority -> authority.getAuthority().equals("ROLE_" + role));
-//    }
 
     public static RoleEnum getCurrentUserRole() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

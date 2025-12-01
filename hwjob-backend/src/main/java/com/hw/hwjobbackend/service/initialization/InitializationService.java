@@ -6,17 +6,17 @@ import java.util.Set;
 
 public interface InitializationService {
 
-    void initializeRolesAndAdmin();
-
-    void initializeRegionData();
-
     void initializeRoles();
 
-    void createAdminUser(Set<Role> roles);
+    void createAdminUser();
+
+    void initializeRegion();
 
     void initializeIndustries();
 
     void initializeJobTypes();
 
-    void initializeLevel();
+    void initializeLevels();
+
+    void initializeSkills();
 }

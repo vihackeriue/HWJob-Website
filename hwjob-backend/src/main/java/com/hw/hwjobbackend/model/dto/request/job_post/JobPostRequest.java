@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,6 +34,8 @@ public class JobPostRequest {
     Long jobTypeId;
 
     Long industryId;
+
+    Set<Long> skillIds;
 
     Integer regionId;
 }

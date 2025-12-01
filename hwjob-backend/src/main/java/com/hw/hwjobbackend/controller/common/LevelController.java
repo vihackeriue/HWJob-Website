@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/levels")
+@RequestMapping("/common/levels")
 public class LevelController {
 
     LevelService levelService;

@@ -39,22 +39,21 @@ public class CandidateJobPostServiceImpl implements CandidateJobPostService {
     JobPostMapper jobPostMapper;
 
     @Override
-    @Transactional
     public SaveJobPostResponse saveJobPost(String jobPostId) {
-        if (jobPostId == null || jobPostId.isBlank()) {
-            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
-        }
-
         String candidateId = SecurityUtils.getCurrentUserId();
+
+        if (!jobPostRepository.existsById(jobPostId)) {
+            throw new AppException(ErrorCode.JOB_POST_NOT_EXISTED);
+        }
 
         CandidateSaveJobId candidateSaveJobId = CandidateSaveJobId.builder()
                 .candidateId(candidateId)
                 .jobPostId(jobPostId)
                 .build();
 
-        boolean alreadySaved = candidateSaveJobRepository.existsById(candidateSaveJobId);
 
-        if (alreadySaved) {
+        if (candidateSaveJobRepository.existsById(candidateSaveJobId)) {
+
             candidateSaveJobRepository.deleteById(candidateSaveJobId);
 
             return SaveJobPostResponse.builder()
@@ -63,11 +62,9 @@ public class CandidateJobPostServiceImpl implements CandidateJobPostService {
                     .build();
         }
 
-        if (!jobPostRepository.existsById(jobPostId)) {
-            throw new AppException(ErrorCode.JOB_POST_NOT_EXISTED);
-        }
 
         Candidate candidate = candidateRepository.getReferenceById(candidateId);
+
         JobPost jobPost = jobPostRepository.getReferenceById(jobPostId);
 
         CandidateSaveJob candidateSaveJob = CandidateSaveJob.builder()
@@ -85,7 +82,6 @@ public class CandidateJobPostServiceImpl implements CandidateJobPostService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Page<JobPostResponse> getSavedJobPosts(int page, int size) {
         String candidateId = SecurityUtils.getCurrentUserId();
         Pageable pageable = PaginationUtils.buildPageable(page, size);
@@ -97,7 +93,6 @@ public class CandidateJobPostServiceImpl implements CandidateJobPostService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<JobPostResponse> getAllSavedJobPosts() {
         String candidateId = SecurityUtils.getCurrentUserId();
 

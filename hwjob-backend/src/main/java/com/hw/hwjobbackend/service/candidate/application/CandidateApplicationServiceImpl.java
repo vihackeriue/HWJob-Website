@@ -2,11 +2,12 @@ package com.hw.hwjobbackend.service.candidate.application;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.model.dto.request.application.ApplicationCandidateRequest;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
 import com.hw.hwjobbackend.service.mapper.application.ApplicationMapper;
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
-import com.hw.hwjobbackend.model.dto.request.application.ApplicationRequest;
+import com.hw.hwjobbackend.model.dto.request.application.ApplicationRecruiterRequest;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
 import com.hw.hwjobbackend.model.entity.application.Application;
 import com.hw.hwjobbackend.model.entity.application.ApplicationId;
@@ -46,8 +47,7 @@ public class CandidateApplicationServiceImpl implements CandidateApplicationServ
 
     @Override
     @Transactional
-    public ApplicationResponse applyJob(ApplicationRequest request) {
-        validateApplicationRequest(request);
+    public ApplicationResponse applyJob(ApplicationCandidateRequest request) {
 
         String candidateId = SecurityUtils.getCurrentUserId();
 
@@ -60,10 +60,13 @@ public class CandidateApplicationServiceImpl implements CandidateApplicationServ
             throw new AppException(ErrorCode.JOB_POST_ALREADY_APPLIED);
         }
 
-        JobPost jobPost = jobPostRepository.findById(request.getJobPostId())
-                .orElseThrow(() -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED));
+        String jobPostId = request.getJobPostId();
 
-        validateJobPostForApplication(jobPost);
+        if (!jobPostRepository.existsValidJobPost(jobPostId)) {
+            throw new AppException(ErrorCode.JOB_POST_NOT_EXISTED);
+        }
+
+        JobPost jobPost = jobPostRepository.getReferenceById(jobPostId);
 
         Candidate candidate = candidateRepository.getReferenceById(candidateId);
 
@@ -80,9 +83,9 @@ public class CandidateApplicationServiceImpl implements CandidateApplicationServ
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Page<JobPostResponse> getAllJobPostsApplied(int page, int size) {
         String candidateId = SecurityUtils.getCurrentUserId();
+
         Pageable pageable = PaginationUtils.buildPageable(page, size);
 
         Page<Application> applications = applicationRepository
@@ -93,7 +96,6 @@ public class CandidateApplicationServiceImpl implements CandidateApplicationServ
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<JobPostResponse> getAllJobPostsApplied() {
         String candidateId = SecurityUtils.getCurrentUserId();
 
@@ -103,21 +105,5 @@ public class CandidateApplicationServiceImpl implements CandidateApplicationServ
         return applications.stream()
                 .map(application -> jobPostMapper.toJobPostResponse(application.getJobPost()))
                 .toList();
-    }
-
-    private void validateApplicationRequest(ApplicationRequest request) {
-        if (request.getJobPostId() == null || request.getJobPostId().isBlank()) {
-            throw new AppException(ErrorCode.INVALID_KEY);
-        }
-    }
-
-    private void validateJobPostForApplication(JobPost jobPost) {
-        if (!JobPostStatusEnum.PUBLIC.equals(jobPost.getStatus())) {
-            throw new AppException(ErrorCode.JOB_POST_NOT_EXISTED);
-        }
-        LocalDateTime now = LocalDateTime.now();
-        if (jobPost.getEndedTime() != null && jobPost.getEndedTime().isBefore(now)) {
-            throw new AppException(ErrorCode.JOB_POST_EXPIRED);
-        }
     }
 }

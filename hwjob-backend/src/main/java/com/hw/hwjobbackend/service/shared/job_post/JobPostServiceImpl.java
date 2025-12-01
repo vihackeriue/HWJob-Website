@@ -21,8 +21,9 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,7 +39,6 @@ public class JobPostServiceImpl implements JobPostService {
     ApplicationRepository applicationRepository;
 
     @Override
-    @Transactional(readOnly = true)
     public Page<JobPostResponse> getJobPosts(Integer page, Integer size, JobPostFilterRequest filter) {
         Pageable pageable = PaginationUtils.buildPageable(page, size);
 
@@ -55,7 +55,6 @@ public class JobPostServiceImpl implements JobPostService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<JobPostResponse> getAllJobPosts(JobPostFilterRequest filter) {
         List<JobPost> jobPosts = jobPostRepository.getAllJobPosts(
                 JobPostStatusEnum.PUBLIC,
@@ -71,31 +70,33 @@ public class JobPostServiceImpl implements JobPostService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public JobPostDetailResponse getJobPostDetail(String id) {
-        String userId = SecurityUtils.getCurrentUserId();
 
-        RoleEnum userRole = SecurityUtils.getCurrentUserRole();
 
-        JobPost jobPost = jobPostRepository.findJobPostWithPermission(id, userId, userRole.name())
-                .orElseThrow(() -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED));
+        JobPost jobPost = jobPostRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED)
+        );
 
-        // Build response
         JobPostDetailResponse response = jobPostMapper.toJobPostDetailResponse(jobPost);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            String userId = SecurityUtils.getCurrentUserId();
+            RoleEnum userRole = SecurityUtils.getCurrentUserRole();
 
-        if (jobPost.getRecruiter() != null) {
-            JobPostRecruiterProfileResponse recruiterResponse =
-                    jobPostMapper.toJobPostRecruiterProfileResponse(jobPost.getRecruiter());
-            response.setRecruiter(recruiterResponse);
+            if (jobPost.getRecruiter() != null) {
+                JobPostRecruiterProfileResponse recruiterResponse =
+                        jobPostMapper.toJobPostRecruiterProfileResponse(jobPost.getRecruiter());
+                response.setRecruiter(recruiterResponse);
+                if (userRole == RoleEnum.CANDIDATE) {
+                    setCandidateSpecificInfo(response, userId, jobPost.getId());
+                } else {
+                    response.setIsApplied(false);
+                    response.setIsSaved(false);
+                }
+            }
         }
-
-        if (userRole == RoleEnum.CANDIDATE) {
-            setCandidateSpecificInfo(response, userId, jobPost.getId());
-        } else {
-            response.setIsApplied(false);
-            response.setIsSaved(false);
-        }
-
+        response.setIsApplied(false);
+        response.setIsSaved(false);
         return response;
     }
 

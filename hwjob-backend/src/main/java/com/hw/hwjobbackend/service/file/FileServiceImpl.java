@@ -12,7 +12,9 @@ import com.hw.hwjobbackend.repository.file.FileRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +36,10 @@ public class FileServiceImpl implements FileService {
     FileMgmtRepository fileMgmtRepository;
     FileMgmtMapper fileMgmtMapper;
 
+    @NonFinal
+    @Value("${app.file.default-avatar-resource}")
+    String DEFAULT_AVATAR_RESOURCE;
+
     @Override
     public FileResponse uploadFile(MultipartFile file) {
 
@@ -49,7 +55,6 @@ public class FileServiceImpl implements FileService {
                     .originalFileName(file.getOriginalFilename())
                     .url(fileInfo.getUrl())
                     .build();
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -68,11 +73,10 @@ public class FileServiceImpl implements FileService {
     public FileResponse setDefaultAvatarForUser(String username) {
         try {
             // Đọc ảnh avatar mặc định
-            Resource defaultAvatar = new ClassPathResource("static/images/default-avatar.png");
+            Resource defaultAvatar = new ClassPathResource(DEFAULT_AVATAR_RESOURCE);
             if (!defaultAvatar.exists()) {
                 throw new AppException(ErrorCode.FILE_NOT_FOUND);
             }
-
             // Lưu file vào thư mục của user
             var fileInfo = fileRepository.storeDefaultAvatar(username, defaultAvatar);
 
