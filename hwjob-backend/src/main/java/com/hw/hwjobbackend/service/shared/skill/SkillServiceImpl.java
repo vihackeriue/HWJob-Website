@@ -29,7 +29,7 @@ public class SkillServiceImpl implements SkillService {
     SkillMapper skillMapper;
 
     @Override
-    public Page<SkillResponse> getSkills(int page, int size) {
+    public Page<SkillResponse> getAllSkills(Integer page, Integer size) {
 
         Pageable pageable = PaginationUtils.buildPageable(page, size);
 
