@@ -2,7 +2,6 @@ package com.hw.hwjobbackend.controller.common;
 
 
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
-import com.hw.hwjobbackend.model.dto.response.region.RegionResponse;
 import com.hw.hwjobbackend.model.dto.response.skill.SkillResponse;
 import com.hw.hwjobbackend.service.shared.skill.SkillService;
 import com.hw.hwjobbackend.util.PaginationUtils;
@@ -43,7 +42,7 @@ public class SkillController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<SkillResponse> getRegionById(@PathVariable Long id) {
+    public ApiResponse<SkillResponse> getSkillById(@PathVariable Long id) {
         return ApiResponse.<SkillResponse>builder()
                 .result(skillService.getSkillById(id))
                 .build();

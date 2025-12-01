@@ -30,6 +30,7 @@ public class AdminIndustryServiceImpl implements AdminIndustryService {
     @Override
     @Transactional
     public IndustryResponse createIndustry(IndustryRequest request) {
+
         validateIndustryNameNotExists(request.getName(), null);
 
         Industry industry = industryMapper.toIndustry(request);
@@ -46,9 +47,10 @@ public class AdminIndustryServiceImpl implements AdminIndustryService {
 
         validateIndustryNameNotExists(request.getName(), id);
 
-        if (hasNoChanges(industry, request)) {
+        if (industry.getName().equals(request.getName())) {
             return industryMapper.toIndustryResponse(industry);
         }
+
         industryMapper.updateIndustry(request, industry);
 
         return industryMapper.toIndustryResponse(industry);
@@ -67,14 +69,9 @@ public class AdminIndustryServiceImpl implements AdminIndustryService {
         boolean exists = (excludeId == null)
                 ? industryRepository.existsByNameIgnoreCase(name)
                 : industryRepository.existsByNameIgnoreCaseAndIdNot(name, excludeId);
-
         if (exists) {
             throw new AppException(ErrorCode.INDUSTRY_EXISTED);
         }
     }
 
-    private boolean hasNoChanges(Industry industry, IndustryRequest request) {
-        return Objects.equals(industry.getName(), request.getName())
-                && Objects.equals(industry.getDescription(), request.getDescription());
-    }
 }

@@ -46,7 +46,6 @@ jwt:
   valid-duration: 3600
   refreshable-duration: 604800
 
-
 app:
   file:
     storage-dir: upload/user-avatar/

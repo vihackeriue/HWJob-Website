@@ -1,11 +1,9 @@
-package com.hw.hwjobbackend.controller.common;
+package com.hw.hwjobbackend.controller.user;
 
 
 import com.hw.hwjobbackend.model.dto.request.user.UserCreationRequest;
 import com.hw.hwjobbackend.model.dto.request.user.UserUpdatePasswordRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
-import com.hw.hwjobbackend.model.dto.response.profile.CandidateProfileResponse;
-import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UpdateAvatarResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserCreationResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserResponse;
@@ -25,22 +23,14 @@ public class UserController {
 
     UserService userService;
 
-    @PostMapping("/create")
-    public ApiResponse<UserCreationResponse> create(
-            @RequestBody @Valid UserCreationRequest request) {
-        return ApiResponse.<UserCreationResponse>builder()
-                .result(userService.createUser(request))
-                .build();
-    }
-
-    @GetMapping("/my-info")
+    @GetMapping("/me")
     ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getUserInfo())
                 .build();
     }
 
-    @PutMapping("/upload-avatar")
+    @PutMapping("/me/avatar")
     ApiResponse<UpdateAvatarResponse> updateAvatar(
             @RequestParam("file") MultipartFile file) {
         return ApiResponse.<UpdateAvatarResponse>builder()
@@ -48,7 +38,7 @@ public class UserController {
                 .build();
     }
 
-    @PutMapping("/update-password")
+    @PutMapping("/me/password")
     ApiResponse<Void> updatePassword(
             @RequestBody UserUpdatePasswordRequest request
     ) {

@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.model.entity.invalidate_token;
+package com.hw.hwjobbackend.model.entity.token;
 
 
 import lombok.*;
@@ -8,7 +8,6 @@ import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
 import java.io.Serializable;
-import java.util.concurrent.TimeUnit;
 
 @Getter
 @Setter

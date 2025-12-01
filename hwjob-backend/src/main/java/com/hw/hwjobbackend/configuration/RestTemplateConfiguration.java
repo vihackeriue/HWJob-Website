@@ -55,7 +55,7 @@ public class RestTemplateConfiguration {
                 requestFactory.setReadTimeout(Duration.ofSeconds(30));
                 return new RestTemplate(requestFactory);
             } catch (Exception e) {
-                throw new IllegalStateException("Failed to create insecure RestTemplate", e);
+                throw new IllegalStateException("Failed to register insecure RestTemplate", e);
             }
         }
 

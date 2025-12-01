@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,7 +31,6 @@ public class AdminUserServiceImpl implements AdminUserService {
     UserMapper userMapper;
 
     @Override
-    @Transactional(readOnly = true)
     public Page<UserResponse> getUsers(int page, int size) {
 
         Pageable pageable = PaginationUtils.buildPageable(page, size);
@@ -42,7 +40,6 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<UserResponse> getUsers() {
         return userRepository.findAllOrderByCreatedAtDesc()
                 .stream()
@@ -51,28 +48,20 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    @Transactional
     public void changeUserStatus(String id, UserStatusRequest request) {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        validateNotSelfUpdate(user.getId(), id);
-
+        if (user.getId().equals(id)) {
+            throw new AppException(ErrorCode.CANNOT_CHANGE_OWN_STATUS);
+        }
         UserStatusEnum newStatus = request.getStatus();
         UserStatusEnum oldStatus = user.getUserStatus();
 
         if (oldStatus == newStatus) {
             return;
         }
-
         user.setUserStatus(newStatus);
-
-    }
-
-    private void validateNotSelfUpdate(String targetUserId, String currentUserId) {
-        if (targetUserId.equals(currentUserId)) {
-            throw new AppException(ErrorCode.CANNOT_CHANGE_OWN_STATUS);
-        }
     }
 }

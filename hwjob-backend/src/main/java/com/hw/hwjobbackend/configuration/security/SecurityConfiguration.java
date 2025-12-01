@@ -5,7 +5,6 @@ import com.hw.hwjobbackend.service.authentication.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -40,17 +39,16 @@ public class SecurityConfiguration {
     private final CustomJwtDecoder customJwtDecoder;
     private final CustomUserDetailService customUserDetailService;
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-
         httpSecurity
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.GET, "/common/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/**", "/users/create").permitAll()
+                        .requestMatchers("/common/**").permitAll()
 //                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/candidate/**").hasAuthority("ROLE_CANDIDATE")
-                        .requestMatchers("/recruiter/**").hasAuthority("ROLE_RECRUITER")
+//                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+//                        .requestMatchers("/candidate/**").hasAuthority("ROLE_CANDIDATE")
+//                        .requestMatchers("/recruiter/**").hasAuthority("ROLE_RECRUITER")
                         .anyRequest().authenticated());
         httpSecurity
                 .oauth2ResourceServer(oauth2 -> oauth2
