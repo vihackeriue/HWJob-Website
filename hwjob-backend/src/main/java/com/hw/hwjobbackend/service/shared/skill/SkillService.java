@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SkillService {
 
-    Page<SkillResponse> getSkills(int page, int size);
+    Page<SkillResponse> getAllSkills(Integer page, Integer size);
 
     List<SkillResponse> getAllSkills();
 
