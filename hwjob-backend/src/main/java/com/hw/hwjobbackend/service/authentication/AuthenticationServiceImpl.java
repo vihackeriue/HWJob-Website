@@ -4,10 +4,8 @@ import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.request.authentication.AuthenticationRequest;
 import com.hw.hwjobbackend.model.dto.response.authentication.AuthenticationResponse;
-import com.hw.hwjobbackend.model.dto.response.user.UserLoginResponse;
-import com.hw.hwjobbackend.model.entity.invalidate_token.InvalidateToken;
 import com.hw.hwjobbackend.model.entity.user.User;
-import com.hw.hwjobbackend.repository.invalidate_token.RedisTokenRepository;
+import com.hw.hwjobbackend.model.enums.TokenEnum;
 import com.hw.hwjobbackend.service.mapper.user.UserMapper;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.AccessLevel;
@@ -19,7 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -42,9 +40,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         User user = (User) authentication.getPrincipal();
 
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
+        log.info("User logged in successfully: {}", user.getUsername());
+
         return AuthenticationResponse.builder()
-                .token(jwtService.generateToken(user))
-                .authenticated(true)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .user(userMapper.toUserLoginResponse(user))
                 .build();
     }
@@ -52,9 +55,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public void logout(String token) {
         try {
-            jwtService.verifyToken(token, false);
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            String tokenType = (String) signedJWT.getJWTClaimsSet().getClaim("type");
+            String jwtId = signedJWT.getJWTClaimsSet().getJWTID();
+            Instant expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime().toInstant();
 
-            jwtService.addToBlackList(SignedJWT.parse(token));
+            if (TokenEnum.REFRESH.name().equals(tokenType)) {
+                jwtService.verifyRefreshToken(token);
+                jwtService.removeFromWhitelist(jwtId);
+                log.info("Refresh token removed for logout: {}", jwtId);
+            } else if (TokenEnum.ACCESS.name().equals(tokenType)) {
+                jwtService.verifyAccessToken(token);
+                jwtService.addToBlacklist(jwtId, expiryTime);
+                log.info("Access token blacklisted for logout: {}", jwtId);
+            } else {
+                throw new AppException(ErrorCode.UNAUTHENTICATED);
+            }
 
         } catch (Exception e) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);

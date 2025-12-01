@@ -1,22 +1,32 @@
 package com.hw.hwjobbackend.service.authentication;
 
 import com.hw.hwjobbackend.model.dto.response.authentication.AuthenticationResponse;
-import com.hw.hwjobbackend.model.dto.response.authentication.IntrospectResponse;
 import com.hw.hwjobbackend.model.entity.user.User;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 
 import java.text.ParseException;
+import java.time.Instant;
 
 public interface JwtService {
 
-    IntrospectResponse introspect(String token);
+    boolean introspect(String token);
 
-    String generateToken(User user);
+    String generateAccessToken(User user);
 
-    SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException;
+    String generateRefreshToken(User user);
 
-    AuthenticationResponse refreshToken(String token) throws ParseException, JOSEException;
+    SignedJWT verifyAccessToken(String token) throws JOSEException, ParseException;
 
-    void addToBlackList(SignedJWT signedJWT) throws ParseException;
+    SignedJWT verifyRefreshToken(String token) throws JOSEException, ParseException;
+
+    AuthenticationResponse refreshToken(String refreshToken) throws ParseException, JOSEException;
+
+    void addToBlacklist(String jwtId, Instant expiryTime);
+
+    void removeFromBlacklist(String jwtId);
+
+    void addToWhitelist(String jwtId, String userId, Instant expiryTime);
+
+    void removeFromWhitelist(String jwtId);
 }

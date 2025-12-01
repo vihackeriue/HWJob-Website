@@ -1,13 +1,14 @@
 package com.hw.hwjobbackend.controller.common;
 
 import com.hw.hwjobbackend.model.dto.request.authentication.AuthenticationRequest;
+import com.hw.hwjobbackend.model.dto.request.authentication.RefreshTokenRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.authentication.AuthenticationResponse;
-import com.hw.hwjobbackend.model.dto.response.authentication.IntrospectResponse;
 import com.hw.hwjobbackend.service.authentication.AuthenticationService;
 import com.hw.hwjobbackend.service.authentication.JwtService;
 import com.hw.hwjobbackend.util.TokenUtils;
 import com.nimbusds.jose.JOSEException;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -19,7 +20,7 @@ import java.text.ParseException;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/auth")
+@RequestMapping("/common/auth")
 @Slf4j
 public class AuthenticationController {
 
@@ -36,32 +37,19 @@ public class AuthenticationController {
     @PostMapping("/logout")
     public ApiResponse<Void> logout(@RequestHeader("Authorization") String authHeader) {
         String token = TokenUtils.extractToken(authHeader);
-
         authenticationService.logout(token);
-
         return ApiResponse.<Void>builder().build();
     }
 
-    @PostMapping("/introspect")
-    public ApiResponse<IntrospectResponse> introspect(
-            @RequestHeader("Authorization") String authHeader) {
-
-        String token = TokenUtils.extractToken(authHeader);
-
-        return ApiResponse.<IntrospectResponse>builder()
-                .result(jwtService.introspect(token))
-                .build();
-    }
-
     @PostMapping("/refresh")
-    public ApiResponse<AuthenticationResponse> refresh(
-            @RequestHeader("Authorization") String authHeader)
+    public ApiResponse<AuthenticationResponse> refreshToken(
+            @Valid @RequestBody RefreshTokenRequest request)
             throws ParseException, JOSEException {
 
-        String token = TokenUtils.extractToken(authHeader);
+        AuthenticationResponse response = jwtService.refreshToken(request.getRefreshToken());
 
         return ApiResponse.<AuthenticationResponse>builder()
-                .result(jwtService.refreshToken(token))
+                .result(response)
                 .build();
     }
 }
