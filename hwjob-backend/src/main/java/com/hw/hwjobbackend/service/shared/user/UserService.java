@@ -22,8 +22,8 @@ public interface UserService {
 
     CandidateProfileResponse getCandidateProfile(String id);
 
-    void validateAndUpdateEmail(User user, String newEmail);
+    void validateExistEmail(User user, String newEmail);
 
-    void validateAndUpdateRegion(User user, Integer newRegionId);
+    void validateRegion(User user, Integer newRegionId);
 
 }

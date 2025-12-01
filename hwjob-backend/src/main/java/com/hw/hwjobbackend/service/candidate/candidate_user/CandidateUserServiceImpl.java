@@ -2,11 +2,15 @@ package com.hw.hwjobbackend.service.candidate.candidate_user;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.model.entity.skill.Skill;
+import com.hw.hwjobbackend.repository.region.RegionRepository;
+import com.hw.hwjobbackend.repository.skill.SkillRepository;
 import com.hw.hwjobbackend.service.mapper.user.CandidateMapper;
 import com.hw.hwjobbackend.model.dto.request.user.CandidateUpdateRequest;
 import com.hw.hwjobbackend.model.dto.response.user.CandidateResponse;
 import com.hw.hwjobbackend.model.entity.user.Candidate;
 import com.hw.hwjobbackend.repository.user.CandidateRepository;
+import com.hw.hwjobbackend.service.shared.skill.SkillService;
 import com.hw.hwjobbackend.service.shared.user.UserService;
 import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +33,7 @@ public class CandidateUserServiceImpl implements CandidateUserService {
     CandidateRepository candidateRepository;
     CandidateMapper candidateMapper;
     UserService userService;
+    SkillService skillService;
 
     @Override
     @Transactional
@@ -38,9 +44,15 @@ public class CandidateUserServiceImpl implements CandidateUserService {
         Candidate candidate = candidateRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        userService.validateAndUpdateEmail(candidate, request.getEmail());
+        userService.validateExistEmail(candidate, request.getEmail());
 
-        userService.validateAndUpdateRegion(candidate, request.getRegionId());
+        userService.validateRegion(candidate, request.getRegionId());
+
+
+        if (request.getSkillIds() != null) {
+            Set<Skill> skills = skillService.getSkillsByIds(request.getSkillIds());
+            candidate.setSkills(skills);
+        }
 
         candidateMapper.updateCandidate(candidate, request);
 

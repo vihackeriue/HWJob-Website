@@ -2,6 +2,7 @@ package com.hw.hwjobbackend.service.recruiter.recruiter_user;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.repository.region.RegionRepository;
 import com.hw.hwjobbackend.service.mapper.user.RecruiterMapper;
 import com.hw.hwjobbackend.model.dto.request.user.RecruiterUpdateRequest;
 import com.hw.hwjobbackend.model.dto.response.user.RecruiterResponse;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 @PreAuthorize("hasRole('RECRUITER')")
 public class RecruiterUserServiceImpl implements RecruiterUserService {
     RecruiterRepository recruiterRepository;
+    RegionRepository regionRepository;
     RecruiterMapper recruiterMapper;
     UserService userService;
 
@@ -33,9 +35,10 @@ public class RecruiterUserServiceImpl implements RecruiterUserService {
         Recruiter recruiter = recruiterRepository.findById(recruiterId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        userService.validateAndUpdateEmail(recruiter, request.getEmail());
+        userService.validateExistEmail(recruiter, request.getEmail());
 
-        userService.validateAndUpdateRegion(recruiter, request.getRegionId());
+        userService.validateRegion(recruiter, request.getRegionId());
+        recruiter.setRegion(regionRepository.getReferenceById(request.getRegionId()));
 
         recruiterMapper.updateRecruiter(recruiter, request);
 

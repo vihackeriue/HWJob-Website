@@ -6,6 +6,7 @@ import com.hw.hwjobbackend.model.dto.request.job_post.JobPostRequest;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.model.entity.job_post.JobPost;
+import com.hw.hwjobbackend.model.entity.skill.Skill;
 import com.hw.hwjobbackend.repository.industry.IndustryRepository;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
 import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
@@ -13,6 +14,7 @@ import com.hw.hwjobbackend.repository.level.LevelRepository;
 import com.hw.hwjobbackend.repository.region.RegionRepository;
 import com.hw.hwjobbackend.repository.user.RecruiterRepository;
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
+import com.hw.hwjobbackend.service.shared.skill.SkillService;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +44,8 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
     LevelRepository levelRepository;
     JobTypeRepository jobTypeRepository;
     IndustryRepository industryRepository;
+
+    SkillService skillService;
 
 
     @Override
@@ -135,6 +140,12 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
 
         } else {
             jobPost.setRegion(null);
+        }
+        if (request.getSkillIds() != null) {
+            Set<Skill> skills = skillService.getSkillsByIds(request.getSkillIds());
+            jobPost.setSkills(skills);
+        } else {
+            jobPost.setSkills(null);
         }
     }
 }
