@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.service.initialization;
 
-import com.hw.hwjobbackend.model.dto.api_response.ProvinceApiResponse;
+import com.hw.hwjobbackend.model.dto.api.ProvinceApiResponse;
 import com.hw.hwjobbackend.model.dto.response.file.FileResponse;
 import com.hw.hwjobbackend.model.entity.industry.Industry;
 import com.hw.hwjobbackend.model.entity.job_type.JobType;
@@ -55,9 +55,8 @@ public class InitializationServiceImpl implements InitializationService {
 
     ApiClientService apiClientService;
 
-
-    RegionService regionService;
     PasswordEncoder passwordEncoder;
+    private final RegionService regionService;
 
     @NonFinal
     @Value("${initial-app.admin.name}")
@@ -129,14 +128,14 @@ public class InitializationServiceImpl implements InitializationService {
             return;
         }
         try {
-            List<ProvinceApiResponse> provinceApiResponses = apiClientService.get(
-                    PROVINCE_API_URL,
-                    new ParameterizedTypeReference<>() {
-                    }
-            );
-            if (provinceApiResponses != null && !provinceApiResponses.isEmpty()) {
-                for (ProvinceApiResponse provinceApiResponse : provinceApiResponses) {
-                    regionService.createRegion(provinceApiResponse);
+            List<ProvinceApiResponse> provinceResponses = apiClientService
+                    .get(PROVINCE_API_URL,
+                            new ParameterizedTypeReference<>() {
+                            }
+                    );
+            if (provinceResponses != null && !provinceResponses.isEmpty()) {
+                for (ProvinceApiResponse provinceResponse : provinceResponses) {
+                    regionService.createRegion(provinceResponse);
                 }
             }
         } catch (Exception e) {

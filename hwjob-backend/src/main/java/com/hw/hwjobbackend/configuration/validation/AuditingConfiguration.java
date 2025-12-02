@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.configuration;
+package com.hw.hwjobbackend.configuration.validation;
 
 
 import org.springframework.context.annotation.Configuration;
