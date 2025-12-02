@@ -13,6 +13,7 @@ import com.hw.hwjobbackend.model.enums.data.IndustryEnum;
 import com.hw.hwjobbackend.model.enums.data.JobTypeEnum;
 import com.hw.hwjobbackend.model.enums.data.LevelEnum;
 import com.hw.hwjobbackend.model.enums.data.SkillEnum;
+import com.hw.hwjobbackend.repository.http_client.RegionFeignClient;
 import com.hw.hwjobbackend.repository.industry.IndustryRepository;
 import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
 import com.hw.hwjobbackend.repository.level.LevelRepository;
@@ -20,7 +21,6 @@ import com.hw.hwjobbackend.repository.region.RegionRepository;
 import com.hw.hwjobbackend.repository.skill.SkillRepository;
 import com.hw.hwjobbackend.repository.user.RoleRepository;
 import com.hw.hwjobbackend.repository.user.UserRepository;
-import com.hw.hwjobbackend.service.api.ApiClientService;
 import com.hw.hwjobbackend.service.file.FileService;
 import com.hw.hwjobbackend.service.shared.region.RegionService;
 import lombok.AccessLevel;
@@ -53,10 +53,9 @@ public class InitializationServiceImpl implements InitializationService {
     FileService fileService;
 
 
-    ApiClientService apiClientService;
-
     PasswordEncoder passwordEncoder;
-    private final RegionService regionService;
+    RegionService regionService;
+    RegionFeignClient regionFeignClient;
 
     @NonFinal
     @Value("${initial-app.admin.name}")
@@ -128,11 +127,7 @@ public class InitializationServiceImpl implements InitializationService {
             return;
         }
         try {
-            List<ProvinceApiResponse> provinceResponses = apiClientService
-                    .get(PROVINCE_API_URL,
-                            new ParameterizedTypeReference<>() {
-                            }
-                    );
+            List<ProvinceApiResponse> provinceResponses = regionFeignClient.getAllProvinces();
             if (provinceResponses != null && !provinceResponses.isEmpty()) {
                 for (ProvinceApiResponse provinceResponse : provinceResponses) {
                     regionService.createRegion(provinceResponse);
