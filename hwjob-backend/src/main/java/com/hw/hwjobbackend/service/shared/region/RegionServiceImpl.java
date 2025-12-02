@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.service.shared.region;
 
-import com.hw.hwjobbackend.model.dto.api_response.ProvinceApiResponse;
+import com.hw.hwjobbackend.model.dto.api.ProvinceApiResponse;
 import com.hw.hwjobbackend.model.dto.response.region.RegionResponse;
 import com.hw.hwjobbackend.model.entity.region.Region;
 import com.hw.hwjobbackend.exception.AppException;
