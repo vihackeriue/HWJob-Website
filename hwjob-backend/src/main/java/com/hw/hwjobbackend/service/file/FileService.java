@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.service.file;
 
-import com.hw.hwjobbackend.dto.response.file.FileData;
-import com.hw.hwjobbackend.dto.response.file.FileResponse;
+import com.hw.hwjobbackend.model.dto.response.file.FileData;
+import com.hw.hwjobbackend.model.dto.response.file.FileResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ public interface FileService {
      * Sao chép avatar mặc định từ resource cho user với username chỉ định
      * và trả về thông tin file (URL) để hiển thị.
      */
-    FileResponse copyDefaultAvatarForUser(String username);
+    FileResponse setDefaultAvatarForUser(String username);
 
     /**
      * Xóa file theo URL đã lưu (nếu tồn tại), bao gồm file vật lý và metadata.

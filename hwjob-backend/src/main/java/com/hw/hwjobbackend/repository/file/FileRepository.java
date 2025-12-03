@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.repository.file;
 
-import com.hw.hwjobbackend.dto.file.FileInfo;
-import com.hw.hwjobbackend.entity.FileMgmt;
+import com.hw.hwjobbackend.model.dto.file.FileInfo;
+import com.hw.hwjobbackend.model.entity.file.FileMgmt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -1,10 +1,11 @@
 package com.hw.hwjobbackend.configuration.security;
 
 
+import com.hw.hwjobbackend.service.authentication.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -19,6 +20,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
@@ -38,39 +40,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private final String[] PUBLIC_ENDPOINTS_POST = {
-            "/users",
-            "/auth/login",
-            "/auth/refresh",
-            "/auth/introspect",
-
-    };
-    private final String[] PUBLIC_ENDPOINTS_GET = {
-            "/regions/**",
-            "/levels",
-            "/levels/**",
-            "/job-types",
-            "/job-types/**",
-            "/industries",
-            "/industries/**",
-            "/job-posts",
-            "/media/**",
-            "/profiles/**"
-    };
-
     private final CustomJwtDecoder customJwtDecoder;
+    private final CustomUserDetailService customUserDetailService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(request -> request
-                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST).permitAll()
-                .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
-                .anyRequest().authenticated());
-        httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwtConfigurer -> jwtConfigurer
-                        .decoder(customJwtDecoder)
-                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
+        httpSecurity
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/common/**").permitAll()
+//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+//                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+//                        .requestMatchers("/candidate/**").hasAuthority("ROLE_CANDIDATE")
+//                        .requestMatchers("/recruiter/**").hasAuthority("ROLE_RECRUITER")
+                        .anyRequest().authenticated());
+        httpSecurity
+                .oauth2ResourceServer(oauth2 -> oauth2
+                                .jwt(jwtConfigurer -> jwtConfigurer
+                                        .decoder(customJwtDecoder)
+                                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+//                        .accessDeniedHandler()
+                );
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.cors(Customizer.withDefaults());
 
@@ -78,21 +68,27 @@ public class SecurityConfiguration {
     }
 
     /**
-     * Cấu hình CORS cho phép tất cả domain, phương thức và header.
+     * Cấu hình CORS.
      */
 
+    @Value("${cors.server-api-ai}")
+    private String serverApiAI;
+
+    @Value("${cors.server-frontend}")
+    private String serverFrontend;
+
     @Bean
-    public CorsFilter corsFilter() {
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(List.of(serverApiAI, serverFrontend));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        corsConfiguration.setAllowedHeaders(List.of("*"));
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setExposedHeaders(List.of("Location"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
 
-        corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.addAllowedHeader("*");
-
-        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-
-        return new CorsFilter(urlBasedCorsConfigurationSource);
     }
 
     /**
@@ -113,4 +109,12 @@ public class SecurityConfiguration {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
+
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(customUserDetailService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return new ProviderManager(authenticationProvider);
+    }
+
 }
