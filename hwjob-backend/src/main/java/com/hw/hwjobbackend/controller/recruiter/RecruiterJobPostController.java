@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/recruiter/job-posts")
+@RequestMapping("/recruiters/job-posts")
 public class RecruiterJobPostController {
 
     RecruiterJobPostService recruiterJobPostService;

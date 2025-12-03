@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface JobPostService {
-    Page<JobPostResponse> getJobPosts(Integer page, Integer size, JobPostFilterRequest filter);
+    Page<JobPostResponse> getAllJobPosts(Integer page, Integer size, JobPostFilterRequest filter);
 
     List<JobPostResponse> getAllJobPosts(JobPostFilterRequest filter);
 

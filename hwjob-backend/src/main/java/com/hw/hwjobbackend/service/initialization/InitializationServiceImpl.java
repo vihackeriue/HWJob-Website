@@ -100,12 +100,15 @@ public class InitializationServiceImpl implements InitializationService {
     @Override
     @Transactional
     public void createAdminUser() {
-        if (userRepository.existsByUsername(ADMIN_USERNAME)) {
+
+        Set<Role> roles = roleRepository.findAllByName(RoleEnum.ADMIN.name());
+
+        if (userRepository.countUserByRoles(roles) > 0) {
             log.info("Admin user already exists. Skipping initialization.");
             return;
         }
 
-        Set<Role> roles = roleRepository.findAllByName(RoleEnum.ADMIN.name());
+//        Set<Role> roles = roleRepository.findAllByName(RoleEnum.ADMIN.name());
 
         User adminUser = User.builder()
                 .username(ADMIN_USERNAME)
