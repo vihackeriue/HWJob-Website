@@ -16,19 +16,19 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/candidate/job-posts")
+@RequestMapping("/candidates/job-posts")
 public class CandidateJobPostController {
 
     CandidateJobPostService candidateJobPostService;
 
-    @PostMapping("/{id}")
+    @PostMapping("saved-job-posts/{id}")
     public ApiResponse<SaveJobPostResponse> saveJobPost(@PathVariable String id) {
         return ApiResponse.<SaveJobPostResponse>builder()
                 .result(candidateJobPostService.saveJobPost(id))
                 .build();
     }
 
-    @GetMapping
+    @GetMapping("/saved-job-posts")
     public ApiResponse<List<JobPostResponse>> getSavedJobPosts(
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "size", required = false) Integer size

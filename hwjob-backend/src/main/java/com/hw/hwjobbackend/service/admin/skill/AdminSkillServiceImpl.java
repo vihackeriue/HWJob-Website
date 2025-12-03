@@ -21,7 +21,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminSkillServiceImpl implements AdminSkillService {
 
     SkillRepository skillRepository;

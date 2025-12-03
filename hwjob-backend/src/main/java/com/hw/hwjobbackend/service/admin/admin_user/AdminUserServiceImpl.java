@@ -24,14 +24,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminUserServiceImpl implements AdminUserService {
 
     UserRepository userRepository;
     UserMapper userMapper;
 
     @Override
-    public Page<UserResponse> getUsers(int page, int size) {
+    public Page<UserResponse> getAllUsers(int page, int size) {
 
         Pageable pageable = PaginationUtils.buildPageable(page, size);
 
@@ -40,7 +39,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public List<UserResponse> getUsers() {
+    public List<UserResponse> getAllUsers() {
         return userRepository.findAllOrderByCreatedAtDesc()
                 .stream()
                 .map(userMapper::toUserResponse)

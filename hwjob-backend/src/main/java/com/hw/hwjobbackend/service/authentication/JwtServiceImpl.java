@@ -145,11 +145,6 @@ public class JwtServiceImpl implements JwtService {
         }
     }
 
-    @Override
-    public void removeFromBlacklist(String jwtId) {
-        invalidateTokenRepository.deleteById(jwtId);
-        log.debug("Token removed from blacklist: {}", jwtId);
-    }
 
     @Override
     public void addToWhitelist(String jwtId, String userId, Instant expiryTime) {

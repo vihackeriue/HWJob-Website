@@ -80,6 +80,7 @@ public class GlobalExceptionHandler {
     /**
      * Lỗi Authentication: chưa đăng nhập, JWT sai hoặc hết hạn
      */
+
     @ExceptionHandler(AuthenticationException.class)
     ResponseEntity<ApiResponse<?>> handleAuthenticationException(AuthenticationException exception) {
         log.warn("Authentication failed: {}", exception.getClass().getSimpleName());
@@ -91,6 +92,7 @@ public class GlobalExceptionHandler {
     /**
      * Lỗi AUTHORIZATION (Không có quyền truy cập)
      */
+
     @ExceptionHandler(AccessDeniedException.class)
     ResponseEntity<ApiResponse<?>> handleAccessDeniedException(AccessDeniedException exception) {
         log.warn("Access denied: {}", exception.getClass().getSimpleName());
@@ -106,6 +108,7 @@ public class GlobalExceptionHandler {
     /**
      * Bắt lỗi validate @Valid
      */
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ApiResponse<?>> handleValidationException(MethodArgumentNotValidException exception) {
 

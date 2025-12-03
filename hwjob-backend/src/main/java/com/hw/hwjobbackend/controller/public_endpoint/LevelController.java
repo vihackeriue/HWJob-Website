@@ -1,8 +1,8 @@
-package com.hw.hwjobbackend.controller.common;
+package com.hw.hwjobbackend.controller.public_endpoint;
 
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
-import com.hw.hwjobbackend.model.dto.response.job_type.JobTypeResponse;
-import com.hw.hwjobbackend.service.shared.job_type.JobTypeService;
+import com.hw.hwjobbackend.model.dto.response.level.LevelResponse;
+import com.hw.hwjobbackend.service.shared.level.LevelService;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -15,37 +15,37 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/common/job-types")
-public class JobTypeController {
+@RequestMapping("/public/levels")
+public class LevelController {
 
-    JobTypeService jobTypeService;
+    LevelService levelService;
 
     @GetMapping
-    ApiResponse<List<JobTypeResponse>> getAllJobTypes(
+    ApiResponse<List<LevelResponse>> getAllLevels(
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "size", required = false) Integer size
     ) {
         if (page != null && size != null) {
             int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
 
-            Page<JobTypeResponse> response = jobTypeService.getJobTypes(zeroBasedPage, size);
+            Page<LevelResponse> response = levelService.getLevels(zeroBasedPage, size);
 
-            return ApiResponse.<List<JobTypeResponse>>builder()
+            return ApiResponse.<List<LevelResponse>>builder()
                     .page(PaginationUtils.toOneBasedPage(response.getNumber()))
                     .totalPages(response.getTotalPages())
                     .result(response.getContent())
                     .build();
         }
 
-        return ApiResponse.<List<JobTypeResponse>>builder()
-                .result(jobTypeService.getAllJobTypes())
+        return ApiResponse.<List<LevelResponse>>builder()
+                .result(levelService.getAllLevels())
                 .build();
     }
 
     @GetMapping("/{id}")
-    ApiResponse<JobTypeResponse> getJobTypeById(@PathVariable Long id) {
-        return ApiResponse.<JobTypeResponse>builder()
-                .result(jobTypeService.getJobTypeById(id))
+    ApiResponse<LevelResponse> getLevelById(@PathVariable Long id) {
+        return ApiResponse.<LevelResponse>builder()
+                .result(levelService.getLevelById(id))
                 .build();
     }
 }

@@ -24,8 +24,6 @@ public interface JwtService {
 
     void addToBlacklist(String jwtId, Instant expiryTime);
 
-    void removeFromBlacklist(String jwtId);
-
     void addToWhitelist(String jwtId, String userId, Instant expiryTime);
 
     void removeFromWhitelist(String jwtId);

@@ -43,7 +43,7 @@ api:
 
 cors:
   server-api-ai: http://localhost:8000/
-  server-frontend: http://localhost:3000/
+  server-frontend: http://localhost:5370/
 
 jwt:
   signerKey: 21d698ee57633eca2f364129be119e4e237079d8ab664b7a37d2006b92da62d6
@@ -53,6 +53,6 @@ jwt:
 app:
   file:
     storage-dir: upload/user-avatar/
-    download-prefix: http://localhost:8080/hwjob/api/common/media/
+    download-prefix: http://localhost:8080/hwjob/api/public/media
     default-avatar-resource: static/images/default-avatar.png
 

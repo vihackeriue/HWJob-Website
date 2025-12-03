@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface AdminUserService {
 
-    Page<UserResponse> getUsers(int page, int size);
+    Page<UserResponse> getAllUsers(int page, int size);
 
-    List<UserResponse> getUsers();
+    List<UserResponse> getAllUsers();
 
     void changeUserStatus(String id, UserStatusRequest request);
 }

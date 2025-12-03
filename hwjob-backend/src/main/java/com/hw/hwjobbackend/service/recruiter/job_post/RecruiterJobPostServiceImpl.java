@@ -34,7 +34,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-@PreAuthorize("hasRole('RECRUITER')")
 public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
 
     JobPostRepository jobPostRepository;

@@ -28,7 +28,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-@PreAuthorize("hasRole('CANDIDATE')")
 public class CandidateUserServiceImpl implements CandidateUserService {
     CandidateRepository candidateRepository;
     CandidateMapper candidateMapper;

@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/recruiter/applications")
+@RequestMapping("/recruiters/applications")
 public class RecruiterApplicationController {
 
     RecruiterApplicationService recruiterJobPostService;
@@ -45,7 +45,7 @@ public class RecruiterApplicationController {
                 .build();
     }
 
-    @PutMapping("/update-application")
+    @PutMapping
     public ApiResponse<Void> updateCandidateApplication(
             @RequestBody ApplicationRecruiterRequest request
     ) {
