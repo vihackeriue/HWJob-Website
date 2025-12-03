@@ -11,9 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -27,7 +25,6 @@ public class AdminLevelServiceImpl implements AdminLevelService {
     LevelMapper levelMapper;
 
     @Override
-    @Transactional
     public LevelResponse createLevel(LevelRequest request) {
         validateLevelNameNotExists(request.getName(), null);
 
@@ -38,7 +35,6 @@ public class AdminLevelServiceImpl implements AdminLevelService {
     }
 
     @Override
-    @Transactional
     public LevelResponse updateLevel(Long id, LevelRequest request) {
         Level level = levelRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.LEVEL_NOT_EXISTED));
@@ -55,7 +51,6 @@ public class AdminLevelServiceImpl implements AdminLevelService {
     }
 
     @Override
-    @Transactional
     public void deleteLevel(Long id) {
         Level level = levelRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.LEVEL_NOT_EXISTED));

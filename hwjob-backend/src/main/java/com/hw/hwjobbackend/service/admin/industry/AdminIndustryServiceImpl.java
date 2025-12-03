@@ -11,11 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +23,6 @@ public class AdminIndustryServiceImpl implements AdminIndustryService {
     IndustryMapper industryMapper;
 
     @Override
-    @Transactional
     public IndustryResponse createIndustry(IndustryRequest request) {
 
         validateIndustryNameNotExists(request.getName(), null);
@@ -39,7 +34,6 @@ public class AdminIndustryServiceImpl implements AdminIndustryService {
     }
 
     @Override
-    @Transactional
     public IndustryResponse updateIndustry(long id, IndustryRequest request) {
         Industry industry = industryRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.INDUSTRY_NOT_EXISTED));
@@ -56,13 +50,11 @@ public class AdminIndustryServiceImpl implements AdminIndustryService {
     }
 
     @Override
-    @Transactional
     public void deleteIndustry(long id) {
         Industry industry = industryRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.INDUSTRY_NOT_EXISTED));
         industryRepository.delete(industry);
     }
-
 
     private void validateIndustryNameNotExists(String name, Long excludeId) {
         boolean exists = (excludeId == null)
