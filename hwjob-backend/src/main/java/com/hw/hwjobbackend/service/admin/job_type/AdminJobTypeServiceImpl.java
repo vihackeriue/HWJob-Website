@@ -11,9 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -27,7 +25,6 @@ public class AdminJobTypeServiceImpl implements AdminJobTypeService {
     JobTypeMapper jobTypeMapper;
 
     @Override
-    @Transactional
     public JobTypeResponse createJobType(JobTypeRequest request) {
         validateJobTypeNameNotExists(request.getName(), null);
         validateJobTypeCodeNotExists(request.getCode(), null);
@@ -39,7 +36,6 @@ public class AdminJobTypeServiceImpl implements AdminJobTypeService {
     }
 
     @Override
-    @Transactional
     public JobTypeResponse updateJobType(Long id, JobTypeRequest request) {
         JobType jobType = jobTypeRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.JOB_TYPE_NOT_EXISTED));
@@ -57,7 +53,6 @@ public class AdminJobTypeServiceImpl implements AdminJobTypeService {
     }
 
     @Override
-    @Transactional
     public void deleteJobType(Long id) {
         JobType jobType = jobTypeRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.JOB_TYPE_NOT_EXISTED));
