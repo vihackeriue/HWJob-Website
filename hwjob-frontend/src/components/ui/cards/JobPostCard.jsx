@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { IoIosHeartEmpty, IoMdHeart } from "react-icons/io";
 import { tGlobal } from "../../../utils/translator";
+import { Link } from "react-router-dom";
 const JobPostCard = ({ jobPost }) => {
-  const [isLiked, setIsSaved] = useState(jobPost.isLiked);
+  const [isLiked, setIsSaved] = useState(jobPost.saved);
 
   const handleToggleSave = () => {
     if (!isLiked) {
@@ -14,20 +15,23 @@ const JobPostCard = ({ jobPost }) => {
   };
 
   return (
-    <div className="flex gap-3 m-3 pr-2 bg-lightGrayishBlue dark:bg-stoneBrown-900 rounded-2xl relative hover:shadow">
+    <div className="flex gap-3 pr-2 bg-lightGrayishBlue dark:bg-stoneBrown-900 rounded-2xl relative hover:shadow">
       <img
-        src={jobPost.image}
+        src={jobPost.imageUrl}
         alt={jobPost.recruiter}
         className="size-32 rounded-2xl "
       />
       <div className="py-2">
-        <h1 className="text-md font-semibold hover-bright-orange line-clamp-2 ">
+        <Link
+          to={`/job-post/${jobPost.id}`}
+          className="text-md font-semibold hover-bright-orange line-clamp-2 "
+        >
           {jobPost.title}
-        </h1>
-        <p className="dark:text-gray-300">{jobPost.recruiter}</p>
+        </Link>
+        <p className="dark:text-gray-300">{jobPost.recruiterName}</p>
         <div className="flex gap-1 dark:text-amber-500">
           <p className="py-1 px-2 rounded-lg bg-white dark:bg-stoneBrown-700">
-            {tGlobal("common.quantity")}: <span>{jobPost.quanlity}</span>
+            {tGlobal("common.quantity")}: <span>{jobPost.quantity}</span>
           </p>
           <div className="py-1 px-2 rounded-lg bg-white dark:bg-stoneBrown-700">
             {jobPost.region}

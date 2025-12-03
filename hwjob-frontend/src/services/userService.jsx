@@ -10,3 +10,16 @@ export const getUsers = async (page = 1, limit = DEFAULT_LIMIT) => {
 
   return response.data;
 };
+
+export const updateAvatarUser = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await axiosPrivate.put("users/upload-avatar", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data;
+};

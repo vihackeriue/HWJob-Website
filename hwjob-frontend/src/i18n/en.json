@@ -62,7 +62,9 @@
       "profile": "Profile",
       "setting": "Setting",
       "signOut": "Sign Out",
-      "addJobPost": "Create Job Post"
+      "addJobPost": "Create Job Post",
+      "manageJobCandidate": "Manage Job",
+      "manageJobRecruiter": "Manage Job"
     },
     "banner": {
       "description": "HWJob is a smart recruitment platform that connects employers and job seekers efficiently. Find the right job, hire the right person — all in one place.",

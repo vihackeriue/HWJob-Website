@@ -17,7 +17,8 @@ function PrivateRoute({ allowedRoles }) {
   const hasRole = auth?.roles?.some((role) => allowedRoles.includes(role));
 
   if (!hasRole) {
-    return <Navigate to="/unauthorized" state={{ from: location }} replace />;
+    alert("Bạn không có quyền truy cập!");
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
   // đúng role → render route con

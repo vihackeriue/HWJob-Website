@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
   //   keep logged in for website
   useEffect(() => {
     const accessToken = localStorage.getItem("site");
+    const userAvatar = localStorage.getItem("userAvatar");
     if (accessToken) {
       try {
         const decoded = jwtDecode(accessToken);
@@ -29,13 +30,15 @@ export const AuthProvider = ({ children }) => {
         } else {
           const username = decoded.sub;
           const roles = decoded.scope ? decoded.scope.split(" ") : [];
+
           // const walletAddress = decoded.walletAddress;
           // setAuth({ username, roles, walletAddress, accessToken });
-          setAuth({ username, roles, accessToken });
+          setAuth({ username, userAvatar, roles, accessToken });
         }
       } catch (err) {
         console.error("Invalid token:", err);
         localStorage.removeItem("site");
+        localStorage.removeItem("userAvatar");
       }
     }
     setLoading(false);
@@ -48,15 +51,16 @@ export const AuthProvider = ({ children }) => {
       if (res.code === 1000 && res.result.authenticated) {
         const accessToken = res.result.token;
         const decoded = jwtDecode(accessToken);
-
+        const userAvatar = res.result.user.imageUrl;
         // setToken(accessToken);
         const username = decoded.sub;
         const roles = decoded.scope ? decoded.scope.split(" ") : [];
         // const walletAddress = decoded.walletAddress;
         // setAuth({ username, roles, walletAddress, accessToken });
-        setAuth({ username, roles, accessToken });
+        setAuth({ username, userAvatar, roles, accessToken });
 
         localStorage.setItem("site", accessToken);
+        localStorage.setItem("userAvatar", userAvatar);
 
         if (roles.includes("ROLE_ADMIN")) {
           navigate("/admin");
@@ -69,6 +73,20 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Login failed:", error);
     }
+  };
+
+  const updateAvatarRealtime = (newAvatar) => {
+    // cập nhật trong state
+    setAuth((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        userAvatar: newAvatar,
+      };
+    });
+
+    // cập nhật trong localStorage
+    localStorage.setItem("userAvatar", newAvatar);
   };
 
   const refresh = async () => {
@@ -121,13 +139,22 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setAuth(null);
       localStorage.removeItem("site");
+      localStorage.removeItem("userAvatar");
       navigate("/");
     }
   };
 
   return (
     <AuthContext.Provider
-      value={{ loading, auth, login, logout, refresh, updateWallet }}
+      value={{
+        loading,
+        auth,
+        login,
+        logout,
+        refresh,
+        updateWallet,
+        updateAvatarRealtime,
+      }}
     >
       {children}
     </AuthContext.Provider>

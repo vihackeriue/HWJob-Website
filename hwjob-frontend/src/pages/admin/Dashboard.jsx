@@ -39,7 +39,7 @@ const Dashboard = () => {
             />
           </div>
           <PrimaryButton>Tạo mới</PrimaryButton>
-        </div>{" "}
+        </div>
       </div>
       <div className="flex-1">
         <div className="flex flex-col gap-3">

@@ -11,15 +11,24 @@ import { getJobTypesNotPagination } from "../../../services/jobTypeService";
 import { useList } from "../../../hooks/useList";
 import { getIndustriesNotPagination } from "../../../services/industryService";
 import { getLevelsNotPagination } from "../../../services/levelService";
+import { createJobPost } from "../../../services/jobPostService";
+import { useNavigate } from "react-router-dom";
+
+const salaryTypes = [
+  { code: "HOURS", name: "Theo giờ" },
+  { code: "PROJECT", name: "Theo dự án" },
+  { code: "MONTHS", name: "Theo tháng" },
+  { code: "NEGOTIATION", name: "Thương lượng" },
+];
 
 const AddJobPost = () => {
   const [formJobPost, setFormJobPost] = useState({
-    title: "Nguyễn Văn A",
+    title: "",
     description: "",
-    quantity: 5,
+    quantity: 1,
 
-    salaryMin: 5,
-    salaryMax: 5,
+    salary: 4,
+    salaryType: 5,
     endedTime: "",
     industryId: null,
     levelId: null,
@@ -27,7 +36,7 @@ const AddJobPost = () => {
     regionId: null,
   });
   const [errors, setErrors] = useState({});
-
+  const navigate = useNavigate();
   const regions = useList(getRegionsNotPagination);
   const jobTypes = useList(getJobTypesNotPagination);
   const industries = useList(getIndustriesNotPagination);
@@ -37,7 +46,7 @@ const AddJobPost = () => {
     setFormJobPost((prev) => ({ ...prev, [name]: value }));
   };
 
-  const validateForm = () => {
+  const validate = () => {
     const newErrors = {};
 
     // 1. Các field không được rỗng
@@ -50,18 +59,16 @@ const AddJobPost = () => {
     if (!formJobPost.levelId) newErrors.levelId = "Vui lòng chọn cấp bậc";
     if (!formJobPost.jobTypeId) newErrors.jobTypeId = "Vui lòng chọn loại nghề";
     if (!formJobPost.regionId) newErrors.regionId = "Vui lòng chọn khu vực";
+    if (!formJobPost.salaryType)
+      newErrors.salaryType = "Vui lòng chọn loại lương";
 
     // 2. Số lượng >= 1
     if (formJobPost.quantity < 1)
       newErrors.quantity = "Số lượng phải lớn hơn hoặc bằng 1";
 
     // 3. Mức lương > 0 và salaryMin < salaryMax
-    if (formJobPost.salaryMin <= 0)
+    if (formJobPost.salary <= 0)
       newErrors.salaryMin = "Mức lương từ phải lớn hơn 0";
-    if (formJobPost.salaryMax <= 0)
-      newErrors.salaryMax = "Mức lương đến phải lớn hơn 0";
-    if (formJobPost.salaryMin > formJobPost.salaryMax)
-      newErrors.salaryMin = "Mức lương từ phải nhỏ hơn hoặc bằng mức lương đến";
 
     // 4. Hạn nộp hồ sơ (datetime) phải > hiện tại
     if (!formJobPost.endedTime) {
@@ -80,13 +87,18 @@ const AddJobPost = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
-    if (!validateForm()) {
+  const handleSubmit = async () => {
+    if (!validate()) {
       console.log("Form có lỗi:", errors);
       return;
     }
-
-    console.log("Form Job Post:", formJobPost);
+    try {
+      await createJobPost(formJobPost);
+      console.log("Tạo job post thành công:");
+      navigate("/");
+    } catch (error) {
+      alert(error.response?.data?.message || "Đăng ký tài khoản thất bại!");
+    }
 
     // Call API tạo job post
   };
@@ -121,29 +133,34 @@ const AddJobPost = () => {
             type="number"
             value={formJobPost.quantity}
             onChange={handleChange}
+            error={errors.quantity}
           />
-          <div className="flex gap-3 justify-between">
-            <FormInput
-              label="Mức lương từ (Triệu)"
-              name="salaryMin"
-              type="number"
-              value={formJobPost.salaryMin}
-              onChange={handleChange}
-            />
-            <FormInput
-              label="Mức lương đến (Triệu)"
-              name="salaryMax"
-              type="number"
-              value={formJobPost.salaryMax}
-              onChange={handleChange}
-            />
-          </div>
+          <FormInput
+            label="Mức lương"
+            name="salary"
+            type="number"
+            value={formJobPost.salary}
+            onChange={handleChange}
+            error={errors.salary}
+          />
+          <FormSelect
+            label="Loại lương"
+            name="salaryType"
+            selected={salaryTypes.find(
+              (j) => j.code === formJobPost.salaryType
+            )}
+            onChange={handleChange}
+            options={salaryTypes}
+            placeholder="Chọn loại lương"
+            error={errors.salaryType}
+          />
           <FormInput
             label="Hạn nộp hồ sơ"
             name="endedTime"
             type="datetime-local"
             value={formJobPost.endedTime}
             onChange={handleChange}
+            error={errors.endedTime}
           />
         </div>
         <div className="flex-1 flex flex-col gap-2 bg-white p-3 rounded-2xl ">
@@ -158,6 +175,7 @@ const AddJobPost = () => {
             onChange={handleChange}
             options={industries.data}
             placeholder="Chọn ngành nghề"
+            error={errors.industryId}
           />
 
           <FormSelect
@@ -167,6 +185,7 @@ const AddJobPost = () => {
             onChange={handleChange}
             options={levels.data}
             placeholder="Chọn cấp bậc"
+            error={errors.levelId}
           />
           <FormSelect
             label="Loại nghề"
@@ -175,14 +194,16 @@ const AddJobPost = () => {
             onChange={handleChange}
             options={jobTypes.data}
             placeholder="Chọn loại nghề"
+            error={errors.jobTypeId}
           />
           <FormSelect
             label="Khu vực"
             name="regionId"
-            selected={regions.data.find((r) => r.code === formJobPost.regionId)}
+            selected={regions.data.find((r) => r.id === formJobPost.regionId)}
             onChange={handleChange}
             options={regions.data}
             placeholder="Chọn khu vực"
+            error={errors.regionId}
           />
           <div className="flex justify-end ">
             <PrimaryButton onClick={handleSubmit}>
