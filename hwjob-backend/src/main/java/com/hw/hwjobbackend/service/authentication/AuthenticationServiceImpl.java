@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -41,13 +42,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = (User) authentication.getPrincipal();
 
         String accessToken = jwtService.generateAccessToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
 
         log.info("User logged in successfully: {}", user.getUsername());
 
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
-                .refreshToken(refreshToken)
                 .user(userMapper.toUserLoginResponse(user))
                 .build();
     }
@@ -56,21 +55,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void logout(String token) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
-            String tokenType = (String) signedJWT.getJWTClaimsSet().getClaim("type");
             String jwtId = signedJWT.getJWTClaimsSet().getJWTID();
-            Instant expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime().toInstant();
+            Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
-            if (TokenEnum.REFRESH.name().equals(tokenType)) {
-                jwtService.verifyRefreshToken(token);
-                jwtService.removeFromWhitelist(jwtId);
-                log.info("Refresh token removed for logout: {}", jwtId);
-            } else if (TokenEnum.ACCESS.name().equals(tokenType)) {
-                jwtService.verifyAccessToken(token);
-                jwtService.addToBlacklist(jwtId, expiryTime);
-                log.info("Access token blacklisted for logout: {}", jwtId);
-            } else {
-                throw new AppException(ErrorCode.UNAUTHENTICATED);
-            }
+            jwtService.addToBlacklist(jwtId, expiryTime);
 
         } catch (Exception e) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
