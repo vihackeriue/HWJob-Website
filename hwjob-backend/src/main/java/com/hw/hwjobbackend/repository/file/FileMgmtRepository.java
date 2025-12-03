@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.repository.file;
 
-import com.hw.hwjobbackend.entity.FileMgmt;
+import com.hw.hwjobbackend.model.entity.file.FileMgmt;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.hw.hwjobbackend.configuration.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hw.hwjobbackend.dto.response.ApiResponse;
+import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,8 +20,10 @@ import java.io.IOException;
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(
-            HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
-            throws IOException {
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException authException) throws IOException {
+
         ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
 
         response.setStatus(errorCode.getStatusCode().value());
@@ -33,9 +35,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 .message(errorCode.getLocalizedMessage())
                 .build();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
+        response.getWriter().write(new ObjectMapper().writeValueAsString(apiResponse));
         response.flushBuffer();
     }
 }

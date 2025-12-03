@@ -33,11 +33,15 @@ public class ApplicationInitConfiguration {
             log.info("=== Starting application initialization ===");
 
             try {
-                // Khởi tạo roles và admin user
-                initializationService.initializeRolesAndAdmin();
+
+                // Khởi tạo role
+                initializationService.initializeRoles();
+
+                // Khởi tạo admin
+                initializationService.createAdminUser();
 
                 // Khởi tạo region data
-                initializationService.initializeRegionData();
+                initializationService.initializeRegion();
 
                 // Khởi tạo industries
                 initializationService.initializeIndustries();
@@ -46,7 +50,10 @@ public class ApplicationInitConfiguration {
                 initializationService.initializeJobTypes();
 
                 // Khởi tạo level
-                initializationService.initializeLevel();
+                initializationService.initializeLevels();
+
+                // khởi tạo skill
+                initializationService.initializeSkills();
 
                 long duration = System.currentTimeMillis() - startTime;
                 log.info("=== Application initialization completed in {}ms ===", duration);
