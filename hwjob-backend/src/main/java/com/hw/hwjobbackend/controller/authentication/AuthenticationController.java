@@ -58,11 +58,8 @@ public class AuthenticationController {
     public ApiResponse<AuthenticationResponse> refreshToken(
             @Valid @RequestBody RefreshTokenRequest request)
             throws ParseException, JOSEException {
-
-        AuthenticationResponse response = jwtService.refreshToken(request.getRefreshToken());
-
         return ApiResponse.<AuthenticationResponse>builder()
-                .result(response)
+                .result(jwtService.refreshAccessToken(request))
                 .build();
     }
 }

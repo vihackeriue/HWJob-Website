@@ -14,5 +14,5 @@ import java.io.Serializable;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RefreshTokenRequest implements Serializable {
     @NotBlank
-    String refreshToken;
+    String token;
 }
