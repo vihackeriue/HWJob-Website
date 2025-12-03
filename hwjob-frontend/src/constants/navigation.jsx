@@ -16,19 +16,24 @@ export const NAVBAR_USER_LINKS = [
     label: "user.navbar.jobPost",
     path: "/job-post",
   },
-
+];
+export const NAVBAR_CANDIDATE_LINKS = [
   {
-    key: "recruiter",
-    label: "user.navbar.recruiter",
-    path: "/recruiter",
+    key: "manageJob",
+    label: "user.navbar.manageJobCandidate",
+    path: "/candidate/manage-job",
   },
 ];
-
 export const NAVBAR_RECRUITER_LINKS = [
   {
     key: "jobPost",
     label: "user.navbar.addJobPost",
-    path: "/add-job-post",
+    path: "/recruiter/add-job-post",
+  },
+  {
+    key: "manageJob",
+    label: "user.navbar.manageJobRecruiter",
+    path: "/recruiter/manage-job",
   },
 ];
 
@@ -36,7 +41,7 @@ export const DROPDOWN_USER_LINKS = [
   {
     key: "profile",
     label: "user.navbar.profile",
-    path: "/profile",
+    path: "/my-profile",
   },
   {
     key: "setting",

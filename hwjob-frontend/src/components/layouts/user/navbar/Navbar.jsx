@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { GiVote } from "react-icons/gi";
 import {
   DROPDOWN_USER_LINKS,
+  NAVBAR_CANDIDATE_LINKS,
   NAVBAR_RECRUITER_LINKS,
   NAVBAR_USER_LINKS,
 } from "../../../../constants/navigation";
@@ -16,6 +17,7 @@ import useAuth from "../../../../hooks/useAuth";
 import ResponsiveMenu from "./ResponsiveMenu";
 import { HiMenuAlt1, HiMenuAlt3 } from "react-icons/hi";
 import PrimaryButton from "../../../ui/button/PrimaryButton";
+import { ROLES } from "../../../../constants/role";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -26,6 +28,10 @@ export default function Navbar() {
   };
   const { t } = useTranslation();
 
+  const hasRole = (role) => {
+    return auth?.roles?.includes(role);
+  };
+  console.log(auth?.roles);
   return (
     <div className="relative z-10 w-full bg-teal-900 text-gray-100">
       <div className="container py-3 md:py-2">
@@ -42,10 +48,17 @@ export default function Navbar() {
               {NAVBAR_USER_LINKS.map((item) => (
                 <NavbarLink key={item.key} item={item}></NavbarLink>
               ))}
+
+              {/* navbar role candidate */}
+              {hasRole(ROLES.CANDIDATE) &&
+                NAVBAR_CANDIDATE_LINKS.map((item) => (
+                  <NavbarLink key={item.key} item={item} />
+                ))}
               {/* navbar role recruiter */}
-              {NAVBAR_RECRUITER_LINKS.map((item) => (
-                <NavbarLink key={item.key} item={item}></NavbarLink>
-              ))}
+              {hasRole(ROLES.RECRUITER) &&
+                NAVBAR_RECRUITER_LINKS.map((item) => (
+                  <NavbarLink key={item.key} item={item} />
+                ))}
               <DarkMode />
             </div>
           </div>
@@ -57,8 +70,8 @@ export default function Navbar() {
                     <MenuButton className="inline-flex items-center gap-2 rounded-md  px-3 py-1.5 text-sm/6 font-semibold shadow-white/10 focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-dark-900 data-open:bg-dark-900">
                       <div className="flex items-center gap-2">
                         <img
-                          src="https://th.bing.com/th?q=IPhone+Avatar&w=120&h=120&c=1&rs=1&qlt=90&r=0&cb=1&dpr=1.3&pid=InlineBlock&mkt=en-WW&cc=VN&setlang=en&adlt=moderate&t=1&mw=247"
-                          alt=""
+                          src={auth.userAvatar}
+                          alt={auth.username}
                           className="h-12 w-12 rounded-full object-cover border border-red-300"
                         />
                         <span className="text-lg uppercase">
@@ -107,7 +120,7 @@ export default function Navbar() {
               />
             )}
           </div>
-          <LanguageSwitcher />
+          {/* <LanguageSwitcher /> */}
         </div>
       </div>
       <ResponsiveMenu showMenu={showMenu} auth={auth} logout={logout} />
