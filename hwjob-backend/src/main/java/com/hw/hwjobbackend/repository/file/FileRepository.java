@@ -2,6 +2,8 @@ package com.hw.hwjobbackend.repository.file;
 
 import com.hw.hwjobbackend.model.dto.file.FileInfo;
 import com.hw.hwjobbackend.model.entity.file.FileMgmt;
+import com.hw.hwjobbackend.model.entity.user.User;
+import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -31,11 +33,9 @@ public class FileRepository {
     @Value("${app.file.download-prefix}")
     String urlPrefix;
 
-    public FileInfo store(MultipartFile file) throws IOException {
+    public FileInfo store(MultipartFile file, User user) throws IOException {
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        Path folder = Paths.get(STR."\{storageDir}\{username}/");
+        Path folder = Paths.get(STR."\{storageDir}\{user.getUsername()}/");
 
         if (!Files.exists(folder)) {
             Files.createDirectories(folder);

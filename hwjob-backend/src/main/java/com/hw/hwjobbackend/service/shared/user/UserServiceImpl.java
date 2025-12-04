@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
             fileService.deleteFileByUrl(user.getImageUrl());
         }
 
-        FileResponse response = fileService.uploadFile(file);
+        FileResponse response = fileService.uploadFile(file, user);
         user.setImageUrl(response.getUrl());
 
         return UpdateAvatarResponse.builder()
