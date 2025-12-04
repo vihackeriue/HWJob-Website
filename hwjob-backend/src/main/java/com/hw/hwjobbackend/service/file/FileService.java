@@ -9,15 +9,15 @@ import java.io.IOException;
 
 public interface FileService {
 
-    FileResponse uploadFile(MultipartFile file, User user);
+    FileResponse uploadFile(MultipartFile file, String userId);
 
     FileData downloadFile(String fileName) throws IOException;
 
     /**
-     * Sao chép avatar mặc định từ resource cho user với username chỉ định
+     * Sao chép avatar mặc định từ resource cho user với userId chỉ định
      * và trả về thông tin file (URL) để hiển thị.
      */
-    FileResponse setDefaultAvatarForUser(String username);
+    FileResponse setDefaultAvatarForUser(String userId);
 
     /**
      * Xóa file theo URL đã lưu (nếu tồn tại), bao gồm file vật lý và metadata.

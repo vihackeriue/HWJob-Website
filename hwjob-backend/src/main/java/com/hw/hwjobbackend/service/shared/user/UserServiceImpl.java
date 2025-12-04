@@ -63,8 +63,11 @@ public class UserServiceImpl implements UserService {
         RoleEnum userType = determineUserType(roles);
         User user = createUserByType(userType, request, roles);
 
-        setDefaultAvatar(user);
+
         user = userRepository.save(user);
+
+        FileResponse avatarResponse = fileService.setDefaultAvatarForUser(user.getId());
+        user.setImageUrl(avatarResponse.getUrl());
 
         return userMapper.toUserCreationResponse(user);
     }
@@ -127,7 +130,7 @@ public class UserServiceImpl implements UserService {
             fileService.deleteFileByUrl(user.getImageUrl());
         }
 
-        FileResponse response = fileService.uploadFile(file, user);
+        FileResponse response = fileService.uploadFile(file, user.getId());
         user.setImageUrl(response.getUrl());
 
         return UpdateAvatarResponse.builder()
@@ -217,8 +220,7 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    private void setDefaultAvatar(User user) {
-        FileResponse avatarResponse = fileService.setDefaultAvatarForUser(user.getUsername());
-        user.setImageUrl(avatarResponse.getUrl());
+    private void setDefaultAvatar(String userId) {
+
     }
 }
