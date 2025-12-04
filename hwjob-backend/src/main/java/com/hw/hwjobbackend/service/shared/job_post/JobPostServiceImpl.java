@@ -21,12 +21,9 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +40,7 @@ public class JobPostServiceImpl implements JobPostService {
     public Page<JobPostResponse> getAllJobPosts(Integer page, Integer size, JobPostFilterRequest filter) {
         Pageable pageable = PaginationUtils.buildPageable(page, size);
 
-        Page<JobPost> jobPosts = jobPostRepository.getJobPosts(
+        Page<JobPost> jobPosts = jobPostRepository.getAllJobPosts(
                 JobPostStatusEnum.PUBLIC,
                 filter.getIndustryId(),
                 filter.getLevelId(),

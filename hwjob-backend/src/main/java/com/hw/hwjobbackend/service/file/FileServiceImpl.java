@@ -6,9 +6,11 @@ import com.hw.hwjobbackend.model.dto.response.file.FileResponse;
 import com.hw.hwjobbackend.model.entity.file.FileMgmt;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.model.entity.user.User;
 import com.hw.hwjobbackend.service.mapper.file.FileMgmtMapper;
 import com.hw.hwjobbackend.repository.file.FileMgmtRepository;
 import com.hw.hwjobbackend.repository.file.FileRepository;
+import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -41,15 +43,15 @@ public class FileServiceImpl implements FileService {
     String DEFAULT_AVATAR_RESOURCE;
 
     @Override
-    public FileResponse uploadFile(MultipartFile file) {
-
+    public FileResponse uploadFile(MultipartFile file, User user) {
         try {
             // Store file
-            FileInfo fileInfo = fileRepository.store(file);
+            FileInfo fileInfo = fileRepository.store(file, user);
+
             // Create file management info
             FileMgmt fileMgmt = fileMgmtMapper.toFileMgmt(fileInfo);
-            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-            fileMgmt.setOwnerId(userId);
+            fileMgmt.setOwnerId(user.getUsername());
+
             fileMgmtRepository.save(fileMgmt);
             return FileResponse.builder()
                     .originalFileName(file.getOriginalFilename())
