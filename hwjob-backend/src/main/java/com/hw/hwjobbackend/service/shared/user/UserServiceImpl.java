@@ -85,6 +85,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(newEmail)) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
+        user.setEmail(newEmail);
     }
 
     @Override
@@ -96,6 +97,7 @@ public class UserServiceImpl implements UserService {
         if (!regionRepository.existsById(newRegionId)) {
             throw new AppException(ErrorCode.REGION_NOT_EXISTED);
         }
+        user.setRegion(regionRepository.getReferenceById(newRegionId));
     }
 
     @Override

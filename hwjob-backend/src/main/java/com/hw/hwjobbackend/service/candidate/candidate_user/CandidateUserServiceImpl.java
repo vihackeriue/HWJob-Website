@@ -3,8 +3,6 @@ package com.hw.hwjobbackend.service.candidate.candidate_user;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.entity.skill.Skill;
-import com.hw.hwjobbackend.repository.region.RegionRepository;
-import com.hw.hwjobbackend.repository.skill.SkillRepository;
 import com.hw.hwjobbackend.service.mapper.user.CandidateMapper;
 import com.hw.hwjobbackend.model.dto.request.user.CandidateUpdateRequest;
 import com.hw.hwjobbackend.model.dto.response.user.CandidateResponse;
@@ -17,11 +15,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -35,7 +30,6 @@ public class CandidateUserServiceImpl implements CandidateUserService {
     SkillService skillService;
 
     @Override
-    @Transactional
     public CandidateResponse updateCandidateInfo(CandidateUpdateRequest request) {
 
         String userId = SecurityUtils.getCurrentUserId();
@@ -46,7 +40,6 @@ public class CandidateUserServiceImpl implements CandidateUserService {
         userService.validateExistEmail(candidate, request.getEmail());
 
         userService.validateRegion(candidate, request.getRegionId());
-
 
         if (request.getSkillIds() != null) {
             Set<Skill> skills = skillService.getSkillsByIds(request.getSkillIds());

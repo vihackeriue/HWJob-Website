@@ -45,7 +45,6 @@ public class CandidateApplicationServiceImpl implements CandidateApplicationServ
     JobPostRepository jobPostRepository;
 
     @Override
-    @Transactional
     public ApplicationResponse applyJob(ApplicationCandidateRequest request) {
 
         String candidateId = SecurityUtils.getCurrentUserId();

@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.service.recruiter.application;
 
-import com.hw.hwjobbackend.model.dto.request.application.ApplicationRecruiterRequest;
+import com.hw.hwjobbackend.model.dto.request.application.ApplicationStatusRequest;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationCandidateResponse;
 import org.springframework.data.domain.Page;
 
@@ -12,6 +12,6 @@ public interface RecruiterApplicationService {
 
     List<ApplicationCandidateResponse> getAllCandidateApplications(String jobPostId);
 
-    void updateCandidateApplication(ApplicationRecruiterRequest request);
+    void updateCandidateApplication(String jobPostId, String candidateId, ApplicationStatusRequest request);
 
 }
