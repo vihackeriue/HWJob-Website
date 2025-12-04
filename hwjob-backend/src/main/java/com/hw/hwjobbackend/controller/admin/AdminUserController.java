@@ -29,7 +29,7 @@ public class AdminUserController {
         if (page != null && size != null) {
             int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
 
-            Page<UserResponse> response = adminUserService.getUsers(zeroBasedPage, size);
+            Page<UserResponse> response = adminUserService.getAllUsers(zeroBasedPage, size);
 
             return ApiResponse.<List<UserResponse>>builder()
                     .page(PaginationUtils.toOneBasedPage(response.getNumber()))
@@ -39,16 +39,16 @@ public class AdminUserController {
         }
 
         return ApiResponse.<List<UserResponse>>builder()
-                .result(adminUserService.getUsers())
+                .result(adminUserService.getAllUsers())
                 .build();
     }
 
-    @PutMapping("/change-status/{id}")
+    @PatchMapping("/{userId}/status")
     ApiResponse<Void> changeUserStatus(
-            @PathVariable String id,
+            @PathVariable String userId,
             @RequestBody UserStatusRequest request
     ) {
-        adminUserService.changeUserStatus(id, request);
+        adminUserService.changeUserStatus(userId, request);
         return ApiResponse.<Void>builder().build();
     }
 }

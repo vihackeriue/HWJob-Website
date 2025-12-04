@@ -1,9 +1,8 @@
-package com.hw.hwjobbackend.controller.common;
-
+package com.hw.hwjobbackend.controller.public_endpoint;
 
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
-import com.hw.hwjobbackend.model.dto.response.skill.SkillResponse;
-import com.hw.hwjobbackend.service.shared.skill.SkillService;
+import com.hw.hwjobbackend.model.dto.response.job_type.JobTypeResponse;
+import com.hw.hwjobbackend.service.shared.job_type.JobTypeService;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -16,35 +15,37 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/common/skills")
-public class SkillController {
+@RequestMapping("/public/job-types")
+public class JobTypeController {
 
-    SkillService skillService;
+    JobTypeService jobTypeService;
 
     @GetMapping
-    public ApiResponse<List<SkillResponse>> getAllSkills(
+    ApiResponse<List<JobTypeResponse>> getAllJobTypes(
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "size", required = false) Integer size
     ) {
         if (page != null && size != null) {
             int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
 
-            Page<SkillResponse> response = skillService.getAllSkills(zeroBasedPage, size);
-            return ApiResponse.<List<SkillResponse>>builder()
+            Page<JobTypeResponse> response = jobTypeService.getJobTypes(zeroBasedPage, size);
+
+            return ApiResponse.<List<JobTypeResponse>>builder()
                     .page(PaginationUtils.toOneBasedPage(response.getNumber()))
                     .totalPages(response.getTotalPages())
                     .result(response.getContent())
                     .build();
         }
-        return ApiResponse.<List<SkillResponse>>builder()
-                .result(skillService.getAllSkills())
+
+        return ApiResponse.<List<JobTypeResponse>>builder()
+                .result(jobTypeService.getAllJobTypes())
                 .build();
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<SkillResponse> getSkillById(@PathVariable Long id) {
-        return ApiResponse.<SkillResponse>builder()
-                .result(skillService.getSkillById(id))
+    ApiResponse<JobTypeResponse> getJobTypeById(@PathVariable Long id) {
+        return ApiResponse.<JobTypeResponse>builder()
+                .result(jobTypeService.getJobTypeById(id))
                 .build();
     }
 }

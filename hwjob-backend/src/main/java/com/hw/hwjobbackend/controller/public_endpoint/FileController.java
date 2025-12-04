@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.controller.common;
+package com.hw.hwjobbackend.controller.public_endpoint;
 
 
 import com.hw.hwjobbackend.service.file.FileService;
@@ -15,7 +15,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("common/media")
+@RequestMapping("/public/media")
 public class FileController {
 
     FileService fileService;

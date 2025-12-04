@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.controller.common;
+package com.hw.hwjobbackend.controller.public_endpoint;
 
 
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/common/regions")
+@RequestMapping("/public/regions")
 public class RegionController {
 
     RegionService regionService;

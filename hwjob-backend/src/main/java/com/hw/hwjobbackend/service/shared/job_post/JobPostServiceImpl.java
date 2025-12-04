@@ -26,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +40,7 @@ public class JobPostServiceImpl implements JobPostService {
     ApplicationRepository applicationRepository;
 
     @Override
-    public Page<JobPostResponse> getJobPosts(Integer page, Integer size, JobPostFilterRequest filter) {
+    public Page<JobPostResponse> getAllJobPosts(Integer page, Integer size, JobPostFilterRequest filter) {
         Pageable pageable = PaginationUtils.buildPageable(page, size);
 
         Page<JobPost> jobPosts = jobPostRepository.getJobPosts(
@@ -73,30 +74,32 @@ public class JobPostServiceImpl implements JobPostService {
     public JobPostDetailResponse getJobPostDetail(String id) {
 
 
-        JobPost jobPost = jobPostRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED)
-        );
+        JobPost jobPost = jobPostRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED));
 
         JobPostDetailResponse response = jobPostMapper.toJobPostDetailResponse(jobPost);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
+
+        JobPostRecruiterProfileResponse recruiterResponse =
+                jobPostMapper.toJobPostRecruiterProfileResponse(jobPost.getRecruiter());
+        response.setRecruiter(recruiterResponse);
+
+        if (SecurityUtils.isAuthenticated()) {
+//            Optional<String> userIdOpt = SecurityUtils.getCurrentUserIdOptional();
+//            Optional<RoleEnum> userRoleOpt = SecurityUtils.getCurrentUserRoleOptional();
             String userId = SecurityUtils.getCurrentUserId();
             RoleEnum userRole = SecurityUtils.getCurrentUserRole();
-
-            if (jobPost.getRecruiter() != null) {
-                JobPostRecruiterProfileResponse recruiterResponse =
-                        jobPostMapper.toJobPostRecruiterProfileResponse(jobPost.getRecruiter());
-                response.setRecruiter(recruiterResponse);
-                if (userRole == RoleEnum.CANDIDATE) {
-                    setCandidateSpecificInfo(response, userId, jobPost.getId());
-                } else {
-                    response.setIsApplied(false);
-                    response.setIsSaved(false);
-                }
+            if (userRole == RoleEnum.CANDIDATE) {
+                setCandidateSpecificInfo(response, userId, jobPost.getId());
+            } else {
+                // Recruiter or Admin
+                response.setIsApplied(false);
+                response.setIsSaved(false);
             }
+        } else {
+            response.setIsApplied(false);
+            response.setIsSaved(false);
         }
-        response.setIsApplied(false);
-        response.setIsSaved(false);
+
         return response;
     }
 

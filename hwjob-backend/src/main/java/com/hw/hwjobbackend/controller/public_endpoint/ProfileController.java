@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.controller.common;
+package com.hw.hwjobbackend.controller.public_endpoint;
 
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.profile.CandidateProfileResponse;
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/common/profiles")
+@RequestMapping("/public/profiles")
 public class ProfileController {
 
     UserService userService;
 
-    @GetMapping("/recruiter-profiles/{id}")
+    @GetMapping("/recruiter/{id}")
     public ApiResponse<RecruiterProfileResponse> getRecruiterProfile(
             @PathVariable String id
     ) {
@@ -29,7 +29,7 @@ public class ProfileController {
                 .build();
     }
 
-    @GetMapping("/candidate-profiles/{id}")
+    @GetMapping("/candidate/{id}")
     public ApiResponse<CandidateProfileResponse> getCandidateProfile(
             @PathVariable String id
     ) {

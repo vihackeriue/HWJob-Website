@@ -1,8 +1,9 @@
-package com.hw.hwjobbackend.controller.common;
+package com.hw.hwjobbackend.controller.public_endpoint;
+
 
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
-import com.hw.hwjobbackend.model.dto.response.level.LevelResponse;
-import com.hw.hwjobbackend.service.shared.level.LevelService;
+import com.hw.hwjobbackend.model.dto.response.skill.SkillResponse;
+import com.hw.hwjobbackend.service.shared.skill.SkillService;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -15,37 +16,35 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/common/levels")
-public class LevelController {
+@RequestMapping("/public/skills")
+public class SkillController {
 
-    LevelService levelService;
+    SkillService skillService;
 
     @GetMapping
-    ApiResponse<List<LevelResponse>> getAllLevels(
+    public ApiResponse<List<SkillResponse>> getAllSkills(
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "size", required = false) Integer size
     ) {
         if (page != null && size != null) {
             int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
 
-            Page<LevelResponse> response = levelService.getLevels(zeroBasedPage, size);
-
-            return ApiResponse.<List<LevelResponse>>builder()
+            Page<SkillResponse> response = skillService.getAllSkills(zeroBasedPage, size);
+            return ApiResponse.<List<SkillResponse>>builder()
                     .page(PaginationUtils.toOneBasedPage(response.getNumber()))
                     .totalPages(response.getTotalPages())
                     .result(response.getContent())
                     .build();
         }
-
-        return ApiResponse.<List<LevelResponse>>builder()
-                .result(levelService.getAllLevels())
+        return ApiResponse.<List<SkillResponse>>builder()
+                .result(skillService.getAllSkills())
                 .build();
     }
 
     @GetMapping("/{id}")
-    ApiResponse<LevelResponse> getLevelById(@PathVariable Long id) {
-        return ApiResponse.<LevelResponse>builder()
-                .result(levelService.getLevelById(id))
+    public ApiResponse<SkillResponse> getSkillById(@PathVariable Long id) {
+        return ApiResponse.<SkillResponse>builder()
+                .result(skillService.getSkillById(id))
                 .build();
     }
 }

@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.service.authentication;
+package com.hw.hwjobbackend.service.shared.user;
 
 import com.hw.hwjobbackend.model.entity.user.Role;
 
