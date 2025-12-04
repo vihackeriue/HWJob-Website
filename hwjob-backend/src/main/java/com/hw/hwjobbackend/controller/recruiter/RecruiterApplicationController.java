@@ -21,7 +21,7 @@ public class RecruiterApplicationController {
 
     RecruiterApplicationService recruiterJobPostService;
 
-    @GetMapping("/{jobPostId}/candidates")
+    @GetMapping("/job-posts/{jobPostId}/candidates")
     public ApiResponse<List<ApplicationCandidateResponse>> getCandidatesAppliedJob(
             @PathVariable String jobPostId,
             @RequestParam(value = "page", required = false) Integer page,
@@ -45,7 +45,7 @@ public class RecruiterApplicationController {
                 .build();
     }
 
-    @PatchMapping("/{jobPostId}/candidates/{candidateId}/status")
+    @PatchMapping("/job-posts/{jobPostId}/candidates/{candidateId}/status")
     public ApiResponse<Void> updateCandidateApplicationStatus(
             @PathVariable String jobPostId,
             @PathVariable String candidateId,
