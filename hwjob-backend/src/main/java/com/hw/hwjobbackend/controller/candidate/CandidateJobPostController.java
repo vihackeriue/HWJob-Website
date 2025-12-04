@@ -21,7 +21,7 @@ public class CandidateJobPostController {
 
     CandidateJobPostService candidateJobPostService;
 
-    @PostMapping("saved-job-posts/{id}")
+    @PostMapping("save/{id}")
     public ApiResponse<SaveJobPostResponse> saveJobPost(@PathVariable String id) {
         return ApiResponse.<SaveJobPostResponse>builder()
                 .result(candidateJobPostService.saveJobPost(id))
