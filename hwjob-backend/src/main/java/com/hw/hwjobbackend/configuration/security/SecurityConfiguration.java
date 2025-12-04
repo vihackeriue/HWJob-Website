@@ -50,9 +50,12 @@ public class SecurityConfiguration {
         httpSecurity
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/public/**", "/auth/**").permitAll()
+
+                        // Chặn request tới những endpoit phân quyền ở phần security
+
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/candidate/**").hasRole("CANDIDATE")
-                        .requestMatchers("/recruiter/**").hasRole("RECRUITER")
+                        .requestMatchers("/candidates/**").hasRole("CANDIDATE")
+                        .requestMatchers("/recruiters/**").hasRole("RECRUITER")
                         .anyRequest().authenticated());
         httpSecurity
                 .oauth2ResourceServer(oauth2 -> oauth2

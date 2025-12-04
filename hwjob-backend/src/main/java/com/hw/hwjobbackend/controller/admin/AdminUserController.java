@@ -43,12 +43,12 @@ public class AdminUserController {
                 .build();
     }
 
-    @PatchMapping("/{id}/status")
+    @PatchMapping("/{userId}/status")
     ApiResponse<Void> changeUserStatus(
-            @PathVariable String id,
+            @PathVariable String userId,
             @RequestBody UserStatusRequest request
     ) {
-        adminUserService.changeUserStatus(id, request);
+        adminUserService.changeUserStatus(userId, request);
         return ApiResponse.<Void>builder().build();
     }
 }

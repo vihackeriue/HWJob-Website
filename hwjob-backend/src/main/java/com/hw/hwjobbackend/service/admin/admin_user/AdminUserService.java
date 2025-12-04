@@ -12,5 +12,5 @@ public interface AdminUserService {
 
     List<UserResponse> getAllUsers();
 
-    void changeUserStatus(String id, UserStatusRequest request);
+    void changeUserStatus(String userId, UserStatusRequest request);
 }
