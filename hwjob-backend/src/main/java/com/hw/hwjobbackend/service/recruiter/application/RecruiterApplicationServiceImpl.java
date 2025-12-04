@@ -59,7 +59,7 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
     }
 
     @Override
-    public void updateCandidateApplication(String jobPostId, String candidateId, ApplicationStatusRequest request) {
+    public void updateCandidateApplicationStatus(String jobPostId, String candidateId, ApplicationStatusRequest request) {
         if (!jobPostRepository.existsById(jobPostId)) {
             throw new AppException(ErrorCode.JOB_POST_NOT_EXISTED);
         }
@@ -70,8 +70,8 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
         String recruiterId = SecurityUtils.getCurrentUserId();
 
         ApplicationId applicationId = ApplicationId.builder()
-                .candidateId(jobPostId)
-                .jobPostId(candidateId)
+                .candidateId(candidateId)
+                .jobPostId(jobPostId)
                 .build();
 
         Application application = applicationRepository
