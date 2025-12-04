@@ -1,6 +1,5 @@
 package com.hw.hwjobbackend.controller.recruiter;
 
-import com.hw.hwjobbackend.model.dto.request.application.ApplicationRecruiterRequest;
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationStatusRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationCandidateResponse;
@@ -47,12 +46,12 @@ public class RecruiterApplicationController {
     }
 
     @PatchMapping("/{jobPostId}/candidates/{candidateId}/status")
-    public ApiResponse<Void> updateCandidateApplication(
+    public ApiResponse<Void> updateCandidateApplicationStatus(
             @PathVariable String jobPostId,
             @PathVariable String candidateId,
             @RequestBody ApplicationStatusRequest request
     ) {
-        recruiterJobPostService.updateCandidateApplication(jobPostId, candidateId, request);
+        recruiterJobPostService.updateCandidateApplicationStatus(jobPostId, candidateId, request);
         return ApiResponse.<Void>builder().build();
     }
 }
