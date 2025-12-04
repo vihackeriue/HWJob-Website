@@ -1,6 +1,7 @@
 package com.hw.hwjobbackend.controller.recruiter;
 
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationRecruiterRequest;
+import com.hw.hwjobbackend.model.dto.request.application.ApplicationStatusRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationCandidateResponse;
 import com.hw.hwjobbackend.service.recruiter.application.RecruiterApplicationService;
@@ -16,22 +17,22 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/recruiter/applications")
+@RequestMapping("/recruiters/applications")
 public class RecruiterApplicationController {
 
     RecruiterApplicationService recruiterJobPostService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/{jobPostId}/candidates")
     public ApiResponse<List<ApplicationCandidateResponse>> getCandidatesAppliedJob(
+            @PathVariable String jobPostId,
             @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "size", required = false) Integer size,
-            @PathVariable String id
+            @RequestParam(value = "size", required = false) Integer size
     ) {
         if (page != null && size != null) {
             int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
 
             Page<ApplicationCandidateResponse> response = recruiterJobPostService
-                    .getCandidateApplications(zeroBasedPage, size, id);
+                    .getCandidateApplications(zeroBasedPage, size, jobPostId);
 
             return ApiResponse.<List<ApplicationCandidateResponse>>builder()
                     .page(PaginationUtils.toOneBasedPage(response.getNumber()))
@@ -41,15 +42,17 @@ public class RecruiterApplicationController {
         }
 
         return ApiResponse.<List<ApplicationCandidateResponse>>builder()
-                .result(recruiterJobPostService.getAllCandidateApplications(id))
+                .result(recruiterJobPostService.getAllCandidateApplications(jobPostId))
                 .build();
     }
 
-    @PutMapping("/update-application")
+    @PatchMapping("/{jobPostId}/candidates/{candidateId}/status")
     public ApiResponse<Void> updateCandidateApplication(
-            @RequestBody ApplicationRecruiterRequest request
+            @PathVariable String jobPostId,
+            @PathVariable String candidateId,
+            @RequestBody ApplicationStatusRequest request
     ) {
-        recruiterJobPostService.updateCandidateApplication(request);
+        recruiterJobPostService.updateCandidateApplication(jobPostId, candidateId, request);
         return ApiResponse.<Void>builder().build();
     }
 }

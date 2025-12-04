@@ -20,8 +20,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/candidate/applications")
+@RequestMapping("/candidates/applications")
 public class CandidateApplicationController {
+
     CandidateApplicationService candidateApplicationService;
 
     @PostMapping

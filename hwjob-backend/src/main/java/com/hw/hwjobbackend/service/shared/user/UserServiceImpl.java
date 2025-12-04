@@ -10,7 +10,6 @@ import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UpdateAvatarResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserCreationResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserResponse;
-import com.hw.hwjobbackend.model.entity.region.Region;
 import com.hw.hwjobbackend.model.entity.user.Candidate;
 import com.hw.hwjobbackend.model.entity.user.Recruiter;
 import com.hw.hwjobbackend.model.entity.user.Role;
@@ -21,7 +20,6 @@ import com.hw.hwjobbackend.repository.region.RegionRepository;
 import com.hw.hwjobbackend.repository.user.CandidateRepository;
 import com.hw.hwjobbackend.repository.user.RecruiterRepository;
 import com.hw.hwjobbackend.repository.user.UserRepository;
-import com.hw.hwjobbackend.service.authentication.RoleService;
 import com.hw.hwjobbackend.service.file.FileService;
 import com.hw.hwjobbackend.service.mapper.user.CandidateMapper;
 import com.hw.hwjobbackend.service.mapper.user.RecruiterMapper;
@@ -87,6 +85,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(newEmail)) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
+        user.setEmail(newEmail);
     }
 
     @Override
@@ -98,6 +97,7 @@ public class UserServiceImpl implements UserService {
         if (!regionRepository.existsById(newRegionId)) {
             throw new AppException(ErrorCode.REGION_NOT_EXISTED);
         }
+        user.setRegion(regionRepository.getReferenceById(newRegionId));
     }
 
     @Override
@@ -136,7 +136,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public RecruiterProfileResponse getRecruiterProfile(String id) {
         Recruiter recruiter = recruiterRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -147,7 +146,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public CandidateProfileResponse getCandidateProfile(String id) {
         Candidate candidate = candidateRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));

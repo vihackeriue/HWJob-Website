@@ -9,13 +9,13 @@ import com.hw.hwjobbackend.model.enums.UserStatusEnum;
 import com.hw.hwjobbackend.repository.user.UserRepository;
 import com.hw.hwjobbackend.service.mapper.user.UserMapper;
 import com.hw.hwjobbackend.util.PaginationUtils;
+import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,14 +24,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminUserServiceImpl implements AdminUserService {
 
     UserRepository userRepository;
     UserMapper userMapper;
 
     @Override
-    public Page<UserResponse> getUsers(int page, int size) {
+    public Page<UserResponse> getAllUsers(int page, int size) {
 
         Pageable pageable = PaginationUtils.buildPageable(page, size);
 
@@ -40,7 +39,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public List<UserResponse> getUsers() {
+    public List<UserResponse> getAllUsers() {
         return userRepository.findAllOrderByCreatedAtDesc()
                 .stream()
                 .map(userMapper::toUserResponse)
@@ -48,14 +47,17 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public void changeUserStatus(String id, UserStatusRequest request) {
+    public void changeUserStatus(String userId, UserStatusRequest request) {
 
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
-        if (user.getId().equals(id)) {
+        String ownerId = SecurityUtils.getCurrentUserId();
+        if (ownerId.equals(userId)) {
             throw new AppException(ErrorCode.CANNOT_CHANGE_OWN_STATUS);
         }
+
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
         UserStatusEnum newStatus = request.getStatus();
         UserStatusEnum oldStatus = user.getUserStatus();
 

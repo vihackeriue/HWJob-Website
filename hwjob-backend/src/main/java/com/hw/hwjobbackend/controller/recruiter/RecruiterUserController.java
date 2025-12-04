@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/recruiter/users")
+@RequestMapping("/recruiters/users")
 public class RecruiterUserController {
 
     RecruiterUserService recruiterUserService;

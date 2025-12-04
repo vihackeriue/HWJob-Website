@@ -1,6 +1,7 @@
 package com.hw.hwjobbackend.configuration.security;
 
 
+import com.hw.hwjobbackend.exception.CustomAccessDeniedHandler;
 import com.hw.hwjobbackend.service.authentication.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,24 +43,27 @@ public class SecurityConfiguration {
 
     private final CustomJwtDecoder customJwtDecoder;
     private final CustomUserDetailService customUserDetailService;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/common/**").permitAll()
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
-//                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-//                        .requestMatchers("/candidate/**").hasAuthority("ROLE_CANDIDATE")
-//                        .requestMatchers("/recruiter/**").hasAuthority("ROLE_RECRUITER")
+                        .requestMatchers("/public/**", "/auth/**").permitAll()
+
+                        // Chặn request tới những endpoit phân quyền ở phần security
+
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/candidates/**").hasRole("CANDIDATE")
+                        .requestMatchers("/recruiters/**").hasRole("RECRUITER")
                         .anyRequest().authenticated());
         httpSecurity
                 .oauth2ResourceServer(oauth2 -> oauth2
-                                .jwt(jwtConfigurer -> jwtConfigurer
-                                        .decoder(customJwtDecoder)
-                                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-//                        .accessDeniedHandler()
+                        .jwt(jwtConfigurer -> jwtConfigurer
+                                .decoder(customJwtDecoder)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                        .accessDeniedHandler(customAccessDeniedHandler)
                 );
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.cors(Customizer.withDefaults());
@@ -98,7 +102,6 @@ public class SecurityConfiguration {
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
-
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
 

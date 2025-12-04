@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.controller.common;
+package com.hw.hwjobbackend.controller.public_endpoint;
 
 
 import com.hw.hwjobbackend.model.dto.api.ServerAIMessageResponse;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/common/server-ais")
+@RequestMapping("/public/server-ai")
 public class ServerAIController {
 
     ServerAIService serverAIService;
 
-    @GetMapping
+    @GetMapping("/")
     public ApiResponse<ServerAIMessageResponse> getMessage() {
         return ApiResponse.<ServerAIMessageResponse>builder()
                 .result(serverAIService.sendMessage())

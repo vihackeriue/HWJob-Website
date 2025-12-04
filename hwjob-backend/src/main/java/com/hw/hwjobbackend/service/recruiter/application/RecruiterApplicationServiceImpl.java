@@ -3,6 +3,7 @@ package com.hw.hwjobbackend.service.recruiter.application;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationRecruiterRequest;
+import com.hw.hwjobbackend.model.dto.request.application.ApplicationStatusRequest;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationCandidateResponse;
 import com.hw.hwjobbackend.model.entity.application.Application;
 import com.hw.hwjobbackend.model.entity.application.ApplicationId;
@@ -58,20 +59,19 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
     }
 
     @Override
-    public void updateCandidateApplication(ApplicationRecruiterRequest request) {
-
-        if (!jobPostRepository.existsById(request.getJobPostId())) {
+    public void updateCandidateApplication(String jobPostId, String candidateId, ApplicationStatusRequest request) {
+        if (!jobPostRepository.existsById(jobPostId)) {
             throw new AppException(ErrorCode.JOB_POST_NOT_EXISTED);
         }
-        if (!candidateRepository.existsById(request.getCandidateId())) {
+        if (!candidateRepository.existsById(candidateId)) {
             throw new AppException(ErrorCode.USER_NOT_EXISTED);
         }
 
         String recruiterId = SecurityUtils.getCurrentUserId();
 
         ApplicationId applicationId = ApplicationId.builder()
-                .candidateId(request.getCandidateId())
-                .jobPostId(request.getJobPostId())
+                .candidateId(jobPostId)
+                .jobPostId(candidateId)
                 .build();
 
         Application application = applicationRepository

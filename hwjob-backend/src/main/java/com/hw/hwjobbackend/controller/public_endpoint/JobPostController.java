@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.controller.common;
+package com.hw.hwjobbackend.controller.public_endpoint;
 
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostFilterRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
@@ -14,16 +14,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/common/job-posts")
+@RequestMapping("/public/job-posts")
 public class JobPostController {
 
     JobPostService jobPostService;
 
     @GetMapping
-    public ApiResponse<List<JobPostResponse>> getJobPosts(
+    public ApiResponse<List<JobPostResponse>> getAllJobPosts(
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "size", required = false) Integer size,
             @RequestParam(value = "industryId", required = false) Long industryId,
@@ -41,7 +42,7 @@ public class JobPostController {
         if (page != null && size != null) {
             int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
 
-            Page<JobPostResponse> response = jobPostService.getJobPosts(
+            Page<JobPostResponse> response = jobPostService.getAllJobPosts(
                     zeroBasedPage, size, filterRequest);
 
             return ApiResponse.<List<JobPostResponse>>builder()

@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-@PreAuthorize("hasRole('RECRUITER')")
 public class RecruiterUserServiceImpl implements RecruiterUserService {
     RecruiterRepository recruiterRepository;
     RegionRepository regionRepository;
