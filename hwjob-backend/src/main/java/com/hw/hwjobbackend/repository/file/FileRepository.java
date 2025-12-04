@@ -33,9 +33,9 @@ public class FileRepository {
     @Value("${app.file.download-prefix}")
     String urlPrefix;
 
-    public FileInfo store(MultipartFile file, User user) throws IOException {
+    public FileInfo store(MultipartFile file, String userId) throws IOException {
 
-        Path folder = Paths.get(STR."\{storageDir}\{user.getUsername()}/");
+        Path folder = Paths.get(STR."\{storageDir}\{userId}/");
 
         if (!Files.exists(folder)) {
             Files.createDirectories(folder);
@@ -65,9 +65,9 @@ public class FileRepository {
         return new ByteArrayResource(data);
     }
 
-    public FileInfo storeDefaultAvatar(String username, Resource defaultResource) throws IOException {
+    public FileInfo storeDefaultAvatar(String userId, Resource defaultResource) throws IOException {
 
-        Path folder = Paths.get(STR."\{storageDir}\{username}/");
+        Path folder = Paths.get(STR."\{storageDir}\{userId}/");
 
         if (!Files.exists(folder)) {
             Files.createDirectories(folder);
