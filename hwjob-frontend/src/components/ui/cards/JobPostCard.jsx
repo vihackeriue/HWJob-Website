@@ -15,7 +15,7 @@ const JobPostCard = ({ jobPost }) => {
   };
 
   return (
-    <div className="flex gap-3 pr-2 bg-lightGrayishBlue dark:bg-stoneBrown-900 rounded-2xl relative hover:shadow">
+    <div className="flex gap-3 pr-2 bg-lightGrayishBlue dark:bg-stoneBrown-900 rounded-2xl relative hover:shadow border border-gray-300">
       <img
         src={jobPost.imageUrl}
         alt={jobPost.recruiter}

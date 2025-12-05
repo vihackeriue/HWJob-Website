@@ -17,8 +17,8 @@ const ResponsiveMenu = ({ showMenu, auth, logout }) => {
             {/* <FaUserCircle size={50} /> */}
 
             <img
-              src="https://th.bing.com/th?q=IPhone+Avatar&w=120&h=120&c=1&rs=1&qlt=90&r=0&cb=1&dpr=1.3&pid=InlineBlock&mkt=en-WW&cc=VN&setlang=en&adlt=moderate&t=1&mw=247"
-              alt=""
+              src={auth.userAvatar}
+              alt={auth.fullname}
               className="h-12 w-12 rounded-full object-cover border border-red-300"
             />
             <div>

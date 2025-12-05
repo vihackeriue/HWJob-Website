@@ -22,9 +22,9 @@ import UserManagement from "./pages/admin/UserManagement";
 import AddJobPost from "./pages/user/recruiter/AddJobPost";
 import JobPostList from "./pages/user/JobPostList";
 import JobPostDetail from "./pages/user/JobPostDetail";
-import { ROLES } from "./constants/role";
 
 import CandidateJobManagement from "./pages/user/candidate/CandidateJobManagement";
+import { ROLES } from "./config/roles";
 
 function App() {
   return (

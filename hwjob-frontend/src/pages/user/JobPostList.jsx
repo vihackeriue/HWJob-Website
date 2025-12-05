@@ -14,29 +14,26 @@ import { getIndustriesNotPagination } from "../../services/industryService";
 import { getLevelsNotPagination } from "../../services/levelService";
 import { HiOutlineSearch } from "react-icons/hi";
 import { getJobPosts } from "../../services/jobPostService";
+import { JobPostListSection } from "../../components/sections/JobPostListSection";
 
 const JobPostList = () => {
   const jobPosts = useList(getJobPosts);
 
-  let page = 1;
-  let totalPages = 5;
-  const location = [
-    { id: 1, name: "Hồ Chí Minh" },
-    { id: 2, name: "Hà Nội" },
-    { id: 3, name: "Đà Nẵng" },
-  ];
-  const [formFilter, setFormFilter] = useState({
-    endedTime: "",
+  const defaultFilter = {
     industryId: null,
     levelId: null,
     jobTypeId: null,
     regionId: null,
-  });
+  };
+  const [formFilter, setFormFilter] = useState(defaultFilter);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormFilter((prev) => ({ ...prev, [name]: value }));
   };
 
+  const isFiltering = Object.keys(defaultFilter).some(
+    (key) => formFilter[key] !== defaultFilter[key]
+  );
   const regions = useList(getRegionsNotPagination);
   const jobTypes = useList(getJobTypesNotPagination);
   const industries = useList(getIndustriesNotPagination);
@@ -75,19 +72,37 @@ const JobPostList = () => {
           <FormSelect
             label="Khu vực"
             name="regionId"
-            selected={regions.data.find((r) => r.code === formFilter.regionId)}
+            selected={regions.data.find((r) => r.id === formFilter.regionId)}
             onChange={handleChange}
             options={regions.data}
             placeholder="Chọn khu vực"
           />
-          <FormSelect
+          {/* <FormSelect
             label="Ngày đăng"
             name="gender"
             onChange={handleChange}
             options={location}
             placeholder="Chọn Ngày đăng"
-          />
-          <PrimaryButton>Lọc</PrimaryButton>
+          /> */}
+          {isFiltering && (
+            <button
+              className="bg-gray-300 dark:bg-stoneBrown-700 text-md px-3 py-2 rounded-xl "
+              onClick={() => {
+                setFormFilter(defaultFilter);
+              }}
+            >
+              Bỏ tất cả
+            </button>
+          )}
+          <PrimaryButton
+            onClick={() => {
+              console.log(formFilter);
+              jobPosts.setParams(formFilter);
+              jobPosts.setPage(1); // reset page
+            }}
+          >
+            Lọc
+          </PrimaryButton>
         </div>
         <div className="flex flex-col gap-3 col-span-2 ">
           <div className="flex gap-3 bg-white dark:bg-stoneBrown-900/50 rounded-2xl p-3 ">
@@ -104,13 +119,15 @@ const JobPostList = () => {
             </div>
             <PrimaryButton>Tìm kiếm</PrimaryButton>
           </div>
-          <div className="bg-white dark:bg-stoneBrown-900/50 rounded-2xl ">
-            {jobPosts.data.map((item) => (
-              <JobPostCard jobPost={item} />
-            ))}
-          </div>
 
-          <Pagination pagination={{ page, totalPages }} />
+          <JobPostListSection
+            jobPosts={jobPosts.data}
+            pagination={{
+              page: jobPosts.page,
+              totalPages: jobPosts.totalPages,
+              setPage: jobPosts.setPage,
+            }}
+          />
         </div>
       </div>
     </>

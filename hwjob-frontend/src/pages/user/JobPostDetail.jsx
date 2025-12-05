@@ -14,9 +14,10 @@ import { formatDate } from "../../utils/date";
 import { useParams } from "react-router-dom";
 import { useDetail } from "../../hooks/useDetail";
 import { applyJob, getJobPostById } from "../../services/jobPostService";
-import { ROLES } from "../../constants/role";
+
 import useAuth from "../../hooks/useAuth";
 import ApplyJobDialog from "../../components/dialog/ApplyJobDialog";
+import { ROLES } from "../../config/roles";
 
 const JobPostDetail = () => {
   const { id } = useParams();
