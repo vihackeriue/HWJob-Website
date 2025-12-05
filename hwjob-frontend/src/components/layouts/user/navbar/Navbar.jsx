@@ -10,14 +10,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import DarkMode from "../../../ui/DarkMode";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { LANGUAGES } from "../../../../constants/language";
-import LanguageSwitcher from "../../../ui/LanguageSwitcher";
+
 import { useTranslation } from "react-i18next";
 import useAuth from "../../../../hooks/useAuth";
 import ResponsiveMenu from "./ResponsiveMenu";
 import { HiMenuAlt1, HiMenuAlt3 } from "react-icons/hi";
 import PrimaryButton from "../../../ui/button/PrimaryButton";
-import { ROLES } from "../../../../constants/role";
+import { ROLES } from "../../../../config/roles";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -71,11 +70,11 @@ export default function Navbar() {
                       <div className="flex items-center gap-2">
                         <img
                           src={auth.userAvatar}
-                          alt={auth.username}
+                          alt={auth.fullname}
                           className="h-12 w-12 rounded-full object-cover border border-red-300"
                         />
                         <span className="text-lg uppercase">
-                          {auth.username}
+                          {auth.fullname}
                         </span>
                       </div>
                     </MenuButton>

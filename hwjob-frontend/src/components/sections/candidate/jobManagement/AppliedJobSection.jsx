@@ -1,13 +1,16 @@
 import React from "react";
 import { JobPostListSection } from "../../JobPostListSection";
+import { useList } from "../../../../hooks/useList";
+import { getAppliedJobPosts } from "../../../../services/jobPostService";
 
-export const AppliedJobSection = ({ jobPosts }) => {
+export const AppliedJobSection = () => {
+  const appliedJobPosts = useList(getAppliedJobPosts);
   return (
     <JobPostListSection
-      jobPosts={jobPosts.data}
+      jobPosts={appliedJobPosts.data}
       pagination={{
-        page: jobPosts.page,
-        totalPages: jobPosts.totalPages,
+        page: appliedJobPosts.page,
+        totalPages: appliedJobPosts.totalPages,
       }}
     />
   );

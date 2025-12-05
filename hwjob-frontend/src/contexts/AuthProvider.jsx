@@ -7,6 +7,7 @@ import {
   updateWalletService,
 } from "../services/authService";
 import { jwtDecode } from "jwt-decode";
+import { ROLES } from "../config/roles";
 
 const AuthContext = createContext({});
 
@@ -28,12 +29,13 @@ export const AuthProvider = ({ children }) => {
           localStorage.removeItem("site");
           setAuth(null);
         } else {
-          const username = decoded.sub;
+          const username = decoded.username;
+          const fullname = decoded.userFullName;
           const roles = decoded.scope ? decoded.scope.split(" ") : [];
 
           // const walletAddress = decoded.walletAddress;
           // setAuth({ username, roles, walletAddress, accessToken });
-          setAuth({ username, userAvatar, roles, accessToken });
+          setAuth({ username, fullname, userAvatar, roles, accessToken });
         }
       } catch (err) {
         console.error("Invalid token:", err);
@@ -48,23 +50,26 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await loginService(data);
 
-      if (res.code === 1000 && res.result.authenticated) {
-        const accessToken = res.result.token;
+      if (res.code === 1000) {
+        const accessToken = res.result.accessToken;
         const decoded = jwtDecode(accessToken);
         const userAvatar = res.result.user.imageUrl;
         // setToken(accessToken);
-        const username = decoded.sub;
+        const username = decoded.username;
+        const fullname = decoded.userFullName;
         const roles = decoded.scope ? decoded.scope.split(" ") : [];
         // const walletAddress = decoded.walletAddress;
         // setAuth({ username, roles, walletAddress, accessToken });
-        setAuth({ username, userAvatar, roles, accessToken });
+        setAuth({ username, fullname, userAvatar, roles, accessToken });
 
         localStorage.setItem("site", accessToken);
         localStorage.setItem("userAvatar", userAvatar);
 
-        if (roles.includes("ROLE_ADMIN")) {
+        if (roles.includes(ROLES.ADMIN)) {
           navigate("/admin");
-        } else if (roles.includes("ROLE_USER")) {
+        } else if (roles.includes(ROLES.CANDIDATE)) {
+          navigate("/");
+        } else if (roles.includes(ROLES.RECRUITER)) {
           navigate("/");
         } else {
           navigate("/");

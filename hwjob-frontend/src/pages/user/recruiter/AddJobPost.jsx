@@ -21,6 +21,11 @@ const salaryTypes = [
   { code: "NEGOTIATION", name: "Thương lượng" },
 ];
 
+const statusJobPost = [
+  { code: "public", name: "Public" },
+  { code: "private", name: "Private" },
+];
+
 const AddJobPost = () => {
   const [formJobPost, setFormJobPost] = useState({
     title: "",
@@ -164,6 +169,19 @@ const AddJobPost = () => {
           />
         </div>
         <div className="flex-1 flex flex-col gap-2 bg-white p-3 rounded-2xl ">
+          {/* Trạng thái bài đăng */}
+          <FormSelect
+            label="Trạng thái bài đăng"
+            name="status"
+            selected={statusJobPost.find(
+              (j) => j.id === formJobPost.industryId
+            )}
+            onChange={handleChange}
+            options={statusJobPost}
+            placeholder="Chọn trạng thái"
+            error={errors.industryId}
+          />
+
           <SecondTitle>Danh mục</SecondTitle>
 
           <FormSelect

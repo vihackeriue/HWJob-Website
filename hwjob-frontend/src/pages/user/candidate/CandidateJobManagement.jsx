@@ -1,11 +1,5 @@
 import { TabGroup, TabPanel, TabPanels } from "@headlessui/react";
 
-import { useList } from "../../../hooks/useList";
-import {
-  getAppliedJobPost,
-  getJobPosts,
-  getSavedJobPost,
-} from "../../../services/jobPostService";
 import { CiLocationOn } from "react-icons/ci";
 import QuantityStatisticsCard from "../../../components/ui/cards/QuantityStatisticsCard";
 import { MenuTablist } from "../../../components/ui/MenuTablist";
@@ -13,7 +7,7 @@ import { AppliedJobSection } from "../../../components/sections/candidate/jobMan
 import { SavedJobSection } from "../../../components/sections/candidate/jobManagement/SavedJobSection";
 import { HistoryJobSection } from "../../../components/sections/candidate/jobManagement/HistoryJobSection";
 import { JobWorkingSection } from "../../../components/sections/candidate/jobManagement/JobWorkingSection";
-import { useEffect, useState } from "react";
+
 const PROFILE_USER_MENUS = [
   { key: "working", label: "Việc đang làm" },
   { key: "appliedJob", label: "Việc làm đã ứng tuyển" },

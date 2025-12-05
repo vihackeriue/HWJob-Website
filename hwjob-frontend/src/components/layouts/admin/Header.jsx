@@ -25,7 +25,7 @@ import useAuth from "../../../hooks/useAuth";
 import DarkMode from "../../ui/DarkMode";
 function Header() {
   const navigate = useNavigate();
-  const auth = useAuth();
+  const { auth, logout } = useAuth();
 
   const searchFilter = [
     { id: 1, name: "Category" },
@@ -101,11 +101,11 @@ function Header() {
           <MenuButton className="inline-flex items-center gap-2 rounded-md  px-3 py-1.5 text-sm/6 font-semibold text-gray-700 shadow-inner shadow-white/10 focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-100 data-open:bg-gray-200">
             <div className="flex items-center gap-2">
               <img
-                src="https://th.bing.com/th?q=IPhone+Avatar&w=120&h=120&c=1&rs=1&qlt=90&r=0&cb=1&dpr=1.3&pid=InlineBlock&mkt=en-WW&cc=VN&setlang=en&adlt=moderate&t=1&mw=247"
-                alt=""
+                src={auth.userAvatar}
+                alt={auth.fullname}
                 className="h-10 w-10 rounded-full object-cover border border-red-300"
               />
-              <span className="">Wain RP</span>
+              <span className="">{auth.fullname}</span>
             </div>
           </MenuButton>
           <MenuItems
@@ -133,7 +133,7 @@ function Header() {
             <MenuItem>
               <button
                 className="group flex w-full items-center gap-2 rounded-sm px-4 py-2 data-focus:bg-gray-200 "
-                onClick={() => auth.logout()}
+                onClick={logout}
               >
                 Sign out
               </button>
