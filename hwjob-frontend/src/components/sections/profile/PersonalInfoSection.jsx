@@ -3,12 +3,10 @@ import SecondTitle from "../../ui/title/SecondTitle";
 import FormInput from "../../ui/form/FormInput";
 import FormSelect from "../../ui/form/FormSelect";
 import { CiEdit } from "react-icons/ci";
-
-const gender = [
-  { id: 1, name: "Nam" },
-  { id: 2, name: "Nữ" },
-  { id: 3, name: "Khác" },
-];
+import { GENDER } from "../../../config/constants";
+import useAuth from "../../../hooks/useAuth";
+import { hasRole } from "../../../utils/permission";
+import { ROLES } from "../../../config/roles";
 
 const PersonalInfoSection = () => {
   const [formPersonalInf, setFormPersonalInf] = useState({
@@ -21,6 +19,7 @@ const PersonalInfoSection = () => {
     salary_expected: "",
     summary: "",
   });
+  const { auth } = useAuth();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormPersonalInf((prev) => ({ ...prev, [name]: value }));
@@ -35,22 +34,40 @@ const PersonalInfoSection = () => {
         value={formPersonalInf.name}
         onChange={handleChange}
       />
-      <FormSelect
-        label="Giới tính"
-        name="gender"
-        value={formPersonalInf.gender}
-        onChange={handleChange}
-        options={gender}
-        placeholder="Chọn giới tính"
-      />
+      {hasRole(auth, ROLES.CANDIDATE) && (
+        <>
+          <FormSelect
+            label="Giới tính"
+            name="gender"
+            selected={GENDER.find((j) => j.code === formPersonalInf.gender)}
+            onChange={handleChange}
+            options={GENDER}
+            placeholder="Chọn loại lương"
+          />
+          <FormInput
+            label="Ngày Sinh"
+            name="dob"
+            value={formPersonalInf.dob}
+            onChange={handleChange}
+            type="date"
+          />
+          <FormInput
+            label="Mức lương mong đợi"
+            name="salary_expected"
+            value={formPersonalInf.salary_expected}
+            onChange={handleChange}
+            type="text"
+          />
+          <FormInput
+            label="Trình độ"
+            name="education"
+            value={formPersonalInf.education}
+            onChange={handleChange}
+            type="text"
+          />
+        </>
+      )}
 
-      <FormInput
-        label="Ngày Sinh"
-        name="dob"
-        value={formPersonalInf.dob}
-        onChange={handleChange}
-        type="date"
-      />
       <FormInput
         label="Địa chỉ"
         name="address"
@@ -58,13 +75,7 @@ const PersonalInfoSection = () => {
         onChange={handleChange}
         type="text"
       />
-      <FormInput
-        label="Trình độ"
-        name="education"
-        value={formPersonalInf.education}
-        onChange={handleChange}
-        type="text"
-      />
+
       <FormInput
         label="Khu vực/ Thành phố"
         name="region"
@@ -72,13 +83,7 @@ const PersonalInfoSection = () => {
         onChange={handleChange}
         type="text"
       />
-      <FormInput
-        label="Mức lương mong đợi"
-        name="salary_expected"
-        value={formPersonalInf.salary_expected}
-        onChange={handleChange}
-        type="text"
-      />
+
       <div>
         <label className="block text-lg font-medium">Tóm tắt bản thân</label>
         <textarea

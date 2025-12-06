@@ -95,15 +95,15 @@ const JobPostDetail = () => {
     }
   };
 
-  const handleSaveJob = async () => {};
+  // const handleSaveJob = async () => {};
   return (
     <div className="flex flex-col gap-3 mt-10">
       <div className="flex gap-3 ">
         <div className="flex-3 bg-white rounded-2xl p-3 flex flex-col gap-3">
           <div className="flex gap-5">
             <img
-              src={jobPost.recruiterImageUrl}
-              alt={jobPost.recruiterName}
+              src={jobPost.recruiter.imageUrl}
+              alt={jobPost.recruiter.fullName}
               className="size-32 rounded-2xl border border-gray-300 p-2"
             />
             <div className="flex flex-col gap-3">
@@ -113,7 +113,9 @@ const JobPostDetail = () => {
               <h1 className="text-md font-semibold line-clamp-2"></h1>
               <p className="text-lg">
                 Nhà tuyển dụng:
-                <span className="font-semibold"> {jobPost.recruiterName}</span>
+                <span className="font-semibold">
+                  {jobPost.recruiter.fullName}
+                </span>
               </p>
             </div>
           </div>

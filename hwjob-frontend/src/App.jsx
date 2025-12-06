@@ -10,11 +10,7 @@ import PrivateRoute from "./components/common/PrivateRoute";
 import Dashboard from "./pages/admin/Dashboard";
 import AdminLayout from "./components/layouts/admin/AdminLayout";
 
-import MyProfile from "./pages/user/profile/MyProfile";
-import Overview from "./pages/user/profile/Overview";
-import PersonalInfo from "./pages/user/profile/PersonalInfo";
-import EditSummary from "./pages/user/profile/EditSummary";
-import SecurityInfo from "./pages/user/profile/SecurityInfo";
+import MyProfile from "./pages/user/MyProfile";
 
 import CategoryManagement from "./pages/admin/CategoryManagement";
 import BadgeManagement from "./pages/admin/BadgeManagement";
@@ -35,19 +31,13 @@ function App() {
       <Route path="/" element={<UserLayout />}>
         <Route index element={<Home />} />
         <Route path="job-post" element={<JobPostList />} />
-
+        <Route path="job-post/:id" element={<JobPostDetail />} />
         <Route
           element={
             <PrivateRoute allowedRoles={[ROLES.RECRUITER, ROLES.CANDIDATE]} />
           }
         >
-          <Route path="job-post/:id" element={<JobPostDetail />} />
-          <Route path="my-profile" element={<MyProfile />}>
-            <Route index element={<Overview />} />
-            <Route path="personal" element={<PersonalInfo />} />
-            <Route path="security" element={<SecurityInfo />} />
-            <Route path="edit-summary" element={<EditSummary />} />
-          </Route>
+          <Route path="my-profile" element={<MyProfile />} />
         </Route>
         {/* Role Recruiter */}
         <Route path="recruiter" allowedRoles={ROLES.RECRUITER}>

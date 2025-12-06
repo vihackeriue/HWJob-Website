@@ -19,7 +19,7 @@ export const ENDPOINTS = {
     LIST_SAVED_JOB_POSTS: "public/job-posts",
     LIST_APPLIED_JOB_POSTS: "public/job-posts",
     LIST_HISTORY_JOB_POSTS: "public/job-posts",
-    DETAIL: (id) => `job-posts/${id}`,
+    DETAIL: (id) => `public/job-posts/${id}`,
     APPLY_JOB: "applications/apply",
   },
   INDUSTRY: {
