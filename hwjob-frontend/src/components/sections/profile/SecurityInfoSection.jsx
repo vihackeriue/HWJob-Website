@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import SecondTitle from "../../ui/title/SecondTitle";
 import FormInput from "../../ui/form/FormInput";
 import { CiEdit } from "react-icons/ci";
+import { UpdatePasswordDialog } from "../../dialog/UpdatePasswordDialog";
 
 const SecurityInfoSection = () => {
+  const [openUpdatePasswordDialog, setOpenUpdatePasswordDialog] =
+    useState(false);
   const [formSecurityInf, setFormSecurityInf] = useState({
     username: "wainrp",
     email: "vana@example.com",
@@ -42,7 +45,10 @@ const SecurityInfoSection = () => {
       />
 
       <div className="flex gap-3 justify-end mt-3">
-        <button className="flex gap-1 items-center bg-brightOrange px-3 py-2 rounded-lg text-gray-100">
+        <button
+          className="flex gap-1 items-center bg-brightOrange px-3 py-2 rounded-lg text-gray-100"
+          onClick={() => setOpenUpdatePasswordDialog(true)}
+        >
           <CiEdit size={20} />
           <span>Thay đổi mật khẩu</span>
         </button>
@@ -55,6 +61,10 @@ const SecurityInfoSection = () => {
           <span>Chỉnh sửa</span>
         </button>
       </div>
+      <UpdatePasswordDialog
+        open={openUpdatePasswordDialog}
+        onClose={() => setOpenUpdatePasswordDialog(false)}
+      />
     </div>
   );
 };

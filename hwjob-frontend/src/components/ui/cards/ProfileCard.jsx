@@ -42,7 +42,7 @@ const ProfileCard = ({ user }) => {
         <span>{user.name}</span>
         {user.verified && <GoCheckCircleFill className="text-teal-500" />}
       </h1>
-      <p className="text-gray-500">@{user.username}</p>
+      <p className="text-gray-500">@{auth.username}</p>
 
       <UpdateAvatarDialog
         open={openUpdateAvatarDialog}

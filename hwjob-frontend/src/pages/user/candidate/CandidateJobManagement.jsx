@@ -8,7 +8,7 @@ import { SavedJobSection } from "../../../components/sections/candidate/jobManag
 import { HistoryJobSection } from "../../../components/sections/candidate/jobManagement/HistoryJobSection";
 import { JobWorkingSection } from "../../../components/sections/candidate/jobManagement/JobWorkingSection";
 
-const PROFILE_USER_MENUS = [
+const JOB_POST_MANAGEMENT_MENUS = [
   { key: "working", label: "Việc đang làm" },
   { key: "appliedJob", label: "Việc làm đã ứng tuyển" },
   { key: "savedJob", label: "Việc làm đã lưu" },
@@ -21,7 +21,10 @@ const CandidateJobManagement = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5">
         {/* Sidebar */}
         <div className="flex flex-col gap-3 col-span-1">
-          <MenuTablist menus={PROFILE_USER_MENUS} title={"Quản lý công việc"} />
+          <MenuTablist
+            menus={JOB_POST_MANAGEMENT_MENUS}
+            title={"Quản lý công việc"}
+          />
         </div>
         <div className="col-span-2  flex flex-col gap-3 ">
           {/* Statistics */}

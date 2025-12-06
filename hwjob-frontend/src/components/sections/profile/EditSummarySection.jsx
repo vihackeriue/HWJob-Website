@@ -1,16 +1,9 @@
-import React from "react";
-import OverviewSection from "../../../components/sections/profile/OverviewSection";
+import React, { useState } from "react";
+import RichTextEditor from "../../ui/RichTextEditor";
+import PrimaryButton from "../../ui/button/PrimaryButton";
 
-const Overview = () => {
-  const personalInfo = {
-    name: "Nguyễn Văn A",
-    gender: 1,
-    age: "21",
-    education: "Đại học",
-    email: "vi@gmail.com",
-    phone: "099832732",
-
-    summary: `
+export const EditSummarySection = () => {
+  const [summary, setSummary] = useState(`
     <h2>Giới thiệu</h2>
     <p><strong>Xin chào!</strong> Mình là <strong>Nguyễn Văn A</strong> — một lập trình viên trẻ, yêu thích công nghệ và luôn mong muốn học hỏi để phát triển bản thân. Mình có kinh nghiệm làm việc với <strong>ReactJS</strong> ở frontend và <strong>Spring Boot</strong> ở backend, tập trung vào việc xây dựng các ứng dụng web hiệu năng cao và thân thiện với người dùng.</p>
 
@@ -29,9 +22,16 @@ const Overview = () => {
 
     <h3>Sở thích</h3>
     <p>Ngoài công việc lập trình, mình yêu thích thể thao, đọc sách và tham gia các cộng đồng công nghệ để học hỏi, mở rộng mối quan hệ trong ngành.</p>
-  `,
-  };
-  return <OverviewSection personalInfo={personalInfo} />;
-};
+  `);
+  const handleSave = async () => {};
+  return (
+    <div className="p-3 bg-white dark:bg-stoneBrown-900 rounded-2xl">
+      <h2 className="text-xl font-semibold mb-2">Tóm tắt bản thân</h2>
+      <RichTextEditor value={summary} onChange={setSummary} />
 
-export default Overview;
+      <div className="flex justify-end pt-3">
+        <PrimaryButton onclick={handleSave}>Cập nhật</PrimaryButton>
+      </div>
+    </div>
+  );
+};

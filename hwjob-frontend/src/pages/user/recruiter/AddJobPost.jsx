@@ -13,27 +13,17 @@ import { getIndustriesNotPagination } from "../../../services/industryService";
 import { getLevelsNotPagination } from "../../../services/levelService";
 import { createJobPost } from "../../../services/jobPostService";
 import { useNavigate } from "react-router-dom";
-
-const salaryTypes = [
-  { code: "HOURS", name: "Theo giờ" },
-  { code: "PROJECT", name: "Theo dự án" },
-  { code: "MONTHS", name: "Theo tháng" },
-  { code: "NEGOTIATION", name: "Thương lượng" },
-];
-
-const statusJobPost = [
-  { code: "public", name: "Public" },
-  { code: "private", name: "Private" },
-];
+import { SALARY_TYPE, STATUS_JOB_POST } from "../../../config/constants";
 
 const AddJobPost = () => {
   const [formJobPost, setFormJobPost] = useState({
     title: "",
     description: "",
-    quantity: 1,
+    quantity: 0,
 
-    salary: 4,
-    salaryType: 5,
+    salary: 0,
+    salaryType: null,
+    status: "PUBLIC",
     endedTime: "",
     industryId: null,
     levelId: null,
@@ -151,11 +141,11 @@ const AddJobPost = () => {
           <FormSelect
             label="Loại lương"
             name="salaryType"
-            selected={salaryTypes.find(
+            selected={SALARY_TYPE.find(
               (j) => j.code === formJobPost.salaryType
             )}
             onChange={handleChange}
-            options={salaryTypes}
+            options={SALARY_TYPE}
             placeholder="Chọn loại lương"
             error={errors.salaryType}
           />
@@ -167,21 +157,20 @@ const AddJobPost = () => {
             onChange={handleChange}
             error={errors.endedTime}
           />
-        </div>
-        <div className="flex-1 flex flex-col gap-2 bg-white p-3 rounded-2xl ">
           {/* Trạng thái bài đăng */}
           <FormSelect
             label="Trạng thái bài đăng"
             name="status"
-            selected={statusJobPost.find(
-              (j) => j.id === formJobPost.industryId
+            selected={STATUS_JOB_POST.find(
+              (j) => j.code === formJobPost.status
             )}
             onChange={handleChange}
-            options={statusJobPost}
+            options={STATUS_JOB_POST}
             placeholder="Chọn trạng thái"
             error={errors.industryId}
           />
-
+        </div>
+        <div className="flex-1 flex flex-col gap-2 bg-white p-3 rounded-2xl ">
           <SecondTitle>Danh mục</SecondTitle>
 
           <FormSelect
