@@ -1,7 +1,24 @@
 {
   "common": {
     "welcome": "Chào mừng đến với trang web của tôi",
-    "language": "Ngôn ngữ"
+    "language": "Ngôn ngữ",
+    "more": "Xem thêm",
+    "check_in": "Điểm Danh",
+    "title": {
+      "topRecruiter": "Nhà tuyển dụng hàng đầu",
+      "feature": "Tính năng nổi bật",
+      "suggestedJob": "Việc làm gợi ý cho bạn",
+      "topJob": "Tin Tuyển dụng nổi bật",
+      "topIndustry": "Ngành nổi bật"
+    },
+    "recruiter": {
+      "post": "Bài đăng",
+      "recruiting": "Đang tuyển dụng"
+    },
+    "jobs": "Việc làm",
+    "quantity": "Số lượng",
+    "like": "Yêu thích",
+    "unlike": "Bỏ Yêu thích"
   },
   "auth": {
     "title": {
@@ -24,15 +41,25 @@
     "login": "Đăng nhập"
   },
 
-  "admin": {},
+  "admin": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "category": "Danh mục",
+      "badge": "Huy hiệu",
+      "user": "Người dùng"
+    }
+  },
   "user": {
     "navbar": {
       "home": "Trang chủ",
-      "jobPosts": "Việc làm",
-      "history": "Lịch sử",
+      "jobPost": "Việc làm",
+      "recruiter": "Nhà tuyển dụng",
       "profile": "Hồ sơ",
-      "settings": "Cài đặt",
-      "signOut": "Đăng xuất"
+      "setting": "Cài đặt",
+      "signOut": "Đăng xuất",
+      "addJobPost": "Tạo bài đăng",
+      "manageJobCandidate": "Quản lý công việc",
+      "manageJobRecruiter": "Quản lý công việc"
     },
     "banner": {
       "description": "HWJob là nền tảng tuyển dụng thông minh kết nối nhà tuyển dụng và ứng viên nhanh chóng, hiệu quả. Tìm việc phù hợp – Tuyển đúngngười – Tất cả trên một nền tảng.",
@@ -49,9 +76,28 @@
         "desc": "Làm việc tự do, kiếm tiền theo cách của bạn."
       }
     },
-    "resumeIntroduction": {
-      "title": "Hoàn thiện hồ sơ & thêm CV chuyên nghiệp",
-      "desc": "Cập nhật đầy đủ thông tin cá nhân, kỹ năng và kinh nghiệm để tạo ấn tượng mạnh với nhà tuyển dụng."
+    "feature": {
+      "resume": {
+        "title": "Hoàn thiện hồ sơ & thêm CV chuyên nghiệp",
+        "desc": "Cập nhật đầy đủ thông tin cá nhân, kỹ năng và kinh nghiệm để tạo ấn tượng mạnh với nhà tuyển dụng."
+      },
+      "badge": {
+        "title": "Thu thập huy hiệu – Nâng tầm hồ sơ, khẳng định bản thân!",
+        "desc": "Huy hiệu thể hiện năng lực và tinh thần chủ động của bạn, giúp hồ sơ nổi bật và thu hút hơn trong mắt nhà tuyển dụng."
+      },
+      "streak": {
+        "title": "Điểm danh nhận xu – Càng chăm, càng giàu!",
+        "desc": "Mỗi ngày chỉ cần vài giây để điểm danh, bạn sẽ nhận ngay xu thưởng và tích lũy kinh nghiệm để tăng cấp độ hoạt động của mình. Việc duy trì chuỗi điểm danh không chỉ giúp bạn thể hiện sự chăm chỉ, mà còn mang đến cơ hội nhận được những huy hiệu đặc biệt dành riêng cho người dùng năng động. Càng điểm danh liên tục, phần thưởng càng giá trị — đừng để chuỗi của bạn bị đứt nhé!",
+        "coin": "Tìm hiểu về xu"
+      },
+      "recruitment": {
+        "title": "Nhà tuyển dụng – Đăng tin, tìm ứng viên dễ dàng",
+        "desc": [
+          "Đăng tin tuyển dụng dễ dàng, tiếp cận hàng nghìn ứng viên tiềm năng chỉ trong vài phút.",
+          "Quản lý tin đăng, hồ sơ và quy trình tuyển dụng một cách trực quan, tiện lợi.",
+          "Kết nối nhanh chóng với nhân tài phù hợp, giúp doanh nghiệp tuyển đúng người – đúng thời điểm."
+        ]
+      }
     }
   }
 }

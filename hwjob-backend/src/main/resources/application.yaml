@@ -7,7 +7,7 @@ spring:
     url: jdbc:mysql://localhost:3306/hwjob_db?createDatabaseIfNotExist=true
 
     username: root
-    password: root
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -43,7 +43,7 @@ api:
 
 cors:
   server-api-ai: http://localhost:8000/
-  server-frontend: http://localhost:5370/
+  server-frontend: http://localhost:5173/
 
 jwt:
   signerKey: 21d698ee57633eca2f364129be119e4e237079d8ab664b7a37d2006b92da62d6

@@ -24,6 +24,8 @@ hwjob-backend/.factorypath
 hwjob-backend/.idea
 hwjob-backend/.gitignore
 hwjob-backend/upload/
+hwjob-backend/src/main/resources/*.yaml
+
 # ------------------------------
 # Node.js / ReactJS
 # ------------------------------

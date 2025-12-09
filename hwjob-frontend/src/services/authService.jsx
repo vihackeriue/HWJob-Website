@@ -1,12 +1,13 @@
 import { axiosPrivate, axiosPublic } from "../api/axios";
+import { ENDPOINTS } from "../config/endpoints";
 
 export const loginService = async (data) => {
-  const response = await axiosPublic.post("/auth/login", data);
+  const response = await axiosPublic.post(ENDPOINTS.AUTH.LOGIN, data);
   return response.data;
 };
 
 export const refreshService = async () => {
-  const response = await axiosPrivate.post("/auth/refresh");
+  const response = await axiosPrivate.post(ENDPOINTS.AUTH.REFRESH);
   return response.data;
 };
 // update wallet
@@ -18,7 +19,7 @@ export const updateWalletService = async (data) => {
 
 export const logoutService = async () => {
   try {
-    const res = await axiosPrivate.post("/auth/logout");
+    const res = await axiosPrivate.post(ENDPOINTS.AUTH.LOGOUT);
     return res.data;
   } catch (err) {
     console.error("Logout failed:", err);
