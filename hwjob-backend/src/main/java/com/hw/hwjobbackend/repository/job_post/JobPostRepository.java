@@ -15,7 +15,6 @@ import java.util.Optional;
 @Repository
 public interface JobPostRepository extends JpaRepository<JobPost, String> {
 
-
     @Query("""
              SELECT jp FROM JobPost jp
              WHERE jp.status = :status
@@ -26,7 +25,7 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
                AND (:regionId IS NULL OR jp.region.id = :regionId)
              ORDER BY jp.createdAt DESC
             """)
-    Page<JobPost> getJobPosts(
+    Page<JobPost> getAllJobPosts(
             @Param("status") JobPostStatusEnum status,
             @Param("industryId") Long industryId,
             @Param("levelId") Long levelId,
@@ -62,22 +61,6 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
     List<JobPost> findAllByRecruiterIdOrderByCreatedAtDesc(String recruiterId);
 
     Optional<JobPost> findByIdAndRecruiterId(String jobPostId, String recruiterId);
-
-    @Query("""
-            SELECT jp FROM JobPost jp
-            LEFT JOIN FETCH jp.recruiter r
-            WHERE jp.id = :jobPostId
-              AND (
-                jp.status = 'PUBLIC'
-                OR :role = 'ADMIN'
-                OR (:role = 'RECRUITER' AND r.id = :userId)
-              )
-            """)
-    Optional<JobPost> findJobPostWithPermission(
-            @Param("jobPostId") String jobPostId,
-            @Param("userId") String userId,
-            @Param("role") String role
-    );
 
     @Query("""
                 SELECT CASE WHEN COUNT(j) > 0 THEN true ELSE false END

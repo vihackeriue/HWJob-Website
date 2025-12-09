@@ -6,6 +6,7 @@ import com.hw.hwjobbackend.model.dto.response.file.FileResponse;
 import com.hw.hwjobbackend.model.entity.file.FileMgmt;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.model.entity.user.User;
 import com.hw.hwjobbackend.service.mapper.file.FileMgmtMapper;
 import com.hw.hwjobbackend.repository.file.FileMgmtRepository;
 import com.hw.hwjobbackend.repository.file.FileRepository;
@@ -17,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,15 +41,15 @@ public class FileServiceImpl implements FileService {
     String DEFAULT_AVATAR_RESOURCE;
 
     @Override
-    public FileResponse uploadFile(MultipartFile file) {
-
+    public FileResponse uploadFile(MultipartFile file, String userId) {
         try {
             // Store file
-            FileInfo fileInfo = fileRepository.store(file);
+            FileInfo fileInfo = fileRepository.store(file, userId);
+
             // Create file management info
             FileMgmt fileMgmt = fileMgmtMapper.toFileMgmt(fileInfo);
-            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
             fileMgmt.setOwnerId(userId);
+
             fileMgmtRepository.save(fileMgmt);
             return FileResponse.builder()
                     .originalFileName(file.getOriginalFilename())
@@ -70,7 +70,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public FileResponse setDefaultAvatarForUser(String username) {
+    public FileResponse setDefaultAvatarForUser(String userId) {
         try {
             // Đọc ảnh avatar mặc định
             Resource defaultAvatar = new ClassPathResource(DEFAULT_AVATAR_RESOURCE);
@@ -78,11 +78,11 @@ public class FileServiceImpl implements FileService {
                 throw new AppException(ErrorCode.FILE_NOT_FOUND);
             }
             // Lưu file vào thư mục của user
-            var fileInfo = fileRepository.storeDefaultAvatar(username, defaultAvatar);
+            var fileInfo = fileRepository.storeDefaultAvatar(userId, defaultAvatar);
 
             // Lưu metadata vào database
             FileMgmt fileMgmt = fileMgmtMapper.toFileMgmt(fileInfo);
-            fileMgmt.setOwnerId(username);
+            fileMgmt.setOwnerId(userId);
             fileMgmtRepository.save(fileMgmt);
 
             return FileResponse.builder()
