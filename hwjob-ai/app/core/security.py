@@ -1,0 +1,1 @@
+# Các hàm xử lý bảo mật
