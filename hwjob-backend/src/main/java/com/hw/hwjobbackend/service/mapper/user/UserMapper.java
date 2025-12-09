@@ -18,6 +18,6 @@ public interface UserMapper {
     @Mapping(source = "region.name", target = "region")
     UserResponse toUserResponse(User user);
 
-    UserLoginResponse toUserLoginResponse(User user);
+    UserAuthenticationResponse toUserLoginResponse(User user);
 
 }
