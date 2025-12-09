@@ -122,7 +122,7 @@ const JobPostDetail = () => {
       }));
       toast.success(isSaved ? "Lưu thành công!" : "Đã hủy lưu!");
     } catch (error) {
-      alert(error.response?.data?.message || "Lưu thất bại!");
+      toast.error(error.response?.data?.message || "Lưu thất bại!");
     }
   };
   return (
