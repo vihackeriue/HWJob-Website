@@ -5,10 +5,10 @@ import find_work_banner from "../../assets/lottie/find_work_banner.json";
 import freelancer_banner from "../../assets/lottie/freelancer_banner.json";
 import job_seeking from "../../assets/lottie/job_seeking.json";
 import Lottie from "lottie-react";
-import { useTranslation } from "react-i18next";
+
+import { tGlobal } from "../../utils/translator";
 
 const BannerSection = () => {
-  const { t } = useTranslation();
   const [currentSlide, setCurrentSlide] = useState(0);
   const settings = {
     dots: true,
@@ -57,17 +57,17 @@ const BannerSection = () => {
               <h1 className="text-5xl sm:text-6xl font-bold font-vollkorn text-brightOrange ">
                 HWJOB
               </h1>
-              <p className="text-md">{t("user.banner.description")}</p>
+              <p className="text-md">{tGlobal("user.banner.description")}</p>
             </div>
             <div className="mt-6">
               <h1 className="text-4xl font-semibold font-imperial">
-                {t(`user.banner.slide${currentSlide + 1}.title`)}
+                {tGlobal(`user.banner.slide${currentSlide + 1}.title`)}
               </h1>
               <p
                 className="text-gray-600 mt-3 dark:text-gray-300"
                 style={{ lineHeight: 1.2 }}
               >
-                {t(`user.banner.slide${currentSlide + 1}.desc`)}
+                {tGlobal(`user.banner.slide${currentSlide + 1}.desc`)}
               </p>
             </div>
           </div>

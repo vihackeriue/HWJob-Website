@@ -5,28 +5,64 @@ import Browsing from "../../assets/lottie/Browsing.json";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import FormSelect from "../../components/ui/form/FormSelect";
+import FormInput from "../../components/ui/form/FormInput";
+import { useNavigate } from "react-router-dom";
+import { createUser } from "../../services/userService";
 export default function Register() {
+  const roles = [
+    { code: "CANDIDATE", name: "Ứng viên" },
+    { code: "RECRUITER", name: "Nhà tuyển dụng" },
+  ];
   const { t } = useTranslation();
-  const [input, setInput] = useState({
+  const [formRegister, setFormRegister] = useState({
     username: "",
+    email: "",
     password: "",
+    rePassword: "",
+    role: "CANDIDATE",
   });
-
-  const handleInput = (e) => {
+  const navigate = useNavigate();
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setInput((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormRegister((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const [errors, setErrors] = useState({});
+  const validate = () => {
+    const newErrors = {};
+    if (!formRegister.username.trim())
+      newErrors.username = "Username is required!";
+    if (!formRegister.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
+      newErrors.email = "Invalid email!";
+    if (formRegister.password.length < 2)
+      newErrors.password = "Password must be at least 6 characters!";
+    if (formRegister.password !== formRegister.rePassword)
+      newErrors.rePassword = "Passwords do not match!";
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (input.username !== "" && input.password !== "") {
-      // await login(input);
-      return;
+    if (!validate()) return;
+
+    try {
+      const user = {
+        username: formRegister.username,
+        password: formRegister.password,
+        email: formRegister.email,
+        roles: [formRegister.role],
+      };
+      // gọi API backend đăng ký
+      await createUser(user);
+      alert("Đăng ký thành công");
+      navigate("/login");
+    } catch (error) {
+      alert(error.response?.data?.message || "Đăng ký tài khoản thất bại!");
     }
-    alert("please provide a valid input");
   };
 
   return (
@@ -47,37 +83,45 @@ export default function Register() {
           </p>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-            <input
-              className="p-2 mt-8 rounded-xl border "
-              type="text"
+            <FormInput
               name="username"
-              id="username"
+              value={formRegister.username}
+              error={errors.username}
+              onChange={handleChange}
               placeholder={t("auth.username")}
-              onChange={handleInput}
             />
-            <input
-              className="p-2 py-2 rounded-xl border "
-              type="email"
+
+            <FormInput
               name="email"
-              id="email"
+              value={formRegister.email}
+              error={errors.email}
+              onChange={handleChange}
               placeholder={t("auth.email")}
-              onChange={handleInput}
             />
-            <input
-              className="p-2 py-2 rounded-xl border"
+
+            <FormInput
               type="password"
               name="password"
-              id="password"
+              value={formRegister.password}
+              error={errors.password}
+              onChange={handleChange}
               placeholder={t("auth.password")}
-              onChange={handleInput}
             />
-            <input
-              className="p-2 py-2 rounded-xl border"
+
+            <FormInput
               type="password"
               name="rePassword"
-              id="rePassword"
+              value={formRegister.rePassword}
+              error={errors.rePassword}
+              onChange={handleChange}
               placeholder={t("auth.rePassword")}
-              onChange={handleInput}
+            />
+            <FormSelect
+              name="role"
+              selected={roles.find((j) => j.code === formRegister.role)}
+              onChange={handleChange}
+              options={roles}
+              placeholder="Chọn ngành nghề"
             />
 
             <button
