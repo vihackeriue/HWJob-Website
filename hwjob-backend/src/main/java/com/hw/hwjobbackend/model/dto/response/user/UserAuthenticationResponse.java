@@ -13,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserLoginResponse {
+public class UserAuthenticationResponse {
     String id;
     String username;
     String email;

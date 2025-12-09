@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.model.dto.response.authentication;
 
-import com.hw.hwjobbackend.model.dto.response.user.UserLoginResponse;
+import com.hw.hwjobbackend.model.dto.response.user.UserAuthenticationResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,5 +13,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenticationResponse {
     String accessToken;
-    UserLoginResponse user;
+    UserAuthenticationResponse user;
 }
