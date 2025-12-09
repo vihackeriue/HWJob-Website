@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.controller.admin;
+package com.hw.hwjobbackend.controller.user.admin;
 
 
 import com.hw.hwjobbackend.model.dto.request.skill.SkillRequest;

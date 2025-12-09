@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.controller.recruiter;
+package com.hw.hwjobbackend.controller.user.recruiter;
 
 
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostRequest;

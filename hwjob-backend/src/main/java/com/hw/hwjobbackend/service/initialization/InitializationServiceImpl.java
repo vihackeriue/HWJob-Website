@@ -108,8 +108,6 @@ public class InitializationServiceImpl implements InitializationService {
             return;
         }
 
-//        Set<Role> roles = roleRepository.findAllByName(RoleEnum.ADMIN.name());
-
         User adminUser = User.builder()
                 .username(ADMIN_USERNAME)
                 .fullName(ADMIN_NAME)
@@ -117,10 +115,9 @@ public class InitializationServiceImpl implements InitializationService {
                 .roles(roles)
                 .password(passwordEncoder.encode(ADMIN_PASSWORD))
                 .build();
-
-        FileResponse avatarResponse = fileService.setDefaultAvatarForUser(adminUser.getUsername());
+        User createdAdmin = userRepository.save(adminUser);
+        FileResponse avatarResponse = fileService.setDefaultAvatarForUser(createdAdmin.getId());
         adminUser.setImageUrl(avatarResponse.getUrl());
-        userRepository.save(adminUser);
     }
 
     @Override
