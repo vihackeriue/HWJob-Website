@@ -28,7 +28,7 @@ public class CandidateJobPostController {
                 .build();
     }
 
-    @GetMapping("/saved-job-posts")
+    @GetMapping("/saved")
     public ApiResponse<List<JobPostResponse>> getSavedJobPosts(
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "size", required = false) Integer size
