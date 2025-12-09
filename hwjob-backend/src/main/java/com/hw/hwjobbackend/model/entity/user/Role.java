@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.model.entity.user;
 
+import com.hw.hwjobbackend.model.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -17,6 +18,8 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
+
+    @Column(unique = true)
     String name;
 
     @Lob

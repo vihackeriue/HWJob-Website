@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.controller.candidate;
+package com.hw.hwjobbackend.controller.user.candidate;
 
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
