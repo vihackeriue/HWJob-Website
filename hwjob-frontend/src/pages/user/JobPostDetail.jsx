@@ -13,11 +13,17 @@ import { FaPeopleCarryBox } from "react-icons/fa6";
 import { formatDate } from "../../utils/date";
 import { useParams } from "react-router-dom";
 import { useDetail } from "../../hooks/useDetail";
-import { applyJob, getJobPostById } from "../../services/jobPostService";
+import {
+  applyJob,
+  getJobPostById,
+  saveJob,
+} from "../../services/jobPostService";
 
 import useAuth from "../../hooks/useAuth";
 import ApplyJobDialog from "../../components/dialog/ApplyJobDialog";
 import { ROLES } from "../../config/roles";
+import classNames from "classnames";
+import { toast } from "react-toastify";
 
 const JobPostDetail = () => {
   const { id } = useParams();
@@ -50,17 +56,28 @@ const JobPostDetail = () => {
             </PrimaryButton>
           )}
 
-          {jobPost.isSaved ? (
-            <button className="flex gap-1 items-center px-3 py-2 rounded-lg text-brightOrange border border-brightOrange">
-              <IoMdHeart className="size-5" />
-              <span>Hủy lưu tin</span>
-            </button>
-          ) : (
-            <button className="flex gap-1 items-center px-3 py-2 rounded-lg text-gray-900 border border-gray-300">
-              <IoIosHeartEmpty className="size-5 text-gray-500" />
-              <span>Lưu tin</span>
-            </button>
-          )}
+          <button
+            onClick={handleSaveJob}
+            className={classNames(
+              "flex gap-1 items-center px-3 py-2 rounded-lg border",
+              {
+                "text-brightOrange border-brightOrange": jobPost.isSaved,
+                "text-gray-900 border-gray-300": !jobPost.isSaved,
+              }
+            )}
+          >
+            {jobPost.isSaved ? (
+              <>
+                <IoMdHeart className="size-5" />
+                <span>Hủy lưu tin</span>
+              </>
+            ) : (
+              <>
+                <IoIosHeartEmpty className="size-5 text-gray-500" />
+                <span>Lưu tin</span>
+              </>
+            )}
+          </button>
         </div>
       );
     }
@@ -95,7 +112,19 @@ const JobPostDetail = () => {
     }
   };
 
-  // const handleSaveJob = async () => {};
+  const handleSaveJob = async () => {
+    try {
+      const res = await saveJob(jobPost.id);
+      const isSaved = res.result.saved;
+      setJobPost((prev) => ({
+        ...prev,
+        isSaved: isSaved,
+      }));
+      toast.success(isSaved ? "Lưu thành công!" : "Đã hủy lưu!");
+    } catch (error) {
+      alert(error.response?.data?.message || "Lưu thất bại!");
+    }
+  };
   return (
     <div className="flex flex-col gap-3 mt-10">
       <div className="flex gap-3 ">

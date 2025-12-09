@@ -16,11 +16,12 @@ export const ENDPOINTS = {
     CREATE: "recruiters/job-posts",
     LIST: "public/job-posts",
     LIST_WORKING_JOBS: "public/job-posts",
-    LIST_SAVED_JOB_POSTS: "public/job-posts",
+    LIST_SAVED_JOB_POSTS: "candidates/job-posts/saved-job-posts",
     LIST_APPLIED_JOB_POSTS: "public/job-posts",
     LIST_HISTORY_JOB_POSTS: "public/job-posts",
     DETAIL: (id) => `public/job-posts/${id}`,
     APPLY_JOB: "applications/apply",
+    SAVE_JOB: (id) => `candidates/job-posts/saved-job-posts/${id}`,
   },
   INDUSTRY: {
     LIST: "public/industries",

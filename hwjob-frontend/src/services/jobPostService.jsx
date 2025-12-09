@@ -23,7 +23,7 @@ export const getWorkingJobPosts = async (page = 1, size = DEFAULT_LIMIT) => {
 };
 
 export const getSavedJobPosts = async (page = 1, size = DEFAULT_LIMIT) => {
-  const response = await axiosPublic.get(
+  const response = await axiosPrivate.get(
     ENDPOINTS.JOB_POST.LIST_SAVED_JOB_POSTS,
     {
       params: { page, size },
@@ -60,5 +60,10 @@ export const getJobPostById = async (id) => {
 
 export const applyJob = async (data) => {
   const response = await axiosPrivate.post(ENDPOINTS.JOB_POST.APPLY_JOB, data);
+  return response.data;
+};
+
+export const saveJob = async (id) => {
+  const response = await axiosPrivate.post(ENDPOINTS.JOB_POST.SAVE_JOB(id));
   return response.data;
 };
