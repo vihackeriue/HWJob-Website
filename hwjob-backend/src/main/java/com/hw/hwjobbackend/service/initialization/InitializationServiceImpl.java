@@ -108,8 +108,6 @@ public class InitializationServiceImpl implements InitializationService {
             return;
         }
 
-//        Set<Role> roles = roleRepository.findAllByName(RoleEnum.ADMIN.name());
-
         User adminUser = User.builder()
                 .username(ADMIN_USERNAME)
                 .fullName(ADMIN_NAME)
