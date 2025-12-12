@@ -23,6 +23,8 @@ import JobPostDetail from "./pages/user/JobPostDetail";
 import CandidateJobManagement from "./pages/user/candidate/CandidateJobManagement";
 import { ROLES } from "./config/roles";
 import { ToastContainer } from "react-toastify";
+import RecruiterJobManagement from "./pages/user/recruiter/RecruiterJobManagement";
+import RecruiterJobPostDetail from "./pages/user/recruiter/RecruiterJobPostDetail";
 
 function App() {
   return (
@@ -43,8 +45,13 @@ function App() {
             <Route path="my-profile" element={<MyProfile />} />
           </Route>
           {/* Role Recruiter */}
-          <Route path="recruiter" allowedRoles={ROLES.RECRUITER}>
+          <Route
+            path="recruiter"
+            element={<PrivateRoute allowedRoles={ROLES.RECRUITER} />}
+          >
             <Route path="add-job-post" element={<AddJobPost />} />
+            <Route path="manage-job" element={<RecruiterJobManagement />} />
+            <Route path="job-post/:id" element={<RecruiterJobPostDetail />} />
           </Route>
           {/* Role Candidate */}
           <Route

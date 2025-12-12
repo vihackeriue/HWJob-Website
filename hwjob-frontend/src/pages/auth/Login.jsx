@@ -28,6 +28,7 @@ function Login() {
     e.preventDefault();
     if (input.username !== "" && input.password !== "") {
       await login(input);
+
       return;
     }
     alert("please provide a valid input");

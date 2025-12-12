@@ -19,6 +19,7 @@ export const ENDPOINTS = {
     LIST_SAVED_JOB_POSTS: "candidates/job-posts/saved",
     LIST_APPLIED_JOB_POSTS: "candidates/applications",
     LIST_HISTORY_JOB_POSTS: "public/job-posts",
+    LIST_JOB_POSTS_OF_RECRUITER: "recruiters/job-posts",
     DETAIL: (id) => `public/job-posts/${id}`,
     APPLY_JOB: "candidates/applications",
     SAVE_JOB: (id) => `candidates/job-posts/save/${id}`,
