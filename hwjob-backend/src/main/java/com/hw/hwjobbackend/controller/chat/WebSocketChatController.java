@@ -2,7 +2,6 @@ package com.hw.hwjobbackend.controller.chat;
 
 
 import com.hw.hwjobbackend.model.dto.request.chat.ChatMessageRequest;
-import com.hw.hwjobbackend.model.dto.request.chat.TypingNotificationRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.chat.ChatMessageResponse;
 import com.hw.hwjobbackend.service.shared.chat.ChatService;
@@ -12,7 +11,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
@@ -24,7 +22,6 @@ import java.security.Principal;
 public class WebSocketChatController {
 
     ChatService chatService;
-    SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/chat.send")
     public ApiResponse<ChatMessageResponse> sendMessage(@Payload ChatMessageRequest request, Principal principal) {
@@ -47,13 +44,5 @@ public class WebSocketChatController {
         return ApiResponse.<ChatMessageResponse>builder()
                 .result(chatService.createMessage(request, userId))
                 .build();
-    }
-
-    @MessageMapping("/chat.typing")
-    public void typing(@Payload TypingNotificationRequest notification) {
-        messagingTemplate.convertAndSend(
-                STR."/topic/conversation/\{notification.getConversationId()}/typing",
-                notification
-        );
     }
 }
