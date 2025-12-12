@@ -5,6 +5,7 @@ import com.hw.hwjobbackend.service.authentication.JwtService;
 import com.hw.hwjobbackend.util.TokenUtils;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.AccessLevel;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,7 @@ public class WebSocketAuthChannelInterceptor implements ChannelInterceptor {
     private final JwtService jwtService;
 
     @Override
-    public Message<?> preSend(Message<?> message, MessageChannel channel) {
+    public Message<?> preSend(@NonNull Message<?> message, @NonNull MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
         if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {

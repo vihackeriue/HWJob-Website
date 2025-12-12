@@ -1,6 +1,5 @@
 package com.hw.hwjobbackend.service.shared.chat;
 
-
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.request.chat.ChatMessageRequest;
@@ -49,7 +48,8 @@ public class ChatServiceImpl implements ChatService {
         String userId = SecurityUtils.getCurrentUserId();
 
         // Step 2: Query MongoDB - tìm tất cả conversation có user tham gia
-        List<Conversation> conversations = conversationRepository.findAllByParticipantIdsContains(userId);
+        List<Conversation> conversations = conversationRepository
+                .findAllByParticipantIdsContainsOrderByModifiedDateDesc(userId);
 
         // Step 3: Transform sang Response DTO
         return conversations.stream()
@@ -136,6 +136,11 @@ public class ChatServiceImpl implements ChatService {
 
         // Step 5: Save to MongoDB
         chatMessage = messageRepository.save(chatMessage);
+        // Cập nhật modifiedDate của conversation
+        conversationRepository.updateModifiedDate(
+                request.getConversationId(),
+                Instant.now()
+        );
 
         // Step 6: Transform sang Response DTO
         ChatMessageResponse response = toChatMessageResponse(chatMessage, userId);
@@ -191,6 +196,7 @@ public class ChatServiceImpl implements ChatService {
     public void broadcastMessageToConversation(String conversationId, ChatMessageResponse message) {
         // Gửi message đến topic: /topic/conversation/{conversationId}
         // Tất cả clients đang subscribe topic này sẽ nhận được message
+        message.setIsMine(false);
         messagingTemplate.convertAndSend(
                 STR."/topic/conversation/\{conversationId}",
                 message
