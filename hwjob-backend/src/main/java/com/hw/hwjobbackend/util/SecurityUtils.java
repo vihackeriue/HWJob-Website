@@ -23,13 +23,13 @@ public final class SecurityUtils {
                 && !"anonymousUser".equals(authentication.getPrincipal());
     }
 
-
     public static String getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
+
         return authentication.getName();
     }
 

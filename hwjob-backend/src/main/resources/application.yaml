@@ -19,10 +19,11 @@ spring:
       port: 6379
 
     mongodb:
-      uri: mongodb://root:root@localhost:27017
+      uri: mongodb://root:root@localhost:27017/hwjob_mongo_db?authSource=admin
       username: root
       password: root
-      database: hwjob-file
+      database: hwjob_mongo_db
+      auto-index-creation: true
 
   messages:
     encoding: UTF-8
@@ -52,7 +53,7 @@ jwt:
 
 app:
   file:
-    storage-dir: upload/user-avatar/
+    storage-dir: hwjob-backend/upload/user-avatar/
     download-prefix: http://localhost:8080/hwjob/api/public/media/
     default-avatar-resource: static/images/default-avatar.png
 
