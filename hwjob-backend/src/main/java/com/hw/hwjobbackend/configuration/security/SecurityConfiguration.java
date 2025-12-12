@@ -49,10 +49,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/public/**", "/auth/**").permitAll()
-
+                        .requestMatchers("/public/**", "/auth/**", "/ws/**", "/test-chat").permitAll()
                         // Chặn request tới những endpoit phân quyền ở phần security
-
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/candidates/**").hasRole("CANDIDATE")
                         .requestMatchers("/recruiters/**").hasRole("RECRUITER")

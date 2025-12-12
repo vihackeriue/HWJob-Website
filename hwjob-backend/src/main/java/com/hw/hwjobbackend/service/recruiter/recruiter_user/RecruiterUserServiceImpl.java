@@ -10,6 +10,7 @@ import com.hw.hwjobbackend.model.entity.user.Recruiter;
 import com.hw.hwjobbackend.repository.user.RecruiterRepository;
 import com.hw.hwjobbackend.service.shared.user.UserService;
 import com.hw.hwjobbackend.util.SecurityUtils;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,6 +29,7 @@ public class RecruiterUserServiceImpl implements RecruiterUserService {
     UserService userService;
 
     @Override
+    @Transactional
     public RecruiterResponse updateRecruiterInfo(RecruiterUpdateRequest request) {
         String recruiterId = SecurityUtils.getCurrentUserId();
 
@@ -40,6 +42,7 @@ public class RecruiterUserServiceImpl implements RecruiterUserService {
         recruiter.setRegion(regionRepository.getReferenceById(request.getRegionId()));
 
         recruiterMapper.updateRecruiter(recruiter, request);
+        recruiterRepository.save(recruiter);
 
         return recruiterMapper.toRecruiterResponse(recruiter);
     }

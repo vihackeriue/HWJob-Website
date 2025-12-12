@@ -11,6 +11,7 @@ import com.hw.hwjobbackend.repository.user.CandidateRepository;
 import com.hw.hwjobbackend.service.shared.skill.SkillService;
 import com.hw.hwjobbackend.service.shared.user.UserService;
 import com.hw.hwjobbackend.util.SecurityUtils;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -30,6 +31,7 @@ public class CandidateUserServiceImpl implements CandidateUserService {
     SkillService skillService;
 
     @Override
+    @Transactional
     public CandidateResponse updateCandidateInfo(CandidateUpdateRequest request) {
 
         String userId = SecurityUtils.getCurrentUserId();
@@ -47,6 +49,8 @@ public class CandidateUserServiceImpl implements CandidateUserService {
         }
 
         candidateMapper.updateCandidate(candidate, request);
+
+        candidateRepository.save(candidate);
 
         return candidateMapper.toCandidateResponse(candidate);
     }

@@ -1,0 +1,26 @@
+package com.hw.hwjobbackend.configuration.web_socket;
+
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.stereotype.Component;
+import org.springframework.web.socket.messaging.SessionConnectedEvent;
+
+@Component
+@Slf4j
+public class WebSocketEventListener {
+
+    @EventListener
+    public void handleWebSocketConnectListener(SessionConnectedEvent event) {
+        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+        log.info("Connected to WebSocket: {}", headerAccessor.getSessionId());
+    }
+
+    @EventListener
+    public void handleWebSocketDisconnectListener(SessionConnectedEvent event) {
+        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+        log.info("WebSocket disconnected: sessionId={}", headerAccessor.getSessionId());
+    }
+
+}
