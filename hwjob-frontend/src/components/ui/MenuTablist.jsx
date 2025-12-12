@@ -8,11 +8,16 @@ const baseClass =
   "flex items-center text-lg gap-3 cursor-pointer rounded-lg p-2 transition-all duration-200";
 const activeClass = "bg-brightOrange text-white";
 const noActiveClass = "hover:bg-gray-200 dark:hover:bg-gray-600";
-export const MenuTablist = ({ menus, title }) => {
+export const MenuTablist = ({ menus, title, orientation = "vertical" }) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const isHorizontal = orientation === "horizontal";
   return (
-    <div className="bg-white dark:bg-stoneBrown-900 p-3 rounded-2xl shadow-sm">
+    <div
+      className={classNames(
+        "bg-white dark:bg-stoneBrown-900 rounded-2xl shadow-sm",
+        !isHorizontal && "p-3"
+      )}
+    >
       {/* Mobile header */}
       <div className="md:hidden flex justify-between items-center">
         <SecondTitle>{title}</SecondTitle>
@@ -38,7 +43,12 @@ export const MenuTablist = ({ menus, title }) => {
           hidden: !isOpen,
         })}
       >
-        <TabList className="space-y-1 mt-5">
+        <TabList
+          className={classNames("", {
+            " mt-5 space-y-1": !isHorizontal,
+            "flex gap-2 flex-row ": isHorizontal,
+          })}
+        >
           {menus.map((item) => (
             <Tab key={item.key} className="w-full focus:outline-none">
               {({ selected }) => (

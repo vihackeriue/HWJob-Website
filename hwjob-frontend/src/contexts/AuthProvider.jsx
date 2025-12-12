@@ -8,6 +8,7 @@ import {
 } from "../services/authService";
 import { jwtDecode } from "jwt-decode";
 import { ROLES } from "../config/roles";
+import { toast } from "react-toastify";
 
 const AuthContext = createContext({});
 
@@ -29,13 +30,14 @@ export const AuthProvider = ({ children }) => {
           localStorage.removeItem("site");
           setAuth(null);
         } else {
+          const id = decoded.sub;
           const username = decoded.username;
           const fullname = decoded.userFullName;
           const roles = decoded.scope ? decoded.scope.split(" ") : [];
 
           // const walletAddress = decoded.walletAddress;
           // setAuth({ username, roles, walletAddress, accessToken });
-          setAuth({ username, fullname, userAvatar, roles, accessToken });
+          setAuth({ id, username, fullname, userAvatar, roles, accessToken });
         }
       } catch (err) {
         console.error("Invalid token:", err);
@@ -55,16 +57,17 @@ export const AuthProvider = ({ children }) => {
         const decoded = jwtDecode(accessToken);
         const userAvatar = res.result.user.imageUrl;
         // setToken(accessToken);
+        const id = decoded.sub;
         const username = decoded.username;
         const fullname = decoded.userFullName;
         const roles = decoded.scope ? decoded.scope.split(" ") : [];
         // const walletAddress = decoded.walletAddress;
         // setAuth({ username, roles, walletAddress, accessToken });
-        setAuth({ username, fullname, userAvatar, roles, accessToken });
+        setAuth({ id, username, fullname, userAvatar, roles, accessToken });
 
         localStorage.setItem("site", accessToken);
         localStorage.setItem("userAvatar", userAvatar);
-
+        toast.success("Đăng nhập thành công!");
         if (roles.includes(ROLES.ADMIN)) {
           navigate("/admin");
         } else if (roles.includes(ROLES.CANDIDATE)) {
@@ -77,6 +80,9 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Login failed:", error);
+      toast.error(
+        error.response?.data?.message || "Đăng nhập thất bại! Vui lòng thử lại."
+      );
     }
   };
 
