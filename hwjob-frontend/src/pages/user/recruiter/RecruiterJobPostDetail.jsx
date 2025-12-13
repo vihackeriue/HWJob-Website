@@ -4,14 +4,15 @@ import { useParams } from "react-router-dom";
 import { getJobPostById } from "../../../services/jobPostService";
 import { useDetail } from "../../../hooks/useDetail";
 import DescriptionSection from "../../../components/sections/common/jobPostDetail/DescriptionSection";
-import { MenuTablist } from "../../../components/ui/MenuTablist";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
+import { TabGroup, TabPanel, TabPanels } from "@headlessui/react";
+import MenuTabListHorizontal from "../../../components/ui/MenuTabListHorizontal";
+import ApplicantListSection from "../../../components/sections/recruiter/jobPostDetail/ApplicantListSection";
 
 const JOB_POST_MANAGEMENT_MENUS = [
-  { key: "working", label: "Mô tả chung" },
-  { key: "appliedJob", label: "Việc làm đã ứng tuyển" },
-  { key: "savedJob", label: "Việc làm đã lưu" },
-  { key: "historyJob", label: "Lịch sử làm việc" },
+  { key: "desc", label: "Mô tả chung" },
+  { key: "applicantList", label: "Ứng viên đã nộp " },
+  { key: "historyJob", label: "Đang làm việc" },
+  { key: "stati", label: "Thống kê" },
 ];
 
 const RecruiterJobPostDetail = () => {
@@ -23,18 +24,18 @@ const RecruiterJobPostDetail = () => {
   }, [data]);
   if (loading || !jobPost) return <div>Đang tải...</div>;
   return (
-    <div className="flex flex-col gap-3 mt-10">
+    <div className="flex flex-col gap-3 mt-10 ">
       <OverviewSection jobPost={jobPost} />
-      <div className="bg-white rounded-2xl p-5">
+      <div className="">
         <TabGroup>
-          <MenuTablist
-            menus={JOB_POST_MANAGEMENT_MENUS}
-            orientation="horizontal"
-          />
+          <MenuTabListHorizontal menus={JOB_POST_MANAGEMENT_MENUS} />
 
-          <TabPanels>
+          <TabPanels className="bg-white rounded-2xl p-5 mt-3 ">
             <TabPanel>
               <DescriptionSection jobPost={jobPost} />
+            </TabPanel>
+            <TabPanel>
+              <ApplicantListSection />
             </TabPanel>
           </TabPanels>
         </TabGroup>
