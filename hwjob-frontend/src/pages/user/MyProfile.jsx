@@ -4,12 +4,12 @@ import ProfileCard from "../../components/ui/cards/ProfileCard";
 
 import ProgressBar from "../../components/ui/ProgressBar";
 import { PROFILE_USER_MENUS } from "../../constants/navigation";
-import { MenuTablist } from "../../components/ui/MenuTablist";
 import { TabGroup, TabPanel, TabPanels } from "@headlessui/react";
 import OverviewSection from "../../components/sections/profile/OverviewSection";
 import PersonalInfoSection from "../../components/sections/profile/PersonalInfoSection";
 import SecurityInfoSection from "../../components/sections/profile/SecurityInfoSection";
 import { EditSummarySection } from "../../components/sections/profile/EditSummarySection";
+import MenuTabListVertical from "../../components/ui/MenuTabListVertical";
 
 const user = {
   name: "Wain RP",
@@ -31,7 +31,10 @@ const MyProfile = () => {
             />
           </div>
 
-          <MenuTablist menus={PROFILE_USER_MENUS} title={"Quản lý công việc"} />
+          <MenuTabListVertical
+            menus={PROFILE_USER_MENUS}
+            title={"Quản lý công việc"}
+          />
         </div>
         <TabPanels className="col-span-2  flex flex-col gap-3 ">
           <TabPanel>

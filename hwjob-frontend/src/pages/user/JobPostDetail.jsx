@@ -7,12 +7,9 @@ import {
   getJobPostById,
   saveJob,
 } from "../../services/jobPostService";
-
 import ApplyJobDialog from "../../components/dialog/ApplyJobDialog";
-
 import { toast } from "react-toastify";
 import { OverviewSection } from "../../components/sections/common/jobPostDetail/OverviewSection";
-
 import DescriptionSection from "../../components/sections/common/jobPostDetail/DescriptionSection";
 
 const JobPostDetail = () => {

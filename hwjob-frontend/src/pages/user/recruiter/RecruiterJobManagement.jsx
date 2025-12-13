@@ -1,6 +1,6 @@
 import { TabGroup, TabPanel, TabPanels } from "@headlessui/react";
 import React from "react";
-import { MenuTablist } from "../../../components/ui/MenuTablist";
+import MenuTabListVertical from "../../../components/ui/MenuTabListVertical";
 import MyJobPostSection from "../../../components/sections/recruiter/jobManagement/MyJobPostSection";
 import QuantityStatisticsCard from "../../../components/ui/cards/QuantityStatisticsCard";
 import { CiLocationOn } from "react-icons/ci";
@@ -17,7 +17,7 @@ const RecruiterJobManagement = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5">
         {/* Sidebar */}
         <div className="flex flex-col gap-3 col-span-1">
-          <MenuTablist
+          <MenuTabListVertical
             menus={JOB_POST_MANAGEMENT_MENUS}
             title={"Quản lý công việc"}
           />
