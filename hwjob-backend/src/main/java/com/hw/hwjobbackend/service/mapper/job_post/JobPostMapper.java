@@ -20,12 +20,12 @@ public interface JobPostMapper {
     @Mapping(target = "recruiter", ignore = true)
     JobPost toJobPost(JobPostRequest request);
 
-    @Mapping(source = "recruiter.username", target = "recruiterName")
-    @Mapping(source = "recruiter.imageUrl", target = "imageUrl")
+
     @Mapping(source = "industry.name", target = "industry")
     @Mapping(source = "level.name", target = "level")
     @Mapping(source = "jobType.name", target = "jobType")
     @Mapping(source = "region.name", target = "region")
+    @Mapping(source = "recruiter", target = "recruiter")
     JobPostResponse toJobPostResponse(JobPost jobPost);
 
     @Mapping(source = "industry.name", target = "industry")

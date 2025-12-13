@@ -5,13 +5,14 @@ export const DEFAULT_LIMIT = 6;
 
 export const axiosPublic = axios.create({
   baseURL: BASE_URL,
-  headers: { "Content-Type": "application/json" },
+  headers: { "Content-Type": "application/json", "Accept-Language": "vi-VN" },
 });
 
 export const axiosPrivate = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
+    "Accept-Language": "vi-VN",
   },
 });
 axiosPrivate.interceptors.request.use(

@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { IoIosHeartEmpty, IoMdHeart } from "react-icons/io";
 import { tGlobal } from "../../../utils/translator";
 import { Link } from "react-router-dom";
+import { hasRole } from "../../../utils/permission";
+import { ROLES } from "../../../config/roles";
+import useAuth from "../../../hooks/useAuth";
 const JobPostCard = ({ jobPost }) => {
   const [isLiked, setIsSaved] = useState(jobPost.saved);
-
+  const { auth } = useAuth();
   const handleToggleSave = () => {
     if (!isLiked) {
       // like Job
@@ -13,22 +16,27 @@ const JobPostCard = ({ jobPost }) => {
     }
     setIsSaved(!isLiked);
   };
-
+  const getJobPostDetailUrl = () => {
+    if (hasRole(auth, ROLES.RECRUITER) && jobPost.recruiter.id === auth.id) {
+      return `/recruiter/job-post/${jobPost.id}`;
+    }
+    return `/job-post/${jobPost.id}`;
+  };
   return (
     <div className="flex gap-3 pr-2 bg-lightGrayishBlue dark:bg-stoneBrown-900 rounded-2xl relative hover:shadow border border-gray-300">
       <img
-        src={jobPost.imageUrl}
-        alt={jobPost.recruiter}
+        src={jobPost.recruiter.imageUrl}
+        alt={jobPost.recruiter.fullName}
         className="size-32 rounded-2xl "
       />
       <div className="py-2">
         <Link
-          to={`/job-post/${jobPost.id}`}
+          to={getJobPostDetailUrl()}
           className="text-md font-semibold hover-bright-orange line-clamp-2 "
         >
           {jobPost.title}
         </Link>
-        <p className="dark:text-gray-300">{jobPost.recruiterName}</p>
+        <p className="dark:text-gray-300">{jobPost.recruiter.fullName}</p>
         <div className="flex gap-1 dark:text-amber-500">
           <p className="py-1 px-2 rounded-lg bg-white dark:bg-stoneBrown-700">
             {tGlobal("common.quantity")}: <span>{jobPost.quantity}</span>

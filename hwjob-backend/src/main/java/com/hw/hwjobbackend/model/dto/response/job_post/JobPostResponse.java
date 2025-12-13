@@ -20,7 +20,8 @@ public class JobPostResponse {
 
     String region;
 
-    String imageUrl;
-
-    String recruiterName;
+//    String imageUrl;
+//
+//    String recruiterName;
+    JobPostRecruiterProfileResponse recruiter;
 }

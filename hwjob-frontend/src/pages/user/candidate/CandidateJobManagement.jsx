@@ -2,11 +2,12 @@ import { TabGroup, TabPanel, TabPanels } from "@headlessui/react";
 
 import { CiLocationOn } from "react-icons/ci";
 import QuantityStatisticsCard from "../../../components/ui/cards/QuantityStatisticsCard";
-import { MenuTablist } from "../../../components/ui/MenuTablist";
+
 import { AppliedJobSection } from "../../../components/sections/candidate/jobManagement/AppliedJobSection";
 import { SavedJobSection } from "../../../components/sections/candidate/jobManagement/SavedJobSection";
 import { HistoryJobSection } from "../../../components/sections/candidate/jobManagement/HistoryJobSection";
 import { JobWorkingSection } from "../../../components/sections/candidate/jobManagement/JobWorkingSection";
+import MenuTabListVertical from "../../../components/ui/MenuTabListVertical";
 
 const JOB_POST_MANAGEMENT_MENUS = [
   { key: "working", label: "Việc đang làm" },
@@ -21,7 +22,7 @@ const CandidateJobManagement = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5">
         {/* Sidebar */}
         <div className="flex flex-col gap-3 col-span-1">
-          <MenuTablist
+          <MenuTabListVertical
             menus={JOB_POST_MANAGEMENT_MENUS}
             title={"Quản lý công việc"}
           />
