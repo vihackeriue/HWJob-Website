@@ -1,58 +1,56 @@
-import React from "react";
+import useMyInfo from "../../hooks/user/useMyProfile.jsx";
+import {useEffect, useState} from "react";
+import {TabGroup, TabPanel, TabPanels} from "@headlessui/react";
+import ProfileCard from "../../components/ui/cards/ProfileCard.jsx";
+import ProgressBar from "../../components/ui/ProgressBar.jsx";
+import MenuTabListVertical from "../../components/ui/MenuTabListVertical.jsx";
+import PersonalInfoSection from "../../components/sections/profile/PersonalInfoSection.jsx";
+import {PROFILE_USER_MENU} from "../../constants/navigation.jsx";
+import UpdateInfoSection from "../../components/sections/profile/UpdateInfoSection.jsx";
 
-import ProfileCard from "../../components/ui/cards/ProfileCard";
-
-import ProgressBar from "../../components/ui/ProgressBar";
-import { PROFILE_USER_MENUS } from "../../constants/navigation";
-import { TabGroup, TabPanel, TabPanels } from "@headlessui/react";
-import OverviewSection from "../../components/sections/profile/OverviewSection";
-import PersonalInfoSection from "../../components/sections/profile/PersonalInfoSection";
-import SecurityInfoSection from "../../components/sections/profile/SecurityInfoSection";
-import { EditSummarySection } from "../../components/sections/profile/EditSummarySection";
-import MenuTabListVertical from "../../components/ui/MenuTabListVertical";
-
-const user = {
-  name: "Wain RP",
-  username: "wainrp",
-  verified: true,
-  profileCompletion: 20,
-};
 const MyProfile = () => {
-  return (
-    <TabGroup>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5">
-        <div className="flex flex-col gap-3 col-span-1">
-          <ProfileCard user={user} />
 
-          <div className="bg-white dark:bg-stoneBrown-900 p-2 rounded-2xl">
-            <ProgressBar
-              title={"Mức độ hòa thiện hồ sơ"}
-              value={user.profileCompletion}
-            />
-          </div>
+    const {data, loading, refetch} = useMyInfo();
+    const [myInfo, setMyInfo] = useState();
+    useEffect(() => {
+        if (data) setMyInfo(data);
+    }, [data]);
+    if (loading || !myInfo) return <div>Đang tải...</div>;
 
-          <MenuTabListVertical
-            menus={PROFILE_USER_MENUS}
-            title={"Quản lý công việc"}
-          />
-        </div>
-        <TabPanels className="col-span-2  flex flex-col gap-3 ">
-          <TabPanel>
-            <OverviewSection />
-          </TabPanel>
-          <TabPanel>
-            <PersonalInfoSection />
-          </TabPanel>
-          <TabPanel>
-            <SecurityInfoSection />
-          </TabPanel>
-          <TabPanel>
-            <EditSummarySection />
-          </TabPanel>
-        </TabPanels>
-      </div>
-    </TabGroup>
-  );
-};
+    return (
+        <TabGroup>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5">
+                <div className="flex flex-col gap-3 col-span-1">
+                    <ProfileCard user={myInfo}/>
+                    <div className="bg-white dark:bg-stoneBrown-900 p-2 rounded-2xl">
+                        <ProgressBar
+                            title={"Mức độ hòa thiện hồ sơ"}
+                            value={myInfo.profileCompletion}
+                        />
+                    </div>
+
+                    <MenuTabListVertical
+                        menus={PROFILE_USER_MENU}
+                        title={"Quản lý"}
+                    />
+                </div>
+                <TabPanels className="col-span-2  flex flex-col gap-3 ">
+                    <TabPanel>
+                        <PersonalInfoSection personalInfo={myInfo}/>
+                    </TabPanel>
+                    <TabPanel>
+                        <UpdateInfoSection
+                            personalInfo={myInfo}
+                            onUpdated={refetch}
+                        />
+                    </TabPanel>
+                    <TabPanel>
+                        <h1>Quản lý CV</h1>
+                    </TabPanel>
+                </TabPanels>
+            </div>
+        </TabGroup>
+    );
+}
 
 export default MyProfile;

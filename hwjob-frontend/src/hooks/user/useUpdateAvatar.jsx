@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {updateAvatarUser} from "../services/userService";
+import {updateAvatarUser} from "../../services/userService.jsx";
 
 export const useUpdateAvatar = () => {
     const [loading, setLoading] = useState(false);

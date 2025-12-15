@@ -1,108 +1,155 @@
-import React, { useState } from "react";
+import React from "react";
 import SecondTitle from "../../ui/title/SecondTitle";
-import FormInput from "../../ui/form/FormInput";
-import FormSelect from "../../ui/form/FormSelect";
-import { CiEdit } from "react-icons/ci";
-import { GENDER } from "../../../config/constants";
-import useAuth from "../../../hooks/useAuth";
-import { hasRole } from "../../../utils/permission";
-import { ROLES } from "../../../config/roles";
+import {GENDER} from "../../../config/constants.jsx";
+import useAuth from "../../../hooks/useAuth.jsx";
+import {ROLES} from "../../../config/roles.jsx";
+import {hasRole} from "../../../utils/permission.jsx";
 
-const PersonalInfoSection = () => {
-  const [formPersonalInf, setFormPersonalInf] = useState({
-    name: "Nguyễn Văn A",
-    gender: 1,
-    dob: "01/12/2003",
 
-    education: "Đại học",
-    region: "",
-    salary_expected: "",
-    summary: "",
-  });
-  const { auth } = useAuth();
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormPersonalInf((prev) => ({ ...prev, [name]: value }));
-  };
+const PersonalInfoSection = ({personalInfo}) => {
 
-  return (
-    <div className="bg-white dark:bg-stoneBrown-900/50 p-3 rounded-2xl">
-      <SecondTitle>Thông tin cá nhân</SecondTitle>
-      <FormInput
-        label="Họ và Tên"
-        name="name"
-        value={formPersonalInf.name}
-        onChange={handleChange}
-      />
-      {hasRole(auth, ROLES.CANDIDATE) && (
-        <>
-          <FormSelect
-            label="Giới tính"
-            name="gender"
-            selected={GENDER.find((j) => j.code === formPersonalInf.gender)}
-            onChange={handleChange}
-            options={GENDER}
-            placeholder="Chọn loại lương"
-          />
-          <FormInput
-            label="Ngày Sinh"
-            name="dob"
-            value={formPersonalInf.dob}
-            onChange={handleChange}
-            type="date"
-          />
-          <FormInput
-            label="Mức lương mong đợi"
-            name="salary_expected"
-            value={formPersonalInf.salary_expected}
-            onChange={handleChange}
-            type="text"
-          />
-          <FormInput
-            label="Trình độ"
-            name="education"
-            value={formPersonalInf.education}
-            onChange={handleChange}
-            type="text"
-          />
-        </>
-      )}
+    const {auth} = useAuth();
 
-      <FormInput
-        label="Địa chỉ"
-        name="address"
-        value={formPersonalInf.address}
-        onChange={handleChange}
-        type="text"
-      />
+    if (!personalInfo) return null;
 
-      <FormInput
-        label="Khu vực/ Thành phố"
-        name="region"
-        value={formPersonalInf.region}
-        onChange={handleChange}
-        type="text"
-      />
+    return (
+        <div className="flex flex-col gap-3">
 
-      <div>
-        <label className="block text-lg font-medium">Tóm tắt bản thân</label>
-        <textarea
-          type="text"
-          name="summary"
-          value={formPersonalInf.summary}
-          className="mt-1 block w-full border px-3 py-2 rounded-md bg-gray-100 border-gray-400"
-          rows={5}
-          placeholder="Giới thiệu ngắn gọn về bản thân..."
-        />
-      </div>
-      <div className="flex gap-3 justify-end mt-3">
-        <button className="flex gap-1 items-center bg-brightOrange px-3 py-2 rounded-lg text-gray-100">
-          <CiEdit size={20} />
-          <span>Cập nhật</span>
-        </button>
-      </div>
-    </div>
-  );
+            <div className="bg-white dark:bg-stoneBrown-900/50 p-3 rounded-2xl">
+                <SecondTitle>Thông tin cá nhân</SecondTitle>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+
+                    <InformationField
+                        label="Tên đầy đủ"
+                        value={personalInfo.fullName}
+                    />
+                    <InformationField
+                        label="Email"
+                        value={personalInfo.email}
+                    />
+                    <InformationField
+                        label="Số điện thoại"
+                        value={personalInfo.phone}
+                    />
+                    <InformationField
+                        label="Khu vực"
+                        value={personalInfo.region?.name}
+                    />
+
+                    {/*CANDIDATE*/}
+
+                    {hasRole(auth, ROLES.CANDIDATE) && (
+                        <>
+                            <InformationField
+                                label="Ngày sinh"
+                                value={personalInfo.dob}
+                            />
+                            <InformationField
+                                label="Giới tính"
+                                value={
+                                    GENDER.find(g => g.code === personalInfo.gender)?.name
+                                }
+                            />
+                            <InformationField
+                                label="Trình độ"
+                                value={personalInfo.education}
+                            />
+                            <InformationField
+                                label="Mức lương mong muốn"
+                                value={personalInfo.expectSalary}
+                            />
+                        </>
+                    )}
+
+                    {/*RECRUITER*/}
+                    {hasRole(auth, ROLES.RECRUITER) && (
+                        <>
+                            <InformationField
+                                label="Website"
+                                value={personalInfo.website}
+                            />
+                        </>
+                    )}
+
+
+                </div>
+            </div>
+
+            <div className="bg-white dark:bg-stoneBrown-900/50 p-3 rounded-2xl">
+                <SecondTitle>Tóm tắt</SecondTitle>
+                {personalInfo.summary ? (
+                    <div
+                        className="prose max-w-none mt-2 p-3"
+                        dangerouslySetInnerHTML={{
+                            __html: personalInfo.summary,
+                        }}
+                    />
+                ) : (
+                    <span className="italic text-gray-400">Không có</span>
+                )}
+            </div>
+            {hasRole(auth, ROLES.CANDIDATE) && (
+                <>
+                    <div className="bg-white dark:bg-stoneBrown-900/50 p-4 rounded-2xl">
+                        <SecondTitle>Kỹ năng</SecondTitle>
+                        {personalInfo.skills.length > 0 ? (
+                            <SkillList skills={personalInfo.skills}/>
+                        ) : (
+                            <span className="italic text-gray-400">Không có</span>
+                        )
+                        }
+                    </div>
+                </>
+            )
+            }
+        </div>
+    );
 };
+
+const InformationField = ({label, value}) => {
+    const isEmpty =
+        value === null ||
+        value === undefined ||
+        value === "";
+
+    return (
+        <p className="bg-white dark:bg-stoneBrown-900 p-2 rounded-lg">
+            <span className="font-bold">{label}: </span>
+            {isEmpty ? (
+                <span className="italic text-gray-400">Không có</span>
+            ) : (
+                value
+            )}
+        </p>
+    );
+};
+
+const SkillList = ({skills}) => (
+    <ul className="flex flex-wrap gap-2 mt-2">
+        {skills.map((skill) => (
+            <SkillTag key={skill.id} skill={skill}/>
+        ))}
+    </ul>
+);
+
+const SkillTag = ({skill}) => (
+    <li
+        className="
+            inline-flex max-w-full
+            items-center
+            rounded-full
+            border border-sky-100
+            bg-sky-50
+            dark:text-sky-300
+            dark:border-sky-500/15
+            dark:bg-sky-500/10
+            px-3 py-1
+            text-sm
+            whitespace-normal
+        "
+    >
+        {skill.name}
+    </li>
+);
 
 export default PersonalInfoSection;

@@ -1,6 +1,8 @@
 package com.hw.hwjobbackend.model.dto.response.user;
 
+import com.hw.hwjobbackend.model.dto.response.region.RegionResponse;
 import com.hw.hwjobbackend.model.dto.response.role.RoleResponse;
+import com.hw.hwjobbackend.model.entity.region.Region;
 import com.hw.hwjobbackend.model.enums.UserStatusEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -23,5 +25,5 @@ public class UserResponse {
     String summary;
     String imageUrl;
     Set<RoleResponse> roles;
-    String region;
+    RegionResponse region;
 }
