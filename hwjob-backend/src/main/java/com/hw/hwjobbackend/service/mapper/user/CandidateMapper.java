@@ -9,7 +9,6 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface CandidateMapper {
 
-    @Mapping(source = "region.name", target = "region")
     CandidateResponse toCandidateResponse(Candidate candidate);
 
     @Mapping(target = "password", ignore = true)

@@ -13,7 +13,6 @@ export function useDetail(fetchFn, id) {
             .then((res) => setData(res.result))
             .catch(() => setError("Không thể tải dữ liệu"))
             .finally(() => setLoading(false));
-    }, [id]);
-
+    }, [fetchFn, id]);
     return {data, loading, error};
 }

@@ -1,6 +1,7 @@
 package com.hw.hwjobbackend.model.dto.request.user;
 
 import com.hw.hwjobbackend.model.enums.CandidateGenderEnum;
+import jakarta.annotation.Nullable;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
