@@ -117,6 +117,9 @@ const UpdateInfoSection = ({personalInfo, onUpdated}) => {
 
         if (success) {
             onUpdated?.();
+            toast.success("Cập nhật thông tin thành công!");
+        } else {
+            toast.success("Cập nhật thất bại!");
         }
     };
 
