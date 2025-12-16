@@ -34,8 +34,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -77,7 +80,9 @@ public class UserServiceImpl implements UserService {
         String userId = SecurityUtils.getCurrentUserId();
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        return userMapper.toUserResponse(user);
+        UserResponse userResponse = userMapper.toUserResponse(user);
+        userResponse.setCompletionPercent(calculateCompletionPercent(user));
+        return userResponse;
     }
 
     @Override
@@ -220,7 +225,37 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    private void setDefaultAvatar(String userId) {
+    private int calculateCompletionPercent(User user) {
 
+        List<Supplier<Boolean>> checks = new ArrayList<>();
+
+        checks.add(() -> hasText(user.getFullName()));
+        checks.add(() -> hasText(user.getEmail()));
+        checks.add(() -> hasText(user.getPhone()));
+        checks.add(() -> user.getRegion() != null);
+        checks.add(() -> hasText(user.getSummary()));
+        checks.add(() -> hasText(user.getImageUrl()));
+
+        if (user instanceof Candidate c) {
+            checks.add(() -> c.getDob() != null);
+            checks.add(() -> c.getGender() != null);
+            checks.add(() -> hasText(c.getEducation()));
+            checks.add(() -> c.getExpectSalary() != null);
+            checks.add(() -> c.getSkills() != null && !c.getSkills().isEmpty());
+        }
+
+        if (user instanceof Recruiter r) {
+            checks.add(() -> hasText(r.getWebsite()));
+        }
+
+        long completed = checks.stream()
+                .filter(Supplier::get)
+                .count();
+
+        return Math.round(completed * 100f / checks.size());
+    }
+
+    private boolean hasText(String value) {
+        return value != null && !value.trim().isEmpty();
     }
 }

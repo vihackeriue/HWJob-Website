@@ -26,4 +26,5 @@ public class UserResponse {
     String imageUrl;
     Set<RoleResponse> roles;
     RegionResponse region;
+    Integer completionPercent;
 }

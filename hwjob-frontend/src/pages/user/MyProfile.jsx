@@ -24,8 +24,8 @@ const MyProfile = () => {
                     <ProfileCard user={myInfo}/>
                     <div className="bg-white dark:bg-stoneBrown-900 p-2 rounded-2xl">
                         <ProgressBar
-                            title={"Mức độ hòa thiện hồ sơ"}
-                            value={myInfo.profileCompletion}
+                            title={"Mức độ hòa thiện thông tin cá nhân"}
+                            value={myInfo.completionPercent}
                         />
                     </div>
 
