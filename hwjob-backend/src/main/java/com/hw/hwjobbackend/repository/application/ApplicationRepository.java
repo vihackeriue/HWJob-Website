@@ -70,4 +70,14 @@ public interface ApplicationRepository extends JpaRepository<Application, Applic
             @Param("candidateId") String candidateId,
             @Param("jobPostId") String jobPostId);
 
+    @Query("""
+    SELECT a FROM Application a
+    WHERE a.jobPost.id = :jobPostId
+      AND a.candidate.id = :candidateId
+""")
+    Optional<Application> findByJobPostIdAndCandidateId(
+            @Param("jobPostId") String jobPostId,
+            @Param("candidateId") String candidateId
+    );
+
 }

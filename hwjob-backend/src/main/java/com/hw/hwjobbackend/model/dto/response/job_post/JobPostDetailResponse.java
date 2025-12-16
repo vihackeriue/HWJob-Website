@@ -2,6 +2,7 @@ package com.hw.hwjobbackend.model.dto.response.job_post;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
 import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.skill.SkillResponse;
 import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
@@ -41,7 +42,7 @@ public class JobPostDetailResponse {
 
     Set<SkillResponse> skills;
 
-    Boolean isApplied;
+    ApplicationResponse application;
     Boolean isSaved;
 
 }

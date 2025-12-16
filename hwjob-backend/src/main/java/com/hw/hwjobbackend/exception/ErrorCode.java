@@ -103,8 +103,10 @@ public enum ErrorCode {
     // ========================================
     CONVERSATION_NOT_FOUND(1901, "error.conversation_not_found", HttpStatus.NOT_FOUND),
     MESSAGE_NOT_FOUND(1902, "error.message_not_found", HttpStatus.NOT_FOUND),
-
-
+    // ========================================
+    // APPLICATION (20xx)
+    // ========================================
+    INVALID_APPLICATION_STATUS(2001, "error.invalid_application_status", HttpStatus.BAD_REQUEST),
     ;
 
 
