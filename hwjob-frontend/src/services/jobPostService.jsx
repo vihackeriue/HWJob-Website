@@ -32,16 +32,6 @@ export const getSavedJobPosts = async (page = 1, size = DEFAULT_LIMIT) => {
 
   return response.data;
 };
-export const getAppliedJobPosts = async (page = 1, size = DEFAULT_LIMIT) => {
-  const response = await axiosPrivate.get(
-    ENDPOINTS.JOB_POST.LIST_APPLIED_JOB_POSTS,
-    {
-      params: { page, size },
-    }
-  );
-
-  return response.data;
-};
 
 export const getHistoryJobPosts = async (page = 1, size = DEFAULT_LIMIT) => {
   const response = await axiosPublic.get(
@@ -68,11 +58,6 @@ export const getJobPostsOfRecruiter = async (
 
 export const getJobPostById = async (id) => {
   const response = await axiosPrivate.get(ENDPOINTS.JOB_POST.DETAIL(id));
-  return response.data;
-};
-
-export const applyJob = async (data) => {
-  const response = await axiosPrivate.post(ENDPOINTS.JOB_POST.APPLY_JOB, data);
   return response.data;
 };
 

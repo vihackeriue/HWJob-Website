@@ -7,8 +7,8 @@ import {
   updateWalletService,
 } from "../services/authService";
 import { jwtDecode } from "jwt-decode";
-import { ROLES } from "../config/roles";
 import { toast } from "react-toastify";
+import { ROLES } from "../constants/roles";
 
 const AuthContext = createContext({});
 

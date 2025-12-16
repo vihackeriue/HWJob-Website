@@ -89,8 +89,17 @@ public class CandidateApplicationServiceImpl implements CandidateApplicationServ
         Page<Application> applications = applicationRepository
                 .findByCandidateIdOrderByCreatedAtDesc(candidateId, pageable);
 
-        return applications.map(application ->
-                jobPostMapper.toJobPostResponse(application.getJobPost()));
+        return applications.map(this::buildJobPostResponse);
+    }
+
+    private JobPostResponse buildJobPostResponse(Application application) {
+        JobPostResponse response =
+                jobPostMapper.toJobPostResponse(application.getJobPost());
+
+
+        response.setApplicationStatus(application.getStatus());
+
+        return response;
     }
 
     @Override

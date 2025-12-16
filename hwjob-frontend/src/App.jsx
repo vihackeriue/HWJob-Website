@@ -21,10 +21,11 @@ import JobPostList from "./pages/user/JobPostList";
 import JobPostDetail from "./pages/user/JobPostDetail";
 
 import CandidateJobManagement from "./pages/user/candidate/CandidateJobManagement";
-import { ROLES } from "./config/roles";
+
 import { ToastContainer } from "react-toastify";
 import RecruiterJobManagement from "./pages/user/recruiter/RecruiterJobManagement";
 import RecruiterJobPostDetail from "./pages/user/recruiter/RecruiterJobPostDetail";
+import { ROLES } from "./constants/roles";
 
 function App() {
   return (

@@ -33,7 +33,7 @@ public interface JobPostMapper {
     @Mapping(source = "jobType.name", target = "jobType")
     @Mapping(source = "region.name", target = "region")
     @Mapping(target = "recruiter", ignore = true)
-    @Mapping(target = "isApplied", ignore = true)
+    @Mapping(target = "application", ignore = true)
     @Mapping(target = "isSaved", ignore = true)
     JobPostDetailResponse toJobPostDetailResponse(JobPost jobPost);
 
