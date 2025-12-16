@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import FormInput from "../../../components/ui/form/FormInput";
 import RichTextEditor from "../../../components/ui/RichTextEditor";
 import FormSelect from "../../../components/ui/form/FormSelect";
-import RangeInput from "../../../components/ui/RangeInput";
 import PrimaryButton from "../../../components/ui/button/PrimaryButton";
 import SecondTitle from "../../../components/ui/title/SecondTitle";
 import PrimaryTitle from "../../../components/ui/title/PrimaryTitle";

@@ -2,9 +2,8 @@ import React from "react";
 import SecondTitle from "../../ui/title/SecondTitle";
 import {GENDER} from "../../../config/constants.jsx";
 import useAuth from "../../../hooks/useAuth.jsx";
-import {ROLES} from "../../../config/roles.jsx";
 import {hasRole} from "../../../utils/permission.jsx";
-
+import {ROLES} from "../../../constants/roles";
 
 const PersonalInfoSection = ({personalInfo}) => {
 

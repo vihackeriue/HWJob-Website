@@ -2,6 +2,7 @@ package com.hw.hwjobbackend.service.shared.job_post;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostRecruiterProfileResponse;
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostFilterRequest;
@@ -80,33 +81,45 @@ public class JobPostServiceImpl implements JobPostService {
                 jobPostMapper.toJobPostRecruiterProfileResponse(jobPost.getRecruiter());
         response.setRecruiter(recruiterResponse);
 
-        if (SecurityUtils.isAuthenticated()) {
-//            Optional<String> userIdOpt = SecurityUtils.getCurrentUserIdOptional();
-//            Optional<RoleEnum> userRoleOpt = SecurityUtils.getCurrentUserRoleOptional();
-            String userId = SecurityUtils.getCurrentUserId();
-            RoleEnum userRole = SecurityUtils.getCurrentUserRole();
-            if (userRole == RoleEnum.CANDIDATE) {
-                setCandidateSpecificInfo(response, userId, jobPost.getId());
-            } else {
-                // Recruiter or Admin
-                response.setIsApplied(false);
-                response.setIsSaved(false);
-            }
-        } else {
-            response.setIsApplied(false);
+        // ===== GUEST =====
+        if (!SecurityUtils.isAuthenticated()) {
+            response.setApplication(null);
             response.setIsSaved(false);
+            return response;
+        }
+        String userId = SecurityUtils.getCurrentUserId();
+        RoleEnum role = SecurityUtils.getCurrentUserRole();
+
+        // ===== CANDIDATE =====
+        if (role == RoleEnum.CANDIDATE) {
+            applicationRepository
+                    .findByJobPostIdAndCandidateId(jobPost.getId(), userId)
+                    .ifPresent(application ->
+                            response.setApplication(
+                                    ApplicationResponse.builder()
+                                            .jobPostId(jobPost.getId())
+                                            .status(application.getStatus())
+                                            .build()
+                            )
+                    );
+
+            response.setIsSaved(
+                    candidateSaveJobRepository.existsByCandidateIdAndJobPostId(
+                            userId, jobPost.getId()
+                    )
+            );
+
+            return response;
+
         }
 
+        // ===== RECRUITER / ADMIN =====
+        response.setApplication(null);
+        response.setIsSaved(false);
+
         return response;
+
     }
 
-    private void setCandidateSpecificInfo(JobPostDetailResponse response, String candidateId, String jobPostId) {
-        boolean isApplied = applicationRepository.existsByCandidateIdAndJobPostId(
-                candidateId, jobPostId);
-        boolean isSaved = candidateSaveJobRepository.existsByCandidateIdAndJobPostId(
-                candidateId, jobPostId);
 
-        response.setIsApplied(isApplied);
-        response.setIsSaved(isSaved);
-    }
 }
