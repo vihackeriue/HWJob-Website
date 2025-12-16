@@ -1,6 +1,6 @@
 import {axiosPrivate, axiosPublic, DEFAULT_LIMIT} from "../api/axios";
 import {ENDPOINTS} from "../config/endpoints";
-import {ROLES} from "../config/roles.jsx";
+import {ROLES} from "../constants/roles.jsx";
 
 export const createUser = async (data) => {
     const response = await axiosPublic.post(ENDPOINTS.AUTH.REGISTER, data);
