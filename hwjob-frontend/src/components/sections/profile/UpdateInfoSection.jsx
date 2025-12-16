@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import SecondTitle from "../../ui/title/SecondTitle";
 import FormInput from "../../ui/form/FormInput";
 import FormSelect from "../../ui/form/FormSelect";
@@ -9,12 +9,13 @@ import {useList} from "../../../hooks/useList.jsx";
 import {getRegionsNotPagination} from "../../../services/regionService.jsx";
 import {IoMdClose} from "react-icons/io";
 import useAuth from "../../../hooks/useAuth.jsx";
-import {ROLES} from "../../../config/roles.jsx";
+
 import {getSkillsNotPagination} from "../../../services/skillService.jsx";
 import RichTextEditor from "../../ui/RichTextEditor.jsx";
 import {useUpdateInfo} from "../../../hooks/user/useUpdateInfo.jsx";
 import {toast} from "react-toastify";
-
+import {ROLES} from "../../../constants/roles.jsx";
+import {hasRole} from "../../../utils/permission.jsx";
 
 const UpdateInfoSection = ({personalInfo, onUpdated}) => {
 
@@ -36,7 +37,6 @@ const UpdateInfoSection = ({personalInfo, onUpdated}) => {
         // RECRUITER
         website: ""
     });
-    const {auth} = useAuth();
 
     useEffect(() => {
         if (!personalInfo) return;
@@ -61,10 +61,10 @@ const UpdateInfoSection = ({personalInfo, onUpdated}) => {
         });
     }, [personalInfo]);
 
-    const hasRole = (role) => auth?.roles?.includes(role);
-
     const regions = useList(getRegionsNotPagination);
     const skills = useList(getSkillsNotPagination);
+
+    const {auth} = useAuth();
 
     const [openUpdatePasswordDialog, setOpenUpdatePasswordDialog] = useState(false);
 
@@ -164,7 +164,7 @@ const UpdateInfoSection = ({personalInfo, onUpdated}) => {
                         placeholder="Chọn khu vực"
                         onChange={handleRegionChange}
                     />
-                    {hasRole(ROLES.CANDIDATE) && (
+                    {hasRole(auth, ROLES.CANDIDATE) && (
                         <>
                             <FormSelect
                                 label="Giới tính"
@@ -204,7 +204,7 @@ const UpdateInfoSection = ({personalInfo, onUpdated}) => {
                         </>
                     )}
 
-                    {hasRole(ROLES.RECRUITER) && (
+                    {hasRole(auth, ROLES.RECRUITER) && (
                         <>
                             <FormInput
                                 label="Website"
@@ -216,7 +216,7 @@ const UpdateInfoSection = ({personalInfo, onUpdated}) => {
                     )}
                 </div>
 
-                {hasRole(ROLES.CANDIDATE) && (
+                {hasRole(auth, ROLES.CANDIDATE) && (
                     <div className="mt-3">
                         <SecondTitle></SecondTitle>
                         <span>Kỹ năng</span>

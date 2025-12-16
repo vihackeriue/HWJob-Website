@@ -1,6 +1,6 @@
-import {ROLES} from "../../config/roles.jsx";
 import {useState} from "react";
 import {updateUserInfo} from "../../services/userService.jsx";
+import {ROLES} from "../../constants/roles.jsx";
 
 
 export const useUpdateInfo = (formData, auth) => {
