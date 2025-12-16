@@ -6,7 +6,7 @@ import { CiEdit } from "react-icons/ci";
 import { GENDER } from "../../../config/constants";
 import useAuth from "../../../hooks/useAuth";
 import { hasRole } from "../../../utils/permission";
-import { ROLES } from "../../../config/roles";
+import { ROLES } from "../../../constants/roles";
 
 const PersonalInfoSection = () => {
   const [formPersonalInf, setFormPersonalInf] = useState({

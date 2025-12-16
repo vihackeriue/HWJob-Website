@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { hasRole } from "../../../../utils/permission";
-import { ROLES } from "../../../../config/roles";
+
 import classNames from "classnames";
 import useAuth from "../../../../hooks/useAuth";
 import InfoCard from "../../../ui/cards/InfoCard";
@@ -9,37 +9,77 @@ import { IoPeopleOutline } from "react-icons/io5";
 import { HiOutlineCalendarDateRange } from "react-icons/hi2";
 import { formatDate } from "../../../../utils/date";
 import PrimaryButton from "../../../ui/button/PrimaryButton";
-
+import { IoIosHeartEmpty, IoMdHeart } from "react-icons/io";
+import { ROLES } from "../../../../constants/roles";
+import { useUpdateApplicationStatus } from "../../../../hooks/useUpdateApplicationStatus";
+import { STATUS_APPLICATION_MAP } from "../../../../constants/statusApplication";
+import ConfirmDialog from "../../../dialog/common/ConfirmDialog";
 export const OverviewSection = ({
   jobPost,
   onSaveJobPost,
   setOpenApplyJobDialog,
 }) => {
   const { auth } = useAuth();
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null);
+
+  const { updateStatus } = useUpdateApplicationStatus();
   const renderActionButtons = () => {
-    // Nếu là ứng viên (CANDIDATE)
-    if (hasRole(ROLES.CANDIDATE)) {
+    /** ===== CANDIDATE ===== */
+    if (hasRole(auth, ROLES.CANDIDATE)) {
       return (
-        <div className="flex gap-3">
-          {jobPost.isApplied ? (
-            <button className="px-4 py-2 bg-gray-300 rounded-lg cursor-not-allowed">
-              Đã ứng tuyển
-            </button>
-          ) : (
+        <div className="flex gap-3 items-center">
+          {/* ===== CHƯA ỨNG TUYỂN ===== */}
+          {!jobPost.application && (
             <PrimaryButton onClick={() => setOpenApplyJobDialog(true)}>
               Ứng tuyển ngay
             </PrimaryButton>
           )}
 
-          <button
+          {/* ===== ĐÃ ỨNG TUYỂN ===== */}
+          {jobPost.application &&
+            (() => {
+              const statusConfig =
+                STATUS_APPLICATION_MAP[jobPost.application.status];
+
+              if (!statusConfig) return null;
+
+              return (
+                <>
+                  {/* Status badge */}
+                  <span
+                    className={classNames(
+                      "px-4 py-2 rounded-lg text-sm font-medium",
+                      statusConfig.className
+                    )}
+                  >
+                    {statusConfig.name}
+                  </span>
+
+                  {/* Candidate actions */}
+                  {statusConfig.actions?.CANDIDATE?.map((action) => (
+                    <PrimaryButton
+                      key={action.to}
+                      variant={action.variant}
+                      onClick={() => {
+                        setConfirmAction(action);
+                        setOpenConfirmDialog(true);
+                      }}
+                    >
+                      {action.label}
+                    </PrimaryButton>
+                  ))}
+                </>
+              );
+            })()}
+          {/* ===== SAVE JOB ===== */}
+          <PrimaryButton
             onClick={onSaveJobPost}
-            className={classNames(
-              "flex gap-1 items-center px-3 py-2 rounded-lg border",
-              {
-                "text-brightOrange border-brightOrange": jobPost.isSaved,
-                "text-gray-900 border-gray-300": !jobPost.isSaved,
-              }
-            )}
+            variant="outline"
+            className={classNames("flex gap-1 items-center", {
+              "text-brightOrange border-brightOrange": jobPost.isSaved,
+              "text-gray-900 border-gray-300": !jobPost.isSaved,
+            })}
           >
             {jobPost.isSaved ? (
               <>
@@ -52,11 +92,12 @@ export const OverviewSection = ({
                 <span>Lưu tin</span>
               </>
             )}
-          </button>
+          </PrimaryButton>
         </div>
       );
     }
-    // Nếu là nhà tuyển dụng và đây là bài đăng của chính họ
+
+    /** ===== RECRUITER (CHỦ BÀI ĐĂNG) ===== */
     if (hasRole(auth, ROLES.RECRUITER) && jobPost.recruiter.id === auth.id) {
       return (
         <div className="flex gap-3">
@@ -65,11 +106,12 @@ export const OverviewSection = ({
       );
     }
 
-    return null; // Nếu recruiter xem bài của người khác thì ko show gì
+    return null;
   };
+
   return (
     <div className="flex gap-3 ">
-      <div className="flex-3 bg-white rounded-2xl p-3 flex flex-col gap-3">
+      <div className="relative flex-3 bg-white rounded-2xl p-3 flex flex-col gap-3 ">
         <div className="flex gap-5">
           <img
             src={jobPost.recruiter.imageUrl}
@@ -89,7 +131,9 @@ export const OverviewSection = ({
             </p>
           </div>
         </div>
-        <div className="flex gap-3 justify-end">{renderActionButtons()}</div>
+        <div className="absolute right-3 bottom-3 flex gap-3">
+          {renderActionButtons()}
+        </div>
       </div>
 
       <div className="flex-1 flex flex-col gap-3 bg-white rounded-2xl p-3">
@@ -111,6 +155,26 @@ export const OverviewSection = ({
           value={formatDate(jobPost.endedTime)}
         />
       </div>
+      <ConfirmDialog
+        open={openConfirmDialog}
+        title={confirmAction?.label}
+        description={`Bạn có chắc chắn muốn "${confirmAction?.label}" không?`}
+        onClose={() => {
+          setOpenConfirmDialog(false);
+          setConfirmAction(null);
+        }}
+        onConfirm={() => {
+          updateStatus({
+            applicationId: auth.id,
+            jobPostId: jobPost.id,
+            status: confirmAction.to,
+            onSuccess: () => {
+              setOpenConfirmDialog(false);
+              setConfirmAction(null);
+            },
+          });
+        }}
+      />
     </div>
   );
 };

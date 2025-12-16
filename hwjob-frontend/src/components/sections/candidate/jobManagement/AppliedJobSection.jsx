@@ -1,7 +1,7 @@
 import React from "react";
 import { JobPostListSection } from "../../JobPostListSection";
 import { useList } from "../../../../hooks/useList";
-import { getAppliedJobPosts } from "../../../../services/jobPostService";
+import { getAppliedJobPosts } from "../../../../services/applicationService";
 
 export const AppliedJobSection = () => {
   const appliedJobPosts = useList(getAppliedJobPosts);

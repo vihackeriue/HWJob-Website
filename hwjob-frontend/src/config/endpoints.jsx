@@ -17,12 +17,20 @@ export const ENDPOINTS = {
     LIST: "public/job-posts",
     LIST_WORKING_JOBS: "public/job-posts",
     LIST_SAVED_JOB_POSTS: "candidates/job-posts/saved",
-    LIST_APPLIED_JOB_POSTS: "candidates/applications",
+
     LIST_HISTORY_JOB_POSTS: "public/job-posts",
     LIST_JOB_POSTS_OF_RECRUITER: "recruiters/job-posts",
     DETAIL: (id) => `public/job-posts/${id}`,
-    APPLY_JOB: "candidates/applications",
+
     SAVE_JOB: (id) => `candidates/job-posts/save/${id}`,
+  },
+  APPLICATION: {
+    APPLY_JOB: "candidates/applications",
+    LIST_APPLIED_JOB_POSTS: "candidates/applications",
+    LIST_APPLICANTS: (jobPostId) =>
+      `recruiters/applications/job-posts/${jobPostId}/candidates`,
+    UPDATE_STATUS_APPLICANTS: (applicationId, jobPostId) =>
+      `recruiters/applications/job-posts/${jobPostId}/candidates/${applicationId}/status`,
   },
   INDUSTRY: {
     LIST: "public/industries",

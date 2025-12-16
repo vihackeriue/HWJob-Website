@@ -97,6 +97,10 @@ public enum ErrorCode {
     // ========================================
     SKILL_EXISTED(1801, "error.skill_existed", HttpStatus.BAD_REQUEST),
     SKILL_NOT_EXISTED(1802, "error.skill_not_existed", HttpStatus.NOT_FOUND),
+
+
+    //    APPLICATION
+    INVALID_APPLICATION_STATUS(1901,"error.invalid_application_status", HttpStatus.BAD_REQUEST),
     ;
 
 

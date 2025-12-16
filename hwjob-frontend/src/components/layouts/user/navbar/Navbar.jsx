@@ -16,7 +16,7 @@ import useAuth from "../../../../hooks/useAuth";
 import ResponsiveMenu from "./ResponsiveMenu";
 import { HiMenuAlt1, HiMenuAlt3 } from "react-icons/hi";
 import PrimaryButton from "../../../ui/button/PrimaryButton";
-import { ROLES } from "../../../../config/roles";
+import { ROLES } from "../../../../constants/roles";
 
 export default function Navbar() {
   const navigate = useNavigate();

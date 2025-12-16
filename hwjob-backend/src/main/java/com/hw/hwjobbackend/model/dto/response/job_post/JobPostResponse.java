@@ -1,6 +1,7 @@
 package com.hw.hwjobbackend.model.dto.response.job_post;
 
 
+import com.hw.hwjobbackend.model.enums.ApplicationStatusEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -20,8 +21,7 @@ public class JobPostResponse {
 
     String region;
 
-//    String imageUrl;
-//
-//    String recruiterName;
+    ApplicationStatusEnum applicationStatus;
     JobPostRecruiterProfileResponse recruiter;
+
 }
