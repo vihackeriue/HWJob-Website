@@ -8,7 +8,6 @@ import {useTranslation} from "react-i18next";
 import FeatureSection from "../../components/sections/FeatureSection";
 import TopRecruiterSection from "../../components/sections/TopRecruiterSection";
 import IntroduceRecruiterSection from "../../components/sections/IntroduceRecruiterSection";
-import PrimaryTitle from "../../components/ui/title/PrimaryTitle";
 import SuggestedJobSection from "../../components/sections/SuggestedJobSection";
 import SearchBar from "../../components/ui/SearchBar";
 

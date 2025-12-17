@@ -55,4 +55,7 @@ export const ENDPOINTS = {
     SKILL: {
         LIST: "public/skills",
     },
+
+    WEBSOCKET: "ws"
+
 };
