@@ -14,7 +14,6 @@ export const getUsers = async (page = 1, size = DEFAULT_LIMIT) => {
     return response.data;
 };
 
-
 export const getMyInfo = async () => {
     const response = await axiosPrivate.get(ENDPOINTS.USER.MY_INFO);
     return response.data;

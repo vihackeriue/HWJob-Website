@@ -6,22 +6,91 @@
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
-        input, button { padding: 8px; margin: 5px 0; }
-        input { width: 200px; }
-        button { cursor: pointer; }
-        .section { border: 1px solid #ccc; padding: 15px; margin: 10px 0; }
-        .msg-box { height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
-        .msg { padding: 5px; margin: 3px 0; }
-        .msg.mine { text-align: right; background: #e3f2fd; }
-        .msg.other { text-align: left; background: #f5f5f5; }
-        .conv-item { padding: 8px; border-bottom: 1px solid #eee; cursor: pointer; }
-        .conv-item:hover { background: #f0f0f0; }
-        .conv-item.active { background: #d0d0d0; }
-        .log { height: 100px; overflow-y: auto; background: #333; color: #0f0; padding: 10px; font-family: monospace; font-size: 12px; }
-        .status { padding: 5px; margin: 5px 0; }
-        .status.ok { color: green; }
-        .status.err { color: red; }
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        input, button {
+            padding: 8px;
+            margin: 5px 0;
+        }
+
+        input {
+            width: 200px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .section {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .msg-box {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .msg {
+            padding: 5px;
+            margin: 3px 0;
+        }
+
+        .msg.mine {
+            text-align: right;
+            background: #e3f2fd;
+        }
+
+        .msg.other {
+            text-align: left;
+            background: #f5f5f5;
+        }
+
+        .conv-item {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .conv-item:hover {
+            background: #f0f0f0;
+        }
+
+        .conv-item.active {
+            background: #d0d0d0;
+        }
+
+        .log {
+            height: 100px;
+            overflow-y: auto;
+            background: #333;
+            color: #0f0;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .status {
+            padding: 5px;
+            margin: 5px 0;
+        }
+
+        .status.ok {
+            color: green;
+        }
+
+        .status.err {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -77,19 +146,22 @@
     }
 
     function authHeaders() {
-        return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token };
+        return {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token};
     }
 
     async function login() {
         const u = document.getElementById('username').value;
         const p = document.getElementById('password').value;
-        if (!u || !p) { alert('Nhập username/password'); return; }
+        if (!u || !p) {
+            alert('Nhập username/password');
+            return;
+        }
         log('Đăng nhập: ' + u);
         try {
             const res = await fetch(baseUrl + '/auth/login', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: u, password: p })
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username: u, password: p})
             });
             const data = await res.json();
             if (data.result && data.result.accessToken) {
@@ -110,7 +182,10 @@
 
     function useToken() {
         const t = document.getElementById('manualToken').value.trim();
-        if (!t) { alert('Nhập token'); return; }
+        if (!t) {
+            alert('Nhập token');
+            return;
+        }
         try {
             token = t;
             userId = parseJwt(t).sub;
@@ -128,18 +203,21 @@
     }
 
     function connectWS() {
-        if (!token) { alert('Đăng nhập trước'); return; }
+        if (!token) {
+            alert('Đăng nhập trước');
+            return;
+        }
         log('Kết nối WebSocket...');
         const socket = new SockJS(baseUrl + '/ws');
         stompClient = Stomp.over(socket);
         stompClient.debug = null;
-        stompClient.connect({ Authorization: 'Bearer ' + token },
-            function() {
+        stompClient.connect({Authorization: 'Bearer ' + token},
+            function () {
                 document.getElementById('wsStatus').textContent = 'Đã kết nối';
                 document.getElementById('wsStatus').className = 'status ok';
                 log('WebSocket connected');
             },
-            function(err) {
+            function (err) {
                 document.getElementById('wsStatus').textContent = 'Lỗi: ' + err;
                 document.getElementById('wsStatus').className = 'status err';
                 log('WS error: ' + err);
@@ -148,14 +226,20 @@
     }
 
     async function loadConvs() {
-        if (!token) { alert('Đăng nhập trước'); return; }
+        if (!token) {
+            alert('Đăng nhập trước');
+            return;
+        }
         log('Tải conversations...');
         try {
-            const res = await fetch(baseUrl + '/chats', { headers: authHeaders() });
+            const res = await fetch(baseUrl + '/chats', {headers: authHeaders()});
             const data = await res.json();
             const convs = data.result || [];
             const el = document.getElementById('convList');
-            if (!convs.length) { el.innerHTML = 'Không có conversation'; return; }
+            if (!convs.length) {
+                el.innerHTML = 'Không có conversation';
+                return;
+            }
             el.innerHTML = convs.map(c =>
                 '<div class="conv-item" id="conv-' + c.id + '" onclick="selectConv(\'' + c.id + '\',\'' + (c.conversationName || 'Chat').replace(/'/g, "\\'") + '\')">' +
                 (c.conversationName || c.id) + '</div>'
@@ -180,11 +264,19 @@
     }
 
     function subscribeConv(convId) {
-        if (!stompClient || !stompClient.connected) { log('WS chưa kết nối'); return; }
-        Object.values(subs).forEach(s => { try { s.unsubscribe(); } catch(e) {} });
+        if (!stompClient || !stompClient.connected) {
+            log('WS chưa kết nối');
+            return;
+        }
+        Object.values(subs).forEach(s => {
+            try {
+                s.unsubscribe();
+            } catch (e) {
+            }
+        });
         subs = {};
         log('Subscribe: /topic/conversation/' + convId);
-        subs[convId] = stompClient.subscribe('/topic/conversation/' + convId, function(msg) {
+        subs[convId] = stompClient.subscribe('/topic/conversation/' + convId, function (msg) {
             log('Nhận message từ WS');
             appendMsg(JSON.parse(msg.body));
         });
@@ -192,11 +284,14 @@
 
     async function loadMsgs(convId) {
         try {
-            const res = await fetch(baseUrl + '/chats/' + convId + '/messages', { headers: authHeaders() });
+            const res = await fetch(baseUrl + '/chats/' + convId + '/messages', {headers: authHeaders()});
             const data = await res.json();
             const msgs = data.result || [];
             const el = document.getElementById('msgList');
-            if (!msgs.length) { el.innerHTML = 'Chưa có tin nhắn'; return; }
+            if (!msgs.length) {
+                el.innerHTML = 'Chưa có tin nhắn';
+                return;
+            }
             el.innerHTML = msgs.slice().reverse().map(createMsgHtml).join('');
             el.scrollTop = el.scrollHeight;
             log('Loaded ' + msgs.length + ' messages');
@@ -226,8 +321,8 @@
         if (!msg || !currentConvId) return;
         log('Gửi: ' + msg);
         if (stompClient && stompClient.connected) {
-            stompClient.send('/app/chat.send', { Authorization: 'Bearer ' + token },
-                JSON.stringify({ conversationId: currentConvId, message: msg }));
+            stompClient.send('/app/chat.send', {Authorization: 'Bearer ' + token},
+                JSON.stringify({conversationId: currentConvId, message: msg}));
         } else {
             sendViaRest(msg);
         }
@@ -239,7 +334,7 @@
             const res = await fetch(baseUrl + '/chats/messages', {
                 method: 'POST',
                 headers: authHeaders(),
-                body: JSON.stringify({ conversationId: currentConvId, message: msg })
+                body: JSON.stringify({conversationId: currentConvId, message: msg})
             });
             const data = await res.json();
             if (data.result) {
@@ -250,7 +345,7 @@
         }
     }
 
-    document.getElementById('msgInput').addEventListener('keypress', function(e) {
+    document.getElementById('msgInput').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') sendMsg();
     });
 
