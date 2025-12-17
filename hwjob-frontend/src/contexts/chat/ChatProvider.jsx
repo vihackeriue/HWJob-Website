@@ -5,23 +5,18 @@ import ChatContext from "./ChatContext.jsx";
 const ChatProvider = ({children}) => {
 
     const [isChatWindowOpen, setIsChatWindowOpen] = useState(false);
-    const [selectedConversation, setSelectedConversation] = useState(null);
-
-    const openChat = () => {
-        setIsChatWindowOpen(true);
-    }
-
-    const closeChat = () => {
-        setIsChatWindowOpen(false);
-    }
+    const [activeConversation, setActiveConversation] = useState(null);
 
     return (
         <ChatContext.Provider value={{
             isChatWindowOpen,
-            openChat,
-            closeChat,
-            selectedConversation,
-            setSelectedConversation
+            openChat: () => setIsChatWindowOpen(true),
+            closeChat: () => {
+                setIsChatWindowOpen(false);
+                setActiveConversation(null);
+            },
+            activeConversation,
+            setActiveConversation
         }}>
             {children}
         </ChatContext.Provider>
