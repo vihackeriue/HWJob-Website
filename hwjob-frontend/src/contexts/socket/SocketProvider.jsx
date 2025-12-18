@@ -1,35 +1,36 @@
 import useAuth from "../../hooks/useAuth.jsx";
 import {useEffect, useState} from "react";
-import {connectSocket, disconnectSocket} from "../../api/websocket.jsx";
 import SocketContext from "./SocketContext.jsx";
+import {socketService} from "../../services/socketService.jsx";
+import useChat from "../../hooks/useChat.jsx";
 
 const SocketProvider = ({children}) => {
     const {auth} = useAuth();
+    const {isChatWindowOpen} = useChat();
     const [isConnected, setIsConnected] = useState(false);
 
     useEffect(() => {
-
-        if (!auth?.accessToken) {
-            disconnectSocket();
-            setIsConnected(false);
+        if (!isChatWindowOpen || !auth?.accessToken) {
             return;
         }
 
-        connectSocket(
-            auth.accessToken,
-            () => setIsConnected(true)
-        );
+        socketService.connect(auth.accessToken, {
+            onConnect: () => setIsConnected(true),
+            onDisconnect: () => setIsConnected(false),
+            onError: () => setIsConnected(false),
+        });
 
-        return () => disconnectSocket();
-    }, [auth?.accessToken]);
+        return () => {
+            socketService.disconnect();
+            setIsConnected(false);
+        };
+    }, [isChatWindowOpen, auth?.accessToken]);
 
     return (
         <SocketContext.Provider value={{isConnected}}>
             {children}
         </SocketContext.Provider>
     );
-}
+};
 
 export default SocketProvider;
-
-

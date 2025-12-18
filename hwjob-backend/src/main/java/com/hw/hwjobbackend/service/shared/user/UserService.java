@@ -8,6 +8,8 @@ import com.hw.hwjobbackend.model.dto.response.user.*;
 import com.hw.hwjobbackend.model.entity.user.User;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface UserService {
 
     UserCreationResponse createUser(UserCreationRequest request);
@@ -26,4 +28,6 @@ public interface UserService {
 
     void validateRegion(User user, Integer newRegionId);
 
+    List<RecruiterHomeResponse> getTop10Recruiters();
+    
 }

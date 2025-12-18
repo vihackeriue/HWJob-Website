@@ -11,7 +11,9 @@ import UpdateInfoSection from "../../components/sections/profile/UpdateInfoSecti
 const MyProfile = () => {
 
     const {data, loading, refetch} = useMyInfo();
+
     const [myInfo, setMyInfo] = useState();
+
     useEffect(() => {
         if (data) setMyInfo(data);
     }, [data]);

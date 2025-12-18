@@ -1,5 +1,7 @@
 import {createContext} from "react";
 
-const SocketContext = createContext(null);
+const SocketContext = createContext({
+    isConnected: false,
+});
 
 export default SocketContext;

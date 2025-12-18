@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.repository.user;
 
+import com.hw.hwjobbackend.model.entity.user.Recruiter;
 import com.hw.hwjobbackend.model.entity.user.Role;
 import com.hw.hwjobbackend.model.entity.user.User;
 import io.lettuce.core.dynamic.annotation.Param;
@@ -31,4 +32,5 @@ public interface UserRepository extends JpaRepository<User, String> {
     List<User> findAllOrderByCreatedAtDesc();
 
     int countUserByRoles(Set<Role> roles);
+
 }
