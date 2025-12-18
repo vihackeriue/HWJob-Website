@@ -1,58 +1,29 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Chat Test</title>
+    <title>Chat Test - STOMPJS</title>
+
+    <!-- SockJS -->
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: auto;
             padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        input, button {
-            padding: 8px;
-            margin: 5px 0;
-        }
-
-        input {
-            width: 200px;
-        }
-
-        button {
-            cursor: pointer;
         }
 
         .section {
             border: 1px solid #ccc;
             padding: 15px;
-            margin: 10px 0;
+            margin-bottom: 15px;
         }
 
-        .msg-box {
-            height: 300px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin: 10px 0;
-        }
-
-        .msg {
-            padding: 5px;
-            margin: 3px 0;
-        }
-
-        .msg.mine {
-            text-align: right;
-            background: #e3f2fd;
-        }
-
-        .msg.other {
-            text-align: left;
-            background: #f5f5f5;
+        input, button {
+            padding: 6px;
+            margin: 5px 0;
         }
 
         .conv-item {
@@ -62,294 +33,285 @@
         }
 
         .conv-item:hover {
-            background: #f0f0f0;
+            background: #f5f5f5;
         }
 
         .conv-item.active {
-            background: #d0d0d0;
+            background: #ddd;
+        }
+
+        .msg-box {
+            height: 300px;
+            border: 1px solid #ccc;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .msg {
+            margin: 5px 0;
+        }
+
+        .mine {
+            text-align: right;
+            color: blue;
+        }
+
+        .other {
+            text-align: left;
+            color: black;
         }
 
         .log {
-            height: 100px;
-            overflow-y: auto;
-            background: #333;
+            height: 120px;
+            background: #111;
             color: #0f0;
+            overflow-y: auto;
             padding: 10px;
             font-family: monospace;
             font-size: 12px;
         }
 
-        .status {
-            padding: 5px;
-            margin: 5px 0;
-        }
-
-        .status.ok {
-            color: green;
-        }
-
-        .status.err {
-            color: red;
-        }
+        .ok { color: green; }
+        .err { color: red; }
     </style>
 </head>
 <body>
-<h2>Chat Test</h2>
 
+<h2>Chat Test – @stomp/stompjs</h2>
+
+<!-- LOGIN -->
 <div class="section">
-    <h3>1. Đăng nhập</h3>
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Đăng nhập</button>
+    <h3>1. Login</h3>
+    <input id="username" placeholder="username">
+    <input id="password" type="password" placeholder="password">
+    <button onclick="login()">Login</button>
     <br>
-    <input type="text" id="manualToken" placeholder="Hoặc nhập token">
-    <button onclick="useToken()">Dùng Token</button>
-    <div id="loginStatus" class="status"></div>
+    <input id="manualToken" placeholder="Hoặc nhập token">
+    <button onclick="useToken()">Use Token</button>
+    <div id="loginStatus"></div>
 </div>
 
+<!-- WS -->
 <div class="section">
     <h3>2. WebSocket</h3>
-    <button onclick="connectWS()">Kết nối WS</button>
-    <div id="wsStatus" class="status">Chưa kết nối</div>
+    <div id="wsStatus">Chưa kết nối</div>
 </div>
 
+<!-- CREATE CONV -->
 <div class="section">
-    <h3>3. Conversations</h3>
-    <button onclick="loadConvs()">Tải danh sách</button>
+    <h3>3. Create Conversation</h3>
+    <input id="participantId" placeholder="Participant User ID">
+    <button onclick="createConversation()">Create</button>
+</div>
+
+<!-- CONVERSATIONS -->
+<div class="section">
+    <h3>4. Conversations</h3>
+    <button onclick="loadConvs()">Load</button>
     <div id="convList"></div>
 </div>
 
+<!-- CHAT -->
 <div class="section">
-    <h3>4. Chat: <span id="convName">-</span></h3>
-    <div class="msg-box" id="msgList"></div>
-    <input type="text" id="msgInput" placeholder="Nhập tin nhắn" disabled>
-    <button id="sendBtn" onclick="sendMsg()" disabled>Gửi</button>
+    <h3>5. Chat: <span id="convName">-</span></h3>
+    <div id="msgList" class="msg-box"></div>
+    <input id="msgInput" placeholder="Nhập tin nhắn" disabled>
+    <button id="sendBtn" onclick="sendMsg()" disabled>Send</button>
 </div>
 
+<!-- LOG -->
 <div class="section">
     <h3>Log</h3>
-    <div class="log" id="logBox"></div>
+    <div id="logBox" class="log"></div>
 </div>
 
-<script th:inline="javascript">
+<!-- SCRIPT -->
+<script type="module">
+    import { Client } from "https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/+esm";
+
     const baseUrl = 'http://localhost:8080/hwjob/api';
+
     let token = null;
     let userId = null;
-    let stompClient = null;
+    let wsClient = null;
     let currentConvId = null;
-    let subs = {};
+    let subscriptions = {};
+
+    /* ================= UTIL ================= */
 
     function log(msg) {
         const el = document.getElementById('logBox');
-        el.innerHTML += '[' + new Date().toLocaleTimeString() + '] ' + msg + '\n';
+        el.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`;
         el.scrollTop = el.scrollHeight;
     }
 
     function authHeaders() {
-        return {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token};
-    }
-
-    async function login() {
-        const u = document.getElementById('username').value;
-        const p = document.getElementById('password').value;
-        if (!u || !p) {
-            alert('Nhập username/password');
-            return;
-        }
-        log('Đăng nhập: ' + u);
-        try {
-            const res = await fetch(baseUrl + '/auth/login', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({username: u, password: p})
-            });
-            const data = await res.json();
-            if (data.result && data.result.accessToken) {
-                token = data.result.accessToken;
-                userId = parseJwt(token).sub;
-                document.getElementById('loginStatus').textContent = 'OK - userId: ' + userId;
-                document.getElementById('loginStatus').className = 'status ok';
-                log('Đăng nhập thành công');
-            } else {
-                throw new Error(data.message || 'Login failed');
-            }
-        } catch (e) {
-            document.getElementById('loginStatus').textContent = 'Lỗi: ' + e.message;
-            document.getElementById('loginStatus').className = 'status err';
-            log('Lỗi: ' + e.message);
-        }
-    }
-
-    function useToken() {
-        const t = document.getElementById('manualToken').value.trim();
-        if (!t) {
-            alert('Nhập token');
-            return;
-        }
-        try {
-            token = t;
-            userId = parseJwt(t).sub;
-            document.getElementById('loginStatus').textContent = 'OK - userId: ' + userId;
-            document.getElementById('loginStatus').className = 'status ok';
-            log('Token OK');
-        } catch (e) {
-            document.getElementById('loginStatus').textContent = 'Token không hợp lệ';
-            document.getElementById('loginStatus').className = 'status err';
-        }
+        return {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        };
     }
 
     function parseJwt(t) {
         return JSON.parse(atob(t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
     }
 
+    /* ================= AUTH ================= */
+
+    async function login() {
+        const u = username.value;
+        const p = password.value;
+
+        const res = await fetch(baseUrl + '/auth/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({username: u, password: p})
+        });
+
+        const data = await res.json();
+        token = data.result.accessToken;
+        userId = parseJwt(token).sub;
+
+        loginStatus.textContent = 'Login OK: ' + userId;
+        loginStatus.className = 'ok';
+
+        connectWS();
+    }
+
+    function useToken() {
+        token = manualToken.value.trim();
+        userId = parseJwt(token).sub;
+
+        loginStatus.textContent = 'Token OK: ' + userId;
+        loginStatus.className = 'ok';
+
+        connectWS();
+    }
+
+    /* ================= WS ================= */
+
     function connectWS() {
-        if (!token) {
-            alert('Đăng nhập trước');
-            return;
-        }
-        log('Kết nối WebSocket...');
-        const socket = new SockJS(baseUrl + '/ws');
-        stompClient = Stomp.over(socket);
-        stompClient.debug = null;
-        stompClient.connect({Authorization: 'Bearer ' + token},
-            function () {
-                document.getElementById('wsStatus').textContent = 'Đã kết nối';
-                document.getElementById('wsStatus').className = 'status ok';
-                log('WebSocket connected');
+        wsClient = new Client({
+            webSocketFactory: () => new SockJS(baseUrl + '/ws'),
+            connectHeaders: { Authorization: 'Bearer ' + token },
+            reconnectDelay: 5000,
+            debug: () => {},
+
+            onConnect: () => {
+                wsStatus.textContent = 'Đã kết nối';
+                wsStatus.className = 'ok';
+                log('WS connected');
             },
-            function (err) {
-                document.getElementById('wsStatus').textContent = 'Lỗi: ' + err;
-                document.getElementById('wsStatus').className = 'status err';
-                log('WS error: ' + err);
+
+            onWebSocketClose: () => {
+                wsStatus.textContent = 'Mất kết nối';
+                wsStatus.className = 'err';
             }
-        );
+        });
+
+        wsClient.activate();
+    }
+
+    /* ================= CONVERSATION ================= */
+
+    async function createConversation() {
+        const pid = participantId.value.trim();
+        if (!pid) return;
+
+        const res = await fetch(baseUrl + '/chats', {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({
+                type: 'DIRECT',
+                participantIds: [pid]
+            })
+        });
+
+        const data = await res.json();
+        log('Create conv: ' + data.result.id);
+        loadConvs();
     }
 
     async function loadConvs() {
-        if (!token) {
-            alert('Đăng nhập trước');
-            return;
-        }
-        log('Tải conversations...');
-        try {
-            const res = await fetch(baseUrl + '/chats', {headers: authHeaders()});
-            const data = await res.json();
-            const convs = data.result || [];
-            const el = document.getElementById('convList');
-            if (!convs.length) {
-                el.innerHTML = 'Không có conversation';
-                return;
-            }
-            el.innerHTML = convs.map(c =>
-                '<div class="conv-item" id="conv-' + c.id + '" onclick="selectConv(\'' + c.id + '\',\'' + (c.conversationName || 'Chat').replace(/'/g, "\\'") + '\')">' +
-                (c.conversationName || c.id) + '</div>'
-            ).join('');
-            log('Loaded ' + convs.length + ' conversations');
-        } catch (e) {
-            log('Lỗi: ' + e.message);
-        }
+        const res = await fetch(baseUrl + '/chats', {headers: authHeaders()});
+        const data = await res.json();
+
+        convList.innerHTML = data.result.map(c =>
+            `<div class="conv-item" id="conv-${c.id}"
+                 onclick="selectConv('${c.id}', '${c.conversationName || c.id}')">
+                 ${c.conversationName || c.id}
+             </div>`
+        ).join('');
     }
 
-    async function selectConv(convId, name) {
-        log('Chọn: ' + convId);
-        document.querySelectorAll('.conv-item').forEach(el => el.classList.remove('active'));
-        const el = document.getElementById('conv-' + convId);
-        if (el) el.classList.add('active');
-        document.getElementById('convName').textContent = name;
-        currentConvId = convId;
-        subscribeConv(convId);
-        await loadMsgs(convId);
-        document.getElementById('msgInput').disabled = false;
-        document.getElementById('sendBtn').disabled = false;
+    window.selectConv = async function (id, name) {
+        currentConvId = id;
+        convName.textContent = name;
+
+        document.querySelectorAll('.conv-item').forEach(e => e.classList.remove('active'));
+        document.getElementById('conv-' + id).classList.add('active');
+
+        subscribeConv(id);
+        loadMsgs(id);
+
+        msgInput.disabled = false;
+        sendBtn.disabled = false;
     }
 
-    function subscribeConv(convId) {
-        if (!stompClient || !stompClient.connected) {
-            log('WS chưa kết nối');
-            return;
-        }
-        Object.values(subs).forEach(s => {
-            try {
-                s.unsubscribe();
-            } catch (e) {
-            }
-        });
-        subs = {};
-        log('Subscribe: /topic/conversation/' + convId);
-        subs[convId] = stompClient.subscribe('/topic/conversation/' + convId, function (msg) {
-            log('Nhận message từ WS');
-            appendMsg(JSON.parse(msg.body));
-        });
+    function subscribeConv(id) {
+        Object.values(subscriptions).forEach(s => s.unsubscribe());
+        subscriptions = {};
+
+        subscriptions[id] = wsClient.subscribe(
+            `/topic/conversation/${id}`,
+            msg => appendMsg(JSON.parse(msg.body))
+        );
     }
 
-    async function loadMsgs(convId) {
-        try {
-            const res = await fetch(baseUrl + '/chats/' + convId + '/messages', {headers: authHeaders()});
-            const data = await res.json();
-            const msgs = data.result || [];
-            const el = document.getElementById('msgList');
-            if (!msgs.length) {
-                el.innerHTML = 'Chưa có tin nhắn';
-                return;
-            }
-            el.innerHTML = msgs.slice().reverse().map(createMsgHtml).join('');
-            el.scrollTop = el.scrollHeight;
-            log('Loaded ' + msgs.length + ' messages');
-        } catch (e) {
-            log('Lỗi: ' + e.message);
-        }
+    /* ================= MESSAGE ================= */
+
+    async function loadMsgs(id) {
+        const res = await fetch(`${baseUrl}/chats/${id}/messages`, {headers: authHeaders()});
+        const data = await res.json();
+
+        msgList.innerHTML = data.result.reverse().map(createMsgHtml).join('');
     }
 
     function createMsgHtml(m) {
-        const isMine = m.isMine || (m.sender && m.sender.userId === userId);
-        const sender = m.sender ? m.sender.fullName : 'Unknown';
-        const time = m.createdDate ? new Date(m.createdDate).toLocaleTimeString() : '';
-        return '<div class="msg ' + (isMine ? 'mine' : 'other') + '">' +
-            (!isMine ? '<b>' + sender + ':</b> ' : '') + m.message + ' <small>(' + time + ')</small></div>';
+        const mine = m.sender?.userId === userId;
+        return `<div class="msg ${mine ? 'mine' : 'other'}">
+            ${mine ? '' : `<b>${m.sender.fullName}:</b> `}
+            ${m.message}
+        </div>`;
     }
 
     function appendMsg(m) {
-        const el = document.getElementById('msgList');
-        if (el.textContent === 'Chưa có tin nhắn') el.innerHTML = '';
-        el.innerHTML += createMsgHtml(m);
-        el.scrollTop = el.scrollHeight;
+        msgList.innerHTML += createMsgHtml(m);
+        msgList.scrollTop = msgList.scrollHeight;
     }
 
-    function sendMsg() {
-        const input = document.getElementById('msgInput');
-        const msg = input.value.trim();
-        if (!msg || !currentConvId) return;
-        log('Gửi: ' + msg);
-        if (stompClient && stompClient.connected) {
-            stompClient.send('/app/chat.send', {Authorization: 'Bearer ' + token},
-                JSON.stringify({conversationId: currentConvId, message: msg}));
-        } else {
-            sendViaRest(msg);
-        }
-        input.value = '';
+    window.sendMsg = function () {
+        const content = msgInput.value.trim();
+        if (!content) return;
+
+        wsClient.publish({
+            destination: '/app/chat.send',
+            headers: { Authorization: 'Bearer ' + token },
+            body: JSON.stringify({
+                conversationId: currentConvId,
+                message: content
+            })
+        });
+
+        msgInput.value = '';
     }
 
-    async function sendViaRest(msg) {
-        try {
-            const res = await fetch(baseUrl + '/chats/messages', {
-                method: 'POST',
-                headers: authHeaders(),
-                body: JSON.stringify({conversationId: currentConvId, message: msg})
-            });
-            const data = await res.json();
-            if (data.result) {
-                log('Gửi REST OK');
-            }
-        } catch (e) {
-            log('Lỗi gửi: ' + e.message);
-        }
-    }
-
-    document.getElementById('msgInput').addEventListener('keypress', function (e) {
+    msgInput.addEventListener('keypress', e => {
         if (e.key === 'Enter') sendMsg();
     });
 
-    log('Ready - Base URL: ' + baseUrl);
+    log('Ready');
 </script>
+
 </body>
 </html>

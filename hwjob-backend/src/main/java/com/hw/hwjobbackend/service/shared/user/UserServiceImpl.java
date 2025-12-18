@@ -7,6 +7,7 @@ import com.hw.hwjobbackend.model.dto.request.user.UserUpdatePasswordRequest;
 import com.hw.hwjobbackend.model.dto.response.file.FileResponse;
 import com.hw.hwjobbackend.model.dto.response.profile.CandidateProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
+import com.hw.hwjobbackend.model.dto.response.user.RecruiterHomeResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UpdateAvatarResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserCreationResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserResponse;
@@ -29,6 +30,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,6 +108,18 @@ public class UserServiceImpl implements UserService {
             throw new AppException(ErrorCode.REGION_NOT_EXISTED);
         }
         user.setRegion(regionRepository.getReferenceById(newRegionId));
+    }
+
+    @Override
+    public List<RecruiterHomeResponse> getTop10Recruiters() {
+        try {
+            return recruiterRepository
+                    .findTopRecruiters(PageRequest.of(0, 10));
+        } catch (Exception e) {
+            log.error("Error when get top 10 recruiters", e);
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+        }
+
     }
 
     @Override

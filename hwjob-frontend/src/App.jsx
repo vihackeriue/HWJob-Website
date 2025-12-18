@@ -25,6 +25,7 @@ import RecruiterJobPostDetail from "./pages/user/recruiter/RecruiterJobPostDetai
 import MyProfile from "./pages/user/MyProfile.jsx";
 import {ROLES} from "./constants/roles";
 import ChatFloatingUI from "./components/ui/ChatFloatingUI.jsx";
+import PublicProfile from "./pages/user/PublicProfile.jsx";
 
 function App() {
     return (
@@ -37,6 +38,7 @@ function App() {
                     <Route index element={<Home/>}/>
                     <Route path="job-post" element={<JobPostList/>}/>
                     <Route path="job-post/:id" element={<JobPostDetail/>}/>
+                    <Route path="profile/:id" element={<PublicProfile/>}/>
                     <Route
                         element={
                             <PrivateRoute allowedRoles={[ROLES.RECRUITER, ROLES.CANDIDATE]}/>

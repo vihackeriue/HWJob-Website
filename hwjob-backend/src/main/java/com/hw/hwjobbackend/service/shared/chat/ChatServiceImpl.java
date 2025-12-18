@@ -143,10 +143,12 @@ public class ChatServiceImpl implements ChatService {
         );
 
         // Step 6: Transform sang Response DTO
-        ChatMessageResponse response = toChatMessageResponse(chatMessage, userId);
+        ChatMessageResponse response = chatMapper.toChatMessageResponse(chatMessage);
+        response.setSender(chatMapper.toParticipantResponse(chatMessage.getSender()));
 
         // Step 7: Broadcast (phát) message đến tất cả subscribers
-        broadcastMessageToConversation(request.getConversationId(), response);
+        broadcastMessageToConversation(request.getConversationId(), response, userId);
+        response.setIsMine(true);
 
         return response;
     }
@@ -193,14 +195,32 @@ public class ChatServiceImpl implements ChatService {
         return chatMessageResponse;
     }
 
-    public void broadcastMessageToConversation(String conversationId, ChatMessageResponse message) {
-        // Gửi message đến topic: /topic/conversation/{conversationId}
-        // Tất cả clients đang subscribe topic này sẽ nhận được message
-        message.setIsMine(false);
-        messagingTemplate.convertAndSend(
-                STR."/topic/conversation/\{conversationId}",
-                message
-        );
+    public void broadcastMessageToConversation(String conversationId, ChatMessageResponse message, String senderId) {
+        // Lấy conversation để biết danh sách participants
+        Conversation conversation = conversationRepository.findById(conversationId)
+                .orElseThrow(() -> new AppException(ErrorCode.CONVERSATION_NOT_FOUND));
+
+        // Gửi message riêng cho từng participant
+        for (Participant participant : conversation.getParticipants()) {
+            String participantUserId = participant.getUserId();
+
+            // Clone response và set isMine đúng cho từng user
+            ChatMessageResponse personalizedMessage = ChatMessageResponse.builder()
+                    .id(message.getId())
+                    .conversationId(message.getConversationId())
+                    .message(message.getMessage())
+                    .sender(message.getSender())
+                    .createdDate(message.getCreatedDate())
+                    .isMine(participantUserId.equals(senderId))
+                    .build();
+
+            // Gửi đến user-specific destination: /user/{userId}/queue/messages
+            messagingTemplate.convertAndSendToUser(
+                    participantUserId,
+                    "/queue/messages",
+                    personalizedMessage
+            );
+        }
     }
 
 }

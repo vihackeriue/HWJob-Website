@@ -18,6 +18,7 @@ export const ENDPOINTS = {
         RECRUITER: {
             UPDATE_INFO: "recruiters/users",
         },
+        PROFILE: (id) => `public/profiles/recruiter/${id}`,
     },
 
     JOB_POST: {
@@ -56,6 +57,19 @@ export const ENDPOINTS = {
         LIST: "public/skills",
     },
 
-    WEBSOCKET: "ws"
+    HOME: {
+        TOP_RECRUITER: "/public/home/top-recruiters",
+    },
+    WS: {
+        ENDPOINT: "ws",
+        DESTINATION: {
+            SEND_MESSAGE: "/app/chat.send",
+            USER_MESSAGES: "/user/queue/messages",
+        },
+    },
+    CHAT: {
+        CONVERSATIONS: "/chats",
+        MESSAGES: (conversationId) => `/chats/${conversationId}/messages`,
+    },
 
 };

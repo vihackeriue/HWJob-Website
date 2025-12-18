@@ -1,47 +1,67 @@
-import {getSocketClient} from "../api/websocket.jsx";
+import {ENDPOINTS} from "../config/endpoints.jsx";
+import {Client} from "@stomp/stompjs";
 
+let client = null;
 
-export const subscribeConversation = (conversationId, onMessage) => {
-    const client = getSocketClient();
-
-    if (!client || !client.connected) {
-        console.warn("Client not connected");
-        return null;
-    }
-
-    const subscription = client.subscribe(
-        `/topic/conversation/${conversationId}`,
-        (message) => {
-            try {
-                const data = JSON.parse(message.body);
-                onMessage(data);
-            } catch (error) {
-                console.error("Error parsing message:", error);
-            }
+export const socketService = {
+    connect(accessToken, {onConnect, onDisconnect, onError}) {
+        if (client?.connected) {
+            onConnect?.();
+            return;
         }
-    );
 
-    console.log(`📡 Subscribed to conversation: ${conversationId}`);
-    return subscription;
-};
+        const brokerURL = `ws://localhost:8080/hwjob/api/${ENDPOINTS.WS.ENDPOINT}`;
 
-export const sendMessage = (payload) => {
-    const client = getSocketClient();
-
-    if (!client || !client.connected) {
-        console.error("Cannot send message: client not connected");
-        return false;
-    }
-
-    try {
-        client.publish({
-            destination: "/app/chat.send",
-            body: JSON.stringify(payload),
+        client = new Client({
+            brokerURL,
+            connectHeaders: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+            onConnect: () => {
+                console.log("[WebSocket] Connected");
+                onConnect?.();
+            },
+            onDisconnect: () => {
+                console.log("[WebSocket] Disconnected");
+                onDisconnect?.();
+            },
+            onStompError: (frame) => {
+                console.error("[WebSocket] Error:", frame.headers?.message);
+                onError?.(frame);
+            },
+            reconnectDelay: 5000,
         });
-        console.log("Message sent:", payload);
-        return true;
-    } catch (error) {
-        console.error("Error sending message:", error);
-        return false;
-    }
+
+        client.activate();
+    },
+
+    disconnect() {
+        if (client) {
+            client.deactivate();
+            client = null;
+        }
+    },
+
+    subscribe(destination, callback) {
+        if (!client?.connected) {
+            console.warn("[WebSocket] Not connected, cannot subscribe");
+            return null;
+        }
+        return client.subscribe(destination, callback);
+    },
+
+    sendMessage(conversationId, message) {
+        if (!client?.connected) {
+            console.warn("[WebSocket] Not connected, cannot send");
+            return;
+        }
+        client.publish({
+            destination: ENDPOINTS.WS.DESTINATION.SEND_MESSAGE,
+            body: JSON.stringify({conversationId, message}),
+        });
+    },
+
+    isConnected() {
+        return client?.connected ?? false;
+    },
 };
