@@ -1,0 +1,213 @@
+{
+  "job_posts": [
+    {
+      "title": "Lập trình viên Golang",
+      "description": "Tham gia phát triển các dịch vụ backend hiệu năng cao bằng Golang. Công việc bao gồm thiết kế API, xử lý dữ liệu lớn, tối ưu tốc độ xử lý và đảm bảo hệ thống hoạt động ổn định trong môi trường phân tán.",
+      "salary": 28000000,
+      "salary_type": "MONTHS",
+      "quantity": 2,
+      "status": "PUBLIC",
+      "ended_time": "2025-04-15"
+    },
+    {
+      "title": "Kỹ sư hệ thống",
+      "description": "Quản lý và vận hành hệ thống server nội bộ. Chịu trách nhiệm giám sát tài nguyên, xử lý sự cố và đảm bảo hệ thống luôn sẵn sàng phục vụ hoạt động kinh doanh.",
+      "salary": 20000000,
+      "salary_type": "MONTHS",
+      "quantity": 1,
+      "status": "PRIVATE",
+      "ended_time": null
+    },
+    {
+      "title": "Business Analyst",
+      "description": "Thu thập và phân tích yêu cầu nghiệp vụ từ các phòng ban. Chuyển đổi yêu cầu thành tài liệu chi tiết để đội phát triển triển khai hệ thống đúng nhu cầu thực tế.",
+      "salary": 23000000,
+      "salary_type": "MONTHS",
+      "quantity": 1,
+      "status": "PUBLIC",
+      "ended_time": "2025-03-10"
+    },
+    {
+      "title": "Lập trình viên C# .NET",
+      "description": "Phát triển ứng dụng web và desktop bằng .NET. Tham gia thiết kế hệ thống, xây dựng chức năng và bảo trì các ứng dụng đang vận hành.",
+      "salary": 24000000,
+      "salary_type": "MONTHS",
+      "quantity": 2,
+      "status": "PUBLIC",
+      "ended_time": null
+    },
+    {
+      "title": "Lập trình viên iOS",
+      "description": "Phát triển ứng dụng iOS bằng Swift. Công việc bao gồm xây dựng giao diện, xử lý logic nghiệp vụ và tích hợp API từ backend.",
+      "salary": 26000000,
+      "salary_type": "PROJECT",
+      "quantity": 1,
+      "status": "PUBLIC",
+      "ended_time": "2025-05-30"
+    },
+    {
+      "title": "Lập trình viên Android",
+      "description": "Phát triển ứng dụng Android bằng Kotlin. Phối hợp với designer và backend để hoàn thiện sản phẩm theo đúng yêu cầu.",
+      "salary": 25000000,
+      "salary_type": "PROJECT",
+      "quantity": 2,
+      "status": "PUBLIC",
+      "ended_time": null
+    },
+    {
+      "title": "Chuyên viên an ninh mạng",
+      "description": "Đảm bảo an toàn thông tin cho hệ thống CNTT. Thực hiện đánh giá lỗ hổng, giám sát bảo mật và đề xuất giải pháp phòng chống tấn công.",
+      "salary": 35000000,
+      "salary_type": "MONTHS",
+      "quantity": 1,
+      "status": "PUBLIC",
+      "ended_time": "2025-07-01"
+    },
+    {
+      "title": "Kỹ sư kiểm thử hiệu năng",
+      "description": "Thực hiện kiểm thử hiệu năng cho hệ thống web và API. Phân tích kết quả, đề xuất cải tiến nhằm đảm bảo hệ thống đáp ứng yêu cầu tải lớn.",
+      "salary": 22000000,
+      "salary_type": "MONTHS",
+      "quantity": 1,
+      "status": "PUBLIC",
+      "ended_time": null
+    },
+    {
+      "title": "Nhân viên kế toán tổng hợp",
+      "description": "Thực hiện hạch toán kế toán, lập báo cáo tài chính và theo dõi công nợ. Yêu cầu hiểu rõ quy định kế toán và cẩn thận trong công việc.",
+      "salary": 15000000,
+      "salary_type": "MONTHS",
+      "quantity": 1,
+      "status": "PRIVATE",
+      "ended_time": "2025-02-28"
+    },
+    {
+      "title": "Chuyên viên nhân sự",
+      "description": "Phụ trách công tác nhân sự bao gồm tuyển dụng, quản lý hồ sơ nhân viên và xây dựng chính sách phúc lợi.",
+      "salary": 16000000,
+      "salary_type": "MONTHS",
+      "quantity": 1,
+      "status": "PUBLIC",
+      "ended_time": null
+    },
+
+    {
+      "title": "Nhân viên hành chính",
+      "description": "Quản lý công việc hành chính văn phòng, hỗ trợ các phòng ban và đảm bảo hoạt động nội bộ diễn ra trôi chảy.",
+      "salary": 9000000,
+      "salary_type": "MONTHS",
+      "quantity": 1,
+      "status": "PRIVATE",
+      "ended_time": null
+    },
+    {
+      "title": "Chuyên viên đào tạo",
+      "description": "Xây dựng và triển khai các chương trình đào tạo nội bộ nhằm nâng cao năng lực cho nhân viên.",
+      "salary": 18000000,
+      "salary_type": "MONTHS",
+      "quantity": 1,
+      "status": "PUBLIC",
+      "ended_time": "2025-06-15"
+    },
+    {
+      "title": "Nhân viên kho",
+      "description": "Quản lý nhập xuất hàng hóa trong kho, kiểm kê định kỳ và đảm bảo số liệu chính xác.",
+      "salary": 8000000,
+      "salary_type": "MONTHS",
+      "quantity": 3,
+      "status": "PRIVATE",
+      "ended_time": null
+    },
+    {
+      "title": "Nhân viên giao hàng",
+      "description": "Thực hiện giao hàng cho khách theo tuyến được phân công, đảm bảo đúng thời gian và chất lượng dịch vụ.",
+      "salary": 7000000,
+      "salary_type": "MONTHS",
+      "quantity": 5,
+      "status": "PUBLIC",
+      "ended_time": "2025-01-31"
+    },
+    {
+      "title": "Nhân viên vận hành sàn thương mại điện tử",
+      "description": "Quản lý gian hàng trên các sàn thương mại điện tử, cập nhật sản phẩm và xử lý đơn hàng.",
+      "salary": 12000000,
+      "salary_type": "MONTHS",
+      "quantity": 2,
+      "status": "PUBLIC",
+      "ended_time": null
+    },
+    {
+      "title": "Chuyên viên phân tích tài chính",
+      "description": "Phân tích tình hình tài chính, lập báo cáo và hỗ trợ ban lãnh đạo trong việc ra quyết định đầu tư.",
+      "salary": 30000000,
+      "salary_type": "MONTHS",
+      "quantity": 1,
+      "status": "PUBLIC",
+      "ended_time": "2025-04-30"
+    },
+    {
+      "title": "Nhân viên thu ngân",
+      "description": "Thực hiện thanh toán cho khách hàng, quản lý tiền mặt và đảm bảo quy trình thu chi chính xác.",
+      "salary": 7000000,
+      "salary_type": "MONTHS",
+      "quantity": 2,
+      "status": "PRIVATE",
+      "ended_time": null
+    },
+    {
+      "title": "Nhân viên pha chế",
+      "description": "Chuẩn bị đồ uống theo công thức, đảm bảo chất lượng và vệ sinh an toàn thực phẩm.",
+      "salary": 35000,
+      "salary_type": "HOURS",
+      "quantity": 4,
+      "status": "PUBLIC",
+      "ended_time": null
+    },
+    {
+      "title": "Nhân viên phục vụ",
+      "description": "Phục vụ khách hàng tại quán, hỗ trợ dọn dẹp và đảm bảo trải nghiệm khách hàng tốt.",
+      "salary": 30000,
+      "salary_type": "HOURS",
+      "quantity": 6,
+      "status": "PUBLIC",
+      "ended_time": null
+    },
+    {
+      "title": "Quản lý cửa hàng",
+      "description": "Quản lý hoạt động kinh doanh của cửa hàng, điều phối nhân sự và đảm bảo doanh thu đạt mục tiêu.",
+      "salary": 20000000,
+      "salary_type": "MONTHS",
+      "quantity": 1,
+      "status": "PUBLIC",
+      "ended_time": "2025-05-20"
+    },
+
+    {
+      "title": "",
+      "description": "Bài đăng thiếu tiêu đề nhưng phần mô tả vẫn tương đối đầy đủ. Trường hợp này dùng để huấn luyện mô hình phát hiện dữ liệu lỗi.",
+      "salary": 11000000,
+      "salary_type": "MONTHS",
+      "quantity": 1,
+      "status": "PUBLIC",
+      "ended_time": null
+    },
+    {
+      "title": "   ",
+      "description": "Mô tả công việc sơ sài, không cung cấp thông tin rõ ràng về nhiệm vụ và yêu cầu.",
+      "salary": -3000000,
+      "salary_type": null,
+      "quantity": 0,
+      "status": "PRIVATE",
+      "ended_time": "2024-10-15"
+    },
+    {
+      "title": null,
+      "description": "Chỉ có mô tả ngắn gọn, thiếu tiêu đề công việc.",
+      "salary": null,
+      "salary_type": "NEGOTIATION",
+      "quantity": -2,
+      "status": "PUBLIC",
+      "ended_time": null
+    }
+  ]
+}

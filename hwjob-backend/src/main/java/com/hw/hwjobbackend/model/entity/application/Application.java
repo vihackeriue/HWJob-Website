@@ -51,5 +51,14 @@ public class Application {
 
     @LastModifiedDate
     LocalDateTime updatedAt;
+
+
+    @PrePersist
+    public void prePersist() {
+        if (status == null) {
+            status = ApplicationStatusEnum.PENDING;
+        }
+    }
+
 }
 

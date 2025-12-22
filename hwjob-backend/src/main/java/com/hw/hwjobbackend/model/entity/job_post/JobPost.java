@@ -6,6 +6,7 @@ import com.hw.hwjobbackend.model.entity.industry.Industry;
 import com.hw.hwjobbackend.model.entity.region.Region;
 import com.hw.hwjobbackend.model.entity.skill.Skill;
 import com.hw.hwjobbackend.model.entity.user.Recruiter;
+import com.hw.hwjobbackend.model.enums.CandidateGenderEnum;
 import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
 import com.hw.hwjobbackend.model.enums.SalaryTypeEnum;
 import jakarta.persistence.*;
@@ -73,5 +74,13 @@ public class JobPost {
 
     @LastModifiedDate
     LocalDateTime updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        if (status == null) {
+            status = JobPostStatusEnum.PUBLIC;
+        }
+    }
+
 
 }

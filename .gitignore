@@ -10,6 +10,10 @@ Thumbs.db
 .idea/
 *.iml
 
+hwjob-ai/.env
+hwjob-ai/__pycache__/
+hwjob-ai/model/data/csv_data/
+
 # ------------------------------
 # Java / Spring Boot
 # ------------------------------

@@ -55,6 +55,10 @@ public class ApplicationInitConfiguration {
                 // khởi tạo skill
                 initializationService.initializeSkills();
 
+                // Khởi tạo user
+
+                initializationService.initializeTestUsers();
+
                 long duration = System.currentTimeMillis() - startTime;
                 log.info("=== Application initialization completed in {}ms ===", duration);
             } catch (Exception e) {
