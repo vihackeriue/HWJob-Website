@@ -6,6 +6,8 @@ import com.hw.hwjobbackend.model.entity.industry.Industry;
 import com.hw.hwjobbackend.model.entity.job_type.JobType;
 import com.hw.hwjobbackend.model.entity.level.Level;
 import com.hw.hwjobbackend.model.entity.skill.Skill;
+import com.hw.hwjobbackend.model.entity.user.Candidate;
+import com.hw.hwjobbackend.model.entity.user.Recruiter;
 import com.hw.hwjobbackend.model.entity.user.Role;
 import com.hw.hwjobbackend.model.entity.user.User;
 import com.hw.hwjobbackend.model.enums.*;
@@ -29,7 +31,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -198,5 +199,73 @@ public class InitializationServiceImpl implements InitializationService {
                         .build())
                 .collect(Collectors.toSet());
         skillRepository.saveAll(skills);
+    }
+
+    @Override
+    @Transactional
+    public void initializeTestUsers() {
+        // Check if test users already exist
+        if (userRepository.existsByUsername("candidate1") || userRepository.existsByUsername("recruiter1")) {
+            log.info("Test users already exist. Skipping initialization.");
+            return;
+        }
+
+        Set<Role> candidateRoles = roleRepository.findAllByName(RoleEnum.CANDIDATE.name());
+        Set<Role> recruiterRoles = roleRepository.findAllByName(RoleEnum.RECRUITER.name());
+
+        if (candidateRoles.isEmpty() || recruiterRoles.isEmpty()) {
+            log.error("Roles not found. Please initialize roles first.");
+            return;
+        }
+
+        String encodedPassword = passwordEncoder.encode("password");
+
+        // Create 100 candidates
+        List<User> candidates = new ArrayList<>();
+        for (int i = 1; i <= 100; i++) {
+            String username = "candidate" + i;
+            Candidate candidate = Candidate.builder()
+                    .username(username)
+                    .fullName(username)
+                    .email(username + "@email.com")
+                    .password(encodedPassword)
+                    .roles(candidateRoles)
+                    .userStatus(UserStatusEnum.ACTIVE)
+                    .build();
+            candidates.add(candidate);
+        }
+        userRepository.saveAll(candidates);
+        log.info("Created 100 candidate users");
+
+        // Set default avatar for candidates
+        for (User candidate : candidates) {
+            FileResponse avatarResponse = fileService.setDefaultAvatarForUser(candidate.getId());
+            candidate.setImageUrl(avatarResponse.getUrl());
+        }
+        userRepository.saveAll(candidates);
+
+        List<User> recruiters = new ArrayList<>();
+        for (int i = 1; i <= 100; i++) {
+            String username = "recruiter" + i;
+            Recruiter recruiter = Recruiter.builder()
+                    .username(username)
+                    .fullName(username)
+                    .email(username + "@email.com")
+                    .password(encodedPassword)
+                    .roles(recruiterRoles)
+                    .userStatus(UserStatusEnum.ACTIVE)
+                    .build();
+            recruiters.add(recruiter);
+        }
+        userRepository.saveAll(recruiters);
+        log.info("Created 100 recruiter users");
+
+        for (User recruiter : recruiters) {
+            FileResponse avatarResponse = fileService.setDefaultAvatarForUser(recruiter.getId());
+            recruiter.setImageUrl(avatarResponse.getUrl());
+        }
+        userRepository.saveAll(recruiters);
+
+        log.info("Test users initialization completed: 100 candidates + 100 recruiters");
     }
 }

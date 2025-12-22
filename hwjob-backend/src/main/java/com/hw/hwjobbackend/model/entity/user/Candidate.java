@@ -33,4 +33,5 @@ public class Candidate extends User {
     String education;
 
     BigDecimal expectSalary;
+
 }
