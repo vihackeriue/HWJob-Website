@@ -2,6 +2,7 @@ package com.hw.hwjobbackend.service.shared.user;
 
 import com.hw.hwjobbackend.model.dto.request.user.UserCreationRequest;
 import com.hw.hwjobbackend.model.dto.request.user.UserUpdatePasswordRequest;
+import com.hw.hwjobbackend.model.dto.response.loyalty_point.LoyaltyPointResponse;
 import com.hw.hwjobbackend.model.dto.response.profile.CandidateProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.user.*;
@@ -10,9 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
 
-    UserCreationResponse createUser(UserCreationRequest request);
+    UserCreationResponse createUser(UserCreationRequest request) throws Exception;
 
     UserResponse getUserInfo();
+
+
 
     void updatePassword(UserUpdatePasswordRequest request);
 

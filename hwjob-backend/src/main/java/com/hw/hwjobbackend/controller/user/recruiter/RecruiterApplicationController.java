@@ -51,7 +51,7 @@ public class RecruiterApplicationController {
             @PathVariable String candidateId,
             @RequestBody ApplicationStatusRequest request
     ) {
-        recruiterJobPostService.updateCandidateApplicationStatus(jobPostId, candidateId, request.getStatus());
+        recruiterJobPostService.updateCandidateApplicationStatus(jobPostId, candidateId, request);
         return ApiResponse.<Void>builder().message("Cập nhật thành công!").build();
     }
 }

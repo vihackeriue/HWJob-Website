@@ -24,18 +24,20 @@ const JobPostDetail = () => {
         jobPostId: jobPost.data.id,
       };
       // gọi API backend đăng ký
-      await applyJob(payload);
-
-      alert("ứng tuyển thành công");
+      const res = await applyJob(payload);
+      const application = res.result;
 
       jobPost.setData((prev) => ({
         ...prev,
-        isApplied: true,
+        application: {
+          jobPostId: application.jobPostId,
+          status: application.status,
+        },
       }));
-
+      toast.success("ứng tuyển thành công");
       setOpenApplyJobDialog(false);
     } catch (error) {
-      alert(error.response?.data?.message || "Ứng tuyển thất bại!");
+      toast.error(error.response?.data?.message || "Ứng tuyển thất bại!");
     }
   };
 
@@ -57,6 +59,7 @@ const JobPostDetail = () => {
     <div className="flex flex-col gap-3 mt-10">
       <OverviewSection
         jobPost={jobPost.data}
+        setJobPost={jobPost.setData}
         setOpenApplyJobDialog={setOpenApplyJobDialog}
         onSaveJobPost={handleSaveJob}
       />

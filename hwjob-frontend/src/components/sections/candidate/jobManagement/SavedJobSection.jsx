@@ -12,6 +12,7 @@ export const SavedJobSection = () => {
       pagination={{
         page: savedJob.page,
         totalPages: savedJob.totalPages,
+        setPage: savedJob.setPage,
       }}
     />
   );

@@ -7,7 +7,7 @@ spring:
     url: jdbc:mysql://localhost:3306/hwjob_db?createDatabaseIfNotExist=true
 
     username: root
-    password: root
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -57,3 +57,22 @@ app:
     download-prefix: http://localhost:8080/hwjob/api/public/media/
     default-avatar-resource: static/images/default-avatar.png
 
+blockchain:
+  ganache-url: http://127.0.0.1:7545
+  contract-address: "0xed110E4375362429E7E0764DbAC15a1CeDb70403"
+  private-key: "0x734d09c7aeaad6cec8eadb54e3db5d926defe60345e0104a85613e17cf51c807"
+
+momo:
+  partner-code: MOMO
+  access-key: F8BBA842ECF85
+  secret-key: K951B6PE1waDMi640xX08PD3vg6EkVlz
+  endpoint: https://test-payment.momo.vn/v2/gateway/api/create
+  redirect-url: http://localhost:3000/payment-result
+  ipn-url: https://your-backend.com/api/momo/ipn
+
+vnpay:
+  tmn-code: 4YUP19I4
+  hash-secret: MDUIFDCRAKLNBPOFIAFNEKFRNMFBYEPX
+  pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+  return-url: http://localhost:5173/payment-result
+  ipn-url: http://localhost:8080/hwjob/api/public/vnpay/ipn

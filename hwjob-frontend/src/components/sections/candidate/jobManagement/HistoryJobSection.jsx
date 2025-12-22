@@ -11,6 +11,7 @@ export const HistoryJobSection = () => {
       pagination={{
         page: historyJobPosts.page,
         totalPages: historyJobPosts.totalPages,
+        setPage: historyJobPosts.setPage,
       }}
     />
   );

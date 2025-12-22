@@ -5,6 +5,7 @@ import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationCandidateRequest;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
+import com.hw.hwjobbackend.service.candidate.work.CandidateWorkService;
 import com.hw.hwjobbackend.service.mapper.application.ApplicationMapper;
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationRecruiterRequest;
@@ -43,6 +44,7 @@ public class CandidateApplicationServiceImpl implements CandidateApplicationServ
     JobPostMapper jobPostMapper;
     CandidateRepository candidateRepository;
     JobPostRepository jobPostRepository;
+    CandidateWorkService workService;
 
     @Override
     public ApplicationResponse applyJob(ApplicationCandidateRequest request) {
@@ -113,4 +115,40 @@ public class CandidateApplicationServiceImpl implements CandidateApplicationServ
                 .map(application -> jobPostMapper.toJobPostResponse(application.getJobPost()))
                 .toList();
     }
+
+    @Override
+    @Transactional
+    public void updateApplicationStatus(String jobPostId, ApplicationStatusEnum newStatus) {
+        String candidateId = SecurityUtils.getCurrentUserId();
+
+        Application application = applicationRepository
+                .findByJobPostIdAndCandidateId(jobPostId, candidateId)
+                .orElseThrow(() -> new AppException(ErrorCode.APPLICATION_NOT_FOUND));
+
+        validateCandidateTransition(application.getStatus(), newStatus);
+
+        if (newStatus == ApplicationStatusEnum.ACCEPTED) {
+            workService.decideWork(jobPostId,candidateId,  true);
+        }
+
+        if (newStatus == ApplicationStatusEnum.CANCELLED) {
+            workService.decideWork(jobPostId, candidateId, false);
+        }
+
+        application.setStatus(newStatus);
+    }
+    private void validateCandidateTransition(
+            ApplicationStatusEnum current,
+            ApplicationStatusEnum next
+    ) {
+        if (current != ApplicationStatusEnum.ASSIGNED) {
+            throw new AppException(ErrorCode.INVALID_APPLICATION_STATUS);
+        }
+
+        if (next != ApplicationStatusEnum.ACCEPTED &&
+                next != ApplicationStatusEnum.CANCELLED) {
+            throw new AppException(ErrorCode.INVALID_APPLICATION_STATUS);
+        }
+    }
+
 }

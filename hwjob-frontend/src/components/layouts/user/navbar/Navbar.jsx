@@ -17,10 +17,14 @@ import ResponsiveMenu from "./ResponsiveMenu";
 import { HiMenuAlt1, HiMenuAlt3 } from "react-icons/hi";
 import PrimaryButton from "../../../ui/button/PrimaryButton";
 import { ROLES } from "../../../../constants/roles";
-
+import { GrLogin } from "react-icons/gr";
+import { useLoyaltyPoints } from "../../../../hooks/useLoyaltyPoints";
+import Loading from "../../../ui/Loading";
+import { PiCoinsFill } from "react-icons/pi";
 export default function Navbar() {
   const navigate = useNavigate();
   const { auth, logout } = useAuth();
+  const { data: points, isLoading } = useLoyaltyPoints();
   const [showMenu, setShowMenu] = useState(false);
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -65,6 +69,16 @@ export default function Navbar() {
             <div className="flex gap-3 items-center">
               {auth ? (
                 <>
+                  <div>
+                    {isLoading ? (
+                      <Loading size={24} />
+                    ) : (
+                      <div className="flex gap-1 items-center  text-amber-600 font-semibold  px-2 py-1 border  text-lg md:text-xl border-amber-600 rounded-lg">
+                        <p>{Number(points ?? 0).toLocaleString()}</p>
+                        <PiCoinsFill />
+                      </div>
+                    )}
+                  </div>
                   <Menu as="div" className="relative">
                     <MenuButton className="inline-flex items-center gap-2 rounded-md  px-3 py-1.5 text-sm/6 font-semibold shadow-white/10 focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-dark-900 data-open:bg-dark-900">
                       <div className="flex items-center gap-2">
@@ -99,6 +113,7 @@ export default function Navbar() {
                 </>
               ) : (
                 <PrimaryButton onClick={() => navigate("/login")}>
+                  <GrLogin size={18} />
                   {t("auth.login")}
                 </PrimaryButton>
               )}
@@ -119,6 +134,7 @@ export default function Navbar() {
               />
             )}
           </div>
+
           {/* <LanguageSwitcher /> */}
         </div>
       </div>
