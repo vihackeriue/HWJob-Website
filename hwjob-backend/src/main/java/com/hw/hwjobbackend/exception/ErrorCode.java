@@ -14,7 +14,7 @@ public enum ErrorCode {
     // ========================================
     UNCATEGORIZED_EXCEPTION(9999, "error.uncategorized", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_KEY(9001, "error.invalid_key", HttpStatus.BAD_REQUEST),
-
+    INVALID_REQUEST(9002, "error.invalid_request", HttpStatus.BAD_REQUEST),
     // ========================================
     // AUTHENTICATION & AUTHORIZATION (10xx)
     // ========================================
@@ -107,6 +107,20 @@ public enum ErrorCode {
     // APPLICATION (20xx)
     // ========================================
     INVALID_APPLICATION_STATUS(2001, "error.invalid_application_status", HttpStatus.BAD_REQUEST),
+    APPLICATION_NOT_FOUND(2002, "error.application_not_found", HttpStatus.NOT_FOUND),
+
+    // ========================================
+    // WORK(21xx)
+    // ========================================
+    WORK_EXISTED(2101, "error.work_existed", HttpStatus.BAD_REQUEST),
+    WORK_NOT_FOUND(2102, "error.work_not_found", HttpStatus.NOT_FOUND),
+    INVALID_WORK_STATUS(2103, "error.invalid_work_status", HttpStatus.BAD_REQUEST),
+    // ========================================
+    // lOYALTY POINTS(22xx)
+    // ========================================
+    USER_WALLET_NOT_EXISTED(2201, "error.user_wallet_not_existed", HttpStatus.NOT_FOUND),
+
+
     ;
 
 

@@ -52,6 +52,11 @@ public class User implements UserDetails {
 
     String imageUrl;
 
+    String walletAddress;
+
+    String encryptedPrivateKey;
+
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     UserStatusEnum userStatus;

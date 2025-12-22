@@ -11,6 +11,7 @@ export const AppliedJobSection = () => {
       pagination={{
         page: appliedJobPosts.page,
         totalPages: appliedJobPosts.totalPages,
+        setPage: appliedJobPosts.setPage,
       }}
     />
   );

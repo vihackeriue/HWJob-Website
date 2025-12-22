@@ -41,7 +41,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ApiResponse<UserCreationResponse> register(
-            @Valid @RequestBody UserCreationRequest request) {
+            @Valid @RequestBody UserCreationRequest request) throws Exception {
         return ApiResponse.<UserCreationResponse>builder()
                 .result(userService.createUser(request))
                 .build();

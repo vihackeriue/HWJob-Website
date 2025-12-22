@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,11 +19,13 @@ import JobPostList from "./pages/user/JobPostList";
 import JobPostDetail from "./pages/user/JobPostDetail";
 
 import CandidateJobManagement from "./pages/user/candidate/CandidateJobManagement";
-import {ToastContainer} from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import RecruiterJobManagement from "./pages/user/recruiter/RecruiterJobManagement";
 import RecruiterJobPostDetail from "./pages/user/recruiter/RecruiterJobPostDetail";
 import MyProfile from "./pages/user/MyProfile.jsx";
 import { ROLES } from "./constants/roles";
+import TopUpPoint from "./pages/user/test/TopUpPoint.jsx";
+import PaymentResult from "./pages/user/test/PaymentResult.jsx";
 
 function App() {
   return (
@@ -42,6 +44,8 @@ function App() {
             }
           >
             <Route path="my-profile" element={<MyProfile />} />
+            <Route path="test" element={<TopUpPoint />} />
+            <Route path="payment-result" element={<PaymentResult />} />
           </Route>
           {/* Role Recruiter */}
           <Route

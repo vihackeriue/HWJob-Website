@@ -7,6 +7,7 @@ import { getLevelsNotPagination } from "../../services/levelService";
 import SecondTitle from "../ui/title/SecondTitle";
 import FormSelect from "../ui/form/FormSelect";
 import PrimaryButton from "../ui/button/PrimaryButton";
+import { CiFilter } from "react-icons/ci";
 
 export const JobPostFilterSection = ({
   formFilter,
@@ -73,15 +74,15 @@ export const JobPostFilterSection = ({
       />
 
       {isFiltering && (
-        <button
-          className="bg-gray-300 dark:bg-stoneBrown-700 text-md px-3 py-2 rounded-xl"
-          onClick={resetFilter}
-        >
+        <PrimaryButton variant="cancel" onClick={resetFilter}>
           Bỏ tất cả
-        </button>
+        </PrimaryButton>
       )}
 
-      <PrimaryButton onClick={onFilter}>Lọc</PrimaryButton>
+      <PrimaryButton onClick={onFilter}>
+        <CiFilter />
+        Lọc bài đăng
+      </PrimaryButton>
     </div>
   );
 };

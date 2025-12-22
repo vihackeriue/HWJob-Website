@@ -8,7 +8,7 @@ import Pagination from "../../../ui/pagination/Pagination";
 import UpdateStatusApplicantDialog from "../../../dialog/UpdateStatusApplicantDialog";
 import { useUpdateApplicationStatus } from "../../../../hooks/useUpdateApplicationStatus";
 
-const ApplicantListSection = () => {
+const ApplicantListSection = ({ jobPost }) => {
   const { id } = useParams();
   const { updateStatus } = useUpdateApplicationStatus();
   const [openViewProfileApplicantDialog, setOpenViewProfileApplicantDialog] =
@@ -23,11 +23,12 @@ const ApplicantListSection = () => {
     setOpenViewProfileApplicantDialog(true);
   };
 
-  const handleUpdateStatus = async (applicationId, status) => {
+  const handleUpdateStatus = async (applicationId, status, payload = {}) => {
     updateStatus({
       applicationId,
       jobPostId: id,
       status,
+      payload,
       setListData: applicants.setData,
       setSelected: setSelectedApplicant,
     });
@@ -74,6 +75,7 @@ const ApplicantListSection = () => {
       <UpdateStatusApplicantDialog
         open={openViewProfileApplicantDialog}
         applicant={selectedApplicant}
+        jobPost={jobPost}
         onClose={() => setOpenViewProfileApplicantDialog(false)}
         onUpdateStatus={handleUpdateStatus}
       />

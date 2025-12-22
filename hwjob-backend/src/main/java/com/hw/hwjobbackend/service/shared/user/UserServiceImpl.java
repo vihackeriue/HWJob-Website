@@ -5,11 +5,13 @@ import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.request.user.UserCreationRequest;
 import com.hw.hwjobbackend.model.dto.request.user.UserUpdatePasswordRequest;
 import com.hw.hwjobbackend.model.dto.response.file.FileResponse;
+import com.hw.hwjobbackend.model.dto.response.loyalty_point.LoyaltyPointResponse;
 import com.hw.hwjobbackend.model.dto.response.profile.CandidateProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UpdateAvatarResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserCreationResponse;
 import com.hw.hwjobbackend.model.dto.response.user.UserResponse;
+import com.hw.hwjobbackend.model.dto.response.wallet.WalletResponse;
 import com.hw.hwjobbackend.model.entity.user.Candidate;
 import com.hw.hwjobbackend.model.entity.user.Recruiter;
 import com.hw.hwjobbackend.model.entity.user.Role;
@@ -20,6 +22,8 @@ import com.hw.hwjobbackend.repository.region.RegionRepository;
 import com.hw.hwjobbackend.repository.user.CandidateRepository;
 import com.hw.hwjobbackend.repository.user.RecruiterRepository;
 import com.hw.hwjobbackend.repository.user.UserRepository;
+import com.hw.hwjobbackend.service.blockchain.BlockchainService;
+import com.hw.hwjobbackend.service.blockchain.WalletService;
 import com.hw.hwjobbackend.service.file.FileService;
 import com.hw.hwjobbackend.service.mapper.user.CandidateMapper;
 import com.hw.hwjobbackend.service.mapper.user.RecruiterMapper;
@@ -56,10 +60,13 @@ public class UserServiceImpl implements UserService {
     CandidateRepository candidateRepository;
     RegionRepository regionRepository;
     CandidateMapper candidateMapper;
+    WalletService walletService;
+
+
 
     @Override
     @Transactional
-    public UserCreationResponse createUser(UserCreationRequest request) {
+    public UserCreationResponse createUser(UserCreationRequest request) throws Exception {
         validateUserCreation(request);
 
         Set<Role> roles = roleService.getRolesByNames(request.getRoles());
@@ -71,6 +78,13 @@ public class UserServiceImpl implements UserService {
 
         FileResponse avatarResponse = fileService.setDefaultAvatarForUser(user.getId());
         user.setImageUrl(avatarResponse.getUrl());
+
+
+        WalletResponse wallet = walletService.createWallet();
+
+        user.setWalletAddress(wallet.getAddress());
+//        user.setEncryptedPrivateKey(encrypt(wallet.getPrivateKey()));
+        user.setEncryptedPrivateKey(wallet.getPrivateKey());
 
         return userMapper.toUserCreationResponse(user);
     }
@@ -84,6 +98,9 @@ public class UserServiceImpl implements UserService {
         userResponse.setCompletionPercent(calculateCompletionPercent(user));
         return userResponse;
     }
+
+
+
 
     @Override
     public void validateExistEmail(User user, String newEmail) {
