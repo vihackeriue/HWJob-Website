@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 import useAuth from "../../../hooks/useAuth";
 import { hasRole } from "../../../utils/permission";
 import { ROLES } from "../../../constants/roles";
-
-import PrimaryButton from "../button/PrimaryButton";
-import ConfirmDialog from "../../dialog/common/ConfirmDialog";
 
 import { STATUS_APPLICATION_MAP } from "../../../constants/statusApplication";
 import { STATUS_WORK_MAP } from "../../../constants/statusWork";
@@ -14,15 +11,12 @@ import { STATUS_WORK_MAP } from "../../../constants/statusWork";
 const JobPostCard = ({ jobPost }) => {
   const { auth } = useAuth();
 
-  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
-  const [confirmAction, setConfirmAction] = useState(null);
-
   /* ===================== URL ===================== */
   const getJobPostDetailUrl = () => {
     if (hasRole(auth, ROLES.RECRUITER) && jobPost.recruiter.id === auth.id) {
       return `/recruiter/job-post/${jobPost.id}`;
     }
-    return `/job-post/${jobPost.id}`;
+    return `/job-post/${jobPost.id || jobPost.jobPostId}`;
   };
 
   /* ===================== STATUS ===================== */
@@ -36,22 +30,7 @@ const JobPostCard = ({ jobPost }) => {
     return null;
   };
 
-  const getActionsByRole = (statusConfig) => {
-    if (!statusConfig) return [];
-
-    if (hasRole(auth, ROLES.CANDIDATE)) {
-      return statusConfig.actions?.CANDIDATE || [];
-    }
-
-    if (hasRole(auth, ROLES.RECRUITER)) {
-      return statusConfig.actions?.RECRUITER || [];
-    }
-
-    return [];
-  };
-
   const statusConfig = getStatusConfig();
-  const actions = getActionsByRole(statusConfig);
 
   return (
     <div className="flex gap-3 pr-2 bg-lightGrayishBlue dark:bg-stoneBrown-900 rounded-2xl relative hover:shadow border border-gray-300">
@@ -75,7 +54,7 @@ const JobPostCard = ({ jobPost }) => {
 
         <div className="flex gap-1 flex-wrap dark:text-amber-500">
           <p className="py-1 px-2 rounded-lg bg-white dark:bg-stoneBrown-700">
-            SL: {jobPost.quantity}
+            Số lượng: {jobPost.quantity}
           </p>
           <div className="py-1 px-2 rounded-lg bg-white dark:bg-stoneBrown-700">
             {jobPost.region}
@@ -115,26 +94,6 @@ const JobPostCard = ({ jobPost }) => {
           )} */}
         </div>
       )}
-
-      {/* ===================== CONFIRM DIALOG ===================== */}
-      <ConfirmDialog
-        open={openConfirmDialog}
-        title={confirmAction?.label}
-        description={`Bạn có chắc chắn muốn "${confirmAction?.label}" không?`}
-        onClose={() => {
-          setOpenConfirmDialog(false);
-          setConfirmAction(null);
-        }}
-        onConfirm={() => {
-          /**
-           * TODO:
-           * - call API update work / application status
-           * - confirmAction.to
-           */
-          setOpenConfirmDialog(false);
-          setConfirmAction(null);
-        }}
-      />
     </div>
   );
 };

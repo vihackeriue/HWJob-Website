@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.model.dto.response.work;
 
+
 import com.hw.hwjobbackend.model.enums.SalaryTypeEnum;
 import com.hw.hwjobbackend.model.enums.WorkStatusEnum;
 import lombok.*;
@@ -13,16 +14,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class WorkOverviewResponse {
-    String workId;
-    String jobPostId;
-    String jobTitle;
-    String recruiterName;
-
+public class WorkCandidateResponse {
+    String id;
+    String fullName;
+    String imageUrl;
     Long agreedSalary;
     SalaryTypeEnum salaryType;
-    String submission;
-
     LocalDateTime startTime;
     LocalDateTime endTime;
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
 import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.skill.SkillResponse;
+import com.hw.hwjobbackend.model.dto.response.work.WorkOverviewResponse;
 import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
 import com.hw.hwjobbackend.model.enums.SalaryTypeEnum;
 import lombok.*;
@@ -43,6 +44,9 @@ public class JobPostDetailResponse {
     Set<SkillResponse> skills;
 
     ApplicationResponse application;
+
+    WorkOverviewResponse work;
+
     Boolean isSaved;
 
 }

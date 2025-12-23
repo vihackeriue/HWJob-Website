@@ -40,12 +40,18 @@ export const ENDPOINTS = {
     RECRUITER_UPDATE_STATUS_APPLICANTS: (applicationId, jobPostId) =>
       `recruiters/applications/job-posts/${jobPostId}/candidates/${applicationId}/status`,
     CANDIDATE_UPDATE_STATUS_APPLICANTS: (jobPostId) =>
-      `/candidates/applications/job-posts/${jobPostId}/candidates/status`,
+      `/candidates/applications/job-posts/${jobPostId}/status`,
   },
   WORK: {
     CANDIDATE_WORK_OVERVIEW: (jobPostId) =>
       `candidates/works/${jobPostId}/overview`,
     LIST_WORKS_OF_CANDIDATE: "candidates/works/me",
+    LIST_STAFF_OF_WORK: (jobPostId) =>
+      `recruiters/works/job-posts/${jobPostId}/candidates`,
+    RECRUITER_UPDATE_STATUS_WORK: (jobPostId, candidateId) =>
+      `recruiters/works/job-posts/${jobPostId}/candidates/${candidateId}/status`,
+    CANDIDATE_UPDATE_STATUS_WORK: (jobPostId) =>
+      `candidates/works/job-posts/${jobPostId}/status`,
   },
   LOYALTY_POINT: {
     GET_POINTS: "loyalty-points/me",

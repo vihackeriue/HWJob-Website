@@ -1,8 +1,11 @@
 package com.hw.hwjobbackend.service.mapper.work;
 
 import com.hw.hwjobbackend.model.dto.request.work.WorkCreateRequest;
+import com.hw.hwjobbackend.model.dto.response.application.ApplicationCandidateResponse;
+import com.hw.hwjobbackend.model.dto.response.work.WorkCandidateResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkOverviewResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkResponse;
+import com.hw.hwjobbackend.model.entity.application.Application;
 import com.hw.hwjobbackend.model.entity.works.Work;
 import com.hw.hwjobbackend.model.enums.WorkStatusEnum;
 import org.mapstruct.Mapper;
@@ -23,6 +26,7 @@ public interface WorkMapper {
     Work toWorkCreate(WorkCreateRequest workCreateRequest);
 
     @Mapping(target = "workId", source = "id")
+    @Mapping(target = "jobPostId", source = "jobPost.id")
     @Mapping(target = "jobTitle", source = "jobPost.title")
     @Mapping(target = "recruiterName", source = "recruiter.fullName")
     WorkOverviewResponse toWorkOverviewResponse(Work work);
@@ -42,4 +46,10 @@ public interface WorkMapper {
             source = "jobPost.recruiter"
     )
     WorkResponse toWorkResponse(Work work);
+
+
+    @Mapping(target = "id",source = "candidate.id")
+    @Mapping( target = "fullName",source = "candidate.fullName")
+    @Mapping(target = "imageUrl",source = "candidate.imageUrl" )
+    WorkCandidateResponse toWorkCandidateResponse(Work work);
 }

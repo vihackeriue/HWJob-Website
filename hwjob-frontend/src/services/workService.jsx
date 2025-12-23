@@ -17,3 +17,31 @@ export const getWorkOfCandidate = async (page = 1, size = DEFAULT_LIMIT) => {
 
   return response.data;
 };
+
+export const getStaffOfWork = async (
+  jobPostId,
+  page = 1,
+  size = DEFAULT_LIMIT
+) => {
+  const response = await axiosPrivate.get(
+    ENDPOINTS.WORK.LIST_STAFF_OF_WORK(jobPostId),
+    {
+      params: { page, size },
+    }
+  );
+  return response.data;
+};
+
+export const recruiterUpdateWorkStatus = (jobPostId, candidateId, data) => {
+  return axiosPrivate.patch(
+    ENDPOINTS.WORK.RECRUITER_UPDATE_STATUS_WORK(jobPostId, candidateId),
+    data
+  );
+};
+
+export const candidateUpdateWorkStatus = (jobPostId, data) => {
+  return axiosPrivate.patch(
+    ENDPOINTS.WORK.CANDIDATE_UPDATE_STATUS_WORK(jobPostId),
+    data
+  );
+};

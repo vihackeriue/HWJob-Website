@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { OverviewSection } from "../../components/sections/common/jobPostDetail/OverviewSection";
 import DescriptionSection from "../../components/sections/common/jobPostDetail/DescriptionSection";
 import { applyJob } from "../../services/applicationService";
+import WorkSection from "../../components/sections/candidate/JobPostDetail/WorkSection";
 
 const JobPostDetail = () => {
   const { id } = useParams();
@@ -63,6 +64,9 @@ const JobPostDetail = () => {
         setOpenApplyJobDialog={setOpenApplyJobDialog}
         onSaveJobPost={handleSaveJob}
       />
+      {jobPost.data.work && (
+        <WorkSection work={jobPost.data.work} setJobPost={jobPost.setData} />
+      )}
       <div className="bg-white rounded-2xl p-5">
         <DescriptionSection jobPost={jobPost.data} />
       </div>
