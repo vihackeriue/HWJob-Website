@@ -2,7 +2,7 @@ package com.hw.hwjobbackend.controller.user.candidate;
 
 
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationCandidateRequest;
-import com.hw.hwjobbackend.model.dto.request.application.ApplicationRecruiterRequest;
+
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationStatusRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
@@ -57,7 +57,7 @@ public class CandidateApplicationController {
                 .result(candidateApplicationService.getAllJobPostsApplied())
                 .build();
     }
-    @PatchMapping("/job-posts/{jobPostId}/candidates/status")
+    @PatchMapping("/job-posts/{jobPostId}/status")
     public ApiResponse<Void> updateApplicationStatus(@PathVariable String jobPostId,
                                                      @RequestBody ApplicationStatusRequest request){
         candidateApplicationService.updateApplicationStatus(jobPostId, request.getStatus());

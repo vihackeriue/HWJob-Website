@@ -1,3 +1,5 @@
+import { ROLES } from "./roles";
+
 export const STATUS_WORK = [
   {
     code: "PENDING",
@@ -5,8 +7,8 @@ export const STATUS_WORK = [
     className: "bg-gray-100 text-gray-700",
 
     actions: {
-      RECRUITER: [],
-      CANDIDATE: [],
+      [ROLES.RECRUITER]: [],
+      [ROLES.CANDIDATE]: [],
     },
   },
 
@@ -16,12 +18,12 @@ export const STATUS_WORK = [
     className: "bg-blue-100 text-blue-700",
 
     note: {
-      CANDIDATE: "Bạn có thể nộp kết quả hoặc hủy công việc",
+      [ROLES.CANDIDATE]: "Bạn có thể nộp kết quả hoặc hủy công việc",
     },
 
     actions: {
-      RECRUITER: [],
-      CANDIDATE: [
+      [ROLES.RECRUITER]: [],
+      [ROLES.CANDIDATE]: [
         { to: "SUBMITTED", label: "Nộp kết quả", variant: "primary" },
         { to: "CANCELLED", label: "Hủy công việc", variant: "danger" },
       ],
@@ -34,15 +36,17 @@ export const STATUS_WORK = [
     className: "bg-purple-100 text-purple-700",
 
     note: {
-      RECRUITER: "Ứng viên đã nộp kết quả, vui lòng xác nhận",
+      [ROLES.RECRUITER]: "Ứng viên đã nộp kết quả, vui lòng xác nhận",
     },
 
     actions: {
-      RECRUITER: [
+      [ROLES.RECRUITER]: [
         { to: "PAID", label: "Thanh toán", variant: "success" },
         { to: "REJECTED", label: "Từ chối kết quả", variant: "danger" },
       ],
-      CANDIDATE: [],
+      [ROLES.CANDIDATE]: [
+        { to: "DISPUTED", label: "Khiếu nại", variant: "warning" },
+      ],
     },
   },
 
@@ -52,12 +56,14 @@ export const STATUS_WORK = [
     className: "bg-red-100 text-red-700",
 
     note: {
-      CANDIDATE: "Kết quả bị từ chối, bạn có thể khiếu nại",
+      [ROLES.CANDIDATE]: "Kết quả bị từ chối, bạn có thể khiếu nại",
     },
 
     actions: {
-      RECRUITER: [],
-      CANDIDATE: [{ to: "DISPUTED", label: "Khiếu nại", variant: "warning" }],
+      [ROLES.RECRUITER]: [],
+      [ROLES.CANDIDATE]: [
+        { to: "DISPUTED", label: "Khiếu nại", variant: "warning" },
+      ],
     },
   },
 
@@ -67,13 +73,13 @@ export const STATUS_WORK = [
     className: "bg-yellow-100 text-yellow-700",
 
     note: {
-      RECRUITER: "Công việc đang trong trạng thái tranh chấp",
-      CANDIDATE: "Yêu cầu tranh chấp đang được xử lý",
+      [ROLES.RECRUITER]: "Công việc đang trong trạng thái tranh chấp",
+      [ROLES.CANDIDATE]: "Yêu cầu tranh chấp đang được xử lý",
     },
 
     actions: {
-      RECRUITER: [],
-      CANDIDATE: [],
+      [ROLES.RECRUITER]: [],
+      [ROLES.CANDIDATE]: [],
     },
   },
 
@@ -83,8 +89,8 @@ export const STATUS_WORK = [
     className: "bg-green-100 text-green-700",
 
     actions: {
-      RECRUITER: [],
-      CANDIDATE: [],
+      [ROLES.RECRUITER]: [],
+      [ROLES.CANDIDATE]: [],
     },
   },
 
@@ -94,8 +100,8 @@ export const STATUS_WORK = [
     className: "bg-gray-100 text-gray-600",
 
     actions: {
-      RECRUITER: [],
-      CANDIDATE: [],
+      [ROLES.RECRUITER]: [],
+      [ROLES.CANDIDATE]: [],
     },
   },
 ];

@@ -5,7 +5,7 @@ import classNames from "classnames";
 import useAuth from "../../../../hooks/useAuth";
 import InfoCard from "../../../ui/cards/InfoCard";
 import { GiMoneyStack } from "react-icons/gi";
-import { IoPeopleOutline } from "react-icons/io5";
+import { IoPeopleOutline, IoPersonOutline } from "react-icons/io5";
 import { HiOutlineCalendarDateRange } from "react-icons/hi2";
 import { formatDate } from "../../../../utils/date";
 import PrimaryButton from "../../../ui/button/PrimaryButton";
@@ -126,11 +126,10 @@ export const OverviewSection = ({
               {jobPost.title}
             </h1>
             <h1 className="text-md font-semibold line-clamp-2"></h1>
-            <p className="text-lg">
-              Nhà tuyển dụng:{" "}
-              <span className="font-semibold">
-                {jobPost.recruiter.fullName}
-              </span>
+            <p className="flex items-center gap-1">
+              <IoPersonOutline />
+              <span className="font-medium">Nhà tuyển dụng:</span>{" "}
+              {jobPost.recruiter.fullName}
             </p>
           </div>
         </div>

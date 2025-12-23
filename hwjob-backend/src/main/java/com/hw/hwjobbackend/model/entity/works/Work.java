@@ -57,6 +57,9 @@ public class Work {
     @Enumerated(EnumType.STRING)
     SalaryTypeEnum salaryType;
 
+    @Lob
+    String submission;
+
     @Enumerated(EnumType.STRING)
     WorkStatusEnum status;
 

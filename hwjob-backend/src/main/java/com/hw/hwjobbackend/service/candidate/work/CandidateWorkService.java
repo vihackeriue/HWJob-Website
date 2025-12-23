@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.service.candidate.work;
 
+import com.hw.hwjobbackend.model.dto.request.work.UpdateWorkStatusRequest;
 import com.hw.hwjobbackend.model.dto.response.work.WorkOverviewResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkResponse;
 import org.springframework.data.domain.Page;
@@ -12,4 +13,6 @@ public interface CandidateWorkService {
 
     Page<WorkResponse> getAllWorksOfCandidate(int page, int size);
     List<WorkResponse> getAllWorksOfCandidate();
+
+    void updateApplicationStatus(String jobPostId, UpdateWorkStatusRequest request);
 }

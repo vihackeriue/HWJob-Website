@@ -115,6 +115,7 @@ public enum ErrorCode {
     WORK_EXISTED(2101, "error.work_existed", HttpStatus.BAD_REQUEST),
     WORK_NOT_FOUND(2102, "error.work_not_found", HttpStatus.NOT_FOUND),
     INVALID_WORK_STATUS(2103, "error.invalid_work_status", HttpStatus.BAD_REQUEST),
+    SUBMISSION_REQUIRED(2104, "error.submission_required", HttpStatus.BAD_REQUEST),
     // ========================================
     // lOYALTY POINTS(22xx)
     // ========================================

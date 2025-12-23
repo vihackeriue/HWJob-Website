@@ -1,5 +1,7 @@
 package com.hw.hwjobbackend.controller.user.candidate;
 
+import com.hw.hwjobbackend.model.dto.request.application.ApplicationStatusRequest;
+import com.hw.hwjobbackend.model.dto.request.work.UpdateWorkStatusRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkOverviewResponse;
@@ -53,5 +55,12 @@ public class CandidateWorkController {
         return ApiResponse.<List<WorkResponse>>builder()
                 .result(candidateWorkService.getAllWorksOfCandidate())
                 .build();
+    }
+    @PatchMapping("/job-posts/{jobPostId}/status")
+    public ApiResponse<Void> updateApplicationStatus(@PathVariable String jobPostId,
+                                                     @RequestBody UpdateWorkStatusRequest request){
+        candidateWorkService.updateApplicationStatus(jobPostId, request);
+        return ApiResponse.<Void>builder().message("Cập nhật thành công!").build();
+
     }
 }

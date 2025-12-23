@@ -4,6 +4,7 @@ import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostRecruiterProfileResponse;
+import com.hw.hwjobbackend.repository.work.WorkRepository;
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostFilterRequest;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
@@ -14,6 +15,7 @@ import com.hw.hwjobbackend.model.enums.RoleEnum;
 import com.hw.hwjobbackend.repository.application.ApplicationRepository;
 import com.hw.hwjobbackend.repository.candidate_save_job.CandidateSaveJobRepository;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
+import com.hw.hwjobbackend.service.mapper.work.WorkMapper;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
@@ -36,6 +38,8 @@ public class JobPostServiceImpl implements JobPostService {
     JobPostMapper jobPostMapper;
     CandidateSaveJobRepository candidateSaveJobRepository;
     ApplicationRepository applicationRepository;
+    WorkRepository workRepository;
+    WorkMapper workMapper;
 
     @Override
     public Page<JobPostResponse> getAllJobPosts(Integer page, Integer size, JobPostFilterRequest filter) {
@@ -103,6 +107,14 @@ public class JobPostServiceImpl implements JobPostService {
                             )
                     );
 
+            workRepository
+                    .findByCandidateIdAndJobPostId(userId, jobPost.getId())
+                    .ifPresent(work ->
+                            response.setWork(
+                                    workMapper.toWorkOverviewResponse(work)
+                            )
+                    );
+
             response.setIsSaved(
                     candidateSaveJobRepository.existsByCandidateIdAndJobPostId(
                             userId, jobPost.getId()
@@ -116,7 +128,7 @@ public class JobPostServiceImpl implements JobPostService {
         // ===== RECRUITER / ADMIN =====
         response.setApplication(null);
         response.setIsSaved(false);
-
+        response.setWork(null);
         return response;
 
     }
