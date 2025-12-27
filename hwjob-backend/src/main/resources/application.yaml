@@ -7,17 +7,13 @@ spring:
     url: jdbc:mysql://localhost:3306/hwjob_db?createDatabaseIfNotExist=true
 
     username: root
-    password: 123456
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
   data:
-    redis:
-      host: localhost
-      port: 6379
-
     mongodb:
       uri: mongodb://root:root@localhost:27017/hwjob_mongo_db?authSource=admin
       username: root
@@ -75,7 +71,7 @@ vnpay:
   hash-secret: E6W3C9Q4OAO1H2X8857RIRBHO6BYRTQF
   pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
   return-url: http://localhost:5173/payment-result
-  ipn-url:  https://transpalmar-anaya-banteringly.ngrok-free.dev/hwjob/api/public/vnpay/ipn
+  ipn-url: https://transpalmar-anaya-banteringly.ngrok-free.dev/hwjob/api/public/vnpay/ipn
 
 # ngrok domain
 # ngrok http 8080
