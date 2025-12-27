@@ -2,11 +2,16 @@ import React from "react";
 import Lottie from "lottie-react";
 import loading from "../../assets/lottie/loading.json";
 
-const Loading = () => {
+const Loading = ({ size = 24 }) => {
+  const dimension = typeof size === "number" ? `${size}px` : size;
   return (
-    <div className="flex justify-center items-center ">
-      <Lottie animationData={loading} loop className="w-40 h-40" />
-    </div>
+    <span className="inline-block align-middle">
+      <Lottie
+        animationData={loading}
+        loop
+        style={{ width: dimension, height: dimension }}
+      />
+    </span>
   );
 };
 

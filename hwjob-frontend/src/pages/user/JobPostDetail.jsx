@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { OverviewSection } from "../../components/sections/common/jobPostDetail/OverviewSection";
 import DescriptionSection from "../../components/sections/common/jobPostDetail/DescriptionSection";
 import { applyJob } from "../../services/applicationService";
+import WorkSection from "../../components/sections/candidate/JobPostDetail/WorkSection";
 
 const JobPostDetail = () => {
   const { id } = useParams();
@@ -24,18 +25,20 @@ const JobPostDetail = () => {
         jobPostId: jobPost.data.id,
       };
       // gọi API backend đăng ký
-      await applyJob(payload);
-
-      alert("ứng tuyển thành công");
+      const res = await applyJob(payload);
+      const application = res.result;
 
       jobPost.setData((prev) => ({
         ...prev,
-        isApplied: true,
+        application: {
+          jobPostId: application.jobPostId,
+          status: application.status,
+        },
       }));
-
+      toast.success("ứng tuyển thành công");
       setOpenApplyJobDialog(false);
     } catch (error) {
-      alert(error.response?.data?.message || "Ứng tuyển thất bại!");
+      toast.error(error.response?.data?.message || "Ứng tuyển thất bại!");
     }
   };
 
@@ -57,9 +60,13 @@ const JobPostDetail = () => {
     <div className="flex flex-col gap-3 mt-10">
       <OverviewSection
         jobPost={jobPost.data}
+        setJobPost={jobPost.setData}
         setOpenApplyJobDialog={setOpenApplyJobDialog}
         onSaveJobPost={handleSaveJob}
       />
+      {jobPost.data.work && (
+        <WorkSection work={jobPost.data.work} setJobPost={jobPost.setData} />
+      )}
       <div className="bg-white rounded-2xl p-5">
         <DescriptionSection jobPost={jobPost.data} />
       </div>

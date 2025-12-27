@@ -13,8 +13,6 @@ public interface RecruiterApplicationService {
 
     List<ApplicationCandidateResponse> getAllCandidateApplications(String jobPostId);
 
-    void updateCandidateApplicationStatus( String jobPostId,
-                                           String candidateId,
-                                           ApplicationStatusEnum newStatus);
+    void updateCandidateApplicationStatus( String jobPostId, String candidateId, ApplicationStatusRequest request);
 
 }

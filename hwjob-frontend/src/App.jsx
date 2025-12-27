@@ -22,8 +22,11 @@ import CandidateJobManagement from "./pages/user/candidate/CandidateJobManagemen
 import {ToastContainer} from "react-toastify";
 import RecruiterJobManagement from "./pages/user/recruiter/RecruiterJobManagement";
 import RecruiterJobPostDetail from "./pages/user/recruiter/RecruiterJobPostDetail";
-import MyProfile from "./pages/user/MyProfile.jsx";
+
 import {ROLES} from "./constants/roles";
+import PaymentResult from "./pages/user/test/PaymentResult.jsx";
+import MyProfile from "./pages/user/shared/MyProfile.jsx";
+import TransactionManagement from "./pages/user/shared/TransactionManagement.jsx";
 import ChatFloatingUI from "./components/ui/ChatFloatingUI.jsx";
 import PublicProfile from "./pages/user/PublicProfile.jsx";
 
@@ -34,7 +37,7 @@ function App() {
                 <Route path="login" element={<Login/>}/>
                 <Route path="register" element={<Register/>}/>
 
-                < Route path="/" element={<UserLayout/>}>
+                <Route path="/" element={<UserLayout/>}>
                     <Route index element={<Home/>}/>
                     <Route path="job-post" element={<JobPostList/>}/>
                     <Route path="job-post/:id" element={<JobPostDetail/>}/>
@@ -45,6 +48,8 @@ function App() {
                         }
                     >
                         <Route path="my-profile" element={<MyProfile/>}/>
+                        <Route path="transaction" element={<TransactionManagement/>}/>
+                        <Route path="payment-result" element={<PaymentResult/>}/>
                     </Route>
                     {/* Role Recruiter */}
                     <Route
@@ -84,7 +89,6 @@ function App() {
                 newestOnTop={false} // <--- Toast mới nằm trên cùng
                 limit={5} // <--- Giới hạn 5 toast một lúc
             />
-            <ChatFloatingUI/>
         </>
     );
 }

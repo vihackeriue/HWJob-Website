@@ -4,6 +4,7 @@ import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationRecruiterRequest;
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationStatusRequest;
+import com.hw.hwjobbackend.model.dto.request.work.WorkCreateRequest;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationCandidateResponse;
 import com.hw.hwjobbackend.model.entity.application.Application;
 import com.hw.hwjobbackend.model.entity.application.ApplicationId;
@@ -11,7 +12,10 @@ import com.hw.hwjobbackend.model.enums.ApplicationStatusEnum;
 import com.hw.hwjobbackend.repository.application.ApplicationRepository;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
 import com.hw.hwjobbackend.repository.user.CandidateRepository;
+import com.hw.hwjobbackend.service.blockchain.BlockchainService;
 import com.hw.hwjobbackend.service.mapper.application.ApplicationMapper;
+import com.hw.hwjobbackend.service.recruiter.work.RecruiterWorkService;
+import com.hw.hwjobbackend.service.shared.loyalty_point.LoyaltyPointService;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import com.hw.hwjobbackend.util.SecurityUtils;
 import jakarta.transaction.Transactional;
@@ -32,9 +36,10 @@ import java.util.List;
 public class RecruiterApplicationServiceImpl implements RecruiterApplicationService {
 
     ApplicationRepository applicationRepository;
-    JobPostRepository jobPostRepository;
-    CandidateRepository candidateRepository;
     ApplicationMapper applicationMapper;
+    RecruiterWorkService workService;
+    LoyaltyPointService loyaltyPointService;
+
 
     @Override
     public Page<ApplicationCandidateResponse> getCandidateApplications(int page, int size, String jobPostId) {
@@ -65,15 +70,10 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
     public void updateCandidateApplicationStatus(
             String jobPostId,
             String candidateId,
-            ApplicationStatusEnum newStatus
+            ApplicationStatusRequest request
     ) {
-        // Validate job post & candidate
-        if (!jobPostRepository.existsById(jobPostId)) {
-            throw new AppException(ErrorCode.JOB_POST_NOT_EXISTED);
-        }
-        if (!candidateRepository.existsById(candidateId)) {
-            throw new AppException(ErrorCode.USER_NOT_EXISTED);
-        }
+        ApplicationStatusEnum newStatus = request.getStatus();
+
 
         //Lấy recruiter đang đăng nhập
         String recruiterId = SecurityUtils.getCurrentUserId();
@@ -91,21 +91,53 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
         //VALIDATE CHUYỂN TRẠNG THÁI
         validateStatusTransition(application.getStatus(), newStatus);
 
+        // ASSIGNED -> REJECTED
+        if (application.getStatus() == ApplicationStatusEnum.ASSIGNED &&
+                newStatus == ApplicationStatusEnum.REJECTED) {
+
+            loyaltyPointService.refundPointToRecruiter(jobPostId, candidateId);
+
+            // Xóa work đã giao
+            workService.deleteByJobPostIdAndCandidateId(jobPostId, candidateId);
+
+
+        }
+
         // Update
         application.setStatus(newStatus);
+
+        if (newStatus == ApplicationStatusEnum.ASSIGNED) {
+            if (request.getAgreedSalary() == null ||
+                    request.getSalaryType() == null ||
+                    request.getStartTime() == null ||
+                    request.getEndTime() == null) {
+                throw new AppException(ErrorCode.INVALID_REQUEST);
+            }
+            WorkCreateRequest workRequest = WorkCreateRequest.builder()
+                    .candidateId(candidateId)
+                    .jobPostId(jobPostId)
+                    .agreedSalary(request.getAgreedSalary())
+                    .salaryType(request.getSalaryType())
+                    .startTime(request.getStartTime())
+                    .endTime(request.getEndTime())
+                    .build();
+
+            workService.assignWork(workRequest);
+        }
+
+
     }
     private void validateStatusTransition(
             ApplicationStatusEnum current,
             ApplicationStatusEnum next
     ) {
-
-        // Không cho đổi trạng thái khi đã kết thúc
+        // Không cho đổi khi đã kết thúc
         if (current == ApplicationStatusEnum.ACCEPTED ||
                 current == ApplicationStatusEnum.CANCELLED) {
             throw new AppException(ErrorCode.INVALID_APPLICATION_STATUS);
         }
 
-        // Recruiter có thể REJECTED ở mọi trạng thái còn lại
+        // Recruiter được REJECTED ở mọi trạng thái chưa kết thúc
         if (next == ApplicationStatusEnum.REJECTED) {
             return;
         }
@@ -116,22 +148,14 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
                     throw new AppException(ErrorCode.INVALID_APPLICATION_STATUS);
                 }
             }
-
             case APPROVED -> {
                 if (next != ApplicationStatusEnum.ASSIGNED) {
                     throw new AppException(ErrorCode.INVALID_APPLICATION_STATUS);
                 }
             }
-
-            case ASSIGNED -> {
-                if (next != ApplicationStatusEnum.ACCEPTED &&
-                        next != ApplicationStatusEnum.CANCELLED) {
-                    throw new AppException(ErrorCode.INVALID_APPLICATION_STATUS);
-                }
-            }
-
             default -> throw new AppException(ErrorCode.INVALID_APPLICATION_STATUS);
         }
     }
+
 
 }

@@ -32,9 +32,23 @@ export const getCandidateApplications = async (
   );
   return response.data;
 };
-export const updateApplicantStatus = (applicationId, jobPostId, status) => {
+export const recruiterUpdateApplicantStatus = (
+  applicationId,
+  jobPostId,
+  data
+) => {
   return axiosPrivate.patch(
-    ENDPOINTS.APPLICATION.UPDATE_STATUS_APPLICANTS(applicationId, jobPostId),
+    ENDPOINTS.APPLICATION.RECRUITER_UPDATE_STATUS_APPLICANTS(
+      applicationId,
+      jobPostId
+    ),
+    data
+  );
+};
+
+export const candidateUpdateApplicantStatus = (jobPostId, status) => {
+  return axiosPrivate.patch(
+    ENDPOINTS.APPLICATION.CANDIDATE_UPDATE_STATUS_APPLICANTS(jobPostId),
     {
       status,
     }

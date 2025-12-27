@@ -1,0 +1,112 @@
+import { ROLES } from "./roles";
+
+export const STATUS_WORK = [
+  {
+    code: "PENDING",
+    name: "Chờ bắt đầu",
+    className: "bg-gray-100 text-gray-700",
+
+    actions: {
+      [ROLES.RECRUITER]: [],
+      [ROLES.CANDIDATE]: [],
+    },
+  },
+
+  {
+    code: "IN_PROGRESS",
+    name: "Đang tiến hành",
+    className: "bg-blue-100 text-blue-700",
+
+    note: {
+      [ROLES.CANDIDATE]: "Bạn có thể nộp kết quả hoặc hủy công việc",
+    },
+
+    actions: {
+      [ROLES.RECRUITER]: [],
+      [ROLES.CANDIDATE]: [
+        { to: "SUBMITTED", label: "Nộp kết quả", variant: "primary" },
+        { to: "CANCELLED", label: "Hủy công việc", variant: "danger" },
+      ],
+    },
+  },
+
+  {
+    code: "SUBMITTED",
+    name: "Đã nộp kết quả",
+    className: "bg-purple-100 text-purple-700",
+
+    note: {
+      [ROLES.RECRUITER]: "Ứng viên đã nộp kết quả, vui lòng xác nhận",
+    },
+
+    actions: {
+      [ROLES.RECRUITER]: [
+        { to: "PAID", label: "Thanh toán", variant: "success" },
+        { to: "REJECTED", label: "Từ chối kết quả", variant: "danger" },
+      ],
+      [ROLES.CANDIDATE]: [
+        { to: "DISPUTED", label: "Khiếu nại", variant: "warning" },
+      ],
+    },
+  },
+
+  {
+    code: "REJECTED",
+    name: "Kết quả bị từ chối",
+    className: "bg-red-100 text-red-700",
+
+    note: {
+      [ROLES.CANDIDATE]: "Kết quả bị từ chối, bạn có thể khiếu nại",
+    },
+
+    actions: {
+      [ROLES.RECRUITER]: [],
+      [ROLES.CANDIDATE]: [
+        { to: "DISPUTED", label: "Khiếu nại", variant: "warning" },
+      ],
+    },
+  },
+
+  {
+    code: "DISPUTED",
+    name: "Đang tranh chấp",
+    className: "bg-yellow-100 text-yellow-700",
+
+    note: {
+      [ROLES.RECRUITER]: "Công việc đang trong trạng thái tranh chấp",
+      [ROLES.CANDIDATE]: "Yêu cầu tranh chấp đang được xử lý",
+    },
+
+    actions: {
+      [ROLES.RECRUITER]: [],
+      [ROLES.CANDIDATE]: [],
+    },
+  },
+
+  {
+    code: "PAID",
+    name: "Đã thanh toán",
+    className: "bg-green-100 text-green-700",
+
+    actions: {
+      [ROLES.RECRUITER]: [],
+      [ROLES.CANDIDATE]: [],
+    },
+  },
+
+  {
+    code: "CANCELLED",
+    name: "Đã hủy",
+    className: "bg-gray-100 text-gray-600",
+
+    actions: {
+      [ROLES.RECRUITER]: [],
+      [ROLES.CANDIDATE]: [],
+    },
+  },
+];
+
+export const STATUS_WORK_MAP = STATUS_WORK.reduce((acc, s) => {
+  acc[s.code] = s;
+  return acc;
+}, {});

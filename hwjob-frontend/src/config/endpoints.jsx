@@ -38,8 +38,35 @@ export const ENDPOINTS = {
         LIST_APPLIED_JOB_POSTS: "candidates/applications",
         LIST_APPLICANTS: (jobPostId) =>
             `recruiters/applications/job-posts/${jobPostId}/candidates`,
-        UPDATE_STATUS_APPLICANTS: (applicationId, jobPostId) =>
+        RECRUITER_UPDATE_STATUS_APPLICANTS: (applicationId, jobPostId) =>
             `recruiters/applications/job-posts/${jobPostId}/candidates/${applicationId}/status`,
+        CANDIDATE_UPDATE_STATUS_APPLICANTS: (jobPostId) =>
+            `/candidates/applications/job-posts/${jobPostId}/status`,
+    },
+    WORK: {
+        CANDIDATE_WORK_OVERVIEW: (jobPostId) =>
+            `candidates/works/${jobPostId}/overview`,
+        LIST_WORKS_OF_CANDIDATE: "candidates/works/me",
+        LIST_STAFF_OF_WORK: (jobPostId) =>
+            `recruiters/works/job-posts/${jobPostId}/candidates`,
+        RECRUITER_UPDATE_STATUS_WORK: (jobPostId, candidateId) =>
+            `recruiters/works/job-posts/${jobPostId}/candidates/${candidateId}/status`,
+        CANDIDATE_UPDATE_STATUS_WORK: (jobPostId) =>
+            `candidates/works/job-posts/${jobPostId}/status`,
+    },
+    REVIEW: {
+        CREATE_REVIEW: "reviews",
+        GET_MY_REVIEWS: "reviews/me",
+        GET_MY_AVERAGE_RATING: "reviews/average-rating",
+    },
+    LOYALTY_POINT: {
+        GET_POINTS: "loyalty-points/me",
+        GET_LOCKED_POINTS: "loyalty-points/locked/me",
+        GET_HISTORY_PAYMENT: "loyalty-points/payment-history",
+        TOP_UP: "loyalty-points/top-up",
+    },
+    REPUTATION: {
+        GET_MY_REPUTATION: "reputation/me",
     },
     INDUSTRY: {
         LIST: "public/industries",
@@ -57,6 +84,7 @@ export const ENDPOINTS = {
         LIST: "public/skills",
     },
 
+
     HOME: {
         TOP_RECRUITER: "/public/home/top-recruiters",
     },
@@ -71,5 +99,4 @@ export const ENDPOINTS = {
         CONVERSATIONS: "/chats",
         MESSAGES: (conversationId) => `/chats/${conversationId}/messages`,
     },
-
 };
