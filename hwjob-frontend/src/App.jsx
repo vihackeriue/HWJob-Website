@@ -89,6 +89,7 @@ function App() {
                 newestOnTop={false} // <--- Toast mới nằm trên cùng
                 limit={5} // <--- Giới hạn 5 toast một lúc
             />
+            <ChatFloatingUI/>
         </>
     );
 }
