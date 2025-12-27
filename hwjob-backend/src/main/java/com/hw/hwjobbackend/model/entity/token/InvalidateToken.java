@@ -1,25 +1,24 @@
 package com.hw.hwjobbackend.model.entity.token;
 
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.TimeToLive;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.io.Serializable;
+import java.util.Date;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RedisHash("invalidate_tokens")
+@Document(collection = "invalidate_tokens")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class InvalidateToken implements Serializable {
+public class InvalidateToken {
     @Id
     String jwtId;
 
-    @TimeToLive
-    Long ttl;
+    @Indexed(expireAfter = "0s")
+    Date expiryTime;
 }
