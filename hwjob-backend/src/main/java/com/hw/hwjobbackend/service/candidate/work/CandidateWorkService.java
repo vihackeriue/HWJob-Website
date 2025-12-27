@@ -5,6 +5,7 @@ import com.hw.hwjobbackend.model.dto.response.work.WorkOverviewResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkResponse;
 import org.springframework.data.domain.Page;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface CandidateWorkService {
@@ -14,5 +15,6 @@ public interface CandidateWorkService {
     Page<WorkResponse> getAllWorksOfCandidate(int page, int size);
     List<WorkResponse> getAllWorksOfCandidate();
 
-    void updateApplicationStatus(String jobPostId, UpdateWorkStatusRequest request);
+    void updateWorkStatus(String jobPostId, UpdateWorkStatusRequest request);
+
 }

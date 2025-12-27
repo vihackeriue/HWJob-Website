@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.controller.payment;
 
-import com.hw.hwjobbackend.service.shared.loyalty_point.LoyaltyPointService;
+import com.hw.hwjobbackend.service.shared.loyalty_point.LoyaltyPointServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,13 +18,13 @@ import java.util.Map;
 @RequestMapping("/public/momo")
 public class MomoController {
 
-    LoyaltyPointService loyaltyPointService;
+    LoyaltyPointServiceImpl loyaltyPointServiceImpl;
 
     @PostMapping("/ipn")
     public ResponseEntity<Void> momoIpn(
             @RequestBody Map<String, String> payload
     ) throws Exception {
-        loyaltyPointService.handleMomoIpn(payload);
+        loyaltyPointServiceImpl.handleMomoIpn(payload);
         return ResponseEntity.ok().build();
     }
 }

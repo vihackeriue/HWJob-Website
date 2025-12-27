@@ -27,7 +27,7 @@ const CandidateJobManagement = () => {
             title={"Quản lý công việc"}
           />
         </div>
-        <div className="col-span-2 flex flex-col gap-3 ">
+        <div className="col-span-2 flex flex-col gap-3">
           {/* Statistics */}
           <div className="flex gap-4 w-full bg-dark-100 p-3 rounded-2xl shadow bg-white">
             <QuantityStatisticsCard

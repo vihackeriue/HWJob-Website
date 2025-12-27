@@ -2,7 +2,7 @@ package com.hw.hwjobbackend.controller.blockchain;
 
 import com.hw.hwjobbackend.model.dto.request.blockchain.LockPointRequest;
 import com.hw.hwjobbackend.model.dto.request.blockchain.MintPointRequest;
-import com.hw.hwjobbackend.service.blockchain.BlockchainService;
+import com.hw.hwjobbackend.service.blockchain.BlockchainServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -19,7 +19,7 @@ import java.util.Map;
 @RequestMapping("/public/blockchain")
 public class BlockchainController {
     @Autowired
-    BlockchainService blockchainService;
+    BlockchainServiceImpl blockchainService;
 
     @PostMapping("/mint-point")
     public ResponseEntity<?> mintPoint(
@@ -46,18 +46,7 @@ public class BlockchainController {
 
         return null;
     }
-    @GetMapping("/reputation/{userId}")
-    public ResponseEntity<?> getUserReputation(@PathVariable String userId) throws Exception {
 
-        BigInteger point = blockchainService.getReputationOfUser(userId);
-
-        return ResponseEntity.ok(
-                Map.of(
-                        "userId", userId,
-                        "Reputation", point
-                )
-        );
-    }
 
 
     @PostMapping("/lock")

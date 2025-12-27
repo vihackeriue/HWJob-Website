@@ -73,8 +73,10 @@ export default function Navbar() {
                     {isLoading ? (
                       <Loading size={24} />
                     ) : (
-                      <div className="flex gap-1 items-center  text-amber-600 font-semibold  px-2 py-1 border  text-lg md:text-xl border-amber-600 rounded-lg">
-                        <p>{Number(points ?? 0).toLocaleString()}</p>
+                      <div className="flex gap-1 items-center  text-amber-600 hover:text-amber-500 font-semibold  px-2 py-1 border  text-lg md:text-xl border-amber-600 rounded-lg">
+                        <Link to={"/transaction"}>
+                          {Number(points ?? 0).toLocaleString()}
+                        </Link>
                         <PiCoinsFill />
                       </div>
                     )}
@@ -105,7 +107,7 @@ export default function Navbar() {
                           className={menuItemClasses}
                           onClick={() => logout()}
                         >
-                          Sign out
+                          Đăng xuất
                         </button>
                       </MenuItem>
                     </MenuItems>

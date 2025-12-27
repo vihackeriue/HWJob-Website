@@ -2,12 +2,9 @@ package com.hw.hwjobbackend.service.recruiter.work;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.model.dto.request.application.ApplicationStatusRequest;
 import com.hw.hwjobbackend.model.dto.request.work.UpdateWorkStatusRequest;
 import com.hw.hwjobbackend.model.dto.request.work.WorkCreateRequest;
-import com.hw.hwjobbackend.model.dto.response.application.ApplicationCandidateResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkCandidateResponse;
-import com.hw.hwjobbackend.model.dto.response.work.WorkOverviewResponse;
 import com.hw.hwjobbackend.model.entity.application.Application;
 import com.hw.hwjobbackend.model.entity.application.ApplicationId;
 import com.hw.hwjobbackend.model.entity.job_post.JobPost;
@@ -15,8 +12,12 @@ import com.hw.hwjobbackend.model.entity.works.Work;
 import com.hw.hwjobbackend.model.enums.ApplicationStatusEnum;
 import com.hw.hwjobbackend.model.enums.WorkStatusEnum;
 import com.hw.hwjobbackend.repository.application.ApplicationRepository;
+import com.hw.hwjobbackend.repository.review.ReviewRepository;
+import com.hw.hwjobbackend.repository.user.UserRepository;
 import com.hw.hwjobbackend.repository.work.WorkRepository;
+import com.hw.hwjobbackend.service.blockchain.BlockchainService;
 import com.hw.hwjobbackend.service.mapper.work.WorkMapper;
+import com.hw.hwjobbackend.service.shared.loyalty_point.LoyaltyPointService;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
@@ -28,6 +29,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -40,6 +42,11 @@ public class RecruiterWorkServiceImpl implements RecruiterWorkService {
     WorkRepository workRepository;
     WorkMapper workMapper;
 
+    BlockchainService blockchainService;
+    ReviewRepository reviewRepository;
+    LoyaltyPointService loyaltyPointService;
+
+
     @Override
     public Page<WorkCandidateResponse> getCandidateWork(int page, int size, String jobPostId) {
         String recruiterId = SecurityUtils.getCurrentUserId();
@@ -49,7 +56,19 @@ public class RecruiterWorkServiceImpl implements RecruiterWorkService {
         Page<Work> works = workRepository
                 .findByJobPostIdAndRecruiterIdOrderByCreatedAtDesc(jobPostId, recruiterId, pageable);
 
-        return works.map(workMapper::toWorkCandidateResponse);
+
+
+        return works.map(work -> {
+            WorkCandidateResponse res = workMapper.toWorkCandidateResponse(work);
+
+            Double myRating = reviewRepository.findMyRating(
+                    work.getId(),
+                    recruiterId
+            );
+
+            res.setMyReviewRating(myRating); // null nếu chưa review
+            return res;
+        });
     }
     @Override
     public List<WorkCandidateResponse> getAllCandidateWork(String jobPostId) {
@@ -58,7 +77,17 @@ public class RecruiterWorkServiceImpl implements RecruiterWorkService {
         List<Work> works = workRepository
                 .findByJobPostIdAndRecruiterIdOrderByCreatedAtDesc(jobPostId, recruiterId);
 
-        return works.stream().map(workMapper::toWorkCandidateResponse).toList();
+        return works.stream().map(work -> {
+            WorkCandidateResponse res = workMapper.toWorkCandidateResponse(work);
+
+            Double myRating = reviewRepository.findMyRating(
+                    work.getId(),
+                    recruiterId
+            );
+
+            res.setMyReviewRating(myRating);
+            return res;
+        }).toList();
     }
 
     @Override
@@ -82,18 +111,31 @@ public class RecruiterWorkServiceImpl implements RecruiterWorkService {
 
         JobPost jobPost = application.getJobPost();
 
+        BigInteger lockAmount = BigInteger.valueOf(request.getAgreedSalary());
+        String recruiterId = SecurityUtils.getCurrentUserId();
+
+        String txHash;
+        try {
+            txHash = blockchainService.lockForJob(recruiterId, lockAmount);
+        } catch (Exception e) {
+            // LOCK FAIL → KHÔNG ĐƯỢC KÝ
+            throw new AppException(ErrorCode.NOT_ENOUGH_REWARD_POINT);
+        }
+
         Work work = workMapper.toWorkCreate(request);
 
         work.setCandidate(application.getCandidate());
         work.setRecruiter(jobPost.getRecruiter());
         work.setJobPost(jobPost);
         work.setApplication(application);
+        work.setLockTxHash(txHash);
+
         workRepository.save(work);
 
     }
     @Override
     @Transactional
-    public void updateCandidateApplicationStatus(
+    public void updateCandidateWorkStatus(
             String jobPostId,
             String candidateId,
             UpdateWorkStatusRequest request
@@ -112,15 +154,20 @@ public class RecruiterWorkServiceImpl implements RecruiterWorkService {
         validateRecruiterWorkTransition(work.getStatus(), newStatus);
 
         // SUBMITTED -> REJECTED
-//        if (work.getStatus() == WorkStatusEnum.SUBMITTED &&
-//                newStatus == WorkStatusEnum.REJECTED) {
-//
-//            // (Optional) clear submission nếu muốn
-//            // work.setSubmission(null);
-//        }
+        if (work.getStatus() == WorkStatusEnum.SUBMITTED &&
+                newStatus == WorkStatusEnum.REJECTED) {
+            loyaltyPointService.refundPointToRecruiterAndDeductReputation(
+                    recruiterId, candidateId, work.getAgreedSalary());
+        }
 
         // SUBMITTED -> PAID
         if (newStatus == WorkStatusEnum.PAID) {
+            boolean goodPerformance = true;
+            try {
+                blockchainService.completeJobForUser(recruiterId, candidateId, work.getAgreedSalary(), goodPerformance);
+            } catch (Exception e) {
+                throw new AppException(ErrorCode.FAIL_PROCESS_BLOCKCHAIN);
+            }
 
             // - update wallet / transaction
         }

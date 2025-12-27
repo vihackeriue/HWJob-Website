@@ -110,7 +110,7 @@ const UpdateStatusApplicantDialog = ({
       endTime: assignForm.endTime,
     });
 
-    onClose();
+    // onClose();
   };
 
   return (

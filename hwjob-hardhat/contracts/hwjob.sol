@@ -42,7 +42,7 @@ contract HWJob is ERC20, Ownable {
     event ReputationDecreased(address indexed user, uint256 newValue);
 
     event UserRegistered(address indexed user);
-
+    event ReputationPenalty(address indexed user, uint256 penalty, uint256 newValue);
     /* ===================== CONSTRUCTOR ===================== */
 
     constructor()
@@ -158,6 +158,46 @@ contract HWJob is ERC20, Ownable {
 
         emit ReputationDecreased(freelancer, reputation[freelancer]);
         emit Refunded(recruiter, amount);
+    }
+
+    /**
+    * Backend refund điểm cho recruiter (hủy job, timeout, dispute...)
+    */
+    function refundToRecruiter(
+        address recruiter,
+        uint256 amount
+    ) external onlyOwner {
+        require(isRegistered[recruiter], "Recruiter chua dang ky");
+        require(amount > 0, "Amount phai > 0");
+        require(lockedBalance[recruiter] >= amount, "Khong du diem lock");
+
+        // Giảm số điểm đang lock
+        lockedBalance[recruiter] -= amount;
+
+        // Trả điểm từ escrow về recruiter
+        _transfer(address(this), recruiter, amount);
+
+        emit Refunded(recruiter, amount);
+    }
+    /**
+    * Backend trừ điểm uy tín của user (fixed amount)
+    */
+    function penalizeReputation(
+        address user,
+        uint256 penalty
+    ) external onlyOwner {
+        require(isRegistered[user], "User chua dang ky");
+        require(penalty > 0, "Penalty phai > 0");
+
+        uint256 current = reputation[user];
+
+        if (penalty >= current) {
+            reputation[user] = 0;
+        } else {
+            reputation[user] = current - penalty;
+        }
+
+        emit ReputationPenalty(user, penalty, reputation[user]);
     }
 
     /* ===================================================== */

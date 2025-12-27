@@ -6,10 +6,11 @@ export function useDetail(fetchFn, id) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!id) return;
-
     setLoading(true);
-    fetchFn(id)
+
+    const promise = id ? fetchFn(id) : fetchFn();
+
+    promise
       .then((res) => setData(res.result))
       .catch(() => setError("Không thể tải dữ liệu"))
       .finally(() => setLoading(false));

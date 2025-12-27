@@ -53,9 +53,19 @@ export const ENDPOINTS = {
     CANDIDATE_UPDATE_STATUS_WORK: (jobPostId) =>
       `candidates/works/job-posts/${jobPostId}/status`,
   },
+  REVIEW: {
+    CREATE_REVIEW: "reviews",
+    GET_MY_REVIEWS: "reviews/me",
+    GET_MY_AVERAGE_RATING: "reviews/average-rating",
+  },
   LOYALTY_POINT: {
     GET_POINTS: "loyalty-points/me",
+    GET_LOCKED_POINTS: "loyalty-points/locked/me",
+    GET_HISTORY_PAYMENT: "loyalty-points/payment-history",
     TOP_UP: "loyalty-points/top-up",
+  },
+  REPUTATION: {
+    GET_MY_REPUTATION: "reputation/me",
   },
   INDUSTRY: {
     LIST: "public/industries",
