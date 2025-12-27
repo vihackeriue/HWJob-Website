@@ -9,9 +9,11 @@ import com.hw.hwjobbackend.model.entity.works.Work;
 import com.hw.hwjobbackend.model.enums.ApplicationStatusEnum;
 import com.hw.hwjobbackend.model.enums.WorkStatusEnum;
 
+import com.hw.hwjobbackend.repository.review.ReviewRepository;
 import com.hw.hwjobbackend.repository.work.WorkRepository;
 
 import com.hw.hwjobbackend.service.mapper.work.WorkMapper;
+import com.hw.hwjobbackend.service.shared.loyalty_point.LoyaltyPointService;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import com.hw.hwjobbackend.util.SecurityUtils;
 import lombok.AccessLevel;
@@ -34,6 +36,8 @@ public class CandidateWorkServiceImpl implements CandidateWorkService {
 
     WorkRepository workRepository;
     WorkMapper workMapper;
+    ReviewRepository reviewRepository;
+    LoyaltyPointService loyaltyPointService;
 
 
     public void decideWork( String jobPostId, String candidateId, boolean accepted) {
@@ -66,8 +70,15 @@ public class CandidateWorkServiceImpl implements CandidateWorkService {
 //        if (work.getStatus() != WorkStatusEnum.PENDING) {
 //            throw new AppException(ErrorCode.INVALID_WORK_STATUS);
 //        }
+        WorkOverviewResponse response =
+                workMapper.toWorkOverviewResponse(work);
+        Double myRating = reviewRepository.findMyRating(
+                work.getId(),
+                candidateId
+        );
+        response.setMyReviewRating(myRating);
 
-        return workMapper.toWorkOverviewResponse(work);
+        return response;
     }
 
     @Override
@@ -94,7 +105,7 @@ public class CandidateWorkServiceImpl implements CandidateWorkService {
     }
     @Override
     @Transactional
-    public void updateApplicationStatus(String jobPostId, UpdateWorkStatusRequest request) {
+    public void updateWorkStatus(String jobPostId, UpdateWorkStatusRequest request) {
         String candidateId = SecurityUtils.getCurrentUserId();
 
         Work work = workRepository
@@ -108,6 +119,13 @@ public class CandidateWorkServiceImpl implements CandidateWorkService {
                 throw new AppException(ErrorCode.SUBMISSION_REQUIRED);
             }
             work.setSubmission(request.getSubmission());
+        }
+
+        if(request.getStatus() == WorkStatusEnum.CANCELLED) {
+            loyaltyPointService.refundPointToRecruiterAndDeductReputation(
+                    work.getRecruiter().getId(),
+                    candidateId,
+                    work.getAgreedSalary());
         }
         work.setStatus(request.getStatus());
     }

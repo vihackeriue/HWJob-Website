@@ -4,6 +4,8 @@ import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostRecruiterProfileResponse;
+import com.hw.hwjobbackend.model.dto.response.work.WorkOverviewResponse;
+import com.hw.hwjobbackend.repository.review.ReviewRepository;
 import com.hw.hwjobbackend.repository.work.WorkRepository;
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostFilterRequest;
@@ -40,7 +42,7 @@ public class JobPostServiceImpl implements JobPostService {
     ApplicationRepository applicationRepository;
     WorkRepository workRepository;
     WorkMapper workMapper;
-
+    ReviewRepository reviewRepository;
     @Override
     public Page<JobPostResponse> getAllJobPosts(Integer page, Integer size, JobPostFilterRequest filter) {
         Pageable pageable = PaginationUtils.buildPageable(page, size);
@@ -109,11 +111,21 @@ public class JobPostServiceImpl implements JobPostService {
 
             workRepository
                     .findByCandidateIdAndJobPostId(userId, jobPost.getId())
-                    .ifPresent(work ->
-                            response.setWork(
-                                    workMapper.toWorkOverviewResponse(work)
-                            )
-                    );
+                    .ifPresent(work -> {
+
+                        WorkOverviewResponse workResponse =
+                                workMapper.toWorkOverviewResponse(work);
+
+                        // thêm rating của candidate cho recruiter
+                        Double myRating = reviewRepository.findMyRating(
+                                work.getId(),
+                                userId
+                        );
+
+                        workResponse.setMyReviewRating(myRating);
+
+                        response.setWork(workResponse);
+                    });
 
             response.setIsSaved(
                     candidateSaveJobRepository.existsByCandidateIdAndJobPostId(

@@ -22,10 +22,11 @@ import CandidateJobManagement from "./pages/user/candidate/CandidateJobManagemen
 import { ToastContainer } from "react-toastify";
 import RecruiterJobManagement from "./pages/user/recruiter/RecruiterJobManagement";
 import RecruiterJobPostDetail from "./pages/user/recruiter/RecruiterJobPostDetail";
-import MyProfile from "./pages/user/MyProfile.jsx";
+
 import { ROLES } from "./constants/roles";
-import TopUpPoint from "./pages/user/test/TopUpPoint.jsx";
 import PaymentResult from "./pages/user/test/PaymentResult.jsx";
+import MyProfile from "./pages/user/shared/MyProfile.jsx";
+import TransactionManagement from "./pages/user/shared/TransactionManagement.jsx";
 
 function App() {
   return (
@@ -44,7 +45,7 @@ function App() {
             }
           >
             <Route path="my-profile" element={<MyProfile />} />
-            <Route path="test" element={<TopUpPoint />} />
+            <Route path="transaction" element={<TransactionManagement />} />
             <Route path="payment-result" element={<PaymentResult />} />
           </Route>
           {/* Role Recruiter */}

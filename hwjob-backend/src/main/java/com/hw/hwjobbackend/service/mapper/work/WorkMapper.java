@@ -29,6 +29,8 @@ public interface WorkMapper {
     @Mapping(target = "jobPostId", source = "jobPost.id")
     @Mapping(target = "jobTitle", source = "jobPost.title")
     @Mapping(target = "recruiterName", source = "recruiter.fullName")
+    @Mapping(target = "recruiterId", source = "recruiter.id")
+
     WorkOverviewResponse toWorkOverviewResponse(Work work);
 
 
@@ -48,7 +50,8 @@ public interface WorkMapper {
     WorkResponse toWorkResponse(Work work);
 
 
-    @Mapping(target = "id",source = "candidate.id")
+    @Mapping(target = "workId", source = "id")
+    @Mapping(target = "candidateId",source = "candidate.id")
     @Mapping( target = "fullName",source = "candidate.fullName")
     @Mapping(target = "imageUrl",source = "candidate.imageUrl" )
     WorkCandidateResponse toWorkCandidateResponse(Work work);

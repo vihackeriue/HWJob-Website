@@ -11,11 +11,13 @@ import com.hw.hwjobbackend.util.PaginationUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -59,7 +61,8 @@ public class CandidateWorkController {
     @PatchMapping("/job-posts/{jobPostId}/status")
     public ApiResponse<Void> updateApplicationStatus(@PathVariable String jobPostId,
                                                      @RequestBody UpdateWorkStatusRequest request){
-        candidateWorkService.updateApplicationStatus(jobPostId, request);
+
+        candidateWorkService.updateWorkStatus(jobPostId, request);
         return ApiResponse.<Void>builder().message("Cập nhật thành công!").build();
 
     }

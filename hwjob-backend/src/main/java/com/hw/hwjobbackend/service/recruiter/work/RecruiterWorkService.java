@@ -14,11 +14,12 @@ public interface RecruiterWorkService {
     List<WorkCandidateResponse> getAllCandidateWork(String jobPostId);
     void assignWork(WorkCreateRequest request);
 
-    void updateCandidateApplicationStatus(
+    void updateCandidateWorkStatus(
             String jobPostId,
             String candidateId,
             UpdateWorkStatusRequest request
     );
     void deleteByJobPostIdAndCandidateId(String jobPostId, String candidateId);
+
 
 }

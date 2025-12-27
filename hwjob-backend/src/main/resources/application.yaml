@@ -59,7 +59,7 @@ app:
 
 blockchain:
   ganache-url: http://127.0.0.1:7545
-  contract-address: "0xed110E4375362429E7E0764DbAC15a1CeDb70403"
+  contract-address: "0xa93f02bf2A9367C5f826255e658D9Bb983C2dF63"
   private-key: "0x734d09c7aeaad6cec8eadb54e3db5d926defe60345e0104a85613e17cf51c807"
 
 momo:
@@ -71,8 +71,12 @@ momo:
   ipn-url: https://your-backend.com/api/momo/ipn
 
 vnpay:
-  tmn-code: 4YUP19I4
-  hash-secret: MDUIFDCRAKLNBPOFIAFNEKFRNMFBYEPX
+  tmn-code: V3CCER63
+  hash-secret: E6W3C9Q4OAO1H2X8857RIRBHO6BYRTQF
   pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
   return-url: http://localhost:5173/payment-result
-  ipn-url: http://localhost:8080/hwjob/api/public/vnpay/ipn
+  ipn-url:  https://transpalmar-anaya-banteringly.ngrok-free.dev/hwjob/api/public/vnpay/ipn
+
+# ngrok domain
+# ngrok http 8080
+

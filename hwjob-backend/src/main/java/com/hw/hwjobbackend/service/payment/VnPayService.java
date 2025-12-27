@@ -1,12 +1,21 @@
 package com.hw.hwjobbackend.service.payment;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hw.hwjobbackend.configuration.payment.VnPayConfig;
 import com.hw.hwjobbackend.model.dto.request.loyalty_point.LoyaltyPointPaymentGatewayRequest;
+import com.hw.hwjobbackend.model.entity.loyalty_point.LoyaltyPointPayment;
+import com.hw.hwjobbackend.model.enums.PaymentStatusEnum;
+import com.hw.hwjobbackend.repository.loyalty_point.LoyaltyPointPaymentRepository;
+import com.hw.hwjobbackend.service.blockchain.BlockchainService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -22,9 +31,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Log4j2
 public class VnPayService implements PaymentGatewayService {
 
     VnPayConfig config;
+
+    LoyaltyPointPaymentRepository loyaltyPointPaymentRepository;
+    BlockchainService blockchainService;
 
     @Override
     public String createPaymentUrl(LoyaltyPointPaymentGatewayRequest req,
@@ -115,7 +128,4 @@ public class VnPayService implements PaymentGatewayService {
             throw new RuntimeException("VNPay signature invalid");
         }
     }
-
-
-
 }

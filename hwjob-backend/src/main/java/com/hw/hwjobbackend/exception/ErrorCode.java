@@ -116,12 +116,29 @@ public enum ErrorCode {
     WORK_NOT_FOUND(2102, "error.work_not_found", HttpStatus.NOT_FOUND),
     INVALID_WORK_STATUS(2103, "error.invalid_work_status", HttpStatus.BAD_REQUEST),
     SUBMISSION_REQUIRED(2104, "error.submission_required", HttpStatus.BAD_REQUEST),
+    WORK_NOT_PAID(2105, "error.work_not_paid", HttpStatus.BAD_REQUEST),
     // ========================================
     // lOYALTY POINTS(22xx)
     // ========================================
     USER_WALLET_NOT_EXISTED(2201, "error.user_wallet_not_existed", HttpStatus.NOT_FOUND),
+    INVALID_AMOUNT(2202, "error.invalid_amount", HttpStatus.BAD_REQUEST),
+    // ========================================
+    // BLOCkCHAIN(23xx)
+    // ========================================
+    NOT_ENOUGH_REWARD_POINT(2301, "error.not_enough_reward_point", HttpStatus.BAD_REQUEST),
+    FAIL_PROCESS_BLOCKCHAIN(2301, "error.fail_process_blockchain", HttpStatus.BAD_REQUEST),
 
-
+    // ========================================
+    // REVIEW(24xx)
+    // ========================================
+    NOT_ALLOWED_RATING(2401, "error.not_allowed_rating", HttpStatus.BAD_REQUEST),
+    REVIEW_ALREADY_EXISTS(2402, "error.review_already_exists", HttpStatus.BAD_REQUEST),
+    INVALID_RATING(2403, "error.invalid_rating", HttpStatus.BAD_REQUEST),
+    INVALID_REVIEW_TARGET(2404, "error.invalid_review_target", HttpStatus.BAD_REQUEST),
+    // ========================================
+    // REPUTATION (25xx)
+    // ========================================
+    INVALID_REPUTATION(2405, "error.invalid_reputation", HttpStatus.BAD_REQUEST),
     ;
 
 

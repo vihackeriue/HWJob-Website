@@ -11,29 +11,33 @@ import ConfirmDialog from "../../../dialog/common/ConfirmDialog";
 import PrimaryTitle from "../../../ui/title/PrimaryTitle";
 import SecondTitle from "../../../ui/title/SecondTitle";
 import { FaStar } from "react-icons/fa";
+import { ROLES } from "../../../../constants/roles";
+import { createReview } from "../../../../services/reviewService";
+import { toast } from "react-toastify";
 
 const WorkSection = ({ work, setJobPost }) => {
-  //   if (!work) return null;
-
   const statusConfig = STATUS_WORK_MAP[work.status];
-
-  const candidateActions = statusConfig.actions?.CANDIDATE || [];
+  const candidateActions = statusConfig.actions?.[ROLES.CANDIDATE] || [];
   const isInProgress = work.status === "IN_PROGRESS";
+  const isPaid = work.status === "PAID";
 
   const [submission, setSubmission] = useState(work.submission || "");
   const [confirmAction, setConfirmAction] = useState(null);
   const [openConfirm, setOpenConfirm] = useState(false);
-  const [rating, setRating] = useState(0);
-  const [hover, setHover] = useState(0);
-  const isPaid = work.status === "PAID";
 
+  // ⭐ rating state
+  const [rating, setRating] = useState(work.myReviewRating || 0);
+  const [hover, setHover] = useState(0);
+  const hasReviewed = work.myReviewRating != null;
   const { updateStatus } = useUpdateWorkStatus();
 
   useEffect(() => {
     setSubmission(work.submission || "");
-  }, [work.submission]);
+    setRating(work.myReviewRating || 0);
+  }, [work]);
 
   if (!statusConfig) return null;
+
   /* ===== HANDLE CONFIRM ===== */
   const handleConfirm = async () => {
     if (!confirmAction) return;
@@ -42,10 +46,14 @@ const WorkSection = ({ work, setJobPost }) => {
       jobPostId: work.jobPostId,
       status: confirmAction,
       payload: confirmAction === "SUBMITTED" ? { submission } : undefined,
-      onSuccess: (updatedWork) => {
+      onSuccess: (status) => {
         setJobPost((prev) => ({
           ...prev,
-          work: updatedWork,
+          work: {
+            ...prev.work,
+            status,
+            ...(confirmAction === "SUBMITTED" && { submission }),
+          },
         }));
         setOpenConfirm(false);
         setConfirmAction(null);
@@ -53,20 +61,40 @@ const WorkSection = ({ work, setJobPost }) => {
     });
   };
 
-  const submitRating = () => {
-    if (!rating) return;
+  /* ===== SUBMIT RATING ===== */
+  const submitRating = async () => {
+    if (!rating || hasReviewed) return;
 
-    // Call update status with rating payload
+    const payload = {
+      workId: work.workId,
+      revieweeId: work.recruiterId,
+      rating,
+    };
+
+    try {
+      await createReview(payload);
+
+      toast.success("Đã gửi đánh giá");
+
+      setJobPost((prev) => ({
+        ...prev,
+        work: {
+          ...prev.work,
+          myReviewRating: rating,
+        },
+      }));
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Gửi đánh giá thất bại");
+    }
   };
 
   return (
     <>
       <div className="grid grid-cols-3 gap-3">
+        {/* ===== LEFT ===== */}
         <div className="col-span-2 flex flex-col gap-4 bg-white rounded-2xl p-5 border border-gray-200">
-          {/* ===== SUBMISSION ===== */}
           <div className="flex justify-between items-center">
             <PrimaryTitle>Công việc của bạn</PrimaryTitle>
-
             <span
               className={classNames(
                 "px-4 py-1 rounded-full text-md font-medium",
@@ -76,7 +104,9 @@ const WorkSection = ({ work, setJobPost }) => {
               {statusConfig.name}
             </span>
           </div>
-          <div className="flex flex-col gap-2 ">
+
+          {/* ===== SUBMISSION ===== */}
+          <div className="flex flex-col gap-2">
             <label className="font-medium text-gray-700">
               Kết quả công việc
             </label>
@@ -85,51 +115,54 @@ const WorkSection = ({ work, setJobPost }) => {
               <textarea
                 value={submission}
                 onChange={(e) => setSubmission(e.target.value)}
-                placeholder="Nhập link, mô tả hoặc kết quả công việc..."
-                className="border rounded-lg p-3 min-h-[120px] focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="border rounded-lg p-3 min-h-[120px]"
               />
             ) : (
-              <div className="border rounded-lg p-3 bg-gray-50 text-gray-700">
-                {work.submission || "Chưa có kết quả được nộp"}
+              <div className="border rounded-lg p-3 bg-gray-50">
+                {work.submission || "Chưa có kết quả"}
               </div>
             )}
           </div>
 
-          {/* ===== NOTE ===== */}
-          {statusConfig.note?.CANDIDATE && (
-            <p className="text-sm text-gray-600 italic">
-              {statusConfig.note.CANDIDATE}
-            </p>
-          )}
+          {/* ===== RATING ===== */}
           {isPaid && (
-            <div className="mb-4">
+            <div className="mt-4">
               <p className="text-sm font-medium mb-2">
                 Đánh giá chất lượng công việc
               </p>
 
-              <div className="flex gap-2 justify-center">
+              <div className="flex justify-center gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <FaStar
                     key={star}
                     size={28}
-                    className="cursor-pointer transition"
+                    className={classNames("transition", {
+                      "cursor-pointer": !hasReviewed,
+                      "cursor-default": hasReviewed,
+                    })}
                     color={star <= (hover || rating) ? "#facc15" : "#e5e7eb"}
-                    onMouseEnter={() => setHover(star)}
-                    onMouseLeave={() => setHover(0)}
-                    onClick={() => setRating(star)}
+                    onMouseEnter={() => !hasReviewed && setHover(star)}
+                    onMouseLeave={() => !hasReviewed && setHover(0)}
+                    onClick={() => !hasReviewed && setRating(star)}
                   />
                 ))}
               </div>
 
-              <div className="flex justify-center mt-3">
-                <PrimaryButton
-                  variant="primary"
-                  disabled={!rating}
-                  onClick={submitRating}
-                >
-                  Gửi đánh giá
-                </PrimaryButton>
-              </div>
+              {!hasReviewed ? (
+                <div className="flex justify-center mt-3">
+                  <PrimaryButton
+                    variant="primary"
+                    disabled={!rating}
+                    onClick={submitRating}
+                  >
+                    Gửi đánh giá
+                  </PrimaryButton>
+                </div>
+              ) : (
+                <p className="text-center text-sm text-green-600 mt-3">
+                  ✔ Bạn đã đánh giá {rating} sao
+                </p>
+              )}
             </div>
           )}
 
@@ -156,12 +189,14 @@ const WorkSection = ({ work, setJobPost }) => {
             </div>
           )}
         </div>
-        {/* ===== DETAIL INFO ===== */}
-        <div className="col-span-1 flex flex-col gap-2 bg-white rounded-2xl p-5 border border-gray-200">
+
+        {/* ===== RIGHT ===== */}
+        <div className="col-span-1 bg-white rounded-2xl p-5 border border-gray-200">
           <SecondTitle>Thông tin công việc</SecondTitle>
+
           <InfoCard
             icon={<GiMoneyStack className="size-8 text-teal-600" />}
-            label="Lương thỏa thuận"
+            label="Lương"
             value={`${work.agreedSalary} / ${work.salaryType}`}
           />
 
@@ -169,7 +204,7 @@ const WorkSection = ({ work, setJobPost }) => {
             icon={
               <HiOutlineCalendarDateRange className="size-8 text-teal-600" />
             }
-            label="Thời gian bắt đầu"
+            label="Bắt đầu"
             value={formatDate(work.startTime)}
           />
 
@@ -177,33 +212,19 @@ const WorkSection = ({ work, setJobPost }) => {
             icon={
               <HiOutlineCalendarDateRange className="size-8 text-teal-600" />
             }
-            label="Hạn cuối"
+            label="Kết thúc"
             value={formatDate(work.endTime)}
           />
         </div>
       </div>
 
-      {/* ===== CONFIRM DIALOG ===== */}
+      {/* ===== CONFIRM ===== */}
       <ConfirmDialog
         open={openConfirm}
-        onClose={() => {
-          setOpenConfirm(false);
-          setConfirmAction(null);
-        }}
+        onClose={() => setOpenConfirm(false)}
         onConfirm={handleConfirm}
-        title="Xác nhận thao tác"
-        description={
-          confirmAction === "SUBMITTED" ? (
-            <div className="space-y-2">
-              <p>Bạn có chắc chắn muốn nộp kết quả này?</p>
-              <div className="border rounded p-2 text-sm bg-gray-50">
-                {submission}
-              </div>
-            </div>
-          ) : (
-            "Bạn có chắc chắn muốn thực hiện hành động này?"
-          )
-        }
+        title="Xác nhận"
+        description="Bạn có chắc chắn?"
         confirmText="Xác nhận"
         cancelText="Hủy"
       />

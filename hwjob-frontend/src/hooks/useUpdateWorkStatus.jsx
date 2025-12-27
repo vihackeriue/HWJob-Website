@@ -24,16 +24,14 @@ export const useUpdateWorkStatus = () => {
     onSuccess,
   }) => {
     try {
-      let result;
-
       // ===== Call API theo role =====
       if (hasRole(auth, ROLES.CANDIDATE)) {
-        result = await candidateUpdateWorkStatus(jobPostId, {
+        await candidateUpdateWorkStatus(jobPostId, {
           status,
           ...(payload ?? {}),
         });
       } else if (hasRole(auth, ROLES.RECRUITER)) {
-        result = await recruiterUpdateWorkStatus(jobPostId, applicationId, {
+        await recruiterUpdateWorkStatus(jobPostId, applicationId, {
           status,
           ...(payload ?? {}),
         });
@@ -41,21 +39,23 @@ export const useUpdateWorkStatus = () => {
         throw new Error("Không có quyền cập nhật trạng thái công việc");
       }
 
-      const updatedWork = result?.result;
+      // ===== Update list (optional) =====
+      if (typeof setListData === "function") {
+        setListData((prev) =>
+          prev.map((item) =>
+            item.id === applicationId ? { ...item, status } : item
+          )
+        );
+      }
 
-      // ===== Update list =====
-      setListData((prev) =>
-        prev.map((item) =>
-          item.id === applicationId ? { ...item, status } : item
-        )
-      );
-
-      setSelected((prev) => (prev ? { ...prev, status } : prev));
+      if (typeof setSelected === "function") {
+        setSelected((prev) => (prev ? { ...prev, status } : prev));
+      }
 
       toast.success("Cập nhật công việc thành công");
 
-      onSuccess?.(updatedWork);
-      return updatedWork;
+      onSuccess?.(status);
+      return status;
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Cập nhật công việc thất bại"

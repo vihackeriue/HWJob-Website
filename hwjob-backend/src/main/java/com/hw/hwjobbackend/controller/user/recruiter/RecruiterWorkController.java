@@ -1,9 +1,7 @@
 package com.hw.hwjobbackend.controller.user.recruiter;
 
-import com.hw.hwjobbackend.model.dto.request.application.ApplicationStatusRequest;
 import com.hw.hwjobbackend.model.dto.request.work.UpdateWorkStatusRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
-import com.hw.hwjobbackend.model.dto.response.application.ApplicationCandidateResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkCandidateResponse;
 import com.hw.hwjobbackend.service.recruiter.work.RecruiterWorkService;
 import com.hw.hwjobbackend.util.PaginationUtils;
@@ -28,7 +26,7 @@ public class RecruiterWorkController {
             @PathVariable String candidateId,
             @RequestBody UpdateWorkStatusRequest request
     ) {
-        recruiterWorkService.updateCandidateApplicationStatus(jobPostId, candidateId, request);
+        recruiterWorkService.updateCandidateWorkStatus(jobPostId, candidateId, request);
         return ApiResponse.<Void>builder().message("Cập nhật thành công!").build();
     }
 

@@ -12,8 +12,10 @@ import com.hw.hwjobbackend.model.enums.ApplicationStatusEnum;
 import com.hw.hwjobbackend.repository.application.ApplicationRepository;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
 import com.hw.hwjobbackend.repository.user.CandidateRepository;
+import com.hw.hwjobbackend.service.blockchain.BlockchainService;
 import com.hw.hwjobbackend.service.mapper.application.ApplicationMapper;
 import com.hw.hwjobbackend.service.recruiter.work.RecruiterWorkService;
+import com.hw.hwjobbackend.service.shared.loyalty_point.LoyaltyPointService;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import com.hw.hwjobbackend.util.SecurityUtils;
 import jakarta.transaction.Transactional;
@@ -34,10 +36,10 @@ import java.util.List;
 public class RecruiterApplicationServiceImpl implements RecruiterApplicationService {
 
     ApplicationRepository applicationRepository;
-    JobPostRepository jobPostRepository;
-    CandidateRepository candidateRepository;
     ApplicationMapper applicationMapper;
     RecruiterWorkService workService;
+    LoyaltyPointService loyaltyPointService;
+
 
     @Override
     public Page<ApplicationCandidateResponse> getCandidateApplications(int page, int size, String jobPostId) {
@@ -93,8 +95,12 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
         if (application.getStatus() == ApplicationStatusEnum.ASSIGNED &&
                 newStatus == ApplicationStatusEnum.REJECTED) {
 
+            loyaltyPointService.refundPointToRecruiter(jobPostId, candidateId);
+
             // Xóa work đã giao
             workService.deleteByJobPostIdAndCandidateId(jobPostId, candidateId);
+
+
         }
 
         // Update

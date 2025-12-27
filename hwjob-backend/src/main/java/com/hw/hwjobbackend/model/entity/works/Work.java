@@ -11,7 +11,9 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Getter
@@ -22,6 +24,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "works")
+@EntityListeners(AuditingEntityListener.class)
 public class Work {
 
     @Id
@@ -52,13 +55,17 @@ public class Work {
     Application application;
 
     // Lương chốt (snapshot, phòng job bị sửa)
-    Long agreedSalary;
+    BigInteger agreedSalary;
 
     @Enumerated(EnumType.STRING)
     SalaryTypeEnum salaryType;
 
+    String lockTxHash;
+
     @Lob
     String submission;
+
+
 
     @Enumerated(EnumType.STRING)
     WorkStatusEnum status;
