@@ -1,42 +1,60 @@
-import React, { useState } from "react";
-import { tGlobal } from "../../../utils/translator";
+import React from "react";
 import { Link } from "react-router-dom";
-import { hasRole } from "../../../utils/permission";
 
 import useAuth from "../../../hooks/useAuth";
+import { hasRole } from "../../../utils/permission";
 import { ROLES } from "../../../constants/roles";
-import PrimaryButton from "../button/PrimaryButton";
+
 import { STATUS_APPLICATION_MAP } from "../../../constants/statusApplication";
-import ConfirmDialog from "../../dialog/common/ConfirmDialog";
+import { STATUS_WORK_MAP } from "../../../constants/statusWork";
+
 const JobPostCard = ({ jobPost }) => {
   const { auth } = useAuth();
-  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
 
+  /* ===================== URL ===================== */
   const getJobPostDetailUrl = () => {
     if (hasRole(auth, ROLES.RECRUITER) && jobPost.recruiter.id === auth.id) {
       return `/recruiter/job-post/${jobPost.id}`;
     }
-    return `/job-post/${jobPost.id}`;
+    return `/job-post/${jobPost.id || jobPost.jobPostId}`;
   };
+
+  /* ===================== STATUS ===================== */
+  const getStatusConfig = () => {
+    if (jobPost.workStatus) {
+      return STATUS_WORK_MAP[jobPost.workStatus];
+    }
+    if (jobPost.applicationStatus) {
+      return STATUS_APPLICATION_MAP[jobPost.applicationStatus];
+    }
+    return null;
+  };
+
+  const statusConfig = getStatusConfig();
 
   return (
     <div className="flex gap-3 pr-2 bg-lightGrayishBlue dark:bg-stoneBrown-900 rounded-2xl relative hover:shadow border border-gray-300">
+      {/* ===================== IMAGE ===================== */}
       <img
         src={jobPost.recruiter.imageUrl}
         alt={jobPost.recruiter.fullName}
-        className="size-32 rounded-2xl "
+        className="size-32 rounded-2xl"
       />
-      <div className="py-2">
+
+      {/* ===================== INFO ===================== */}
+      <div className="py-2 flex-1">
         <Link
           to={getJobPostDetailUrl()}
-          className="text-md font-semibold hover-bright-orange line-clamp-2 "
+          className="text-md font-semibold hover-bright-orange line-clamp-2"
         >
           {jobPost.title}
         </Link>
+
         <p className="dark:text-gray-300">{jobPost.recruiter.fullName}</p>
-        <div className="flex gap-1 dark:text-amber-500">
+
+        <div className="flex gap-1 flex-wrap dark:text-amber-500">
           <p className="py-1 px-2 rounded-lg bg-white dark:bg-stoneBrown-700">
-            {tGlobal("common.quantity")}: <span>{jobPost.quantity}</span>
+            Số lượng: {jobPost.quantity}
           </p>
           <div className="py-1 px-2 rounded-lg bg-white dark:bg-stoneBrown-700">
             {jobPost.region}
@@ -46,47 +64,36 @@ const JobPostCard = ({ jobPost }) => {
           </div>
         </div>
       </div>
-      <div className="absolute right-3 bottom-3 flex flex-col items-end gap-2">
-        {/* Đã ứng tuyển */}
-        {jobPost.applicationStatus &&
-          (() => {
-            const statusConfig =
-              STATUS_APPLICATION_MAP[jobPost.applicationStatus];
 
-            if (!statusConfig) return null;
+      {/* ===================== STATUS & ACTION ===================== */}
+      {statusConfig && (
+        <div className="absolute right-3 bottom-3 flex flex-col items-end gap-2">
+          {/* Badge */}
+          <span
+            className={`px-3 py-1 text-sm font-medium rounded-full ${statusConfig.className}`}
+          >
+            {statusConfig.name}
+          </span>
 
-            return (
-              <>
-                {/* Status badge */}
-                <span
-                  className={`px-3 py-1 text-xs font-medium rounded-full ${statusConfig.className}`}
+          {/* Actions */}
+          {/* {actions.length > 0 && (
+            <div className="flex gap-1">
+              {actions.map((action) => (
+                <PrimaryButton
+                  key={action.to}
+                  variant={action.variant}
+                  onClick={() => {
+                    setConfirmAction(action);
+                    setOpenConfirmDialog(true);
+                  }}
                 >
-                  {statusConfig.name}
-                </span>
-                {/* Candidate actions */}
-                {/* <div className="flex gap-1">
-                  {statusConfig.actions?.CANDIDATE?.map((action) => (
-                    <PrimaryButton
-                      key={action.to}
-                      variant={action.variant}
-                      onClick={() => {
-                        setOpenConfirmDialog(true);
-                      }}
-                    >
-                      {action.label}
-                    </PrimaryButton>
-                  ))}
-                </div> */}
-              </>
-            );
-          })()}
-      </div>
-      <ConfirmDialog
-        open={openConfirmDialog}
-        onClose={() => {
-          setOpenConfirmDialog(false);
-        }}
-      />
+                  {action.label}
+                </PrimaryButton>
+              ))}
+            </div>
+          )} */}
+        </div>
+      )}
     </div>
   );
 };

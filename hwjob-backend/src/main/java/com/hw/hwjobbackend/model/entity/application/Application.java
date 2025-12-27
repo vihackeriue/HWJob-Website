@@ -40,11 +40,6 @@ public class Application {
     @Enumerated(EnumType.STRING)
     ApplicationStatusEnum status;
 
-    Double rating;
-
-    @Lob
-    String feedback;
-
     @CreatedDate
     @Column(updatable = false)
     LocalDateTime createdAt;

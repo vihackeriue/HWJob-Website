@@ -1,6 +1,5 @@
 package com.hw.hwjobbackend.model.entity.user;
 
-import com.hw.hwjobbackend.model.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

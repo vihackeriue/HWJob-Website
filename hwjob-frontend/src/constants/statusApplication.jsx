@@ -38,10 +38,12 @@ export const STATUS_APPLICATION = [
     },
 
     actions: {
-      RECRUITER: [],
+      RECRUITER: [
+        { to: "REJECTED", label: "Hủy giao việc", variant: "danger" },
+      ],
       CANDIDATE: [
         { to: "ACCEPTED", label: "Nhận việc", variant: "success" },
-        { to: "CANCELLED", label: "Từ chối", variant: "danger" },
+        // { to: "CANCELLED", label: "Từ chối", variant: "danger" },
       ],
     },
   },

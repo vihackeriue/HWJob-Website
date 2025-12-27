@@ -16,7 +16,7 @@ const ConfirmDialog = ({
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-xl w-full max-w-md shadow-lg">
         <h2 className="text-xl font-semibold mb-3">{title}</h2>
-        <p className="text-gray-600">{description}</p>
+        <div className="text-gray-600">{description}</div>
 
         <div className="flex justify-end gap-3 mt-6">
           <PrimaryButton variant="cancel" onClick={onClose}>
