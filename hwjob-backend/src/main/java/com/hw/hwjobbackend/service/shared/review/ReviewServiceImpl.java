@@ -85,9 +85,9 @@ public class ReviewServiceImpl implements ReviewService {
         if(request.getRating() == 1) {
             reputationService.deductReputation(revieweeId, BigInteger.valueOf(3));
         }
-//        if(request.getRating() == 5) {
-//            reputationService.deductReputation(revieweeId, BigInteger.valueOf(5));
-//        }
+    //        if(request.getRating() == 5) {
+    //            reputationService.deductReputation(revieweeId, BigInteger.valueOf(5));
+    //        }
 
         Review review = Review.builder()
                 .work(work)
