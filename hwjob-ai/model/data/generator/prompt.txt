@@ -1,0 +1,105 @@
+Hãy tạo cho tôi dữ liệu khoảng 20 dữ liệu users, 10 dữ liệu candidate, 10 dữ liệu recruiter để tôi update, có một phần dữ liệu xấu, null, các dữ liệu đều là tiếng Việt, và như thật , phấ summary có thể ngắn, dài, fullName có thể là tên người, tên công ty, dữ liệu ngày chỉ có null hoặc đúng định dạng %Y-%m-%d, dữ liệu này để tôi train AI
+
+Chỉ trả về JSON đúng schema, không giải thích, không markdown
+{
+  "users": [
+    {
+      "full_name": "Nguyen Van A",
+      "phone": "0901234567",
+      "summary": "Senior Backend Developer"
+    },
+    {
+      "full_name": "",
+      "phone": null,
+      "summary": "   "
+    }
+  ],
+  "candidates": [
+    {
+      "dob": "1998-05-20",
+      "education": "Bachelor IT",
+      "expect_salary": 20000000,
+      "gender": 1
+    }
+  ],
+  "recruiters": [
+    {
+      "website": "https://company.com"
+    }
+  ]
+}
+
+data sau khi tạo thì lưu lại thành 1 file .json để tôi tải xuống
+
+Hãy tạo cho tôi dữ liệu khoảng 20 dữ liệu cho mỗi danh sách , có một phần dữ liệu xấu, null, các dữ liệu đều là tiếng Việt, và như thật , dữ liệu ngày chỉ có null hoặc đúng định dạng %Y-%m-%d, dữ liệu này để tôi train AI
+
+enum application status gồm có
+   PENDING,
+    APPROVED,
+    ASSIGNED,
+    ACCEPTED,
+    REJECTED,
+    CANCELLED
+
+jobpost salary type gồm
+   HOURS,
+    PROJECT,
+    MONTHS,
+    NEGOTIATION,
+
+Những dữ liệu Enum phải làm cho đúng với danh sách trên
+
+{
+  "job_posts": [
+    {
+      "title": "Senior Backend Java Developer",
+      "description": "Spring Boot, JPA, Microservices",
+      "salary": 25000000,
+      "salary_type": "MONTHS",
+      "quantity": 2,
+      "status": "PUBLIC",
+      "ended_time": "2025-03-30 23:59:59"
+    },
+    {
+      "title": "Frontend React Developer",
+      "description": "React, TypeScript, Redux",
+      "salary": 20000000,
+      "salary_type": "MONTHS",
+      "quantity": 3,
+      "status": "PUBLIC",
+      "ended_time": null
+    },
+    {
+      "title": "",
+      "description": "Bad title example",
+      "salary": -1,
+      "salary_type": null,
+      "quantity": 0,
+      "status": "PRIVATE",
+      "ended_time": "2024-12-01 00:00:00"
+    },
+    {
+      "title": "   ",
+      "description": "undefined",
+      "salary": null,
+      "salary_type": "NEGOTIATION",
+      "quantity": -1,
+      "status": "PUBLIC",
+      "ended_time": null
+    }
+  ],
+
+  "applications": [
+    { "status": "PENDING" },
+    { "status": "APPROVED" },
+    { "status": "REJECTED" },
+    { "status": "ASSIGNED" },
+    { "status": "ACCEPTED" },
+    { "status": "CANCELLED" }
+  ]
+}
+data sau khi tạo thì lưu lại thành 1 file .json để tôi tải xuống
+
+
+
+

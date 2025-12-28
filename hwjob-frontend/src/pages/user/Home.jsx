@@ -8,93 +8,16 @@ import {useTranslation} from "react-i18next";
 import FeatureSection from "../../components/sections/FeatureSection";
 import TopRecruiterSection from "../../components/sections/TopRecruiterSection";
 import IntroduceRecruiterSection from "../../components/sections/IntroduceRecruiterSection";
-import PrimaryTitle from "../../components/ui/title/PrimaryTitle";
 import SuggestedJobSection from "../../components/sections/SuggestedJobSection";
 import SearchBar from "../../components/ui/SearchBar";
+import {useList} from "../../hooks/useList.jsx";
+import {getTopRecruiters} from "../../services/homeService.jsx";
 
 export default function Home() {
     const {t} = useTranslation();
 
-    const recruiters = [
-        {
-            id: 1,
-            name: "FPT Software",
-            image: "https://www.senviet.art/wp-content/uploads/edd/2017/09/fpt.jpg",
-            totalPost: 21,
-            recruiting: 5,
-        },
-        {
-            id: 2,
-            name: "VNG Corporation",
-            image:
-                "https://th.bing.com/th/id/R.a8211ae17a648d727801f00d07e6b6b9?rik=bv%2fmCoC3Vr%2bYww&pid=ImgRaw&r=0",
-            totalPost: 18,
-            recruiting: 4,
-        },
-        {
-            id: 3,
-            name: "VinGroup",
-            image:
-                "https://tse3.mm.bing.net/th/id/OIP.JTIhJns-wGODaue_kgRWsAHaD4?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3",
-            totalPost: 25,
-            recruiting: 7,
-        },
-        {
-            id: 4,
-            name: "Shopee Vietnam",
-            image:
-                "https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopee_logo.svg",
-            totalPost: 30,
-            recruiting: 10,
-        },
-        {
-            id: 5,
-            name: "TMA Solutions",
-            image: "https://tma.vn/Data/Sites/1/skins/default/img/logo.png",
-            totalPost: 15,
-            recruiting: 3,
-        },
-        {
-            id: 6,
-            name: "NashTech Vietnam",
-            image:
-                "https://cdn.nashtechglobal.com/wp-content/uploads/2020/05/logo.svg",
-            totalPost: 22,
-            recruiting: 6,
-        },
-        {
-            id: 7,
-            name: "Techcombank",
-            image:
-                "https://upload.wikimedia.org/wikipedia/commons/2/20/Techcombank_logo.svg",
-            totalPost: 10,
-            recruiting: 2,
-        },
-        {
-            id: 8,
-            name: "Viettel Group",
-            image:
-                "https://upload.wikimedia.org/wikipedia/commons/f/f9/Viettel_logo_2021.svg",
-            totalPost: 28,
-            recruiting: 8,
-        },
-        {
-            id: 9,
-            name: "MB Bank",
-            image:
-                "https://upload.wikimedia.org/wikipedia/commons/b/bc/MB_Bank_logo.svg",
-            totalPost: 12,
-            recruiting: 4,
-        },
-        {
-            id: 10,
-            name: "CMC Corporation",
-            image:
-                "https://upload.wikimedia.org/wikipedia/commons/3/3d/CMC_Corporation_logo.svg",
-            totalPost: 17,
-            recruiting: 5,
-        },
-    ];
+    const {data: recruiters} = useList(getTopRecruiters);
+
     const jobPosts = [
         {
             id: 1,

@@ -3,11 +3,12 @@ package com.hw.hwjobbackend.repository.candidate_save_job;
 import com.hw.hwjobbackend.model.entity.candidate_save_job.CandidateSaveJob;
 import com.hw.hwjobbackend.model.entity.candidate_save_job.CandidateSaveJobId;
 import com.hw.hwjobbackend.model.entity.job_post.JobPost;
-import io.lettuce.core.dynamic.annotation.Param;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 

@@ -1,9 +1,5 @@
 package com.hw.hwjobbackend.service.initialization;
 
-import com.hw.hwjobbackend.model.entity.user.Role;
-
-import java.util.Set;
-
 public interface InitializationService {
 
     void initializeRoles();
@@ -19,4 +15,6 @@ public interface InitializationService {
     void initializeLevels();
 
     void initializeSkills();
+
+    void initializeTestUsers();
 }
