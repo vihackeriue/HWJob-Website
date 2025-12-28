@@ -9,5 +9,6 @@ export const getSkills = async (page = 1, size = DEFAULT_LIMIT) => {
 };
 export const getSkillsNotPagination = async () => {
     const response = await axiosPublic.get(ENDPOINTS.SKILL.LIST);
+    console.log(response.data);
     return response.data;
 };

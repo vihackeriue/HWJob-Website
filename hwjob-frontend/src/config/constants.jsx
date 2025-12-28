@@ -21,3 +21,8 @@ export const STATUS_JOB_POST = [
     {code: "PUBLIC", name: "Công khai"},
     {code: "PRIVATE", name: "Riêng tư"},
 ];
+
+export const CHAT_TYPE = [
+    {code: "GROUP", name: "Nhóm"},
+    {code: "DIRECT", name: "Trực tiếp"}
+]

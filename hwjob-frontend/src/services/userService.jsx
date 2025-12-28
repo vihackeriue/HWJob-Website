@@ -14,7 +14,6 @@ export const getUsers = async (page = 1, size = DEFAULT_LIMIT) => {
     return response.data;
 };
 
-
 export const getMyInfo = async () => {
     const response = await axiosPrivate.get(ENDPOINTS.USER.MY_INFO);
     return response.data;
@@ -61,5 +60,10 @@ export const updateUserInfo = async (data, role) => {
     }
 
     throw new Error("Unsupported role");
+};
+
+export const getUserProfileById = async (id) => {
+    const response = await axiosPrivate.get(ENDPOINTS.USER.PROFILE(id));
+    return response.data;
 };
 

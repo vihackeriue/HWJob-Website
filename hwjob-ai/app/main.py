@@ -1,13 +1,6 @@
-from fastapi import FastAPI
+from flask import Flask
+from app.routes.main import main_bp
 
-app = FastAPI()
+app = Flask(__name__)
 
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+app.register_blueprint(main_bp)
