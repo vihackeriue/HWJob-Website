@@ -4,8 +4,8 @@ Hãy đóng vai một chuyên gia tạo dữ liệu giả lập (dummy data gene
 1.  **Định dạng:** Trả về kết quả là một JSON object duy nhất, tuân thủ chính xác cấu trúc mẫu tôi cung cấp bên dưới.
 2.  **Ngôn ngữ:** Toàn bộ dữ liệu nội dung (tên, mô tả, tiêu đề, tóm tắt...) phải là **Tiếng Việt** tự nhiên, chuyên nghiệp, phù hợp với thị trường tuyển dụng Việt Nam.
 3.  **Quy tắc đặt Username (Bắt buộc):**
-    *   Đối với **Ứng viên (Candidates)**: Hãy đặt username theo mẫu `candidate1`, `candidate2`, `candidate3`...
-    *   Đối với **Nhà tuyển dụng (Recruiters)**: Hãy đặt username theo mẫu `recruiter1`, `recruiter2`, `recruiter3`...
+    *   Đối với **Ứng viên (Candidates)**: Hãy đặt username theo mẫu `candidate1`, `candidate2`... đến `candidate20`.
+    *   Đối với **Nhà tuyển dụng (Recruiters)**: Hãy đặt username theo mẫu `recruiter1`, `recruiter2`... đến `recruiter20`.
     *   Email cũng nên tương ứng (ví dụ: `candidate1@example.com`, `recruiter1@company.com`).
 
 4.  **Độ dài và Định dạng nội dung (QUAN TRỌNG):**
@@ -18,16 +18,16 @@ Hãy đóng vai một chuyên gia tạo dữ liệu giả lập (dummy data gene
     *   Ví dụ: thiếu `phone`, `summary`, `dob`, hoặc `expect_salary`.
     *   Tuy nhiên, các trường khóa (username, email, password, các trường liên kết) **BẮT BUỘC** phải có đầy đủ.
 
-6.  **Số lượng dữ liệu cần tạo:**
-    *   10 Skills
-    *   5 Industries
-    *   5 Levels
-    *   2 Job Types
-    *   10 Users (5 ứng viên, 5 nhà tuyển dụng)
-    *   5 Candidates
-    *   5 Recruiters
-    *   10 Job Posts
-    *   10 Applications
+6.  **Số lượng dữ liệu cần tạo (TĂNG CƯỜNG):**
+    *   **20 Skills** (Kỹ năng đa dạng: IT, Marketing, Sales, HR...)
+    *   **10 Industries** (Các ngành nghề phổ biến)
+    *   **5 Levels** (Thực tập, Mới tốt nghiệp, Nhân viên, Trưởng nhóm, Quản lý)
+    *   **2 Job Types** (Toàn thời gian, Bán thời gian)
+    *   **40 Users** (Bao gồm: 20 ứng viên, 20 nhà tuyển dụng)
+    *   **20 Candidates** (Tương ứng với 20 user ứng viên)
+    *   **20 Recruiters** (Tương ứng với 20 user nhà tuyển dụng)
+    *   **40 Job Posts** (Bài đăng tuyển dụng đa dạng)
+    *   **40 Applications** (Đơn ứng tuyển ngẫu nhiên)
 
 7.  **Logic liên kết dữ liệu:**
     *   Sử dụng trường `username` để liên kết chính xác giữa bảng `users` với `candidates` và `recruiters`.
