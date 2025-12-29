@@ -20,6 +20,11 @@ public interface FileService {
     FileResponse setDefaultAvatarForUser(String userId);
 
     /**
+     * Trả về URL của avatar mặc định mà không tạo file vật lý cho user.
+     */
+    String getDefaultAvatarUrl();
+
+    /**
      * Xóa file theo URL đã lưu (nếu tồn tại), bao gồm file vật lý và metadata.
      */
     void deleteFileByUrl(String url);

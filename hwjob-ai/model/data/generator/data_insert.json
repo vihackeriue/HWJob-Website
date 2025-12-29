@@ -1,213 +1,463 @@
 {
+  "skills": [
+    {
+      "name": "Java",
+      "description": "Ngôn ngữ lập trình hướng đối tượng phổ biến cho phát triển backend, ứng dụng doanh nghiệp và Android"
+    },
+    {
+      "name": "Python",
+      "description": "Ngôn ngữ lập trình đa năng, phổ biến trong phát triển web, phân tích dữ liệu, AI và tự động hóa"
+    },
+    {
+      "name": "ReactJS",
+      "description": "Thư viện JavaScript mã nguồn mở để xây dựng giao diện người dùng, tập trung vào component"
+    },
+    {
+      "name": "Digital Marketing",
+      "description": "Kỹ năng tiếp thị sử dụng các kênh kỹ thuật số như mạng xã hội, SEO, SEM, email marketing"
+    },
+    {
+      "name": "SEO (Search Engine Optimization)",
+      "description": "Tối ưu hóa website để cải thiện thứ hạng trên các công cụ tìm kiếm như Google"
+    },
+    {
+      "name": "SQL & Database",
+      "description": "Kỹ năng làm việc với cơ sở dữ liệu quan hệ, viết truy vấn SQL và thiết kế database"
+    },
+    {
+      "name": "Agile/Scrum",
+      "description": "Phương pháp quản lý dự án linh hoạt, phổ biến trong phát triển phần mềm, tập trung vào sự hợp tác và cải tiến liên tục"
+    },
+    {
+      "name": "Business Analysis",
+      "description": "Phân tích nhu cầu nghiệp vụ, đề xuất giải pháp công nghệ và làm cầu nối giữa stakeholders và đội kỹ thuật"
+    },
+    {
+      "name": "Content Creation",
+      "description": "Kỹ năng sáng tạo, lên ý tưởng và sản xuất nội dung (văn bản, hình ảnh, video) cho các mục đích marketing và truyền thông"
+    },
+    {
+      "name": "Cloud Computing (AWS/Azure)",
+      "description": "Kỹ năng làm việc với các dịch vụ điện toán đám mây để triển khai, vận hành và mở rộng ứng dụng"
+    }
+  ],
+  "industries": [
+    {
+      "name": "Công nghệ thông tin và Phần mềm",
+      "description": "Ngành công nghiệp phần mềm, phát triển ứng dụng, dịch vụ CNTT và giải pháp công nghệ"
+    },
+    {
+      "name": "Digital Marketing & Truyền thông",
+      "description": "Ngành tiếp thị số, quảng cáo trực tuyến, truyền thông đa phương tiện và quan hệ công chúng trực tuyến"
+    },
+    {
+      "name": "Tài chính và FinTech",
+      "description": "Ngành dịch vụ tài chính, ngân hàng, bảo hiểm và các công ty công nghệ tài chính (FinTech)"
+    },
+    {
+      "name": "Thương mại Điện tử",
+      "description": "Ngành mua bán hàng hóa và dịch vụ thông qua nền tảng internet và các sàn giao dịch trực tuyến"
+    },
+    {
+      "name": "Sản xuất và Công nghiệp 4.0",
+      "description": "Ngành sản xuất ứng dụng công nghệ cao, tự động hóa, IoT và chuyển đổi số trong quy trình sản xuất"
+    }
+  ],
+  "levels": [
+    {
+      "name": "Thực tập"
+    },
+    {
+      "name": "Mới tốt nghiệp"
+    },
+    {
+      "name": "Nhân viên"
+    },
+    {
+      "name": "Trưởng nhóm"
+    },
+    {
+      "name": "Quản lý"
+    }
+  ],
+  "job_types": [
+    {
+      "code": "FULL_TIME",
+      "name": "Toàn thời gian"
+    },
+    {
+      "code": "PART_TIME",
+      "name": "Bán thời gian"
+    }
+  ],
+  "users": [
+    {
+      "username": "candidate1",
+      "password": "password",
+      "email": "candidate1@example.com",
+      "full_name": "Nguyễn Văn An",
+      "summary": "Lập trình viên Full-stack với 4 năm kinh nghiệm, đam mê công nghệ và xây dựng sản phẩm chất lượng cao.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-05 08:30:00"
+    },
+    {
+      "username": "candidate2",
+      "password": "password",
+      "email": "candidate2@example.com",
+      "full_name": "Trần Thị Bích",
+      "summary": "Chuyên viên Digital Marketing với 2 năm kinh nghiệm tại agency, thành thạo SEO và Social Media.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-12 14:15:00"
+    },
+    {
+      "username": "candidate3",
+      "password": "password",
+      "email": "candidate3@example.com",
+      "full_name": "Lê Minh Cường",
+      "summary": "Sinh viên năm cuối ngành Khoa học Máy tính, tìm kiếm cơ hội thực tập trong lĩnh vực AI và Data Science.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-20 10:45:00"
+    },
+    {
+      "username": "candidate4",
+      "password": "password",
+      "email": "candidate4@example.com",
+      "full_name": "Phạm Thùy Dương",
+      "summary": "Business Analyst mới tốt nghiệp với kỹ năng phân tích và giao tiếp tốt, mong muốn phát triển trong ngành FinTech.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-12-01 09:20:00"
+    },
+    {
+      "username": "candidate5",
+      "password": "password",
+      "email": "candidate5@example.com",
+      "full_name": "Hoàng Văn Đức",
+      "summary": "Chuyên viên Content Creator tự do với 3 năm kinh nghiệm, sáng tạo nội dung đa nền tảng.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-12-10 16:40:00"
+    },
+    {
+      "username": "recruiter1",
+      "password": "password",
+      "email": "recruiter1@company.com",
+      "full_name": "Công ty Cổ phần Công nghệ FPT",
+      "summary": "Tập đoàn công nghệ hàng đầu Việt Nam, chuyên cung cấp dịch vụ CNTT và phần mềm toàn cầu.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-03 13:00:00"
+    },
+    {
+      "username": "recruiter2",
+      "password": "password",
+      "email": "recruiter2@company.com",
+      "full_name": "Tập đoàn Vingroup",
+      "summary": "Tập đoàn kinh tế tư nhân hàng đầu Việt Nam với các lĩnh vực công nghệ, bất động sản, y tế và giáo dục.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-08 11:30:00"
+    },
+    {
+      "username": "recruiter3",
+      "password": "password",
+      "email": "recruiter3@company.com",
+      "full_name": "Ngân hàng Techcombank",
+      "summary": "Ngân hàng thương mại cổ phần hàng đầu Việt Nam, tiên phong trong chuyển đổi số ngành ngân hàng.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-15 15:20:00"
+    },
+    {
+      "username": "recruiter4",
+      "password": "password",
+      "email": "recruiter4@company.com",
+      "full_name": "Công ty Cổ phần Tập đoàn MISA",
+      "summary": "Công ty phần mềm kế toán và quản trị doanh nghiệp hàng đầu Việt Nam, phục vụ hơn 200.000 khách hàng.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-25 10:10:00"
+    },
+    {
+      "username": "recruiter5",
+      "password": "password",
+      "email": "recruiter5@company.com",
+      "full_name": "Công ty Cổ phần Đầu tư Thế giới Di động (MWG)",
+      "summary": "Tập đoàn bán lẻ công nghệ và điện máy hàng đầu Việt Nam với chuỗi cửa hàng toàn quốc.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-12-05 14:50:00"
+    }
+  ],
+  "candidates": [
+    {
+      "username": "candidate1",
+      "dob": "1995-08-15",
+      "gender": 0,
+      "expect_salary": 2500,
+      "education": "Kỹ sư Công nghệ Thông tin - Đại học Bách Khoa Hà Nội",
+      "skill_names": ["Java", "Spring Boot", "SQL & Database", "Cloud Computing (AWS/Azure)", "Agile/Scrum"]
+    },
+    {
+      "username": "candidate2",
+      "dob": "1998-03-22",
+      "gender": 1,
+      "expect_salary": 1200,
+      "education": "Cử nhân Marketing - Đại học Kinh tế Quốc dân",
+      "skill_names": ["Digital Marketing", "SEO (Search Engine Optimization)", "Content Creation", "Social Media"]
+    },
+    {
+      "username": "candidate3",
+      "dob": "2001-11-05",
+      "gender": 0,
+      "expect_salary": 500,
+      "education": "Sinh viên năm cuối Khoa học Máy tính - Đại học Công nghệ, ĐHQGHN",
+      "skill_names": ["Python", "Machine Learning", "SQL & Database", "ReactJS"]
+    },
+    {
+      "username": "candidate4",
+      "dob": "1997-06-30",
+      "gender": 1,
+      "expect_salary": 1500,
+      "education": "Thạc sĩ Quản trị Kinh doanh - Đại học Ngoại thương",
+      "skill_names": ["Business Analysis", "SQL & Database", "Agile/Scrum", "Python"]
+    },
+    {
+      "username": "candidate5",
+      "dob": "1994-01-18",
+      "gender": 0,
+      "expect_salary": 1000,
+      "education": "Cử nhân Báo chí - Học viện Báo chí và Tuyên truyền",
+      "skill_names": ["Content Creation", "Digital Marketing", "SEO (Search Engine Optimization)", "Video Editing"]
+    }
+  ],
+  "recruiters": [
+    {
+      "username": "recruiter1",
+      "website": "https://career.fpt.com.vn"
+    },
+    {
+      "username": "recruiter2",
+      "website": "https://careers.vingroup.net"
+    },
+    {
+      "username": "recruiter3",
+      "website": "https://career.techcombank.com.vn"
+    },
+    {
+      "username": "recruiter4",
+      "website": "https://tuyendung.misa.vn"
+    },
+    {
+      "username": "recruiter5",
+      "website": "https://career.mwg.vn"
+    }
+  ],
   "job_posts": [
     {
-      "title": "Lập trình viên Golang",
-      "description": "Tham gia phát triển các dịch vụ backend hiệu năng cao bằng Golang. Công việc bao gồm thiết kế API, xử lý dữ liệu lớn, tối ưu tốc độ xử lý và đảm bảo hệ thống hoạt động ổn định trong môi trường phân tán.",
-      "salary": 28000000,
-      "salary_type": "MONTHS",
-      "quantity": 2,
-      "status": "PUBLIC",
-      "ended_time": "2025-04-15"
-    },
-    {
-      "title": "Kỹ sư hệ thống",
-      "description": "Quản lý và vận hành hệ thống server nội bộ. Chịu trách nhiệm giám sát tài nguyên, xử lý sự cố và đảm bảo hệ thống luôn sẵn sàng phục vụ hoạt động kinh doanh.",
-      "salary": 20000000,
-      "salary_type": "MONTHS",
-      "quantity": 1,
-      "status": "PRIVATE",
-      "ended_time": null
-    },
-    {
-      "title": "Business Analyst",
-      "description": "Thu thập và phân tích yêu cầu nghiệp vụ từ các phòng ban. Chuyển đổi yêu cầu thành tài liệu chi tiết để đội phát triển triển khai hệ thống đúng nhu cầu thực tế.",
-      "salary": 23000000,
-      "salary_type": "MONTHS",
-      "quantity": 1,
-      "status": "PUBLIC",
-      "ended_time": "2025-03-10"
-    },
-    {
-      "title": "Lập trình viên C# .NET",
-      "description": "Phát triển ứng dụng web và desktop bằng .NET. Tham gia thiết kế hệ thống, xây dựng chức năng và bảo trì các ứng dụng đang vận hành.",
-      "salary": 24000000,
-      "salary_type": "MONTHS",
-      "quantity": 2,
-      "status": "PUBLIC",
-      "ended_time": null
-    },
-    {
-      "title": "Lập trình viên iOS",
-      "description": "Phát triển ứng dụng iOS bằng Swift. Công việc bao gồm xây dựng giao diện, xử lý logic nghiệp vụ và tích hợp API từ backend.",
-      "salary": 26000000,
-      "salary_type": "PROJECT",
-      "quantity": 1,
-      "status": "PUBLIC",
-      "ended_time": "2025-05-30"
-    },
-    {
-      "title": "Lập trình viên Android",
-      "description": "Phát triển ứng dụng Android bằng Kotlin. Phối hợp với designer và backend để hoàn thiện sản phẩm theo đúng yêu cầu.",
-      "salary": 25000000,
-      "salary_type": "PROJECT",
-      "quantity": 2,
-      "status": "PUBLIC",
-      "ended_time": null
-    },
-    {
-      "title": "Chuyên viên an ninh mạng",
-      "description": "Đảm bảo an toàn thông tin cho hệ thống CNTT. Thực hiện đánh giá lỗ hổng, giám sát bảo mật và đề xuất giải pháp phòng chống tấn công.",
-      "salary": 35000000,
-      "salary_type": "MONTHS",
-      "quantity": 1,
-      "status": "PUBLIC",
-      "ended_time": "2025-07-01"
-    },
-    {
-      "title": "Kỹ sư kiểm thử hiệu năng",
-      "description": "Thực hiện kiểm thử hiệu năng cho hệ thống web và API. Phân tích kết quả, đề xuất cải tiến nhằm đảm bảo hệ thống đáp ứng yêu cầu tải lớn.",
-      "salary": 22000000,
-      "salary_type": "MONTHS",
-      "quantity": 1,
-      "status": "PUBLIC",
-      "ended_time": null
-    },
-    {
-      "title": "Nhân viên kế toán tổng hợp",
-      "description": "Thực hiện hạch toán kế toán, lập báo cáo tài chính và theo dõi công nợ. Yêu cầu hiểu rõ quy định kế toán và cẩn thận trong công việc.",
-      "salary": 15000000,
-      "salary_type": "MONTHS",
-      "quantity": 1,
-      "status": "PRIVATE",
-      "ended_time": "2025-02-28"
-    },
-    {
-      "title": "Chuyên viên nhân sự",
-      "description": "Phụ trách công tác nhân sự bao gồm tuyển dụng, quản lý hồ sơ nhân viên và xây dựng chính sách phúc lợi.",
-      "salary": 16000000,
-      "salary_type": "MONTHS",
-      "quantity": 1,
-      "status": "PUBLIC",
-      "ended_time": null
-    },
-
-    {
-      "title": "Nhân viên hành chính",
-      "description": "Quản lý công việc hành chính văn phòng, hỗ trợ các phòng ban và đảm bảo hoạt động nội bộ diễn ra trôi chảy.",
-      "salary": 9000000,
-      "salary_type": "MONTHS",
-      "quantity": 1,
-      "status": "PRIVATE",
-      "ended_time": null
-    },
-    {
-      "title": "Chuyên viên đào tạo",
-      "description": "Xây dựng và triển khai các chương trình đào tạo nội bộ nhằm nâng cao năng lực cho nhân viên.",
-      "salary": 18000000,
-      "salary_type": "MONTHS",
-      "quantity": 1,
-      "status": "PUBLIC",
-      "ended_time": "2025-06-15"
-    },
-    {
-      "title": "Nhân viên kho",
-      "description": "Quản lý nhập xuất hàng hóa trong kho, kiểm kê định kỳ và đảm bảo số liệu chính xác.",
-      "salary": 8000000,
-      "salary_type": "MONTHS",
+      "title": "Lập trình viên Java Backend (Spring Boot)",
+      "description": "Phát triển và bảo trì hệ thống backend cho các sản phẩm ngân hàng số. Yêu cầu có kinh nghiệm với microservices, Spring Boot và database.",
       "quantity": 3,
-      "status": "PRIVATE",
-      "ended_time": null
+      "salary": 2800,
+      "salary_type": "MONTHS",
+      "status": "PUBLIC",
+      "created_at": "2025-11-10 09:00:00",
+      "ended_time": "2026-01-20 23:59:59",
+      "recruiter_username": "recruiter3",
+      "industry_name": "Tài chính và FinTech",
+      "job_type_code": "FULL_TIME",
+      "level_name": "Nhân viên",
+      "skill_names": ["Java", "Spring Boot", "SQL & Database", "Cloud Computing (AWS/Azure)"]
     },
     {
-      "title": "Nhân viên giao hàng",
-      "description": "Thực hiện giao hàng cho khách theo tuyến được phân công, đảm bảo đúng thời gian và chất lượng dịch vụ.",
-      "salary": 7000000,
+      "title": "Chuyên viên Digital Marketing",
+      "description": "Lập kế hoạch và triển khai chiến dịch marketing trên các nền tảng số, phân tích hiệu quả và tối ưu chi phí.",
+      "quantity": 2,
+      "salary": 1500,
       "salary_type": "MONTHS",
+      "status": "PUBLIC",
+      "created_at": "2025-11-15 14:20:00",
+      "ended_time": "2026-01-25 23:59:59",
+      "recruiter_username": "recruiter5",
+      "industry_name": "Digital Marketing & Truyền thông",
+      "job_type_code": "FULL_TIME",
+      "level_name": "Nhân viên",
+      "skill_names": ["Digital Marketing", "SEO (Search Engine Optimization)", "Content Creation", "Social Media"]
+    },
+    {
+      "title": "Thực tập sinh Phát triển Phần mềm",
+      "description": "Tham gia phát triển các dự án phần mềm thực tế dưới sự hướng dẫn của mentor giàu kinh nghiệm.",
       "quantity": 5,
+      "salary": 400,
+      "salary_type": "MONTHS",
       "status": "PUBLIC",
-      "ended_time": "2025-01-31"
+      "created_at": "2025-11-20 10:15:00",
+      "ended_time": "2026-01-15 23:59:59",
+      "recruiter_username": "recruiter1",
+      "industry_name": "Công nghệ thông tin và Phần mềm",
+      "job_type_code": "FULL_TIME",
+      "level_name": "Thực tập",
+      "skill_names": ["Java", "Python", "SQL & Database", "ReactJS"]
     },
     {
-      "title": "Nhân viên vận hành sàn thương mại điện tử",
-      "description": "Quản lý gian hàng trên các sàn thương mại điện tử, cập nhật sản phẩm và xử lý đơn hàng.",
-      "salary": 12000000,
-      "salary_type": "MONTHS",
+      "title": "Business Analyst (Ngành FinTech)",
+      "description": "Phân tích yêu cầu nghiệp vụ, đề xuất giải pháp công nghệ và làm cầu nối giữa khách hàng và đội phát triển.",
       "quantity": 2,
+      "salary": 2000,
+      "salary_type": "MONTHS",
       "status": "PUBLIC",
-      "ended_time": null
+      "created_at": "2025-11-25 11:30:00",
+      "ended_time": "2026-01-30 23:59:59",
+      "recruiter_username": "recruiter3",
+      "industry_name": "Tài chính và FinTech",
+      "job_type_code": "FULL_TIME",
+      "level_name": "Nhân viên",
+      "skill_names": ["Business Analysis", "SQL & Database", "Agile/Scrum", "Digital Marketing"]
     },
     {
-      "title": "Chuyên viên phân tích tài chính",
-      "description": "Phân tích tình hình tài chính, lập báo cáo và hỗ trợ ban lãnh đạo trong việc ra quyết định đầu tư.",
-      "salary": 30000000,
-      "salary_type": "MONTHS",
-      "quantity": 1,
+      "title": "Content Creator (Part-time)",
+      "description": "Sản xuất nội dung sáng tạo cho các kênh truyền thông của công ty, bao gồm bài viết, hình ảnh và video.",
+      "quantity": 3,
+      "salary": 15,
+      "salary_type": "HOURS",
       "status": "PUBLIC",
-      "ended_time": "2025-04-30"
+      "created_at": "2025-12-01 16:00:00",
+      "ended_time": "2026-01-10 23:59:59",
+      "recruiter_username": "recruiter5",
+      "industry_name": "Digital Marketing & Truyền thông",
+      "job_type_code": "PART_TIME",
+      "level_name": "Mới tốt nghiệp",
+      "skill_names": ["Content Creation", "Digital Marketing", "Video Editing"]
     },
     {
-      "title": "Nhân viên thu ngân",
-      "description": "Thực hiện thanh toán cho khách hàng, quản lý tiền mặt và đảm bảo quy trình thu chi chính xác.",
-      "salary": 7000000,
-      "salary_type": "MONTHS",
+      "title": "Kỹ sư DevOps (AWS)",
+      "description": "Xây dựng và vận hành hệ thống CI/CD, quản lý infrastructure trên cloud, tự động hóa quy trình triển khai.",
       "quantity": 2,
-      "status": "PRIVATE",
-      "ended_time": null
-    },
-    {
-      "title": "Nhân viên pha chế",
-      "description": "Chuẩn bị đồ uống theo công thức, đảm bảo chất lượng và vệ sinh an toàn thực phẩm.",
-      "salary": 35000,
-      "salary_type": "HOURS",
-      "quantity": 4,
-      "status": "PUBLIC",
-      "ended_time": null
-    },
-    {
-      "title": "Nhân viên phục vụ",
-      "description": "Phục vụ khách hàng tại quán, hỗ trợ dọn dẹp và đảm bảo trải nghiệm khách hàng tốt.",
-      "salary": 30000,
-      "salary_type": "HOURS",
-      "quantity": 6,
-      "status": "PUBLIC",
-      "ended_time": null
-    },
-    {
-      "title": "Quản lý cửa hàng",
-      "description": "Quản lý hoạt động kinh doanh của cửa hàng, điều phối nhân sự và đảm bảo doanh thu đạt mục tiêu.",
-      "salary": 20000000,
+      "salary": 3000,
       "salary_type": "MONTHS",
-      "quantity": 1,
       "status": "PUBLIC",
-      "ended_time": "2025-05-20"
+      "created_at": "2025-12-05 13:10:00",
+      "ended_time": "2026-01-18 23:59:59",
+      "recruiter_username": "recruiter1",
+      "industry_name": "Công nghệ thông tin và Phần mềm",
+      "job_type_code": "FULL_TIME",
+      "level_name": "Trưởng nhóm",
+      "skill_names": ["Cloud Computing (AWS/Azure)", "Python", "Agile/Scrum", "SQL & Database"]
     },
-
     {
-      "title": "",
-      "description": "Bài đăng thiếu tiêu đề nhưng phần mô tả vẫn tương đối đầy đủ. Trường hợp này dùng để huấn luyện mô hình phát hiện dữ liệu lỗi.",
-      "salary": 11000000,
+      "title": "Quản lý Sản phẩm Số (Product Manager)",
+      "description": "Quản lý vòng đời sản phẩm từ nghiên cứu thị trường, lập roadmap đến phối hợp phát triển và launch sản phẩm.",
+      "quantity": 1,
+      "salary": 3500,
       "salary_type": "MONTHS",
+      "status": "PUBLIC",
+      "created_at": "2025-11-28 08:50:00",
+      "ended_time": "2025-12-20 23:59:59",
+      "recruiter_username": "recruiter4",
+      "industry_name": "Công nghệ thông tin và Phần mềm",
+      "job_type_code": "FULL_TIME",
+      "level_name": "Quản lý",
+      "skill_names": ["Business Analysis", "Agile/Scrum", "Digital Marketing", "SQL & Database"]
+    },
+    {
+      "title": "Chuyên viên SEO",
+      "description": "Tối ưu hóa website để cải thiện thứ hạng trên Google, nghiên cứu từ khóa và xây dựng chiến lược SEO tổng thể.",
       "quantity": 1,
+      "salary": 1800,
+      "salary_type": "MONTHS",
       "status": "PUBLIC",
-      "ended_time": null
+      "created_at": "2025-12-03 11:05:00",
+      "ended_time": "2026-01-28 23:59:59",
+      "recruiter_username": "recruiter2",
+      "industry_name": "Digital Marketing & Truyền thông",
+      "job_type_code": "FULL_TIME",
+      "level_name": "Nhân viên",
+      "skill_names": ["SEO (Search Engine Optimization)", "Digital Marketing", "Content Creation", "Analytics"]
     },
     {
-      "title": "   ",
-      "description": "Mô tả công việc sơ sài, không cung cấp thông tin rõ ràng về nhiệm vụ và yêu cầu.",
-      "salary": -3000000,
-      "salary_type": null,
-      "quantity": 0,
-      "status": "PRIVATE",
-      "ended_time": "2024-10-15"
+      "title": "Lập trình viên Python (Data Analysis)",
+      "description": "Phát triển các ứng dụng phân tích dữ liệu, xây dựng pipeline xử lý dữ liệu và báo cáo tự động.",
+      "quantity": 2,
+      "salary": 2200,
+      "salary_type": "MONTHS",
+      "status": "PUBLIC",
+      "created_at": "2025-11-30 10:40:00",
+      "ended_time": "2025-12-25 23:59:59",
+      "recruiter_username": "recruiter4",
+      "industry_name": "Công nghệ thông tin và Phần mềm",
+      "job_type_code": "FULL_TIME",
+      "level_name": "Nhân viên",
+      "skill_names": ["Python", "SQL & Database", "Data Analysis", "Machine Learning"]
     },
     {
-      "title": null,
-      "description": "Chỉ có mô tả ngắn gọn, thiếu tiêu đề công việc.",
-      "salary": null,
-      "salary_type": "NEGOTIATION",
-      "quantity": -2,
+      "title": "Trưởng nhóm Phát triển Phần mềm",
+      "description": "Dẫn dắt đội phát triển 5-7 người, quản lý dự án và đảm bảo chất lượng sản phẩm phần mềm.",
+      "quantity": 1,
+      "salary": 3200,
+      "salary_type": "MONTHS",
       "status": "PUBLIC",
-      "ended_time": null
+      "created_at": "2025-12-08 09:20:00",
+      "ended_time": "2026-01-31 23:59:59",
+      "recruiter_username": "recruiter2",
+      "industry_name": "Công nghệ thông tin và Phần mềm",
+      "job_type_code": "FULL_TIME",
+      "level_name": "Trưởng nhóm",
+      "skill_names": ["Java", "Agile/Scrum", "Cloud Computing (AWS/Azure)", "Team Management"]
+    }
+  ],
+  "applications": [
+    {
+      "candidate_username": "candidate1",
+      "job_post_title": "Lập trình viên Java Backend (Spring Boot)",
+      "status": "PENDING",
+      "created_at": "2025-11-12 14:22:00"
+    },
+    {
+      "candidate_username": "candidate1",
+      "job_post_title": "Kỹ sư DevOps (AWS)",
+      "status": "APPROVED",
+      "created_at": "2025-12-06 09:15:00"
+    },
+    {
+      "candidate_username": "candidate2",
+      "job_post_title": "Chuyên viên Digital Marketing",
+      "status": "ASSIGNED",
+      "created_at": "2025-11-16 16:05:00"
+    },
+    {
+      "candidate_username": "candidate2",
+      "job_post_title": "Content Creator (Part-time)",
+      "status": "PENDING",
+      "created_at": "2025-12-02 10:30:00"
+    },
+    {
+      "candidate_username": "candidate3",
+      "job_post_title": "Thực tập sinh Phát triển Phần mềm",
+      "status": "ACCEPTED",
+      "created_at": "2025-11-21 13:40:00"
+    },
+    {
+      "candidate_username": "candidate3",
+      "job_post_title": "Lập trình viên Python (Data Analysis)",
+      "status": "REJECTED",
+      "created_at": "2025-12-01 11:50:00"
+    },
+    {
+      "candidate_username": "candidate4",
+      "job_post_title": "Business Analyst (Ngành FinTech)",
+      "status": "PENDING",
+      "created_at": "2025-11-26 15:20:00"
+    },
+    {
+      "candidate_username": "candidate4",
+      "job_post_title": "Quản lý Sản phẩm Số (Product Manager)",
+      "status": "REJECTED",
+      "created_at": "2025-11-29 14:10:00"
+    },
+    {
+      "candidate_username": "candidate5",
+      "job_post_title": "Content Creator (Part-time)",
+      "status": "APPROVED",
+      "created_at": "2025-12-02 11:25:00"
+    },
+    {
+      "candidate_username": "candidate5",
+      "job_post_title": "Chuyên viên SEO",
+      "status": "CANCELLED",
+      "created_at": "2025-12-04 09:00:00"
     }
   ]
 }

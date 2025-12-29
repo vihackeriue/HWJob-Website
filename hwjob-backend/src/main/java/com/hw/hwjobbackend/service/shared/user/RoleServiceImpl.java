@@ -1,6 +1,7 @@
 package com.hw.hwjobbackend.service.shared.user;
 
 import com.hw.hwjobbackend.model.entity.user.Role;
+import com.hw.hwjobbackend.model.enums.RoleEnum;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.repository.user.RoleRepository;
@@ -24,11 +25,19 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Set<Role> getRolesByNames(Set<String> roleNames) {
         return roleNames.stream()
-                .map(roleName -> roleRepository.findByName(roleName)
-                        .orElseThrow(() -> {
-                            log.error("Role not found: {}", roleName);
-                            return new AppException(ErrorCode.ROLE_NOT_EXISTED);
-                        }))
+                .map(roleName -> {
+                    try {
+                        RoleEnum roleEnum = RoleEnum.valueOf(roleName);
+                        return roleRepository.findByName(roleEnum)
+                                .orElseThrow(() -> {
+                                    log.error("Role not found: {}", roleName);
+                                    return new AppException(ErrorCode.ROLE_NOT_EXISTED);
+                                });
+                    } catch (IllegalArgumentException e) {
+                        log.error("Invalid role name: {}", roleName);
+                        throw new AppException(ErrorCode.ROLE_NOT_EXISTED);
+                    }
+                })
                 .collect(Collectors.toSet());
     }
 }

@@ -161,7 +161,7 @@ public class JwtServiceImpl implements JwtService {
         StringJoiner scopeJoiner = new StringJoiner(" ");
         if (!CollectionUtils.isEmpty(user.getRoles())) {
             user.getRoles().forEach(role ->
-                    scopeJoiner.add("ROLE_" + role.getName().toUpperCase())
+                    scopeJoiner.add("ROLE_" + role.getName().name().toUpperCase())
             );
         }
         return scopeJoiner.toString();

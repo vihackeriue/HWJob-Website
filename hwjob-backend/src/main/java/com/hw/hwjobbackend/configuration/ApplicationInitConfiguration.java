@@ -43,21 +43,21 @@ public class ApplicationInitConfiguration {
                 // Khởi tạo region data
                 initializationService.initializeRegion();
 
-                // Khởi tạo industries
-                initializationService.initializeIndustries();
-
-                // Khởi tạo job types
-                initializationService.initializeJobTypes();
-
-                // Khởi tạo level
-                initializationService.initializeLevels();
-
-                // khởi tạo skill
-                initializationService.initializeSkills();
-
-                // Khởi tạo user
-
-                initializationService.initializeTestUsers();
+//                // Khởi tạo industries
+//                initializationService.initializeIndustries();
+//
+//                // Khởi tạo job types
+//                initializationService.initializeJobTypes();
+//
+//                // Khởi tạo level
+//                initializationService.initializeLevels();
+//
+//                // khởi tạo skill
+//                initializationService.initializeSkills();
+//
+//                // Khởi tạo user
+//
+//                initializationService.initializeTestUsers();
 
                 long duration = System.currentTimeMillis() - startTime;
                 log.info("=== Application initialization completed in {}ms ===", duration);
