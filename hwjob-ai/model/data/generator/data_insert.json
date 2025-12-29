@@ -2,82 +2,82 @@
   "skills": [
     {
       "name": "Java",
-      "description": "Ngôn ngữ lập trình hướng đối tượng phổ biến cho phát triển backend, ứng dụng doanh nghiệp và Android"
+      "description": "Ngôn ngữ lập trình hướng đối tượng phổ biến cho ứng dụng doanh nghiệp."
     },
     {
       "name": "Python",
-      "description": "Ngôn ngữ lập trình đa năng, phổ biến trong phát triển web, phân tích dữ liệu, AI và tự động hóa"
+      "description": "Ngôn ngữ lập trình đa năng, mạnh mẽ trong phân tích dữ liệu và AI."
     },
     {
       "name": "ReactJS",
-      "description": "Thư viện JavaScript mã nguồn mở để xây dựng giao diện người dùng, tập trung vào component"
+      "description": "Thư viện JavaScript phổ biến để xây dựng giao diện người dùng."
+    },
+    {
+      "name": "Spring Boot",
+      "description": "Framework Java giúp phát triển ứng dụng backend nhanh chóng."
+    },
+    {
+      "name": "SQL",
+      "description": "Ngôn ngữ truy vấn dữ liệu cho các hệ quản trị cơ sở dữ liệu quan hệ."
+    },
+    {
+      "name": "Docker",
+      "description": "Công cụ tạo và quản lý các container cho ứng dụng phần mềm."
     },
     {
       "name": "Digital Marketing",
-      "description": "Kỹ năng tiếp thị sử dụng các kênh kỹ thuật số như mạng xã hội, SEO, SEM, email marketing"
+      "description": "Kỹ năng quảng bá sản phẩm, dịch vụ thông qua các kênh kỹ thuật số."
     },
     {
-      "name": "SEO (Search Engine Optimization)",
-      "description": "Tối ưu hóa website để cải thiện thứ hạng trên các công cụ tìm kiếm như Google"
+      "name": "UI/UX Design",
+      "description": "Thiết kế giao diện và trải nghiệm người dùng cho sản phẩm số."
     },
     {
-      "name": "SQL & Database",
-      "description": "Kỹ năng làm việc với cơ sở dữ liệu quan hệ, viết truy vấn SQL và thiết kế database"
+      "name": "Project Management",
+      "description": "Kỹ năng lập kế hoạch, tổ chức và quản lý các dự án."
     },
     {
-      "name": "Agile/Scrum",
-      "description": "Phương pháp quản lý dự án linh hoạt, phổ biến trong phát triển phần mềm, tập trung vào sự hợp tác và cải tiến liên tục"
-    },
-    {
-      "name": "Business Analysis",
-      "description": "Phân tích nhu cầu nghiệp vụ, đề xuất giải pháp công nghệ và làm cầu nối giữa stakeholders và đội kỹ thuật"
-    },
-    {
-      "name": "Content Creation",
-      "description": "Kỹ năng sáng tạo, lên ý tưởng và sản xuất nội dung (văn bản, hình ảnh, video) cho các mục đích marketing và truyền thông"
-    },
-    {
-      "name": "Cloud Computing (AWS/Azure)",
-      "description": "Kỹ năng làm việc với các dịch vụ điện toán đám mây để triển khai, vận hành và mở rộng ứng dụng"
+      "name": "Tiếng Anh",
+      "description": "Kỹ năng giao tiếp và đọc hiểu tài liệu bằng tiếng Anh."
     }
   ],
   "industries": [
     {
-      "name": "Công nghệ thông tin và Phần mềm",
-      "description": "Ngành công nghiệp phần mềm, phát triển ứng dụng, dịch vụ CNTT và giải pháp công nghệ"
+      "name": "Công nghệ thông tin",
+      "description": "Lĩnh vực phần mềm, phần cứng và hệ thống thông tin."
     },
     {
-      "name": "Digital Marketing & Truyền thông",
-      "description": "Ngành tiếp thị số, quảng cáo trực tuyến, truyền thông đa phương tiện và quan hệ công chúng trực tuyến"
+      "name": "Tài chính - Ngân hàng",
+      "description": "Lĩnh vực liên quan đến dịch vụ tài chính, ngân hàng và bảo hiểm."
     },
     {
-      "name": "Tài chính và FinTech",
-      "description": "Ngành dịch vụ tài chính, ngân hàng, bảo hiểm và các công ty công nghệ tài chính (FinTech)"
+      "name": "Bán lẻ & Thương mại điện tử",
+      "description": "Lĩnh vực kinh doanh hàng hóa và dịch vụ trực tiếp đến người tiêu dùng."
     },
     {
-      "name": "Thương mại Điện tử",
-      "description": "Ngành mua bán hàng hóa và dịch vụ thông qua nền tảng internet và các sàn giao dịch trực tuyến"
+      "name": "Marketing & Truyền thông",
+      "description": "Lĩnh vực quảng bá thương hiệu và truyền thông đa phương tiện."
     },
     {
-      "name": "Sản xuất và Công nghiệp 4.0",
-      "description": "Ngành sản xuất ứng dụng công nghệ cao, tự động hóa, IoT và chuyển đổi số trong quy trình sản xuất"
+      "name": "Giáo dục & Đào tạo",
+      "description": "Lĩnh vực cung cấp kiến thức và phát triển kỹ năng con người."
     }
   ],
   "levels": [
     {
-      "name": "Thực tập"
+      "name": "Thực tập sinh"
     },
     {
-      "name": "Mới tốt nghiệp"
+      "name": "Fresher"
     },
     {
-      "name": "Nhân viên"
+      "name": "Junior"
     },
     {
-      "name": "Trưởng nhóm"
+      "name": "Senior"
     },
     {
-      "name": "Quản lý"
+      "name": "Trưởng nhóm/Quản lý"
     }
   ],
   "job_types": [
@@ -96,25 +96,28 @@
       "password": "password",
       "email": "candidate1@example.com",
       "full_name": "Nguyễn Văn An",
-      "summary": "Lập trình viên Full-stack với 4 năm kinh nghiệm, đam mê công nghệ và xây dựng sản phẩm chất lượng cao.",
+      "phone": "0912345678",
+      "summary": "<p>Lập trình viên <b>Backend Java</b> với hơn 3 năm kinh nghiệm trong môi trường Agile.</p><ul><li>Thành thạo <b>Spring Boot</b> và <b>Hibernate</b> để phát triển API.</li><li>Có kinh nghiệm triển khai ứng dụng lên <b>AWS</b> và sử dụng <b>Docker</b>.</li><li>Đã tham gia phát triển hệ thống Microservices cho dự án tài chính.</li><li>Khả năng làm việc nhóm tốt, tư duy giải quyết vấn đề logic.</li></ul>",
       "user_status": "ACTIVE",
-      "created_at": "2025-11-05 08:30:00"
+      "created_at": "2025-11-05 09:15:00"
     },
     {
       "username": "candidate2",
       "password": "password",
       "email": "candidate2@example.com",
       "full_name": "Trần Thị Bích",
-      "summary": "Chuyên viên Digital Marketing với 2 năm kinh nghiệm tại agency, thành thạo SEO và Social Media.",
+      "phone": "0923456789",
+      "summary": "<p>Chuyên viên <b>Digital Marketing</b> sáng tạo, có 2 năm kinh nghiệm tại agency.</p><ul><li>Thành thạo chạy quảng cáo <b>Facebook Ads</b>, <b>Google Ads</b> và tối ưu chi phí (CPA).</li><li>Có kinh nghiệm xây dựng chiến lược Content Marketing và quản lý cộng đồng (Community Management).</li><li>Phân tích số liệu (Analytics) và lập báo cáo hiệu quả chiến dịch.</li><li>Kỹ năng thiết kế cơ bản với Photoshop và Canva.</li></ul>",
       "user_status": "ACTIVE",
-      "created_at": "2025-11-12 14:15:00"
+      "created_at": "2025-11-12 14:20:00"
     },
     {
       "username": "candidate3",
       "password": "password",
       "email": "candidate3@example.com",
       "full_name": "Lê Minh Cường",
-      "summary": "Sinh viên năm cuối ngành Khoa học Máy tính, tìm kiếm cơ hội thực tập trong lĩnh vực AI và Data Science.",
+      "phone": "0934567890",
+      "summary": "<p><b>Frontend Developer</b> với trọng tâm là <b>ReactJS</b> và hệ sinh thái của nó.</p><ul><li>Thành thạo React Hooks, Redux Toolkit, và các thư viện UI như Ant Design, Material-UI.</li><li>Có kinh nghiệm tích hợp API với Axios và xử lý hiệu năng ứng dụng.</li><li>Biết sử dụng Next.js cho SEO và TypeScript để phát triển ổn định.</li><li>Luôn cập nhật xu hướng công nghệ mới và yêu thích tạo ra trải nghiệm người dùng mượt mà.</li></ul>",
       "user_status": "ACTIVE",
       "created_at": "2025-11-20 10:45:00"
     },
@@ -123,341 +126,400 @@
       "password": "password",
       "email": "candidate4@example.com",
       "full_name": "Phạm Thùy Dương",
-      "summary": "Business Analyst mới tốt nghiệp với kỹ năng phân tích và giao tiếp tốt, mong muốn phát triển trong ngành FinTech.",
-      "user_status": "ACTIVE",
-      "created_at": "2025-12-01 09:20:00"
+      "phone": null,
+      "summary": "<p><b>UI/UX Designer</b> với niềm đam mê tạo ra sản phẩm số đẹp mắt và thân thiện với người dùng.</p><ul><li>Sử dụng thành thạo <b>Figma</b>, <b>Adobe XD</b> để thiết kế wireframe, prototype.</li><li>Hiểu biết về nguyên lý thiết kế, psychology of design và quy trình thiết kế lấy người dùng làm trung tâm.</li><li>Có kinh nghiệm làm việc với developer để đảm bảo chất lượng hiện thực hóa thiết kế.</li><li>Portfolio với các dự án thiết kế app mobile và website thương mại điện tử.</li></ul>",
+      "user_status": "INACTIVE",
+      "created_at": "2025-12-01 16:30:00"
     },
     {
       "username": "candidate5",
       "password": "password",
       "email": "candidate5@example.com",
-      "full_name": "Hoàng Văn Đức",
-      "summary": "Chuyên viên Content Creator tự do với 3 năm kinh nghiệm, sáng tạo nội dung đa nền tảng.",
+      "full_name": "Hoàng Văn Em",
+      "phone": "0945678901",
+      "summary": null,
       "user_status": "ACTIVE",
-      "created_at": "2025-12-10 16:40:00"
+      "created_at": "2025-12-10 08:00:00"
     },
     {
       "username": "recruiter1",
       "password": "password",
-      "email": "recruiter1@company.com",
-      "full_name": "Công ty Cổ phần Công nghệ FPT",
-      "summary": "Tập đoàn công nghệ hàng đầu Việt Nam, chuyên cung cấp dịch vụ CNTT và phần mềm toàn cầu.",
+      "email": "hr@techviet.com.vn",
+      "full_name": "Công ty Cổ phần Công nghệ TechViet",
+      "phone": "02437123456",
+      "summary": "<p>TechViet là công ty <b>phát triển phần mềm</b> và <b>cung cấp giải pháp chuyển đổi số</b> hàng đầu tại Việt Nam.</p><ul><li>Chúng tôi chuyên sâu vào các lĩnh vực: <b>FinTech</b>, <b>EdTech</b> và <b>Enterprise Software</b>.</li><li>Môi trường làm việc trẻ trung, năng động, khuyến khích sáng tạo và học hỏi.</li><li>Chính sách đãi ngộ cạnh tranh, lộ trình thăng tiến rõ ràng và nhiều cơ hội phát triển cá nhân.</li><li>Luôn tìm kiếm những tài năng công nghệ cùng chung tay tạo ra sản phẩm giá trị.</li></ul>",
       "user_status": "ACTIVE",
-      "created_at": "2025-11-03 13:00:00"
+      "created_at": "2025-11-02 08:30:00"
     },
     {
       "username": "recruiter2",
       "password": "password",
-      "email": "recruiter2@company.com",
-      "full_name": "Tập đoàn Vingroup",
-      "summary": "Tập đoàn kinh tế tư nhân hàng đầu Việt Nam với các lĩnh vực công nghệ, bất động sản, y tế và giáo dục.",
+      "email": "tuyendung@fintechas.vn",
+      "full_name": "Công ty Tài chính Công nghệ Fintech AS",
+      "phone": "02838234567",
+      "summary": "<p>Fintech AS là công ty khởi nghiệp tiên phong trong lĩnh vực <b>công nghệ tài chính</b> (Fintech) tại TP.HCM.</p><ul><li>Sản phẩm chính: Ứng dụng ví điện tử và nền tảng cho vay ngang hàng (P2P Lending).</li><li>Văn hóa công ty đề cao tinh thần <b>ownership</b>, tốc độ và sự <b>linh hoạt</b> (Agile/Scrum).</li><li>Tìm kiếm những cá nhân dám nghĩ dám làm, thích thử thách trong môi trường startup năng động.</li></ul>",
       "user_status": "ACTIVE",
-      "created_at": "2025-11-08 11:30:00"
+      "created_at": "2025-11-10 13:10:00"
     },
     {
       "username": "recruiter3",
       "password": "password",
-      "email": "recruiter3@company.com",
-      "full_name": "Ngân hàng Techcombank",
-      "summary": "Ngân hàng thương mại cổ phần hàng đầu Việt Nam, tiên phong trong chuyển đổi số ngành ngân hàng.",
+      "email": "contact@ecomtop1.com",
+      "full_name": "Tập đoàn Thương mại Điện tử EcomTop1",
+      "phone": "19005678",
+      "summary": "<p>EcomTop1 là một trong những <b>sàn thương mại điện tử</b> lớn nhất và phát triển nhanh nhất Việt Nam.</p><ul><li>Chúng tôi không ngừng mở rộng để phục vụ hàng triệu người bán và người mua trên toàn quốc.</li><li>Môi trường làm việc đa quốc gia, cơ hội tiếp cận với các dự án công nghệ quy mô lớn.</li><li>Chú trọng phát triển năng lực lãnh đạo và tạo điều kiện để nhân viên phát huy tối đa tiềm năng.</li></ul>",
       "user_status": "ACTIVE",
-      "created_at": "2025-11-15 15:20:00"
+      "created_at": "2025-11-25 11:05:00"
     },
     {
       "username": "recruiter4",
       "password": "password",
-      "email": "recruiter4@company.com",
-      "full_name": "Công ty Cổ phần Tập đoàn MISA",
-      "summary": "Công ty phần mềm kế toán và quản trị doanh nghiệp hàng đầu Việt Nam, phục vụ hơn 200.000 khách hàng.",
-      "user_status": "ACTIVE",
-      "created_at": "2025-11-25 10:10:00"
+      "email": "info@creativemind.edu.vn",
+      "full_name": "Trung tâm Đào tạo & Phát triển CreativeMind",
+      "phone": "",
+      "summary": "<p>CreativeMind là tổ chức <b>giáo dục và đào tạo công nghệ</b> uy tín, chuyên cung cấp các khóa học lập trình, marketing số và thiết kế.</p><ul><li>Chúng tôi tin vào sức mạnh của giáo dục để thay đổi tương lai.</li><li>Đội ngũ giảng viên là các chuyên gia giàu kinh nghiệm thực tế từ các doanh nghiệp.</li><li>Môi trường sáng tạo, cởi mở, luôn tìm kiếm những giảng viên/trợ giảng tâm huyết cùng chung tay đào tạo thế hệ trẻ.</li></ul>",
+      "user_status": "INACTIVE",
+      "created_at": "2025-12-05 15:45:00"
     },
     {
       "username": "recruiter5",
       "password": "password",
-      "email": "recruiter5@company.com",
-      "full_name": "Công ty Cổ phần Đầu tư Thế giới Di động (MWG)",
-      "summary": "Tập đoàn bán lẻ công nghệ và điện máy hàng đầu Việt Nam với chuỗi cửa hàng toàn quốc.",
+      "email": "hr@marketingpro.vn",
+      "full_name": "Công ty Truyền thông & Marketing Pro",
+      "phone": "02839393939",
+      "summary": "<p>Marketing Pro là agency cung cấp <b>giải pháp truyền thông tổng thể</b> cho các thương hiệu trong và ngoài nước.</p><ul><li>Chuyên môn sâu về <b>Social Media Marketing</b>, <b>Influencer Marketing</b> và <b>PR</b>.</li><li>Đội ngũ trẻ trung, sáng tạo, nơi mọi ý tưởng đều được tôn trọng.</li><li>Làm việc với đa dạng khách hàng từ F&B, Thời trang đến Bất động sản.</li><li>Tìm kiếm những chiến binh marketing đầy nhiệt huyết và ý tưởng bứt phá.</li></ul>",
       "user_status": "ACTIVE",
-      "created_at": "2025-12-05 14:50:00"
+      "created_at": "2025-12-15 09:30:00"
     }
   ],
   "candidates": [
     {
       "username": "candidate1",
-      "dob": "1995-08-15",
+      "dob": "1997-08-15",
       "gender": 0,
-      "expect_salary": 2500,
-      "education": "Kỹ sư Công nghệ Thông tin - Đại học Bách Khoa Hà Nội",
-      "skill_names": ["Java", "Spring Boot", "SQL & Database", "Cloud Computing (AWS/Azure)", "Agile/Scrum"]
+      "expect_salary": 28000000,
+      "education": "Đại học Bách Khoa Hà Nội - Chuyên ngành Khoa học Máy tính",
+      "skill_names": [
+        "Java",
+        "Spring Boot",
+        "SQL",
+        "Docker"
+      ]
     },
     {
       "username": "candidate2",
-      "dob": "1998-03-22",
+      "dob": "1999-03-22",
       "gender": 1,
-      "expect_salary": 1200,
-      "education": "Cử nhân Marketing - Đại học Kinh tế Quốc dân",
-      "skill_names": ["Digital Marketing", "SEO (Search Engine Optimization)", "Content Creation", "Social Media"]
+      "expect_salary": 12000000,
+      "education": "Đại học Kinh tế Quốc dân - Chuyên ngành Marketing",
+      "skill_names": [
+        "Digital Marketing",
+        "Project Management",
+        "Tiếng Anh"
+      ]
     },
     {
       "username": "candidate3",
-      "dob": "2001-11-05",
+      "dob": "2000-11-10",
       "gender": 0,
-      "expect_salary": 500,
-      "education": "Sinh viên năm cuối Khoa học Máy tính - Đại học Công nghệ, ĐHQGHN",
-      "skill_names": ["Python", "Machine Learning", "SQL & Database", "ReactJS"]
+      "expect_salary": 15000000,
+      "education": "Đại học FPT - Chuyên ngành Kỹ thuật Phần mềm",
+      "skill_names": [
+        "ReactJS",
+        "Python",
+        "UI/UX Design"
+      ]
     },
     {
       "username": "candidate4",
-      "dob": "1997-06-30",
+      "dob": "1998-06-05",
       "gender": 1,
-      "expect_salary": 1500,
-      "education": "Thạc sĩ Quản trị Kinh doanh - Đại học Ngoại thương",
-      "skill_names": ["Business Analysis", "SQL & Database", "Agile/Scrum", "Python"]
+      "expect_salary": 18000000,
+      "education": "Đại học Mỹ thuật Công nghiệp - Chuyên ngành Thiết kế Đồ họa",
+      "skill_names": [
+        "UI/UX Design",
+        "Project Management"
+      ]
     },
     {
       "username": "candidate5",
-      "dob": "1994-01-18",
-      "gender": 0,
-      "expect_salary": 1000,
-      "education": "Cử nhân Báo chí - Học viện Báo chí và Tuyên truyền",
-      "skill_names": ["Content Creation", "Digital Marketing", "SEO (Search Engine Optimization)", "Video Editing"]
+      "dob": null,
+      "gender": 2,
+      "expect_salary": null,
+      "education": "Cao đẳng Thực hành FPT Polytechnic - Chuyên ngành Ứng dụng phần mềm",
+      "skill_names": [
+        "Python",
+        "SQL"
+      ]
     }
   ],
   "recruiters": [
     {
       "username": "recruiter1",
-      "website": "https://career.fpt.com.vn"
+      "website": "https://www.techviet.com.vn"
     },
     {
       "username": "recruiter2",
-      "website": "https://careers.vingroup.net"
+      "website": "https://fintechas.vn"
     },
     {
       "username": "recruiter3",
-      "website": "https://career.techcombank.com.vn"
+      "website": "https://ecomtop1.vn"
     },
     {
       "username": "recruiter4",
-      "website": "https://tuyendung.misa.vn"
+      "website": null
     },
     {
       "username": "recruiter5",
-      "website": "https://career.mwg.vn"
+      "website": "https://marketingpro.vn"
     }
   ],
   "job_posts": [
     {
-      "title": "Lập trình viên Java Backend (Spring Boot)",
-      "description": "Phát triển và bảo trì hệ thống backend cho các sản phẩm ngân hàng số. Yêu cầu có kinh nghiệm với microservices, Spring Boot và database.",
+      "title": "Lập trình viên Backend Java (Senior)",
+      "description": "<p>TechViet cần tuyển <b>Lập trình viên Backend Java Senior</b> tham gia phát triển hệ thống core banking.</p><b>Mô tả công việc:</b><ul><li>Phát triển, tối ưu và bảo trì các microservice sử dụng Spring Boot.</li><li>Thiết kế và phát triển API cho các sản phẩm fintech.</li><li>Làm việc với cơ sở dữ liệu SQL (MySQL/PostgreSQL) và NoSQL (Redis).</li><li>Triển khai và quản lý ứng dụng trên nền tảng cloud AWS.</li><li>Tham gia các buổi code review, phân tích yêu cầu và lập kế hoạch sprint.</li></ul><b>Quyền lợi:</b><ul><li>Lương thưởng cạnh tranh, thưởng dự án, thưởng performance.</li><li>Bảo hiểm sức khỏe cao cấp, khám sức khỏe định kỳ.</li><li>Đào tạo nội bộ và hỗ trợ chi phí học các chứng chỉ quốc tế.</li><li>Du lịch công ty hàng năm, teambuilding định kỳ.</li></ul>",
       "quantity": 3,
-      "salary": 2800,
+      "salary": 35000000,
       "salary_type": "MONTHS",
       "status": "PUBLIC",
-      "created_at": "2025-11-10 09:00:00",
-      "ended_time": "2026-01-20 23:59:59",
-      "recruiter_username": "recruiter3",
-      "industry_name": "Tài chính và FinTech",
+      "created_at": "2025-11-10 10:00:00",
+      "ended_time": "2026-01-20 17:00:00",
+      "recruiter_username": "recruiter1",
+      "industry_name": "Công nghệ thông tin",
       "job_type_code": "FULL_TIME",
-      "level_name": "Nhân viên",
-      "skill_names": ["Java", "Spring Boot", "SQL & Database", "Cloud Computing (AWS/Azure)"]
+      "level_name": "Senior",
+      "skill_names": [
+        "Java",
+        "Spring Boot",
+        "SQL",
+        "Docker"
+      ]
     },
     {
       "title": "Chuyên viên Digital Marketing",
-      "description": "Lập kế hoạch và triển khai chiến dịch marketing trên các nền tảng số, phân tích hiệu quả và tối ưu chi phí.",
+      "description": "<p>Marketing Pro cần bổ sung nhân sự cho đội ngũ chạy quảng cáo performance.</p><b>Mô tả công việc:</b><ul><li>Lập kế hoạch, thực thi và tối ưu các chiến dịch quảng cáo Facebook Ads, Google Ads, TikTok Ads.</li><li>Phân tích số liệu, đo lường hiệu quả ROI và lập báo cáo chi tiết cho khách hàng.</li><li>Phối hợp với team Content và Design để tạo ra các asset quảng cáo chất lượng.</li><li>Nghiên cứu insight khách hàng và thị trường để đề xuất chiến lược tối ưu.</li></ul><b>Quyền lợi:</b><ul><li>Lương cứng + hoa hồng hấp dẫn dựa trên hiệu quả chiến dịch.</li><li>Được training bài bản về các công cụ và xu hướng marketing mới nhất.</li><li>Môi trường trẻ trung, vui vẻ, có nhiều hoạt động gắn kết.</li></ul>",
       "quantity": 2,
-      "salary": 1500,
+      "salary": 15000000,
       "salary_type": "MONTHS",
       "status": "PUBLIC",
-      "created_at": "2025-11-15 14:20:00",
-      "ended_time": "2026-01-25 23:59:59",
+      "created_at": "2025-11-18 14:00:00",
+      "ended_time": "2026-01-31 23:59:59",
       "recruiter_username": "recruiter5",
-      "industry_name": "Digital Marketing & Truyền thông",
+      "industry_name": "Marketing & Truyền thông",
       "job_type_code": "FULL_TIME",
-      "level_name": "Nhân viên",
-      "skill_names": ["Digital Marketing", "SEO (Search Engine Optimization)", "Content Creation", "Social Media"]
+      "level_name": "Junior",
+      "skill_names": [
+        "Digital Marketing",
+        "Project Management",
+        "Tiếng Anh"
+      ]
+    },
+    {
+      "title": "Frontend Developer (ReactJS)",
+      "description": "<p>EcomTop1 cần tuyển Frontend Developer tham gia phát triển giao diện hệ thống quản trị và trải nghiệm người dùng trên web/app.</p><b>Mô tả công việc:</b><ul><li>Phát triển các tính năng mới cho giao diện người dùng sử dụng ReactJS/Next.js.</li><li>Tối ưu hiệu năng, tốc độ tải trang và trải nghiệm người dùng (UX).</li><li>Làm việc chặt chẽ với team Backend và UI/UX Designer.</li><li>Viết code sạch, có thể tái sử dụng và dễ bảo trì.</li></ul><b>Quyền lợi:</b><ul><li>Lương theo năng lực, thưởng tháng 13, thưởng dự án.</li><li>Chế độ phúc lợi đầy đủ theo luật Lao động và đặc thù công ty.</li><li>Làm việc tại tòa nhà văn phòng hiện đại, khu vực trung tâm quận 1.</li></ul>",
+      "quantity": 4,
+      "salary": 22000000,
+      "salary_type": "MONTHS",
+      "status": "PUBLIC",
+      "created_at": "2025-11-28 09:30:00",
+      "ended_time": "2026-01-10 18:00:00",
+      "recruiter_username": "recruiter3",
+      "industry_name": "Công nghệ thông tin",
+      "job_type_code": "FULL_TIME",
+      "level_name": "Junior",
+      "skill_names": [
+        "ReactJS",
+        "UI/UX Design"
+      ]
     },
     {
       "title": "Thực tập sinh Phát triển Phần mềm",
-      "description": "Tham gia phát triển các dự án phần mềm thực tế dưới sự hướng dẫn của mentor giàu kinh nghiệm.",
-      "quantity": 5,
-      "salary": 400,
+      "description": "<p>Chương trình thực tập sinh (Intern) dành cho sinh viên CNTT năm cuối có đam mê lập trình.</p><b>Mô tả công việc:</b><ul><li>Hỗ trợ team phát triển các tính năng nhỏ trên sản phẩm.</li><li>Học và thực hành viết code theo quy trình, được mentor hướng dẫn trực tiếp.</li><li>Tham gia các buổi training nội bộ về công nghệ và kỹ năng mềm.</li><li>Thực hiện bài tập, báo cáo hàng tuần.</li></ul><b>Yêu cầu:</b><ul><li>Sinh viên năm 3,4 chuyên ngành CNTT.</li><li>Có kiến thức cơ bản về một ngôn ngữ lập trình (Java/Python/JavaScript).</li><li>Chăm chỉ, ham học hỏi và có tinh thần trách nhiệm.</li></ul><b>Quyền lợi:</b><ul><li>Phụ cấp thực tập, ăn trưa tại công ty.</li><li>Cơ hội được nhận vào làm chính thức sau khi thực tập.</li><li>Giấy chứng nhận thực tập có giá trị.</li></ul>",
+      "quantity": 10,
+      "salary": 3000000,
       "salary_type": "MONTHS",
       "status": "PUBLIC",
-      "created_at": "2025-11-20 10:15:00",
-      "ended_time": "2026-01-15 23:59:59",
+      "created_at": "2025-12-05 08:15:00",
+      "ended_time": "2026-01-25 17:00:00",
       "recruiter_username": "recruiter1",
-      "industry_name": "Công nghệ thông tin và Phần mềm",
+      "industry_name": "Công nghệ thông tin",
       "job_type_code": "FULL_TIME",
-      "level_name": "Thực tập",
-      "skill_names": ["Java", "Python", "SQL & Database", "ReactJS"]
+      "level_name": "Thực tập sinh",
+      "skill_names": [
+        "Java",
+        "Python",
+        "ReactJS",
+        "SQL"
+      ]
     },
     {
-      "title": "Business Analyst (Ngành FinTech)",
-      "description": "Phân tích yêu cầu nghiệp vụ, đề xuất giải pháp công nghệ và làm cầu nối giữa khách hàng và đội phát triển.",
-      "quantity": 2,
-      "salary": 2000,
-      "salary_type": "MONTHS",
-      "status": "PUBLIC",
-      "created_at": "2025-11-25 11:30:00",
-      "ended_time": "2026-01-30 23:59:59",
-      "recruiter_username": "recruiter3",
-      "industry_name": "Tài chính và FinTech",
-      "job_type_code": "FULL_TIME",
-      "level_name": "Nhân viên",
-      "skill_names": ["Business Analysis", "SQL & Database", "Agile/Scrum", "Digital Marketing"]
-    },
-    {
-      "title": "Content Creator (Part-time)",
-      "description": "Sản xuất nội dung sáng tạo cho các kênh truyền thông của công ty, bao gồm bài viết, hình ảnh và video.",
-      "quantity": 3,
-      "salary": 15,
+      "title": "Giảng viên/Trợ giảng Lập trình Part-time",
+      "description": "<p>Tuyển giảng viên/trợ giảng part-time cho các khóa học lập trình buổi tối và cuối tuần.</p><b>Mô tả công việc:</b><ul><li>Giảng dạy/hỗ trợ giảng dạy các khóa học về Java, Python, Web Frontend.</li><li>Chấm bài, giải đáp thắc mắc và hỗ trợ học viên trong và ngoài giờ học.</li><li>Biên soạn tài liệu, bài tập thực hành.</li></ul><b>Yêu cầu:</b><ul><li>Có kinh nghiệm phát triển phần mềm từ 1 năm trở lên.</li><li>Có khả năng truyền đạt tốt, nhiệt tình, kiên nhẫn.</li><li>Ưu tiên ứng viên đã có kinh nghiệm giảng dạy hoặc training nội bộ.</li></ul><b>Quyền lợi:</b><ul><li>Lương theo giờ/buổi, thỏa thuận dựa trên năng lực và kinh nghiệm.</li><li>Lịch dạy linh hoạt, phù hợp với người đi làm.</li></ul>",
+      "quantity": 5,
+      "salary": 250000,
       "salary_type": "HOURS",
       "status": "PUBLIC",
-      "created_at": "2025-12-01 16:00:00",
-      "ended_time": "2026-01-10 23:59:59",
-      "recruiter_username": "recruiter5",
-      "industry_name": "Digital Marketing & Truyền thông",
+      "created_at": "2025-12-12 13:45:00",
+      "ended_time": "2025-12-28 23:59:59",
+      "recruiter_username": "recruiter4",
+      "industry_name": "Giáo dục & Đào tạo",
       "job_type_code": "PART_TIME",
-      "level_name": "Mới tốt nghiệp",
-      "skill_names": ["Content Creation", "Digital Marketing", "Video Editing"]
+      "level_name": "Fresher",
+      "skill_names": [
+        "Java",
+        "Python",
+        "ReactJS"
+      ]
     },
     {
-      "title": "Kỹ sư DevOps (AWS)",
-      "description": "Xây dựng và vận hành hệ thống CI/CD, quản lý infrastructure trên cloud, tự động hóa quy trình triển khai.",
+      "title": "Data Analyst (Fresher/Junior)",
+      "description": "<p>Fintech AS cần Data Analyst hỗ trợ phân tích dữ liệu người dùng và tài chính để đưa ra insight cho sản phẩm.</p><b>Mô tả công việc:</b><ul><li>Thu thập, làm sạch và tổ chức dữ liệu từ nhiều nguồn khác nhau.</li><li>Phân tích dữ liệu bằng SQL và Python (Pandas, NumPy) để tìm ra xu hướng, mẫu hình.</li><li>Tạo báo cáo trực quan (dashboard) bằng Power BI/Tableau.</li><li>Hỗ trợ team sản phẩm và kinh doanh trong việc ra quyết định dựa trên dữ liệu.</li></ul><b>Quyền lợi:</b><ul><li>Lương cạnh tranh, thưởng theo quý.</li><li>Được đào tạo chuyên sâu về dữ liệu trong lĩnh vực fintech.</li><li>Môi trường startup năng động, ít hierarchy.</li></ul>",
       "quantity": 2,
-      "salary": 3000,
+      "salary": 13000000,
+      "salary_type": "MONTHS",
+      "status": "PRIVATE",
+      "created_at": "2025-11-15 11:20:00",
+      "ended_time": "2026-01-15 17:00:00",
+      "recruiter_username": "recruiter2",
+      "industry_name": "Tài chính - Ngân hàng",
+      "job_type_code": "FULL_TIME",
+      "level_name": "Fresher",
+      "skill_names": [
+        "Python",
+        "SQL"
+      ]
+    },
+    {
+      "title": "UI/UX Designer",
+      "description": "<p>Tham gia thiết kế giao diện và trải nghiệm cho các sản phẩm số của TechViet.</p><b>Mô tả công việc:</b><ul><li>Thiết kế wireframe, prototype cho web app và mobile app (iOS & Android).</li><li>Thực hiện user research cơ bản và usability testing.</li><li>Làm việc với Product Manager và Developer để hiện thực hóa thiết kế.</li><li>Xây dựng và quản lý Design System cho sản phẩm.</li></ul>",
+      "quantity": 1,
+      "salary": 20000000,
       "salary_type": "MONTHS",
       "status": "PUBLIC",
-      "created_at": "2025-12-05 13:10:00",
-      "ended_time": "2026-01-18 23:59:59",
+      "created_at": "2025-11-22 16:10:00",
+      "ended_time": "2026-01-05 17:00:00",
       "recruiter_username": "recruiter1",
-      "industry_name": "Công nghệ thông tin và Phần mềm",
+      "industry_name": "Công nghệ thông tin",
       "job_type_code": "FULL_TIME",
-      "level_name": "Trưởng nhóm",
-      "skill_names": ["Cloud Computing (AWS/Azure)", "Python", "Agile/Scrum", "SQL & Database"]
+      "level_name": "Junior",
+      "skill_names": [
+        "UI/UX Design",
+        "Project Management"
+      ]
     },
     {
-      "title": "Quản lý Sản phẩm Số (Product Manager)",
-      "description": "Quản lý vòng đời sản phẩm từ nghiên cứu thị trường, lập roadmap đến phối hợp phát triển và launch sản phẩm.",
-      "quantity": 1,
-      "salary": 3500,
-      "salary_type": "MONTHS",
+      "title": "Nhân viên Kinh doanh Bán lẻ (Part-time)",
+      "description": "<p>Tuyển nhân viên bán hàng part-time làm việc tại cửa hàng flagship của EcomTop1.</p><b>Mô tả công việc:</b><ul><li>Tư vấn, bán hàng trực tiếp cho khách tại cửa hàng.</li><li>Sắp xếp, trưng bày sản phẩm và giữ gìn vệ sinh khu vực bán hàng.</li><li>Hỗ trợ công việc kho bãi, kiểm kê hàng hóa khi cần.</li></ul><b>Yêu cầu:</b><ul><li>Giao tiếp tốt, thân thiện, nhiệt tình.</li><li>Trung thực, có tinh thần trách nhiệm.</li></ul>",
+      "quantity": 8,
+      "salary": 25000,
+      "salary_type": "HOURS",
       "status": "PUBLIC",
-      "created_at": "2025-11-28 08:50:00",
-      "ended_time": "2025-12-20 23:59:59",
-      "recruiter_username": "recruiter4",
-      "industry_name": "Công nghệ thông tin và Phần mềm",
-      "job_type_code": "FULL_TIME",
-      "level_name": "Quản lý",
-      "skill_names": ["Business Analysis", "Agile/Scrum", "Digital Marketing", "SQL & Database"]
+      "created_at": "2025-12-03 10:50:00",
+      "ended_time": "2026-01-30 17:00:00",
+      "recruiter_username": "recruiter3",
+      "industry_name": "Bán lẻ & Thương mại điện tử",
+      "job_type_code": "PART_TIME",
+      "level_name": "Fresher",
+      "skill_names": []
     },
     {
-      "title": "Chuyên viên SEO",
-      "description": "Tối ưu hóa website để cải thiện thứ hạng trên Google, nghiên cứu từ khóa và xây dựng chiến lược SEO tổng thể.",
+      "title": "Trưởng nhóm Phát triển Sản phẩm (Product Owner)",
+      "description": "<p>Dẫn dắt team phát triển một sản phẩm fintech mới tại Fintech AS.</p><b>Mô tả công việc:</b><ul><li>Định nghĩa và sắp xếp thứ tự ưu tiên Product Backlog.</li><li>Làm việc với stakeholders để thu thập yêu cầu và truyền đạt tầm nhìn sản phẩm.</li><li>Phối hợp với team Scrum (Developer, Tester) để lập kế hoạch sprint và theo dõi tiến độ.</li><li>Phân tích thị trường và đối thủ để đề xuất cải tiến sản phẩm.</li></ul><b>Yêu cầu:</b><ul><li>Có từ 3 năm kinh nghiệm ở vị trí Product Owner/Manager trong lĩnh vực phần mềm.</li><li>Hiểu biết về Agile/Scrum.</li><li>Kỹ năng giao tiếp, thuyết phục và phân tích tốt.</li></ul>",
       "quantity": 1,
-      "salary": 1800,
-      "salary_type": "MONTHS",
+      "salary": 45000000,
+      "salary_type": "NEGOTIATION",
       "status": "PUBLIC",
-      "created_at": "2025-12-03 11:05:00",
-      "ended_time": "2026-01-28 23:59:59",
+      "created_at": "2025-12-08 15:00:00",
+      "ended_time": "2026-01-18 17:00:00",
       "recruiter_username": "recruiter2",
-      "industry_name": "Digital Marketing & Truyền thông",
+      "industry_name": "Tài chính - Ngân hàng",
       "job_type_code": "FULL_TIME",
-      "level_name": "Nhân viên",
-      "skill_names": ["SEO (Search Engine Optimization)", "Digital Marketing", "Content Creation", "Analytics"]
+      "level_name": "Trưởng nhóm/Quản lý",
+      "skill_names": [
+        "Project Management"
+      ]
     },
     {
-      "title": "Lập trình viên Python (Data Analysis)",
-      "description": "Phát triển các ứng dụng phân tích dữ liệu, xây dựng pipeline xử lý dữ liệu và báo cáo tự động.",
+      "title": "DevOps Engineer",
+      "description": "<p>Xây dựng và vận hành hệ thống CI/CD, quản lý hạ tầng cloud cho TechViet.</p><b>Mô tả công việc:</b><ul><li>Triển khai và quản lý hạ tầng trên AWS (EC2, RDS, S3, EKS).</li><li>Xây dựng pipeline CI/CD sử dụng Jenkins/GitLab CI.</li><li>Quản lý cấu hình và tự động hóa với Ansible/Terraform.</li><li>Giám sát hệ thống, xử lý sự cố và tối ưu hiệu năng.</li></ul>",
       "quantity": 2,
-      "salary": 2200,
+      "salary": 32000000,
       "salary_type": "MONTHS",
       "status": "PUBLIC",
-      "created_at": "2025-11-30 10:40:00",
-      "ended_time": "2025-12-25 23:59:59",
-      "recruiter_username": "recruiter4",
-      "industry_name": "Công nghệ thông tin và Phần mềm",
+      "created_at": "2025-12-20 09:00:00",
+      "ended_time": "2026-01-22 17:00:00",
+      "recruiter_username": "recruiter1",
+      "industry_name": "Công nghệ thông tin",
       "job_type_code": "FULL_TIME",
-      "level_name": "Nhân viên",
-      "skill_names": ["Python", "SQL & Database", "Data Analysis", "Machine Learning"]
-    },
-    {
-      "title": "Trưởng nhóm Phát triển Phần mềm",
-      "description": "Dẫn dắt đội phát triển 5-7 người, quản lý dự án và đảm bảo chất lượng sản phẩm phần mềm.",
-      "quantity": 1,
-      "salary": 3200,
-      "salary_type": "MONTHS",
-      "status": "PUBLIC",
-      "created_at": "2025-12-08 09:20:00",
-      "ended_time": "2026-01-31 23:59:59",
-      "recruiter_username": "recruiter2",
-      "industry_name": "Công nghệ thông tin và Phần mềm",
-      "job_type_code": "FULL_TIME",
-      "level_name": "Trưởng nhóm",
-      "skill_names": ["Java", "Agile/Scrum", "Cloud Computing (AWS/Azure)", "Team Management"]
+      "level_name": "Senior",
+      "skill_names": [
+        "Docker",
+        "SQL",
+        "Project Management"
+      ]
     }
   ],
   "applications": [
     {
       "candidate_username": "candidate1",
-      "job_post_title": "Lập trình viên Java Backend (Spring Boot)",
+      "job_post_title": "Lập trình viên Backend Java (Senior)",
       "status": "PENDING",
-      "created_at": "2025-11-12 14:22:00"
+      "created_at": "2025-11-12 14:25:00"
     },
     {
       "candidate_username": "candidate1",
-      "job_post_title": "Kỹ sư DevOps (AWS)",
+      "job_post_title": "DevOps Engineer",
       "status": "APPROVED",
-      "created_at": "2025-12-06 09:15:00"
+      "created_at": "2025-12-21 10:15:00"
     },
     {
       "candidate_username": "candidate2",
       "job_post_title": "Chuyên viên Digital Marketing",
       "status": "ASSIGNED",
-      "created_at": "2025-11-16 16:05:00"
+      "created_at": "2025-11-20 16:40:00"
     },
     {
       "candidate_username": "candidate2",
-      "job_post_title": "Content Creator (Part-time)",
-      "status": "PENDING",
-      "created_at": "2025-12-02 10:30:00"
+      "job_post_title": "Nhân viên Kinh doanh Bán lẻ (Part-time)",
+      "status": "REJECTED",
+      "created_at": "2025-12-05 11:05:00"
     },
     {
       "candidate_username": "candidate3",
-      "job_post_title": "Thực tập sinh Phát triển Phần mềm",
+      "job_post_title": "Frontend Developer (ReactJS)",
       "status": "ACCEPTED",
-      "created_at": "2025-11-21 13:40:00"
+      "created_at": "2025-11-30 09:50:00"
     },
     {
       "candidate_username": "candidate3",
-      "job_post_title": "Lập trình viên Python (Data Analysis)",
-      "status": "REJECTED",
-      "created_at": "2025-12-01 11:50:00"
-    },
-    {
-      "candidate_username": "candidate4",
-      "job_post_title": "Business Analyst (Ngành FinTech)",
+      "job_post_title": "Giảng viên/Trợ giảng Lập trình Part-time",
       "status": "PENDING",
-      "created_at": "2025-11-26 15:20:00"
+      "created_at": "2025-12-13 15:30:00"
     },
     {
       "candidate_username": "candidate4",
-      "job_post_title": "Quản lý Sản phẩm Số (Product Manager)",
-      "status": "REJECTED",
-      "created_at": "2025-11-29 14:10:00"
-    },
-    {
-      "candidate_username": "candidate5",
-      "job_post_title": "Content Creator (Part-time)",
-      "status": "APPROVED",
-      "created_at": "2025-12-02 11:25:00"
-    },
-    {
-      "candidate_username": "candidate5",
-      "job_post_title": "Chuyên viên SEO",
+      "job_post_title": "UI/UX Designer",
       "status": "CANCELLED",
-      "created_at": "2025-12-04 09:00:00"
+      "created_at": "2025-11-25 13:20:00"
+    },
+    {
+      "candidate_username": "candidate4",
+      "job_post_title": "Data Analyst (Fresher/Junior)",
+      "status": "PENDING",
+      "created_at": "2025-11-17 08:45:00"
+    },
+    {
+      "candidate_username": "candidate5",
+      "job_post_title": "Thực tập sinh Phát triển Phần mềm",
+      "status": "PENDING",
+      "created_at": "2025-12-08 14:00:00"
+    },
+    {
+      "candidate_username": "candidate5",
+      "job_post_title": "Data Analyst (Fresher/Junior)",
+      "status": "REJECTED",
+      "created_at": "2025-11-18 11:10:00"
     }
   ]
 }

@@ -1,0 +1,33 @@
+Đây là prompt để yêu cầu AI tạo TIẾP dữ liệu (tránh trùng lặp với lần đầu):
+
+---
+
+Hãy tiếp tục đóng vai chuyên gia tạo dữ liệu giả lập. Nhiệm vụ của bạn là **tạo thêm** dữ liệu mới để bổ sung vào file JSON trước đó.
+
+**Yêu cầu quan trọng để KHÔNG TRÙNG LẶP:**
+
+1.  **Username & Email (Bắt buộc):**
+    *   Lần trước đã tạo đến `candidate20` và `recruiter20`.
+    *   Lần này, hãy **bắt đầu đánh số từ 21**:
+        *   Candidates: `candidate21`, `candidate22`... đến `candidate40`.
+        *   Recruiters: `recruiter21`, `recruiter22`... đến `recruiter40`.
+    *   Email tương ứng: `candidate21@example.com`, `recruiter21@company.com`...
+
+2.  **Nội dung Job Posts:**
+    *   Hãy sáng tạo các tiêu đề và mô tả công việc **KHÁC** với lần trước.
+    *   Ví dụ: Nếu lần trước đã có nhiều "Java Backend", lần này hãy tập trung vào "Frontend React/Vue", "Mobile Flutter", "DevOps", "AI Engineer", "Business Analyst"...
+    *   Thời gian `created_at` và `ended_time` vẫn tuân thủ quy tắc cũ (cuối 2025 - đầu 2026).
+
+3.  **Số lượng tạo thêm:**
+    *   20 Users mới (10 Candidate, 10 Recruiter).
+    *   10 Candidates mới.
+    *   10 Recruiters mới.
+    *   20 Job Posts mới.
+    *   20 Applications mới.
+
+4.  **Định dạng:**
+    *   Chỉ trả về JSON object chứa các mảng dữ liệu **MỚI** (không cần lặp lại các bảng danh mục như skills, industries, levels, job_types nếu chúng không thay đổi. Hoặc nếu có thay đổi thì trả về đầy đủ).
+    *   Nếu chỉ trả về dữ liệu mới, hãy giữ nguyên cấu trúc key (users, candidates...) để tôi có thể dễ dàng merge vào file cũ.
+
+---
+*Lưu ý: Bạn có thể thay đổi số bắt đầu (21) thành số khác tùy thuộc vào lượng dữ liệu bạn đã có.*
