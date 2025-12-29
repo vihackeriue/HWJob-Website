@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.model.entity.user;
 
+import com.hw.hwjobbackend.model.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,7 +20,8 @@ public class Role {
     String id;
 
     @Column(unique = true)
-    String name;
+    @Enumerated(EnumType.STRING)
+    RoleEnum name;
 
     @Lob
     String description;

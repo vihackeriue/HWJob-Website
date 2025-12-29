@@ -1,105 +1,167 @@
-Hãy tạo cho tôi dữ liệu khoảng 20 dữ liệu users, 10 dữ liệu candidate, 10 dữ liệu recruiter để tôi update, có một phần dữ liệu xấu, null, các dữ liệu đều là tiếng Việt, và như thật , phấ summary có thể ngắn, dài, fullName có thể là tên người, tên công ty, dữ liệu ngày chỉ có null hoặc đúng định dạng %Y-%m-%d, dữ liệu này để tôi train AI
+Hãy đóng vai một chuyên gia tạo dữ liệu giả lập (dummy data generator) cho hệ thống tuyển dụng việc làm tại Việt Nam. Nhiệm vụ của bạn là tạo ra một file JSON chứa dữ liệu mẫu chất lượng cao để import vào database.
 
-Chỉ trả về JSON đúng schema, không giải thích, không markdown
+**Yêu cầu chung:**
+1.  **Định dạng:** Trả về kết quả là một JSON object duy nhất, tuân thủ chính xác cấu trúc mẫu tôi cung cấp bên dưới.
+2.  **Ngôn ngữ:** Toàn bộ dữ liệu nội dung (tên, mô tả, tiêu đề, tóm tắt...) phải là **Tiếng Việt** tự nhiên, chuyên nghiệp, phù hợp với thị trường tuyển dụng Việt Nam.
+3.  **Quy tắc đặt Username (Bắt buộc):**
+    *   Đối với **Ứng viên (Candidates)**: Hãy đặt username theo mẫu `candidate1`, `candidate2`, `candidate3`...
+    *   Đối với **Nhà tuyển dụng (Recruiters)**: Hãy đặt username theo mẫu `recruiter1`, `recruiter2`, `recruiter3`...
+    *   Email cũng nên tương ứng (ví dụ: `candidate1@example.com`, `recruiter1@company.com`).
+
+4.  **Độ dài và Định dạng nội dung (QUAN TRỌNG):**
+    *   **Ngắn gọn:** Các trường `description` của `skills`, `industries`, `levels`, `job_types` phải **ngắn gọn, súc tích** (chỉ khoảng 1 câu).
+    *   **Chi tiết & HTML:** Trường `summary` của `users` và `description` của `job_posts` phải **dài tương đối, chi tiết** và được trình bày bằng các **thẻ HTML cơ bản** (như `<p>`, `<ul>`, `<li>`, `<b>`, `<br>`) để hiển thị đẹp trên web.
+        *   Ví dụ `summary`: `<p>Lập trình viên <b>Java</b> với 3 năm kinh nghiệm.</p><ul><li>Thành thạo Spring Boot</li><li>Có kiến thức về Microservices</li></ul>`
+
+5.  **Tạo dữ liệu nhiễu (Noise) cho AI Training:**
+    *   Để phục vụ mục đích huấn luyện AI, hãy để khoảng **5%** dữ liệu có các trường bị thiếu (null) hoặc rỗng ("").
+    *   Ví dụ: thiếu `phone`, `summary`, `dob`, hoặc `expect_salary`.
+    *   Tuy nhiên, các trường khóa (username, email, password, các trường liên kết) **BẮT BUỘC** phải có đầy đủ.
+
+6.  **Số lượng dữ liệu cần tạo:**
+    *   10 Skills
+    *   5 Industries
+    *   5 Levels
+    *   2 Job Types
+    *   10 Users (5 ứng viên, 5 nhà tuyển dụng)
+    *   5 Candidates
+    *   5 Recruiters
+    *   10 Job Posts
+    *   10 Applications
+
+7.  **Logic liên kết dữ liệu:**
+    *   Sử dụng trường `username` để liên kết chính xác giữa bảng `users` với `candidates` và `recruiters`.
+    *   Sử dụng các trường `_name` hoặc `_code` để liên kết trong `job_posts`.
+
+**Quy tắc dữ liệu chi tiết (Constraints):**
+*   **Password:** Tất cả user đều dùng chung mật khẩu là: `password`.
+*   **User Recruiter:** `full_name` phải là tên Công ty/Tổ chức.
+*   **Phone:** Định dạng số điện thoại Việt Nam.
+*   **Ngày tháng (QUAN TRỌNG):**
+    *   `created_at` (cho tất cả các bảng): Tạo ngẫu nhiên trong khoảng từ **01/11/2025** đến **31/12/2025**.
+    *   `ended_time` (trong `job_posts`):
+        *   **90%** bài đăng có thời gian hết hạn trong **Tháng 01/2026** (Còn hạn).
+        *   **10%** bài đăng có thời gian hết hạn trong **Tháng 12/2025** (Đã hết hạn).
+*   **Enum Values:**
+    *   `user_status`: 'ACTIVE', 'INACTIVE'
+    *   `gender`: 0 (Nam), 1 (Nữ), 2 (Khác)
+    *   `salary_type`: 'HOURS', 'MONTHS', 'NEGOTIATION', 'PROJECT'
+    *   `job_post_status`: 'PRIVATE', 'PUBLIC'
+    *   `application_status`: 'ACCEPTED', 'APPROVED', 'ASSIGNED', 'CANCELLED', 'PENDING', 'REJECTED'
+    *   `job_type_code`: 'FULL_TIME', 'PART_TIME'
+
+**Cấu trúc JSON mẫu (Hãy điền dữ liệu vào đây):**
+
+```json
 {
-  "users": [
-    {
-      "full_name": "Nguyen Van A",
-      "phone": "0901234567",
-      "summary": "Senior Backend Developer"
-    },
-    {
-      "full_name": "",
-      "phone": null,
-      "summary": "   "
-    }
-  ],
-  "candidates": [
-    {
-      "dob": "1998-05-20",
-      "education": "Bachelor IT",
-      "expect_salary": 20000000,
-      "gender": 1
-    }
-  ],
-  "recruiters": [
-    {
-      "website": "https://company.com"
-    }
-  ]
-}
-
-data sau khi tạo thì lưu lại thành 1 file .json để tôi tải xuống
-
-Hãy tạo cho tôi dữ liệu khoảng 20 dữ liệu cho mỗi danh sách , có một phần dữ liệu xấu, null, các dữ liệu đều là tiếng Việt, và như thật , dữ liệu ngày chỉ có null hoặc đúng định dạng %Y-%m-%d, dữ liệu này để tôi train AI
-
-enum application status gồm có
-   PENDING,
-    APPROVED,
-    ASSIGNED,
-    ACCEPTED,
-    REJECTED,
-    CANCELLED
-
-jobpost salary type gồm
-   HOURS,
-    PROJECT,
-    MONTHS,
-    NEGOTIATION,
-
-Những dữ liệu Enum phải làm cho đúng với danh sách trên
-
-{
+  "skills": [
+    { "name": "Java", "description": "Ngôn ngữ lập trình hướng đối tượng phổ biến." },
+    // ...
+  ],
+  "industries": [
+    { "name": "Công nghệ thông tin", "description": "Lĩnh vực phần mềm và hệ thống." }
+    // ...
+  ],
+  "levels": [
+    { "name": "Thực tập sinh" },
+    // ...
+  ],
+  "job_types": [
+    { "code": "FULL_TIME", "name": "Toàn thời gian" },
+    { "code": "PART_TIME", "name": "Bán thời gian" }
+  ],
+  "users": [
+    {
+      "username": "candidate1",
+      "password": "password",
+      "email": "candidate1@example.com",
+      "full_name": "Nguyễn Văn A",
+      "phone": "0912345678",
+      "summary": "<p>Lập trình viên <b>Java</b> đầy nhiệt huyết.</p><ul><li>2 năm kinh nghiệm</li><li>Thích học hỏi công nghệ mới</li></ul>",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-01 08:00:00"
+    },
+    {
+      "username": "recruiter1",
+      "password": "password",
+      "email": "recruiter1@techabc.com",
+      "full_name": "Công ty Cổ phần Công nghệ ABC",
+      "phone": "0243888999",
+      "summary": "<p>Công ty hàng đầu về <b>giải pháp phần mềm</b>.</p><p>Môi trường làm việc chuyên nghiệp.</p>",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-15 09:00:00"
+    },
+    {
+      "username": "candidate2",
+      "password": "password",
+      "email": "candidate2@example.com",
+      "full_name": "Trần Thị B",
+      "phone": null, // Ví dụ dữ liệu thiếu
+      "summary": null, // Ví dụ dữ liệu thiếu
+      "user_status": "ACTIVE",
+      "created_at": "2025-12-02 08:00:00"
+    }
+    // ... thêm user khác
+  ],
+  "candidates": [
+    {
+      "username": "candidate1",
+      "dob": "1998-05-20",
+      "gender": 0,
+      "expect_salary": 15000000,
+      "education": "Đại học Bách Khoa Hà Nội",
+      "skill_names": ["Java", "Python"]
+    }
+    // ...
+  ],
+  "recruiters": [
+    {
+      "username": "recruiter1",
+      "website": "https://techabc.com.vn"
+    }
+    // ...
+  ],
   "job_posts": [
     {
-      "title": "Senior Backend Java Developer",
-      "description": "Spring Boot, JPA, Microservices",
-      "salary": 25000000,
-      "salary_type": "MONTHS",
+      "title": "Lập trình viên Backend Java",
+      "description": "<p>Chúng tôi đang tìm kiếm ứng viên <b>Backend Java</b>.</p><b>Yêu cầu:</b><ul><li>Thành thạo Java Core</li><li>Biết Spring Boot</li></ul>",
       "quantity": 2,
-      "status": "PUBLIC",
-      "ended_time": "2025-03-30 23:59:59"
-    },
-    {
-      "title": "Frontend React Developer",
-      "description": "React, TypeScript, Redux",
       "salary": 20000000,
       "salary_type": "MONTHS",
-      "quantity": 3,
       "status": "PUBLIC",
-      "ended_time": null
+      "created_at": "2025-11-01 10:00:00",
+      "ended_time": "2026-01-15 23:59:59",
+      "recruiter_username": "recruiter1",
+      "industry_name": "Công nghệ thông tin",
+      "job_type_code": "FULL_TIME",
+      "level_name": "Nhân viên chính thức",
+      "skill_names": ["Java"]
     },
     {
-      "title": "",
-      "description": "Bad title example",
-      "salary": -1,
-      "salary_type": null,
-      "quantity": 0,
-      "status": "PRIVATE",
-      "ended_time": "2024-12-01 00:00:00"
-    },
-    {
-      "title": "   ",
-      "description": "undefined",
-      "salary": null,
-      "salary_type": "NEGOTIATION",
-      "quantity": -1,
+      "title": "Thực tập sinh Marketing (Đã hết hạn)",
+      "description": "<p>Tuyển thực tập sinh <b>Marketing</b>.</p>",
+      "quantity": 5,
+      "salary": 3000000,
+      "salary_type": "MONTHS",
       "status": "PUBLIC",
-      "ended_time": null
+      "created_at": "2025-11-01 09:00:00",
+      "ended_time": "2025-12-20 17:00:00",
+      "recruiter_username": "recruiter1",
+      "industry_name": "Marketing",
+      "job_type_code": "PART_TIME",
+      "level_name": "Thực tập sinh",
+      "skill_names": []
     }
+    // ...
   ],
-
   "applications": [
-    { "status": "PENDING" },
-    { "status": "APPROVED" },
-    { "status": "REJECTED" },
-    { "status": "ASSIGNED" },
-    { "status": "ACCEPTED" },
-    { "status": "CANCELLED" }
+    {
+      "candidate_username": "candidate1",
+      "job_post_title": "Lập trình viên Backend Java",
+      "status": "PENDING",
+      "created_at": "2025-11-02 14:30:00"
+    }
+    // ...
   ]
 }
-data sau khi tạo thì lưu lại thành 1 file .json để tôi tải xuống
-
-
-
-
+```

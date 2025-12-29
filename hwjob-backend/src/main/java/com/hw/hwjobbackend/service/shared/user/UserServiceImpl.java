@@ -63,7 +63,6 @@ public class UserServiceImpl implements UserService {
     WalletService walletService;
 
 
-
     @Override
     @Transactional
     public UserCreationResponse createUser(UserCreationRequest request) throws Exception {
@@ -76,8 +75,8 @@ public class UserServiceImpl implements UserService {
 
         user = userRepository.save(user);
 
-        FileResponse avatarResponse = fileService.setDefaultAvatarForUser(user.getId());
-        user.setImageUrl(avatarResponse.getUrl());
+        // Sử dụng URL mặc định thay vì copy file
+        user.setImageUrl(fileService.getDefaultAvatarUrl());
 
 
         WalletResponse wallet = walletService.createWallet();
@@ -85,7 +84,6 @@ public class UserServiceImpl implements UserService {
         user.setWalletAddress(wallet.getAddress());
 //        user.setEncryptedPrivateKey(encrypt(wallet.getPrivateKey()));
         user.setEncryptedPrivateKey(wallet.getPrivateKey());
-
         return userMapper.toUserCreationResponse(user);
     }
 
@@ -98,8 +96,6 @@ public class UserServiceImpl implements UserService {
         userResponse.setCompletionPercent(calculateCompletionPercent(user));
         return userResponse;
     }
-
-
 
 
     @Override
@@ -159,7 +155,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        // Xóa avatar cũ nếu có
+        // Xóa avatar cũ nếu có và không phải là avatar mặc định
         if (user.getImageUrl() != null && !user.getImageUrl().isBlank()) {
             fileService.deleteFileByUrl(user.getImageUrl());
         }
@@ -206,9 +202,9 @@ public class UserServiceImpl implements UserService {
 
     private RoleEnum determineUserType(Set<Role> roles) {
         boolean hasCandidate = roles.stream()
-                .anyMatch(role -> RoleEnum.CANDIDATE.name().equalsIgnoreCase(role.getName()));
+                .anyMatch(role -> RoleEnum.CANDIDATE.name().equalsIgnoreCase(role.getName().name()));
         boolean hasRecruiter = roles.stream()
-                .anyMatch(role -> RoleEnum.RECRUITER.name().equalsIgnoreCase(role.getName()));
+                .anyMatch(role -> RoleEnum.RECRUITER.name().equalsIgnoreCase(role.getName().name()));
 
         if (hasCandidate && hasRecruiter) {
             throw new AppException(ErrorCode.ROLE_NOT_EXISTED);

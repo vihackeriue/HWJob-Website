@@ -40,6 +40,10 @@ public class FileServiceImpl implements FileService {
     @Value("${app.file.default-avatar-resource}")
     String DEFAULT_AVATAR_RESOURCE;
 
+    @NonFinal
+    @Value("${app.file.download-prefix}")
+    String urlPrefix;
+
     @Override
     public FileResponse uploadFile(MultipartFile file, String userId) {
         try {
@@ -62,6 +66,16 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public FileData downloadFile(String fileName) throws IOException {
+        // Check if it's the default avatar request (e.g. "default-avatar.png")
+        // Assuming the URL structure is .../files/{fileName}
+        // If the fileName matches the default avatar name, serve it directly from resources
+        if ("default-avatar.png".equals(fileName)) {
+            Resource defaultAvatar = new ClassPathResource(DEFAULT_AVATAR_RESOURCE);
+            if (defaultAvatar.exists()) {
+                return new FileData("image/png", defaultAvatar);
+            }
+        }
+
         FileMgmt fileMgmt = fileMgmtRepository.findById(fileName).orElseThrow(
                 () -> new AppException(ErrorCode.FILE_NOT_FOUND));
         Resource resource = fileRepository.read(fileMgmt);
@@ -71,32 +85,33 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public FileResponse setDefaultAvatarForUser(String userId) {
-        try {
-            // Đọc ảnh avatar mặc định
-            Resource defaultAvatar = new ClassPathResource(DEFAULT_AVATAR_RESOURCE);
-            if (!defaultAvatar.exists()) {
-                throw new AppException(ErrorCode.FILE_NOT_FOUND);
-            }
-            // Lưu file vào thư mục của user
-            var fileInfo = fileRepository.storeDefaultAvatar(userId, defaultAvatar);
+        // Deprecated or modified behavior:
+        // Instead of copying file, just return the default URL.
+        // But to keep interface contract, we return a FileResponse with the default URL.
+        return FileResponse.builder()
+                .originalFileName("default-avatar.png")
+                .url(getDefaultAvatarUrl())
+                .build();
+    }
 
-            // Lưu metadata vào database
-            FileMgmt fileMgmt = fileMgmtMapper.toFileMgmt(fileInfo);
-            fileMgmt.setOwnerId(userId);
-            fileMgmtRepository.save(fileMgmt);
-
-            return FileResponse.builder()
-                    .originalFileName(defaultAvatar.getFilename())
-                    .url(fileInfo.getUrl())
-                    .build();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @Override
+    public String getDefaultAvatarUrl() {
+        // Return a static URL that points to the default avatar
+        // Assuming the download controller handles "default-avatar.png" or similar
+        // You might need to adjust this based on how your FileController maps URLs.
+        // If urlPrefix is "http://localhost:8080/api/v1/files/", then:
+        return urlPrefix + "default-avatar.png";
     }
 
     @Override
     public void deleteFileByUrl(String url) {
         if (url == null || url.isBlank()) return;
+
+        // Do not delete if it is the default avatar URL
+        if (url.equals(getDefaultAvatarUrl())) {
+            return;
+        }
+
         fileMgmtRepository.findByUrl(url).ifPresent(fileMgmt -> {
             try {
                 if (fileMgmt.getPath() != null) {
