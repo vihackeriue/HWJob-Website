@@ -1,525 +1,850 @@
 {
-  "skills": [
-    {
-      "name": "Java",
-      "description": "Ngôn ngữ lập trình hướng đối tượng phổ biến cho ứng dụng doanh nghiệp."
-    },
-    {
-      "name": "Python",
-      "description": "Ngôn ngữ lập trình đa năng, mạnh mẽ trong phân tích dữ liệu và AI."
-    },
-    {
-      "name": "ReactJS",
-      "description": "Thư viện JavaScript phổ biến để xây dựng giao diện người dùng."
-    },
-    {
-      "name": "Spring Boot",
-      "description": "Framework Java giúp phát triển ứng dụng backend nhanh chóng."
-    },
-    {
-      "name": "SQL",
-      "description": "Ngôn ngữ truy vấn dữ liệu cho các hệ quản trị cơ sở dữ liệu quan hệ."
-    },
-    {
-      "name": "Docker",
-      "description": "Công cụ tạo và quản lý các container cho ứng dụng phần mềm."
-    },
-    {
-      "name": "Digital Marketing",
-      "description": "Kỹ năng quảng bá sản phẩm, dịch vụ thông qua các kênh kỹ thuật số."
-    },
-    {
-      "name": "UI/UX Design",
-      "description": "Thiết kế giao diện và trải nghiệm người dùng cho sản phẩm số."
-    },
-    {
-      "name": "Project Management",
-      "description": "Kỹ năng lập kế hoạch, tổ chức và quản lý các dự án."
-    },
-    {
-      "name": "Tiếng Anh",
-      "description": "Kỹ năng giao tiếp và đọc hiểu tài liệu bằng tiếng Anh."
-    }
-  ],
-  "industries": [
-    {
-      "name": "Công nghệ thông tin",
-      "description": "Lĩnh vực phần mềm, phần cứng và hệ thống thông tin."
-    },
-    {
-      "name": "Tài chính - Ngân hàng",
-      "description": "Lĩnh vực liên quan đến dịch vụ tài chính, ngân hàng và bảo hiểm."
-    },
-    {
-      "name": "Bán lẻ & Thương mại điện tử",
-      "description": "Lĩnh vực kinh doanh hàng hóa và dịch vụ trực tiếp đến người tiêu dùng."
-    },
-    {
-      "name": "Marketing & Truyền thông",
-      "description": "Lĩnh vực quảng bá thương hiệu và truyền thông đa phương tiện."
-    },
-    {
-      "name": "Giáo dục & Đào tạo",
-      "description": "Lĩnh vực cung cấp kiến thức và phát triển kỹ năng con người."
-    }
-  ],
-  "levels": [
-    {
-      "name": "Thực tập sinh"
-    },
-    {
-      "name": "Fresher"
-    },
-    {
-      "name": "Junior"
-    },
-    {
-      "name": "Senior"
-    },
-    {
-      "name": "Trưởng nhóm/Quản lý"
-    }
-  ],
-  "job_types": [
-    {
-      "code": "FULL_TIME",
-      "name": "Toàn thời gian"
-    },
-    {
-      "code": "PART_TIME",
-      "name": "Bán thời gian"
-    }
-  ],
   "users": [
     {
-      "username": "candidate1",
+      "username": "candidate61",
       "password": "password",
-      "email": "candidate1@example.com",
-      "full_name": "Nguyễn Văn An",
-      "phone": "0912345678",
-      "summary": "<p>Lập trình viên <b>Backend Java</b> với hơn 3 năm kinh nghiệm trong môi trường Agile.</p><ul><li>Thành thạo <b>Spring Boot</b> và <b>Hibernate</b> để phát triển API.</li><li>Có kinh nghiệm triển khai ứng dụng lên <b>AWS</b> và sử dụng <b>Docker</b>.</li><li>Đã tham gia phát triển hệ thống Microservices cho dự án tài chính.</li><li>Khả năng làm việc nhóm tốt, tư duy giải quyết vấn đề logic.</li></ul>",
+      "email": "candidate61@example.com",
+      "full_name": "Lê Thị Thu Hiền",
+      "phone": "0912456879",
+      "summary": "<p>Sinh viên mới tốt nghiệp ngành Quan hệ Công chúng. Năng động, khả năng viết tốt, muốn phát triển trong môi trường truyền thông.</p>",
       "user_status": "ACTIVE",
-      "created_at": "2025-11-05 09:15:00"
+      "created_at": "2025-11-02 13:20:00"
     },
     {
-      "username": "candidate2",
+      "username": "candidate62",
       "password": "password",
-      "email": "candidate2@example.com",
-      "full_name": "Trần Thị Bích",
-      "phone": "0923456789",
-      "summary": "<p>Chuyên viên <b>Digital Marketing</b> sáng tạo, có 2 năm kinh nghiệm tại agency.</p><ul><li>Thành thạo chạy quảng cáo <b>Facebook Ads</b>, <b>Google Ads</b> và tối ưu chi phí (CPA).</li><li>Có kinh nghiệm xây dựng chiến lược Content Marketing và quản lý cộng đồng (Community Management).</li><li>Phân tích số liệu (Analytics) và lập báo cáo hiệu quả chiến dịch.</li><li>Kỹ năng thiết kế cơ bản với Photoshop và Canva.</li></ul>",
+      "email": "candidate62@example.com",
+      "full_name": "Trần Minh Quân",
+      "phone": "0923567980",
+      "summary": "Kỹ thuật viên IT hỗ trợ phần cứng và phần mềm. Có kinh nghiệm 1 năm tại một công ty outsourcing.",
       "user_status": "ACTIVE",
-      "created_at": "2025-11-12 14:20:00"
+      "created_at": "2025-11-07 09:45:00"
     },
     {
-      "username": "candidate3",
+      "username": "candidate63",
       "password": "password",
-      "email": "candidate3@example.com",
-      "full_name": "Lê Minh Cường",
-      "phone": "0934567890",
-      "summary": "<p><b>Frontend Developer</b> với trọng tâm là <b>ReactJS</b> và hệ sinh thái của nó.</p><ul><li>Thành thạo React Hooks, Redux Toolkit, và các thư viện UI như Ant Design, Material-UI.</li><li>Có kinh nghiệm tích hợp API với Axios và xử lý hiệu năng ứng dụng.</li><li>Biết sử dụng Next.js cho SEO và TypeScript để phát triển ổn định.</li><li>Luôn cập nhật xu hướng công nghệ mới và yêu thích tạo ra trải nghiệm người dùng mượt mà.</li></ul>",
-      "user_status": "ACTIVE",
-      "created_at": "2025-11-20 10:45:00"
-    },
-    {
-      "username": "candidate4",
-      "password": "password",
-      "email": "candidate4@example.com",
-      "full_name": "Phạm Thùy Dương",
+      "email": "candidate63@example.com",
+      "full_name": "Phạm Thị Ngọc Anh",
       "phone": null,
-      "summary": "<p><b>UI/UX Designer</b> với niềm đam mê tạo ra sản phẩm số đẹp mắt và thân thiện với người dùng.</p><ul><li>Sử dụng thành thạo <b>Figma</b>, <b>Adobe XD</b> để thiết kế wireframe, prototype.</li><li>Hiểu biết về nguyên lý thiết kế, psychology of design và quy trình thiết kế lấy người dùng làm trung tâm.</li><li>Có kinh nghiệm làm việc với developer để đảm bảo chất lượng hiện thực hóa thiết kế.</li><li>Portfolio với các dự án thiết kế app mobile và website thương mại điện tử.</li></ul>",
+      "summary": "<p>Freelancer chuyên <b>viết bài SEO</b> cho website về giáo dục, sức khỏe. Tốc độ nhanh, đảm bảo unique content.</p>",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-12 16:10:00"
+    },
+    {
+      "username": "candidate64",
+      "password": "password",
+      "email": "candidate64@example.com",
+      "full_name": "Hoàng Văn Tùng",
+      "phone": "0945789123",
+      "summary": "Nhân viên chăm sóc khách hàng online qua chat và email. Thân thiện, kiên nhẫn, giải quyết vấn đề nhanh.",
       "user_status": "INACTIVE",
-      "created_at": "2025-12-01 16:30:00"
+      "created_at": "2025-11-17 11:30:00"
     },
     {
-      "username": "candidate5",
+      "username": "candidate65",
       "password": "password",
-      "email": "candidate5@example.com",
-      "full_name": "Hoàng Văn Em",
-      "phone": "0945678901",
-      "summary": null,
+      "email": "candidate65@example.com",
+      "full_name": "Nguyễn Đức Mạnh",
+      "phone": "0956890234",
+      "summary": "<p>Chuyên viên <b>nhập liệu chuyên nghiệp</b>. Tốc độ gõ 80 từ/phút, độ chính xác 99%. Có kinh nghiệm làm việc với các dự án số hóa tài liệu.</p>",
       "user_status": "ACTIVE",
-      "created_at": "2025-12-10 08:00:00"
+      "created_at": "2025-11-22 14:55:00"
     },
     {
-      "username": "recruiter1",
+      "username": "candidate66",
       "password": "password",
-      "email": "hr@techviet.com.vn",
-      "full_name": "Công ty Cổ phần Công nghệ TechViet",
-      "phone": "02437123456",
-      "summary": "<p>TechViet là công ty <b>phát triển phần mềm</b> và <b>cung cấp giải pháp chuyển đổi số</b> hàng đầu tại Việt Nam.</p><ul><li>Chúng tôi chuyên sâu vào các lĩnh vực: <b>FinTech</b>, <b>EdTech</b> và <b>Enterprise Software</b>.</li><li>Môi trường làm việc trẻ trung, năng động, khuyến khích sáng tạo và học hỏi.</li><li>Chính sách đãi ngộ cạnh tranh, lộ trình thăng tiến rõ ràng và nhiều cơ hội phát triển cá nhân.</li><li>Luôn tìm kiếm những tài năng công nghệ cùng chung tay tạo ra sản phẩm giá trị.</li></ul>",
+      "email": "candidate66@example.com",
+      "full_name": "Vũ Thị Hồng Nhung",
+      "phone": "0967901345",
+      "summary": "Dịch thuật viên Anh - Việt chuyên ngành kinh tế, luật. Cẩn thận, đúng hạn, giữ nguyên ý tác giả.",
       "user_status": "ACTIVE",
-      "created_at": "2025-11-02 08:30:00"
+      "created_at": "2025-11-27 10:15:00"
     },
     {
-      "username": "recruiter2",
+      "username": "candidate67",
       "password": "password",
-      "email": "tuyendung@fintechas.vn",
-      "full_name": "Công ty Tài chính Công nghệ Fintech AS",
-      "phone": "02838234567",
-      "summary": "<p>Fintech AS là công ty khởi nghiệp tiên phong trong lĩnh vực <b>công nghệ tài chính</b> (Fintech) tại TP.HCM.</p><ul><li>Sản phẩm chính: Ứng dụng ví điện tử và nền tảng cho vay ngang hàng (P2P Lending).</li><li>Văn hóa công ty đề cao tinh thần <b>ownership</b>, tốc độ và sự <b>linh hoạt</b> (Agile/Scrum).</li><li>Tìm kiếm những cá nhân dám nghĩ dám làm, thích thử thách trong môi trường startup năng động.</li></ul>",
+      "email": "candidate67@example.com",
+      "full_name": "Đặng Quang Huy",
+      "phone": "0978012456",
+      "summary": "",
       "user_status": "ACTIVE",
-      "created_at": "2025-11-10 13:10:00"
+      "created_at": "2025-12-01 15:40:00"
     },
     {
-      "username": "recruiter3",
+      "username": "candidate68",
       "password": "password",
-      "email": "contact@ecomtop1.com",
-      "full_name": "Tập đoàn Thương mại Điện tử EcomTop1",
-      "phone": "19005678",
-      "summary": "<p>EcomTop1 là một trong những <b>sàn thương mại điện tử</b> lớn nhất và phát triển nhanh nhất Việt Nam.</p><ul><li>Chúng tôi không ngừng mở rộng để phục vụ hàng triệu người bán và người mua trên toàn quốc.</li><li>Môi trường làm việc đa quốc gia, cơ hội tiếp cận với các dự án công nghệ quy mô lớn.</li><li>Chú trọng phát triển năng lực lãnh đạo và tạo điều kiện để nhân viên phát huy tối đa tiềm năng.</li></ul>",
+      "email": "candidate68@example.com",
+      "full_name": "Bùi Thị Thanh Hương",
+      "phone": "0989123567",
+      "summary": "Cộng tác viên thiết kế banner đơn giản, infographic bằng Canva. Sáng tạo, bắt kịp xu hướng thiết kế.",
       "user_status": "ACTIVE",
-      "created_at": "2025-11-25 11:05:00"
+      "created_at": "2025-12-06 08:25:00"
     },
     {
-      "username": "recruiter4",
+      "username": "candidate69",
       "password": "password",
-      "email": "info@creativemind.edu.vn",
-      "full_name": "Trung tâm Đào tạo & Phát triển CreativeMind",
+      "email": "candidate69@example.com",
+      "full_name": "Lý Văn Đạt",
+      "phone": "0901234678",
+      "summary": "<p>Gia sư Toán - Lý online cho học sinh cấp 2, cấp 3. Phương pháp dạy dễ hiểu, nhiệt tình.</p>",
+      "user_status": "ACTIVE",
+      "created_at": "2025-12-11 12:50:00"
+    },
+    {
+      "username": "candidate70",
+      "password": "password",
+      "email": "candidate70@example.com",
+      "full_name": "Trịnh Thị Mai Linh",
+      "phone": "0912345789",
+      "summary": "Nhân viên đánh máy, soạn thảo văn bản, hợp đồng tại nhà. Thành thạo Word, Excel, gõ 10 ngón.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-12-16 17:05:00"
+    },
+    {
+      "username": "recruiter61",
+      "password": "password",
+      "email": "tuyendung@dataentrypro.vn",
+      "full_name": "Công ty TNHH Dịch vụ Số hóa DataEntry Pro",
+      "phone": "02839112233",
+      "summary": "<p>Chuyên cung cấp dịch vụ nhập liệu, số hóa tài liệu cho các thư viện, doanh nghiệp và cơ quan nhà nước.</p><p>Hợp tác với hơn 100 cộng tác viên toàn quốc.</p>",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-01 08:45:00"
+    },
+    {
+      "username": "recruiter62",
+      "password": "password",
+      "email": "hr@contentmart.vn",
+      "full_name": "Sàn Nội dung ContentMart",
+      "phone": "02438529988",
+      "summary": "Nền tảng kết nối nhà cung cấp nội dung (writer, designer, translator) với doanh nghiệp có nhu cầu. Hàng nghìn dự án mỗi tháng.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-05 14:10:00"
+    },
+    {
+      "username": "recruiter63",
+      "password": "password",
+      "email": "career@freelanceviet.com",
+      "full_name": "Cộng đồng Freelancer Việt",
+      "phone": "19001234",
+      "summary": "<p>Diễn đàn và nhóm hỗ trợ cộng đồng freelancer Việt Nam phát triển kỹ năng và tìm kiếm dự án.</p><p>Thường xuyên tổ chức workshop online về các kỹ năng freelance.</p>",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-10 10:35:00"
+    },
+    {
+      "username": "recruiter64",
+      "password": "password",
+      "email": "talent@translatehub.com",
+      "full_name": "Trung tâm Dịch thuật Chuyên nghiệp TranslateHub",
+      "phone": "02838119988",
+      "summary": "Cung cấp dịch vụ dịch thuật công chứng và dịch thuật chuyên ngành cho hơn 50 ngôn ngữ. Làm việc với đội ngũ dịch giả tự do trên toàn cầu.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-15 16:50:00"
+    },
+    {
+      "username": "recruiter65",
+      "password": "password",
+      "email": "hr@virtualoffice.vn",
+      "full_name": "Công ty Giải pháp Văn phòng Ảo VirtualOffice",
+      "phone": "02437751234",
+      "summary": "<p>Cung cấp dịch vụ trợ lý ảo, lễ tân ảo và hỗ trợ hành chính từ xa cho startup và doanh nghiệp nhỏ.</p><p>Giúp khách hàng tiết kiệm chi phí vận hành.</p>",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-19 09:15:00"
+    },
+    {
+      "username": "recruiter66",
+      "password": "password",
+      "email": "tuyendung@online-tutor.edu.vn",
+      "full_name": "Nền tảng Gia sư Trực tuyến Online Tutor",
+      "phone": "18009876",
+      "summary": "Kết nối giáo viên, gia sư với học viên trên toàn quốc thông qua các lớp học trực tuyến 1-1 hoặc nhóm nhỏ.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-11-24 13:40:00"
+    },
+    {
+      "username": "recruiter67",
+      "password": "password",
+      "email": "recruitment@designcrowd.vn",
+      "full_name": "Cộng đồng Thiết kế Crowdsourcing DesignCrowd Việt Nam",
+      "phone": null,
+      "summary": "Nền tảng crowdsourcing thiết kế logo, banner, website. Khách hàng đăng brief, nhận hàng trăm ý tưởng từ designer tự do.",
+      "user_status": "INACTIVE",
+      "created_at": "2025-11-29 11:05:00"
+    },
+    {
+      "username": "recruiter68",
+      "password": "password",
+      "email": "hr@voiceovervn.com",
+      "full_name": "Studio Lồng tiếng & Thu âm VoiceOver VN",
+      "phone": "0912345001",
+      "summary": "<p>Cung cấp dịch vụ lồng tiếng, thu âm quảng cáo, video explainer, audiobook.</p><p>Tìm kiếm giọng đọc nam/nữ chất lượng, có thể làm việc từ xa.</p>",
+      "user_status": "ACTIVE",
+      "created_at": "2025-12-03 15:30:00"
+    },
+    {
+      "username": "recruiter69",
+      "password": "password",
+      "email": "careers@social-media-manager.vn",
+      "full_name": "Công ty Quản lý Mạng xã hội SocialBee",
       "phone": "",
-      "summary": "<p>CreativeMind là tổ chức <b>giáo dục và đào tạo công nghệ</b> uy tín, chuyên cung cấp các khóa học lập trình, marketing số và thiết kế.</p><ul><li>Chúng tôi tin vào sức mạnh của giáo dục để thay đổi tương lai.</li><li>Đội ngũ giảng viên là các chuyên gia giàu kinh nghiệm thực tế từ các doanh nghiệp.</li><li>Môi trường sáng tạo, cởi mở, luôn tìm kiếm những giảng viên/trợ giảng tâm huyết cùng chung tay đào tạo thế hệ trẻ.</li></ul>",
-      "user_status": "INACTIVE",
-      "created_at": "2025-12-05 15:45:00"
+      "summary": "Chuyên quản lý fanpage, chạy content và ads cho các thương hiệu F&B, thời trang. Tuyển CTV viết bài và thiết kế hình ảnh.",
+      "user_status": "ACTIVE",
+      "created_at": "2025-12-08 10:00:00"
     },
     {
-      "username": "recruiter5",
+      "username": "recruiter70",
       "password": "password",
-      "email": "hr@marketingpro.vn",
-      "full_name": "Công ty Truyền thông & Marketing Pro",
-      "phone": "02839393939",
-      "summary": "<p>Marketing Pro là agency cung cấp <b>giải pháp truyền thông tổng thể</b> cho các thương hiệu trong và ngoài nước.</p><ul><li>Chuyên môn sâu về <b>Social Media Marketing</b>, <b>Influencer Marketing</b> và <b>PR</b>.</li><li>Đội ngũ trẻ trung, sáng tạo, nơi mọi ý tưởng đều được tôn trọng.</li><li>Làm việc với đa dạng khách hàng từ F&B, Thời trang đến Bất động sản.</li><li>Tìm kiếm những chiến binh marketing đầy nhiệt huyết và ý tưởng bứt phá.</li></ul>",
+      "email": "info@data-labeling.com",
+      "full_name": "Dự án Gắn nhãn Dữ liệu AI (Data Labeling Project)",
+      "phone": "02838223344",
+      "summary": "Dự án quy mô lớn, cần hàng trăm cộng tác viên gắn nhãn hình ảnh, video, văn bản để train AI. Công việc online, hướng dẫn chi tiết.",
       "user_status": "ACTIVE",
-      "created_at": "2025-12-15 09:30:00"
+      "created_at": "2025-12-13 14:25:00"
     }
   ],
   "candidates": [
     {
-      "username": "candidate1",
-      "dob": "1997-08-15",
-      "gender": 0,
-      "expect_salary": 28000000,
-      "education": "Đại học Bách Khoa Hà Nội - Chuyên ngành Khoa học Máy tính",
+      "username": "candidate61",
+      "dob": "2000-09-12",
+      "gender": 1,
+      "expect_salary": 7000000,
+      "education": "Đại học Khoa học Xã hội & Nhân văn - Quan hệ Công chúng",
       "skill_names": [
-        "Java",
-        "Spring Boot",
-        "SQL",
-        "Docker"
+        "Content Writing",
+        "Social Media Management"
       ]
     },
     {
-      "username": "candidate2",
-      "dob": "1999-03-22",
-      "gender": 1,
-      "expect_salary": 12000000,
-      "education": "Đại học Kinh tế Quốc dân - Chuyên ngành Marketing",
+      "username": "candidate62",
+      "dob": "1998-04-25",
+      "gender": 0,
+      "expect_salary": 9000000,
+      "education": "Cao đẳng FPT Polytechnic - Quản trị mạng máy tính",
       "skill_names": [
-        "Digital Marketing",
-        "Project Management",
+        "Microsoft Office",
+        "Critical Thinking"
+      ]
+    },
+    {
+      "username": "candidate63",
+      "dob": "1995-11-30",
+      "gender": 1,
+      "expect_salary": null,
+      "education": "Đại học Hà Nội - Báo chí",
+      "skill_names": [
+        "Content Writing",
+        "SEO",
         "Tiếng Anh"
       ]
     },
     {
-      "username": "candidate3",
-      "dob": "2000-11-10",
+      "username": "candidate64",
+      "dob": "1996-06-18",
       "gender": 0,
-      "expect_salary": 15000000,
-      "education": "Đại học FPT - Chuyên ngành Kỹ thuật Phần mềm",
+      "expect_salary": 8500000,
+      "education": "Đại học Mở TP.HCM - Ngôn ngữ Anh",
       "skill_names": [
-        "ReactJS",
-        "Python",
-        "UI/UX Design"
+        "Customer Service",
+        "Tiếng Anh",
+        "Microsoft Office"
       ]
     },
     {
-      "username": "candidate4",
-      "dob": "1998-06-05",
+      "username": "candidate65",
+      "dob": "1993-01-05",
+      "gender": 0,
+      "expect_salary": 12000000,
+      "education": "Trung cấp Kế toán - Tin học",
+      "skill_names": [
+        "Data Entry",
+        "Microsoft Office",
+        "Time Management"
+      ]
+    },
+    {
+      "username": "candidate66",
+      "dob": "1994-08-22",
       "gender": 1,
-      "expect_salary": 18000000,
-      "education": "Đại học Mỹ thuật Công nghiệp - Chuyên ngành Thiết kế Đồ họa",
+      "expect_salary": 10000000,
+      "education": "Đại học Ngoại thương - Kinh tế Đối ngoại",
+      "skill_names": [
+        "Translation",
+        "Tiếng Anh",
+        "Business Analysis"
+      ]
+    },
+    {
+      "username": "candidate67",
+      "dob": null,
+      "gender": 0,
+      "expect_salary": 6000000,
+      "education": "Đại học Công nghiệp Hà Nội - Công nghệ Thông tin",
+      "skill_names": [
+        "Data Entry",
+        "Microsoft Office"
+      ]
+    },
+    {
+      "username": "candidate68",
+      "dob": "1997-03-14",
+      "gender": 1,
+      "expect_salary": 8000000,
+      "education": "Cao đẳng Mỹ thuật Công nghiệp - Thiết kế Đồ họa",
       "skill_names": [
         "UI/UX Design",
-        "Project Management"
+        "Social Media Management"
       ]
     },
     {
-      "username": "candidate5",
-      "dob": null,
-      "gender": 2,
-      "expect_salary": null,
-      "education": "Cao đẳng Thực hành FPT Polytechnic - Chuyên ngành Ứng dụng phần mềm",
+      "username": "candidate69",
+      "dob": "1992-12-07",
+      "gender": 0,
+      "expect_salary": 150000,
+      "education": "Đại học Sư phạm Hà Nội - Sư phạm Toán",
       "skill_names": [
-        "Python",
-        "SQL"
+        "Teaching & Tutoring",
+        "Public Speaking",
+        "Critical Thinking"
+      ]
+    },
+    {
+      "username": "candidate70",
+      "dob": "1991-07-29",
+      "gender": 1,
+      "expect_salary": 8000000,
+      "education": "Trung cấp Hành chính - Văn thư",
+      "skill_names": [
+        "Data Entry",
+        "Microsoft Office",
+        "Virtual Assistance"
       ]
     }
   ],
   "recruiters": [
     {
-      "username": "recruiter1",
-      "website": "https://www.techviet.com.vn"
+      "username": "recruiter61",
+      "website": "https://dataentrypro.vn/tuyendung-ctv"
     },
     {
-      "username": "recruiter2",
-      "website": "https://fintechas.vn"
+      "username": "recruiter62",
+      "website": "https://contentmart.vn/for-writers"
     },
     {
-      "username": "recruiter3",
-      "website": "https://ecomtop1.vn"
+      "username": "recruiter63",
+      "website": "https://freelanceviet.com/jobs"
     },
     {
-      "username": "recruiter4",
+      "username": "recruiter64",
+      "website": "https://translatehub.com/vi/trở-thành-dịch-giả"
+    },
+    {
+      "username": "recruiter65",
+      "website": "https://virtualoffice.vn/tuyen-dung-ao"
+    },
+    {
+      "username": "recruiter66",
       "website": null
     },
     {
-      "username": "recruiter5",
-      "website": "https://marketingpro.vn"
+      "username": "recruiter67",
+      "website": "https://designcrowd.vn/designers"
+    },
+    {
+      "username": "recruiter68",
+      "website": "https://voiceovervn.com/tuyen-dung-giong-doc"
+    },
+    {
+      "username": "recruiter69",
+      "website": "https://social-bee.vn/tuyen-ctv"
+    },
+    {
+      "username": "recruiter70",
+      "website": "https://data-labeling.com/join"
     }
   ],
   "job_posts": [
     {
-      "title": "Lập trình viên Backend Java (Senior)",
-      "description": "<p>TechViet cần tuyển <b>Lập trình viên Backend Java Senior</b> tham gia phát triển hệ thống core banking.</p><b>Mô tả công việc:</b><ul><li>Phát triển, tối ưu và bảo trì các microservice sử dụng Spring Boot.</li><li>Thiết kế và phát triển API cho các sản phẩm fintech.</li><li>Làm việc với cơ sở dữ liệu SQL (MySQL/PostgreSQL) và NoSQL (Redis).</li><li>Triển khai và quản lý ứng dụng trên nền tảng cloud AWS.</li><li>Tham gia các buổi code review, phân tích yêu cầu và lập kế hoạch sprint.</li></ul><b>Quyền lợi:</b><ul><li>Lương thưởng cạnh tranh, thưởng dự án, thưởng performance.</li><li>Bảo hiểm sức khỏe cao cấp, khám sức khỏe định kỳ.</li><li>Đào tạo nội bộ và hỗ trợ chi phí học các chứng chỉ quốc tế.</li><li>Du lịch công ty hàng năm, teambuilding định kỳ.</li></ul>",
-      "quantity": 3,
-      "salary": 35000000,
-      "salary_type": "MONTHS",
+      "title": "Cộng tác viên Nhập liệu Số hóa Sách cũ",
+      "description": "Công việc chuyển thể nội dung từ sách, tài liệu giấy sang định dạng số (Word/Excel). Làm online, nhận tài liệu scan qua email. Trả theo số trang hoàn thành.",
+      "quantity": 50,
+      "salary": 10000,
+      "salary_type": "PROJECT",
       "status": "PUBLIC",
-      "created_at": "2025-11-10 10:00:00",
-      "ended_time": "2026-01-20 17:00:00",
-      "recruiter_username": "recruiter1",
-      "industry_name": "Công nghệ thông tin",
-      "job_type_code": "FULL_TIME",
-      "level_name": "Senior",
+      "created_at": "2025-11-03 09:15:00",
+      "ended_time": "2026-01-31 23:59:59",
+      "recruiter_username": "recruiter61",
+      "industry_name": "Hành chính văn phòng",
+      "job_type_code": "PART_TIME",
+      "level_name": "Mới tốt nghiệp",
       "skill_names": [
-        "Java",
-        "Spring Boot",
-        "SQL",
-        "Docker"
+        "Data Entry",
+        "Microsoft Office"
       ]
     },
     {
-      "title": "Chuyên viên Digital Marketing",
-      "description": "<p>Marketing Pro cần bổ sung nhân sự cho đội ngũ chạy quảng cáo performance.</p><b>Mô tả công việc:</b><ul><li>Lập kế hoạch, thực thi và tối ưu các chiến dịch quảng cáo Facebook Ads, Google Ads, TikTok Ads.</li><li>Phân tích số liệu, đo lường hiệu quả ROI và lập báo cáo chi tiết cho khách hàng.</li><li>Phối hợp với team Content và Design để tạo ra các asset quảng cáo chất lượng.</li><li>Nghiên cứu insight khách hàng và thị trường để đề xuất chiến lược tối ưu.</li></ul><b>Quyền lợi:</b><ul><li>Lương cứng + hoa hồng hấp dẫn dựa trên hiệu quả chiến dịch.</li><li>Được training bài bản về các công cụ và xu hướng marketing mới nhất.</li><li>Môi trường trẻ trung, vui vẻ, có nhiều hoạt động gắn kết.</li></ul>",
-      "quantity": 2,
-      "salary": 15000000,
-      "salary_type": "MONTHS",
+      "title": "Viết bài Blog về Công nghệ & Đánh giá Sản phẩm",
+      "description": "<p>Tìm kiếm CTV viết bài review điện thoại, laptop, thiết bị thông minh.</p><ul><li>Viết bài có độ dài 1000-1500 từ, có hình ảnh minh họa.</li><li>Nội dung hữu ích, khách quan, đúng chuẩn SEO.</li><li>Đăng ký nhận chủ đề hàng tuần.</li></ul><p>Lương: 200.000đ - 400.000đ/bài tùy chất lượng.</p>",
+      "quantity": 15,
+      "salary": 200000,
+      "salary_type": "PROJECT",
       "status": "PUBLIC",
-      "created_at": "2025-11-18 14:00:00",
-      "ended_time": "2026-01-31 23:59:59",
-      "recruiter_username": "recruiter5",
-      "industry_name": "Marketing & Truyền thông",
-      "job_type_code": "FULL_TIME",
-      "level_name": "Junior",
+      "created_at": "2025-11-08 14:45:00",
+      "ended_time": "2026-01-20 17:00:00",
+      "recruiter_username": "recruiter62",
+      "industry_name": "Công nghệ thông tin",
+      "job_type_code": "PART_TIME",
+      "level_name": "Mới tốt nghiệp",
       "skill_names": [
-        "Digital Marketing",
-        "Project Management",
+        "Content Writing",
+        "SEO"
+      ]
+    },
+    {
+      "title": "Dịch thuật Tài liệu Y tế (Anh - Việt) - Online",
+      "description": "Dịch các tài liệu nghiên cứu, hướng dẫn sử dụng thuốc, thiết bị y tế. Yêu cầu có kiến thức về thuật ngữ y khoa, cẩn thận tuyệt đối. Làm việc qua platform, có glossary hỗ trợ.",
+      "quantity": 10,
+      "salary": 1200,
+      "salary_type": "PROJECT",
+      "status": "PUBLIC",
+      "created_at": "2025-11-13 11:20:00",
+      "ended_time": "2026-01-25 23:59:59",
+      "recruiter_username": "recruiter64",
+      "industry_name": "Y tế & Chăm sóc sức khỏe",
+      "job_type_code": "PART_TIME",
+      "level_name": "Nhân viên",
+      "skill_names": [
+        "Translation",
         "Tiếng Anh"
       ]
     },
     {
-      "title": "Frontend Developer (ReactJS)",
-      "description": "<p>EcomTop1 cần tuyển Frontend Developer tham gia phát triển giao diện hệ thống quản trị và trải nghiệm người dùng trên web/app.</p><b>Mô tả công việc:</b><ul><li>Phát triển các tính năng mới cho giao diện người dùng sử dụng ReactJS/Next.js.</li><li>Tối ưu hiệu năng, tốc độ tải trang và trải nghiệm người dùng (UX).</li><li>Làm việc chặt chẽ với team Backend và UI/UX Designer.</li><li>Viết code sạch, có thể tái sử dụng và dễ bảo trì.</li></ul><b>Quyền lợi:</b><ul><li>Lương theo năng lực, thưởng tháng 13, thưởng dự án.</li><li>Chế độ phúc lợi đầy đủ theo luật Lao động và đặc thù công ty.</li><li>Làm việc tại tòa nhà văn phòng hiện đại, khu vực trung tâm quận 1.</li></ul>",
-      "quantity": 4,
-      "salary": 22000000,
-      "salary_type": "MONTHS",
-      "status": "PUBLIC",
-      "created_at": "2025-11-28 09:30:00",
-      "ended_time": "2026-01-10 18:00:00",
-      "recruiter_username": "recruiter3",
-      "industry_name": "Công nghệ thông tin",
-      "job_type_code": "FULL_TIME",
-      "level_name": "Junior",
-      "skill_names": [
-        "ReactJS",
-        "UI/UX Design"
-      ]
-    },
-    {
-      "title": "Thực tập sinh Phát triển Phần mềm",
-      "description": "<p>Chương trình thực tập sinh (Intern) dành cho sinh viên CNTT năm cuối có đam mê lập trình.</p><b>Mô tả công việc:</b><ul><li>Hỗ trợ team phát triển các tính năng nhỏ trên sản phẩm.</li><li>Học và thực hành viết code theo quy trình, được mentor hướng dẫn trực tiếp.</li><li>Tham gia các buổi training nội bộ về công nghệ và kỹ năng mềm.</li><li>Thực hiện bài tập, báo cáo hàng tuần.</li></ul><b>Yêu cầu:</b><ul><li>Sinh viên năm 3,4 chuyên ngành CNTT.</li><li>Có kiến thức cơ bản về một ngôn ngữ lập trình (Java/Python/JavaScript).</li><li>Chăm chỉ, ham học hỏi và có tinh thần trách nhiệm.</li></ul><b>Quyền lợi:</b><ul><li>Phụ cấp thực tập, ăn trưa tại công ty.</li><li>Cơ hội được nhận vào làm chính thức sau khi thực tập.</li><li>Giấy chứng nhận thực tập có giá trị.</li></ul>",
-      "quantity": 10,
-      "salary": 3000000,
-      "salary_type": "MONTHS",
-      "status": "PUBLIC",
-      "created_at": "2025-12-05 08:15:00",
-      "ended_time": "2026-01-25 17:00:00",
-      "recruiter_username": "recruiter1",
-      "industry_name": "Công nghệ thông tin",
-      "job_type_code": "FULL_TIME",
-      "level_name": "Thực tập sinh",
-      "skill_names": [
-        "Java",
-        "Python",
-        "ReactJS",
-        "SQL"
-      ]
-    },
-    {
-      "title": "Giảng viên/Trợ giảng Lập trình Part-time",
-      "description": "<p>Tuyển giảng viên/trợ giảng part-time cho các khóa học lập trình buổi tối và cuối tuần.</p><b>Mô tả công việc:</b><ul><li>Giảng dạy/hỗ trợ giảng dạy các khóa học về Java, Python, Web Frontend.</li><li>Chấm bài, giải đáp thắc mắc và hỗ trợ học viên trong và ngoài giờ học.</li><li>Biên soạn tài liệu, bài tập thực hành.</li></ul><b>Yêu cầu:</b><ul><li>Có kinh nghiệm phát triển phần mềm từ 1 năm trở lên.</li><li>Có khả năng truyền đạt tốt, nhiệt tình, kiên nhẫn.</li><li>Ưu tiên ứng viên đã có kinh nghiệm giảng dạy hoặc training nội bộ.</li></ul><b>Quyền lợi:</b><ul><li>Lương theo giờ/buổi, thỏa thuận dựa trên năng lực và kinh nghiệm.</li><li>Lịch dạy linh hoạt, phù hợp với người đi làm.</li></ul>",
-      "quantity": 5,
-      "salary": 250000,
-      "salary_type": "HOURS",
-      "status": "PUBLIC",
-      "created_at": "2025-12-12 13:45:00",
-      "ended_time": "2025-12-28 23:59:59",
-      "recruiter_username": "recruiter4",
-      "industry_name": "Giáo dục & Đào tạo",
-      "job_type_code": "PART_TIME",
-      "level_name": "Fresher",
-      "skill_names": [
-        "Java",
-        "Python",
-        "ReactJS"
-      ]
-    },
-    {
-      "title": "Data Analyst (Fresher/Junior)",
-      "description": "<p>Fintech AS cần Data Analyst hỗ trợ phân tích dữ liệu người dùng và tài chính để đưa ra insight cho sản phẩm.</p><b>Mô tả công việc:</b><ul><li>Thu thập, làm sạch và tổ chức dữ liệu từ nhiều nguồn khác nhau.</li><li>Phân tích dữ liệu bằng SQL và Python (Pandas, NumPy) để tìm ra xu hướng, mẫu hình.</li><li>Tạo báo cáo trực quan (dashboard) bằng Power BI/Tableau.</li><li>Hỗ trợ team sản phẩm và kinh doanh trong việc ra quyết định dựa trên dữ liệu.</li></ul><b>Quyền lợi:</b><ul><li>Lương cạnh tranh, thưởng theo quý.</li><li>Được đào tạo chuyên sâu về dữ liệu trong lĩnh vực fintech.</li><li>Môi trường startup năng động, ít hierarchy.</li></ul>",
-      "quantity": 2,
-      "salary": 13000000,
-      "salary_type": "MONTHS",
-      "status": "PRIVATE",
-      "created_at": "2025-11-15 11:20:00",
-      "ended_time": "2026-01-15 17:00:00",
-      "recruiter_username": "recruiter2",
-      "industry_name": "Tài chính - Ngân hàng",
-      "job_type_code": "FULL_TIME",
-      "level_name": "Fresher",
-      "skill_names": [
-        "Python",
-        "SQL"
-      ]
-    },
-    {
-      "title": "UI/UX Designer",
-      "description": "<p>Tham gia thiết kế giao diện và trải nghiệm cho các sản phẩm số của TechViet.</p><b>Mô tả công việc:</b><ul><li>Thiết kế wireframe, prototype cho web app và mobile app (iOS & Android).</li><li>Thực hiện user research cơ bản và usability testing.</li><li>Làm việc với Product Manager và Developer để hiện thực hóa thiết kế.</li><li>Xây dựng và quản lý Design System cho sản phẩm.</li></ul>",
-      "quantity": 1,
-      "salary": 20000000,
-      "salary_type": "MONTHS",
-      "status": "PUBLIC",
-      "created_at": "2025-11-22 16:10:00",
-      "ended_time": "2026-01-05 17:00:00",
-      "recruiter_username": "recruiter1",
-      "industry_name": "Công nghệ thông tin",
-      "job_type_code": "FULL_TIME",
-      "level_name": "Junior",
-      "skill_names": [
-        "UI/UX Design",
-        "Project Management"
-      ]
-    },
-    {
-      "title": "Nhân viên Kinh doanh Bán lẻ (Part-time)",
-      "description": "<p>Tuyển nhân viên bán hàng part-time làm việc tại cửa hàng flagship của EcomTop1.</p><b>Mô tả công việc:</b><ul><li>Tư vấn, bán hàng trực tiếp cho khách tại cửa hàng.</li><li>Sắp xếp, trưng bày sản phẩm và giữ gìn vệ sinh khu vực bán hàng.</li><li>Hỗ trợ công việc kho bãi, kiểm kê hàng hóa khi cần.</li></ul><b>Yêu cầu:</b><ul><li>Giao tiếp tốt, thân thiện, nhiệt tình.</li><li>Trung thực, có tinh thần trách nhiệm.</li></ul>",
+      "title": "Trợ lý Ảo (Virtual Assistant) cho Doanh nhân",
+      "description": "Hỗ trợ một founder startup: lên lịch họp, đặt vé máy bay, khách sạn, sắp xếp email, nhắc nhở công việc. Làm 2-3 giờ mỗi ngày qua Google Workspace. Cần tiếng Anh cơ bản.",
       "quantity": 8,
       "salary": 25000,
       "salary_type": "HOURS",
       "status": "PUBLIC",
-      "created_at": "2025-12-03 10:50:00",
-      "ended_time": "2026-01-30 17:00:00",
-      "recruiter_username": "recruiter3",
-      "industry_name": "Bán lẻ & Thương mại điện tử",
+      "created_at": "2025-11-18 16:30:00",
+      "ended_time": "2026-01-15 17:00:00",
+      "recruiter_username": "recruiter65",
+      "industry_name": "Hành chính văn phòng",
       "job_type_code": "PART_TIME",
-      "level_name": "Fresher",
-      "skill_names": []
-    },
-    {
-      "title": "Trưởng nhóm Phát triển Sản phẩm (Product Owner)",
-      "description": "<p>Dẫn dắt team phát triển một sản phẩm fintech mới tại Fintech AS.</p><b>Mô tả công việc:</b><ul><li>Định nghĩa và sắp xếp thứ tự ưu tiên Product Backlog.</li><li>Làm việc với stakeholders để thu thập yêu cầu và truyền đạt tầm nhìn sản phẩm.</li><li>Phối hợp với team Scrum (Developer, Tester) để lập kế hoạch sprint và theo dõi tiến độ.</li><li>Phân tích thị trường và đối thủ để đề xuất cải tiến sản phẩm.</li></ul><b>Yêu cầu:</b><ul><li>Có từ 3 năm kinh nghiệm ở vị trí Product Owner/Manager trong lĩnh vực phần mềm.</li><li>Hiểu biết về Agile/Scrum.</li><li>Kỹ năng giao tiếp, thuyết phục và phân tích tốt.</li></ul>",
-      "quantity": 1,
-      "salary": 45000000,
-      "salary_type": "NEGOTIATION",
-      "status": "PUBLIC",
-      "created_at": "2025-12-08 15:00:00",
-      "ended_time": "2026-01-18 17:00:00",
-      "recruiter_username": "recruiter2",
-      "industry_name": "Tài chính - Ngân hàng",
-      "job_type_code": "FULL_TIME",
-      "level_name": "Trưởng nhóm/Quản lý",
+      "level_name": "Nhân viên",
       "skill_names": [
-        "Project Management"
+        "Virtual Assistance",
+        "Time Management",
+        "Tiếng Anh"
       ]
     },
     {
-      "title": "DevOps Engineer",
-      "description": "<p>Xây dựng và vận hành hệ thống CI/CD, quản lý hạ tầng cloud cho TechViet.</p><b>Mô tả công việc:</b><ul><li>Triển khai và quản lý hạ tầng trên AWS (EC2, RDS, S3, EKS).</li><li>Xây dựng pipeline CI/CD sử dụng Jenkins/GitLab CI.</li><li>Quản lý cấu hình và tự động hóa với Ansible/Terraform.</li><li>Giám sát hệ thống, xử lý sự cố và tối ưu hiệu năng.</li></ul>",
-      "quantity": 2,
-      "salary": 32000000,
+      "title": "Gia sư Tiếng Anh Giao tiếp Online cho Người đi làm",
+      "description": "Dạy 1-1 cho học viên là người đi làm, tập trung vào kỹ năng giao tiếp trong môi trường công sở. Giáo trình có sẵn. Lịch học linh hoạt buổi tối. Yêu cầu phát âm chuẩn, kinh nghiệm giảng dạy.",
+      "quantity": 20,
+      "salary": 180000,
+      "salary_type": "HOURS",
+      "status": "PUBLIC",
+      "created_at": "2025-11-23 10:05:00",
+      "ended_time": "2026-01-30 17:00:00",
+      "recruiter_username": "recruiter66",
+      "industry_name": "Giáo dục & Đào tạo",
+      "job_type_code": "PART_TIME",
+      "level_name": "Nhân viên",
+      "skill_names": [
+        "Teaching & Tutoring",
+        "Tiếng Anh",
+        "Public Speaking"
+      ]
+    },
+    {
+      "title": "Thiết kế Logo theo Yêu cầu (Crowdsourcing)",
+      "description": "Tham gia cuộc thi thiết kế logo cho khách hàng. Mỗi dự án có brief rõ ràng. Người thiết kế được chọn sẽ nhận giải thưởng. Có thể tham gia nhiều cuộc thi cùng lúc.",
+      "quantity": 100,
+      "salary": 1500000,
+      "salary_type": "PROJECT",
+      "status": "PUBLIC",
+      "created_at": "2025-11-28 13:50:00",
+      "ended_time": "2026-01-10 17:00:00",
+      "recruiter_username": "recruiter67",
+      "industry_name": "Marketing & Truyền thông",
+      "job_type_code": "PART_TIME",
+      "level_name": "Mới tốt nghiệp",
+      "skill_names": [
+        "UI/UX Design"
+      ]
+    },
+    {
+      "title": "Cộng tác viên Thu âm Quảng cáo (Giọng nam trầm ấm)",
+      "description": "Thu âm script quảng cáo radio, video tại nhà. Yêu cầu có mic thu âm chất lượng, không gian yên tĩnh. Giọng nam trầm, ấm, truyền cảm. Nhận file script và thu theo hướng dẫn.",
+      "quantity": 5,
+      "salary": 300000,
+      "salary_type": "PROJECT",
+      "status": "PUBLIC",
+      "created_at": "2025-12-02 08:40:00",
+      "ended_time": "2026-01-18 23:59:59",
+      "recruiter_username": "recruiter68",
+      "industry_name": "Giải trí & Truyền thông",
+      "job_type_code": "PART_TIME",
+      "level_name": "Mới tốt nghiệp",
+      "skill_names": [
+        "Public Speaking"
+      ]
+    },
+    {
+      "title": "Quản lý Fanpage & Viết Content cho Thương hiệu Trà sữa",
+      "description": "<p>Đăng bài hàng ngày, tương tác với khách hàng trên fanpage Facebook và Instagram.</p><ul><li>Tạo content hình ảnh, video ngắn (idea có sẵn).</li><li>Trả lời inbox, comment.</li><li>Báo cáo kết quả hàng tuần.</li></ul><p>Làm việc online, khoảng 2h/ngày.</p>",
+      "quantity": 7,
+      "salary": 2000000,
       "salary_type": "MONTHS",
       "status": "PUBLIC",
-      "created_at": "2025-12-20 09:00:00",
+      "created_at": "2025-12-07 12:15:00",
       "ended_time": "2026-01-22 17:00:00",
-      "recruiter_username": "recruiter1",
-      "industry_name": "Công nghệ thông tin",
-      "job_type_code": "FULL_TIME",
-      "level_name": "Senior",
+      "recruiter_username": "recruiter69",
+      "industry_name": "Marketing & Truyền thông",
+      "job_type_code": "PART_TIME",
+      "level_name": "Mới tốt nghiệp",
       "skill_names": [
-        "Docker",
-        "SQL",
-        "Project Management"
+        "Social Media Management",
+        "Content Writing"
+      ]
+    },
+    {
+      "title": "Cộng tác viên Gắn nhãn Hình ảnh cho AI (An toàn Nội dung)",
+      "description": "Xem và phân loại hình ảnh theo các tiêu chí có sẵn (ví dụ: có chứa bạo lực, khiêu dâm hay không). Công việc đơn giản, có hướng dẫn cụ thể, làm bất cứ lúc nào. Thanh toán theo số lượng hình ảnh đã gắn nhãn.",
+      "quantity": 200,
+      "salary": 500,
+      "salary_type": "PROJECT",
+      "status": "PUBLIC",
+      "created_at": "2025-12-12 15:00:00",
+      "ended_time": "2026-01-28 23:59:59",
+      "recruiter_username": "recruiter70",
+      "industry_name": "Công nghệ thông tin",
+      "job_type_code": "PART_TIME",
+      "level_name": "Thực tập sinh",
+      "skill_names": [
+        "Data Entry",
+        "Critical Thinking"
+      ]
+    },
+    {
+      "title": "Đánh máy Bản thảo Tiểu thuyết",
+      "description": "Nhận file ảnh/PDF bản thảo viết tay và đánh máy thành văn bản Word. Yêu cầu chính xác tuyệt đối về nội dung, đúng định dạng. Dự án kéo dài 2 tháng.",
+      "quantity": 10,
+      "salary": 8000000,
+      "salary_type": "PROJECT",
+      "status": "PUBLIC",
+      "created_at": "2025-12-17 09:35:00",
+      "ended_time": "2026-01-05 17:00:00",
+      "recruiter_username": "recruiter61",
+      "industry_name": "Hành chính văn phòng",
+      "job_type_code": "PART_TIME",
+      "level_name": "Nhân viên",
+      "skill_names": [
+        "Data Entry",
+        "Microsoft Office"
+      ]
+    },
+    {
+      "title": "Biên tập & Hiệu đính Bài viết Tiếng Việt",
+      "description": "Nhận bài viết từ writer, chỉnh sửa lỗi chính tả, ngữ pháp, trau chuốt câu văn cho mượt mà hơn. Yêu cầu tiếng Việt tốt, cẩn thận, có con mắt biên tập.",
+      "quantity": 12,
+      "salary": 50000,
+      "salary_type": "PROJECT",
+      "status": "PUBLIC",
+      "created_at": "2025-11-05 11:50:00",
+      "ended_time": "2026-01-12 17:00:00",
+      "recruiter_username": "recruiter62",
+      "industry_name": "Marketing & Truyền thông",
+      "job_type_code": "PART_TIME",
+      "level_name": "Nhân viên",
+      "skill_names": [
+        "Content Writing",
+        "Critical Thinking"
+      ]
+    },
+    {
+      "title": "Dịch Subtitle (Phụ đề) Video YouTube từ Anh sang Việt",
+      "description": "Nhận file video hoặc transcript tiếng Anh, dịch và tạo phụ đề tiếng Việt đồng bộ với thời gian video. Sử dụng tool hỗ trợ. Yêu cầu dịch tự nhiên, phù hợp với văn hóa Việt.",
+      "quantity": 25,
+      "salary": 150000,
+      "salary_type": "PROJECT",
+      "status": "PUBLIC",
+      "created_at": "2025-11-15 17:25:00",
+      "ended_time": "2026-01-20 23:59:59",
+      "recruiter_username": "recruiter64",
+      "industry_name": "Giải trí & Truyền thông",
+      "job_type_code": "PART_TIME",
+      "level_name": "Mới tốt nghiệp",
+      "skill_names": [
+        "Translation",
+        "Tiếng Anh"
+      ]
+    },
+    {
+      "title": "Nhập liệu Đơn hàng từ Facebook/Shopee vào Excel",
+      "description": "Theo dõi inbox fanpage/shop, ghi lại thông tin đơn hàng (tên KH, sđt, địa chỉ, sản phẩm) vào file Excel mẫu. Làm vào cuối ngày, khoảng 1h/ngày.",
+      "quantity": 15,
+      "salary": 1000000,
+      "salary_type": "MONTHS",
+      "status": "PUBLIC",
+      "created_at": "2025-11-20 14:10:00",
+      "ended_time": "2026-01-25 17:00:00",
+      "recruiter_username": "recruiter65",
+      "industry_name": "Bán lẻ & Thương mại điện tử",
+      "job_type_code": "PART_TIME",
+      "level_name": "Thực tập sinh",
+      "skill_names": [
+        "Data Entry",
+        "Microsoft Office",
+        "Customer Service"
+      ]
+    },
+    {
+      "title": "Gia sư Lập trình Scratch/Python cho Trẻ em Online",
+      "description": "Dạy lập trình cơ bản cho học sinh tiểu học/THCS thông qua các nền tảng trực tuyến. Giáo trình vui nhộn, dễ hiểu. Yêu cầu kiên nhẫn, yêu thích dạy trẻ.",
+      "quantity": 10,
+      "salary": 200000,
+      "salary_type": "HOURS",
+      "status": "PUBLIC",
+      "created_at": "2025-11-25 08:20:00",
+      "ended_time": "2026-01-15 17:00:00",
+      "recruiter_username": "recruiter66",
+      "industry_name": "Giáo dục & Đào tạo",
+      "job_type_code": "PART_TIME",
+      "level_name": "Nhân viên",
+      "skill_names": [
+        "Teaching & Tutoring",
+        "Python",
+        "Public Speaking"
+      ]
+    },
+    {
+      "title": "Thiết kế Banner Khuyến mãi theo Tuần (Freelance)",
+      "description": "Mỗi tuần nhận brief thiết kế 2-3 banner khuyến mãi cho website và Facebook. Kích thước cố định, sử dụng hình ảnh có sẵn hoặc tự tìm. Giao nộp qua Figma/PSD.",
+      "quantity": 8,
+      "salary": 300000,
+      "salary_type": "PROJECT",
+      "status": "PUBLIC",
+      "created_at": "2025-11-30 16:45:00",
+      "ended_time": "2026-01-30 17:00:00",
+      "recruiter_username": "recruiter67",
+      "industry_name": "Marketing & Truyền thông",
+      "job_type_code": "PART_TIME",
+      "level_name": "Nhân viên",
+      "skill_names": [
+        "UI/UX Design",
+        "Social Media Management"
+      ]
+    },
+    {
+      "title": "Thu âm Audiobook Sách Thiếu nhi",
+      "description": "Thu âm đọc truyện thiếu nhi với giọng diễn cảm, truyền cảm xúc. Yêu cầu có chất giọng ấm, trong trẻo, không gian thu âm yên tĩnh. Nhận sách điện tử và thu theo chapter.",
+      "quantity": 3,
+      "salary": 500000,
+      "salary_type": "PROJECT",
+      "status": "PUBLIC",
+      "created_at": "2025-12-04 10:30:00",
+      "ended_time": "2026-01-10 23:59:59",
+      "recruiter_username": "recruiter68",
+      "industry_name": "Giải trí & Truyền thông",
+      "job_type_code": "PART_TIME",
+      "level_name": "Nhân viên",
+      "skill_names": [
+        "Public Speaking"
+      ]
+    },
+    {
+      "title": "Viết Caption & Lên lịch Post Instagram (Hàng ngày)",
+      "description": "Nhận hình ảnh/video từ brand, viết caption phù hợp và lên lịch post tự động trên Instagram (dùng tool). Cần hiểu insight người dùng Instagram, bắt trend nhanh.",
+      "quantity": 10,
+      "salary": 1500000,
+      "salary_type": "MONTHS",
+      "status": "PUBLIC",
+      "created_at": "2025-12-09 13:55:00",
+      "ended_time": "2026-01-20 17:00:00",
+      "recruiter_username": "recruiter69",
+      "industry_name": "Marketing & Truyền thông",
+      "job_type_code": "PART_TIME",
+      "level_name": "Mới tốt nghiệp",
+      "skill_names": [
+        "Social Media Management",
+        "Content Writing"
+      ]
+    },
+    {
+      "title": "Phân loại & Gắn nhãn Câu hỏi cho Chatbot",
+      "description": "Đọc các câu hỏi của người dùng và phân loại chúng vào các nhóm ý định (intent) có sẵn. Ví dụ: \"Giá sản phẩm này bao nhiêu?\" -> intent \"hỏi giá\". Công việc đơn giản, training đầy đủ.",
+      "quantity": 100,
+      "salary": 300,
+      "salary_type": "PROJECT",
+      "status": "PUBLIC",
+      "created_at": "2025-12-14 17:20:00",
+      "ended_time": "2026-01-31 23:59:59",
+      "recruiter_username": "recruiter70",
+      "industry_name": "Công nghệ thông tin",
+      "job_type_code": "PART_TIME",
+      "level_name": "Thực tập sinh",
+      "skill_names": [
+        "Data Entry",
+        "Critical Thinking"
+      ]
+    },
+    {
+      "title": "Số hóa Biểu mẫu & Phiếu khảo sát cũ",
+      "description": "Chuyển đổi các biểu mẫu, phiếu khảo sát bằng giấy sang dạng form điện tử (Google Form hoặc Word). Cần chính xác về bố cục và nội dung.",
+      "quantity": 30,
+      "salary": 15000,
+      "salary_type": "PROJECT",
+      "status": "PUBLIC",
+      "created_at": "2025-11-10 07:50:00",
+      "ended_time": "2026-01-08 17:00:00",
+      "recruiter_username": "recruiter61",
+      "industry_name": "Hành chính văn phòng",
+      "job_type_code": "PART_TIME",
+      "level_name": "Mới tốt nghiệp",
+      "skill_names": [
+        "Data Entry",
+        "Microsoft Office"
+      ]
+    },
+    {
+      "title": "Tổng hợp tin tức & Viết bản tin hàng tuần (Tài chính)",
+      "description": "Theo dõi tin tức tài chính, ngân hàng trong tuần, tổng hợp và viết thành một bản tin ngắn (500-700 từ) gửi cho khách hàng doanh nghiệp. Cần khả năng tổng hợp và viết lách tốt.",
+      "quantity": 5,
+      "salary": 400000,
+      "salary_type": "PROJECT",
+      "status": "PUBLIC",
+      "created_at": "2025-11-26 12:00:00",
+      "ended_time": "2026-01-22 17:00:00",
+      "recruiter_username": "recruiter62",
+      "industry_name": "Tài chính - Ngân hàng",
+      "job_type_code": "PART_TIME",
+      "level_name": "Nhân viên",
+      "skill_names": [
+        "Content Writing",
+        "Business Analysis",
+        "Critical Thinking"
       ]
     }
   ],
   "applications": [
     {
-      "candidate_username": "candidate1",
-      "job_post_title": "Lập trình viên Backend Java (Senior)",
+      "candidate_username": "candidate61",
+      "job_post_title": "Viết bài Blog về Công nghệ & Đánh giá Sản phẩm",
       "status": "PENDING",
-      "created_at": "2025-11-12 14:25:00"
+      "created_at": "2025-11-09 10:30:00"
     },
     {
-      "candidate_username": "candidate1",
-      "job_post_title": "DevOps Engineer",
+      "candidate_username": "candidate62",
+      "job_post_title": "Cộng tác viên Nhập liệu Số hóa Sách cũ",
       "status": "APPROVED",
-      "created_at": "2025-12-21 10:15:00"
+      "created_at": "2025-11-04 14:15:00"
     },
     {
-      "candidate_username": "candidate2",
-      "job_post_title": "Chuyên viên Digital Marketing",
+      "candidate_username": "candidate63",
+      "job_post_title": "Viết bài Blog về Công nghệ & Đánh giá Sản phẩm",
       "status": "ASSIGNED",
-      "created_at": "2025-11-20 16:40:00"
+      "created_at": "2025-11-10 16:45:00"
     },
     {
-      "candidate_username": "candidate2",
-      "job_post_title": "Nhân viên Kinh doanh Bán lẻ (Part-time)",
+      "candidate_username": "candidate64",
+      "job_post_title": "Trợ lý Ảo (Virtual Assistant) cho Doanh nhân",
       "status": "REJECTED",
-      "created_at": "2025-12-05 11:05:00"
+      "created_at": "2025-11-19 09:20:00"
     },
     {
-      "candidate_username": "candidate3",
-      "job_post_title": "Frontend Developer (ReactJS)",
+      "candidate_username": "candidate65",
+      "job_post_title": "Cộng tác viên Nhập liệu Số hóa Sách cũ",
+      "status": "PENDING",
+      "created_at": "2025-11-05 08:50:00"
+    },
+    {
+      "candidate_username": "candidate66",
+      "job_post_title": "Dịch thuật Tài liệu Y tế (Anh - Việt) - Online",
       "status": "ACCEPTED",
-      "created_at": "2025-11-30 09:50:00"
+      "created_at": "2025-11-14 13:10:00"
     },
     {
-      "candidate_username": "candidate3",
-      "job_post_title": "Giảng viên/Trợ giảng Lập trình Part-time",
+      "candidate_username": "candidate67",
+      "job_post_title": "Cộng tác viên Gắn nhãn Hình ảnh cho AI (An toàn Nội dung)",
       "status": "PENDING",
-      "created_at": "2025-12-13 15:30:00"
+      "created_at": "2025-12-13 11:40:00"
     },
     {
-      "candidate_username": "candidate4",
-      "job_post_title": "UI/UX Designer",
+      "candidate_username": "candidate68",
+      "job_post_title": "Thiết kế Logo theo Yêu cầu (Crowdsourcing)",
       "status": "CANCELLED",
-      "created_at": "2025-11-25 13:20:00"
+      "created_at": "2025-11-29 15:25:00"
     },
     {
-      "candidate_username": "candidate4",
-      "job_post_title": "Data Analyst (Fresher/Junior)",
+      "candidate_username": "candidate69",
+      "job_post_title": "Gia sư Tiếng Anh Giao tiếp Online cho Người đi làm",
       "status": "PENDING",
-      "created_at": "2025-11-17 08:45:00"
+      "created_at": "2025-11-24 17:00:00"
     },
     {
-      "candidate_username": "candidate5",
-      "job_post_title": "Thực tập sinh Phát triển Phần mềm",
+      "candidate_username": "candidate70",
+      "job_post_title": "Đánh máy Bản thảo Tiểu thuyết",
+      "status": "APPROVED",
+      "created_at": "2025-12-18 10:05:00"
+    },
+    {
+      "candidate_username": "candidate61",
+      "job_post_title": "Quản lý Fanpage & Viết Content cho Thương hiệu Trà sữa",
+      "status": "ASSIGNED",
+      "created_at": "2025-12-08 14:50:00"
+    },
+    {
+      "candidate_username": "candidate62",
+      "job_post_title": "Nhập liệu Đơn hàng từ Facebook/Shopee vào Excel",
       "status": "PENDING",
-      "created_at": "2025-12-08 14:00:00"
+      "created_at": "2025-11-21 12:35:00"
     },
     {
-      "candidate_username": "candidate5",
-      "job_post_title": "Data Analyst (Fresher/Junior)",
+      "candidate_username": "candidate63",
+      "job_post_title": "Biên tập & Hiệu đính Bài viết Tiếng Việt",
       "status": "REJECTED",
-      "created_at": "2025-11-18 11:10:00"
+      "created_at": "2025-11-06 09:15:00"
+    },
+    {
+      "candidate_username": "candidate64",
+      "job_post_title": "Dịch Subtitle (Phụ đề) Video YouTube từ Anh sang Việt",
+      "status": "ACCEPTED",
+      "created_at": "2025-11-16 18:30:00"
+    },
+    {
+      "candidate_username": "candidate65",
+      "job_post_title": "Số hóa Biểu mẫu & Phiếu khảo sát cũ",
+      "status": "PENDING",
+      "created_at": "2025-11-11 07:40:00"
+    },
+    {
+      "candidate_username": "candidate66",
+      "job_post_title": "Tổng hợp tin tức & Viết bản tin hàng tuần (Tài chính)",
+      "status": "CANCELLED",
+      "created_at": "2025-11-27 11:55:00"
+    },
+    {
+      "candidate_username": "candidate67",
+      "job_post_title": "Phân loại & Gắn nhãn Câu hỏi cho Chatbot",
+      "status": "PENDING",
+      "created_at": "2025-12-15 16:20:00"
+    },
+    {
+      "candidate_username": "candidate68",
+      "job_post_title": "Thiết kế Banner Khuyến mãi theo Tuần (Freelance)",
+      "status": "APPROVED",
+      "created_at": "2025-12-01 13:05:00"
+    },
+    {
+      "candidate_username": "candidate69",
+      "job_post_title": "Gia sư Lập trình Scratch/Python cho Trẻ em Online",
+      "status": "PENDING",
+      "created_at": "2025-11-26 10:45:00"
+    },
+    {
+      "candidate_username": "candidate70",
+      "job_post_title": "Viết Caption & Lên lịch Post Instagram (Hàng ngày)",
+      "status": "REJECTED",
+      "created_at": "2025-12-10 15:10:00"
     }
   ]
 }

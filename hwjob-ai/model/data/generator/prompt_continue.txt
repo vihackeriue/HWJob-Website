@@ -1,22 +1,25 @@
-Đây là prompt để yêu cầu AI tạo TIẾP dữ liệu (tránh trùng lặp với lần đầu):
-
----
-
+Hãy tạo tiếp dữ liệu bắt đầu từ số **21**. Tạo thêm 10 candidate, 10 recruiter, 20 job posts (trong đó có job nhập liệu online).
 Hãy tiếp tục đóng vai chuyên gia tạo dữ liệu giả lập. Nhiệm vụ của bạn là **tạo thêm** dữ liệu mới để bổ sung vào file JSON trước đó.
 
-**Yêu cầu quan trọng để KHÔNG TRÙNG LẶP:**
+**THÔNG TIN QUAN TRỌNG KHI CHUYỂN QUA HỘI THOẠI MỚI:**
+Vì đây là hội thoại mới, tôi sẽ cung cấp lại danh sách các bảng danh mục đã có để bạn sử dụng cho đúng (không cần tạo lại các bảng này, chỉ cần dùng tên/code của chúng để liên kết):
+*   **Skills:** Java, Python, ReactJS, NodeJS, Marketing, Sales, HR, Design, Content Writing, Data Entry...
+*   **Industries:** Công nghệ thông tin, Marketing, Hành chính văn phòng, Kinh doanh, Tài chính...
+*   **Levels:** Thực tập sinh, Mới tốt nghiệp, Nhân viên chính thức, Trưởng nhóm, Quản lý.
+*   **Job Types:** FULL_TIME, PART_TIME.
 
-1.  **Username & Email (Bắt buộc):**
-    *   Lần trước đã tạo đến `candidate20` và `recruiter20`.
-    *   Lần này, hãy **bắt đầu đánh số từ 21**:
-        *   Candidates: `candidate21`, `candidate22`... đến `candidate40`.
-        *   Recruiters: `recruiter21`, `recruiter22`... đến `recruiter40`.
-    *   Email tương ứng: `candidate21@example.com`, `recruiter21@company.com`...
+**Yêu cầu tạo dữ liệu mới (KHÔNG TRÙNG LẶP):**
 
-2.  **Nội dung Job Posts:**
-    *   Hãy sáng tạo các tiêu đề và mô tả công việc **KHÁC** với lần trước.
-    *   Ví dụ: Nếu lần trước đã có nhiều "Java Backend", lần này hãy tập trung vào "Frontend React/Vue", "Mobile Flutter", "DevOps", "AI Engineer", "Business Analyst"...
-    *   Thời gian `created_at` và `ended_time` vẫn tuân thủ quy tắc cũ (cuối 2025 - đầu 2026).
+1.  **Số bắt đầu (Start Index):**
+    *   Hãy bắt đầu đánh số username từ: **[SỐ_BẮT_ĐẦU]** (Ví dụ: nếu trước đó đã tạo đến 20, hãy điền 21 vào đây).
+    *   Username Candidates: `candidate[SỐ_BẮT_ĐẦU]`, `candidate[SỐ_BẮT_ĐẦU + 1]`...
+    *   Username Recruiters: `recruiter[SỐ_BẮT_ĐẦU]`, `recruiter[SỐ_BẮT_ĐẦU + 1]`...
+    *   Email tương ứng: `candidate[SỐ_BẮT_ĐẦU]@example.com`...
+
+2.  **Nội dung Job Posts (Đa dạng hóa):**
+    *   Hãy sáng tạo các tiêu đề và mô tả công việc **KHÁC** với các mẫu phổ biến.
+    *   **Lưu ý:** Hãy tạo thêm các Job làm việc **Online/Freelance** (như Nhập liệu, Viết bài, Dịch thuật...) chiếm khoảng 80% số lượng job mới.
+    *   Mô tả công việc (`description`) có thể ngắn gọn hoặc dài chi tiết (kèm HTML) tùy ý.
 
 3.  **Số lượng tạo thêm:**
     *   20 Users mới (10 Candidate, 10 Recruiter).
@@ -26,8 +29,7 @@ Hãy tiếp tục đóng vai chuyên gia tạo dữ liệu giả lập. Nhiệm 
     *   20 Applications mới.
 
 4.  **Định dạng:**
-    *   Chỉ trả về JSON object chứa các mảng dữ liệu **MỚI** (không cần lặp lại các bảng danh mục như skills, industries, levels, job_types nếu chúng không thay đổi. Hoặc nếu có thay đổi thì trả về đầy đủ).
-    *   Nếu chỉ trả về dữ liệu mới, hãy giữ nguyên cấu trúc key (users, candidates...) để tôi có thể dễ dàng merge vào file cũ.
+    *   Chỉ trả về JSON object chứa các mảng dữ liệu **MỚI** (users, candidates, recruiters, job_posts, applications).
+    *   Không cần trả lại mảng skills, industries... trừ khi bạn muốn thêm skill/industry mới chưa có trong danh sách trên.
 
 ---
-*Lưu ý: Bạn có thể thay đổi số bắt đầu (21) thành số khác tùy thuộc vào lượng dữ liệu bạn đã có.*
