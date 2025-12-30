@@ -45,6 +45,7 @@ jwt:
   signerKey: 21d698ee57633eca2f364129be119e4e237079d8ab664b7a37d2006b92da62d6
   valid-duration: 3600
   refreshable-duration: 604800
+  api-key: 0ddfd6ca62a69ea47643e8db5d50d7c09c3155dd92122e35c20a55ad603b8e00
 
 app:
   file:

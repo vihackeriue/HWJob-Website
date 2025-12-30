@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.service.shared.region;
 
-import com.hw.hwjobbackend.model.dto.api.ProvinceApiResponse;
+import com.hw.hwjobbackend.model.dto.api.response.ProvinceApiResponse;
 import com.hw.hwjobbackend.model.dto.response.region.RegionResponse;
 import org.springframework.data.domain.Page;
 

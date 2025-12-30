@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.repository.http_client;
 
-import com.hw.hwjobbackend.model.dto.api.ProvinceApiResponse;
+import com.hw.hwjobbackend.model.dto.api.response.ProvinceApiResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 

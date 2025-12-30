@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from typing import List, Optional
 
 class RecommendJobsRequestDTO(BaseModel):
     """
@@ -7,4 +8,5 @@ class RecommendJobsRequestDTO(BaseModel):
     """
     summary: str
     education: str
-    skills: str
+    # [SỬA LẠI] Cho phép skills có thể null và cung cấp giá trị mặc định là list rỗng
+    skills: Optional[List[str]] = Field(default_factory=list)

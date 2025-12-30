@@ -3,11 +3,14 @@ from pydantic import ValidationError
 from app.schemas.request.job_index_dto import JobIndexDTO
 from app.schemas.request.candidate_index_dto import CandidateIndexDTO
 from app.services.indexing_service import IndexingService
+from app.core.security import require_api_key
 
 # Tạo một Blueprint cho các route liên quan đến indexing
 indexing_bp = Blueprint('indexing_bp', __name__)
 
+
 @indexing_bp.route('/index-job', methods=['POST'])
+@require_api_key
 def index_job():
     """
     API endpoint để index một Job Post.
@@ -27,7 +30,9 @@ def index_job():
         print(f"Error in /index-job: {e}")
         return jsonify({"error": "An internal server error occurred."}), 500
 
+
 @indexing_bp.route('/index-candidate', methods=['POST'])
+@require_api_key
 def index_candidate():
     """
     API endpoint để index một Candidate.

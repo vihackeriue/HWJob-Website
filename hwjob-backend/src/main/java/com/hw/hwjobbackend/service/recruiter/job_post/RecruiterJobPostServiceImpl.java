@@ -2,11 +2,14 @@ package com.hw.hwjobbackend.service.recruiter.job_post;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.model.dto.api.request.JobPostIndexingRequest;
+import com.hw.hwjobbackend.model.dto.api.response.ServerAIMessageResponse;
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostRequest;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.model.entity.job_post.JobPost;
 import com.hw.hwjobbackend.model.entity.skill.Skill;
+import com.hw.hwjobbackend.repository.http_client.ServerAIFeignClient;
 import com.hw.hwjobbackend.repository.industry.IndustryRepository;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
 import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
@@ -23,7 +26,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,9 +45,9 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
     LevelRepository levelRepository;
     JobTypeRepository jobTypeRepository;
     IndustryRepository industryRepository;
+    ServerAIFeignClient serverAIFeignClient;
 
     SkillService skillService;
-
 
     @Override
     @Transactional
@@ -57,6 +59,8 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
 
         setJobPostRelations(jobPost, request);
         jobPost = jobPostRepository.save(jobPost);
+
+        createJobPostIndexing(jobPost);
 
         return jobPostMapper.toJobPostResponse(jobPost);
     }
@@ -97,8 +101,27 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
 
         jobPostMapper.updateJobPost(request, jobPost);
         setJobPostRelations(jobPost, request);
-
+        createJobPostIndexing(jobPost);
         return jobPostMapper.toJobPostDetailResponse(jobPost);
+    }
+
+    private void createJobPostIndexing(JobPost jobPost) {
+
+        List<String> jobPostSkills = (jobPost.getSkills() != null)
+                ? jobPost.getSkills().stream().map(Skill::getName).toList()
+                : List.of();
+
+        JobPostIndexingRequest jobPostIndexingRequest = JobPostIndexingRequest.builder()
+                .jobId(jobPost.getId())
+                .title(jobPost.getTitle())
+                .description(jobPost.getDescription())
+                .level(jobPost.getLevel().getName())
+                .skills(jobPostSkills)
+                .endedTime(jobPost.getEndedTime())
+                .status(jobPost.getStatus().name())
+                .build();
+        ServerAIMessageResponse response = serverAIFeignClient.indexJobPost(jobPostIndexingRequest);
+        log.info(response.getMessage());
     }
 
     private void setJobPostRelations(JobPost jobPost, JobPostRequest request) {

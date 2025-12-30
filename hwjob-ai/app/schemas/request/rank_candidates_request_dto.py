@@ -8,6 +8,6 @@ class RankCandidatesRequestDTO(BaseModel):
     """
     title: str
     description: str
-    skills: str
+    skills: List[str]
     level: str
-    pending_candidate_ids: List[int] = Field(default_factory=list)
+    pending_candidate_ids: List[str] = Field(default_factory=list)  # [SỬA LẠI] Chuyển từ List[int] sang List[str]
