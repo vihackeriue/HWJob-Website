@@ -1,7 +1,6 @@
 package com.hw.hwjobbackend.service.initialization;
 
-import com.hw.hwjobbackend.model.dto.api.ProvinceApiResponse;
-import com.hw.hwjobbackend.model.dto.response.file.FileResponse;
+import com.hw.hwjobbackend.model.dto.api.response.ProvinceApiResponse;
 import com.hw.hwjobbackend.model.entity.industry.Industry;
 import com.hw.hwjobbackend.model.entity.job_type.JobType;
 import com.hw.hwjobbackend.model.entity.level.Level;

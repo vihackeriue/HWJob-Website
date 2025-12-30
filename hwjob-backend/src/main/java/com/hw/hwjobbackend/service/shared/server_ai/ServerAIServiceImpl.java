@@ -1,6 +1,6 @@
 package com.hw.hwjobbackend.service.shared.server_ai;
 
-import com.hw.hwjobbackend.model.dto.api.ServerAIMessageResponse;
+import com.hw.hwjobbackend.model.dto.api.response.ServerAIMessageResponse;
 import com.hw.hwjobbackend.repository.http_client.ServerAIFeignClient;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +20,5 @@ public class ServerAIServiceImpl implements ServerAIService {
     @Override
     public ServerAIMessageResponse sendMessage() {
         return serverAIFeignClient.sendMessage();
-    }
-
-    @Override
-    public ServerAIMessageResponse sendMessage(String name) {
-        return serverAIFeignClient.sendMessage(name);
     }
 }

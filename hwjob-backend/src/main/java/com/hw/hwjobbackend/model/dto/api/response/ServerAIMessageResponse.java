@@ -1,4 +1,4 @@
-package com.hw.hwjobbackend.model.dto.api;
+package com.hw.hwjobbackend.model.dto.api.response;
 
 
 import lombok.*;

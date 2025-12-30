@@ -1,12 +1,14 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from typing import List, Optional
 
 class JobIndexDTO(BaseModel):
     """
     DTO cho việc index một Job Post.
-    Dữ liệu được gửi từ Spring Boot khi có Job mới hoặc cập nhật.
     """
-    job_id: int
+    job_id: str
     title: str
     description: str
-    skills: str
+    skills: Optional[List[str]] = Field(default_factory=list)
     level: str
+    ended_time: str
+    status: str  # [MỚI] Thêm trường status ('PUBLIC', 'PRIVATE')

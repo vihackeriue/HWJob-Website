@@ -2,7 +2,10 @@ package com.hw.hwjobbackend.service.candidate.candidate_user;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.model.dto.api.request.CandidateIndexingRequest;
+import com.hw.hwjobbackend.model.dto.api.response.ServerAIMessageResponse;
 import com.hw.hwjobbackend.model.entity.skill.Skill;
+import com.hw.hwjobbackend.repository.http_client.ServerAIFeignClient;
 import com.hw.hwjobbackend.service.mapper.user.CandidateMapper;
 import com.hw.hwjobbackend.model.dto.request.user.CandidateUpdateRequest;
 import com.hw.hwjobbackend.model.dto.response.user.CandidateResponse;
@@ -18,6 +21,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -29,6 +33,7 @@ public class CandidateUserServiceImpl implements CandidateUserService {
     CandidateMapper candidateMapper;
     UserService userService;
     SkillService skillService;
+    ServerAIFeignClient serverAIFeignClient;
 
     @Override
     @Transactional
@@ -51,7 +56,23 @@ public class CandidateUserServiceImpl implements CandidateUserService {
         candidateMapper.updateCandidate(candidate, request);
 
         candidateRepository.save(candidate);
-
+        createCandidateIndexing(candidate);
         return candidateMapper.toCandidateResponse(candidate);
+    }
+
+    private void createCandidateIndexing(Candidate candidate) {
+
+        List<String> candidateSkills = (candidate.getSkills() != null)
+                ? candidate.getSkills().stream().map(Skill::getName).toList()
+                : List.of();
+
+        CandidateIndexingRequest request = CandidateIndexingRequest.builder()
+                .candidateId(candidate.getId())
+                .summary(candidate.getSummary())
+                .education(candidate.getEducation())
+                .skills(candidateSkills)
+                .build();
+        ServerAIMessageResponse response = serverAIFeignClient.indexCandidate(request);
+        log.info(response.getMessage());
     }
 }
