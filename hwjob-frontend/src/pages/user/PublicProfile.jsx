@@ -21,7 +21,6 @@ const PublicProfile = () => {
 
             if (conversation) {
                 openConversation(conversation);
-                toast.success("Đã mở cuộc trò chuyện");
             } else {
                 toast.error("Không thể tạo cuộc trò chuyện");
             }
