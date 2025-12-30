@@ -8,62 +8,57 @@ Hãy đóng vai một chuyên gia tạo dữ liệu giả lập (dummy data gene
     *   Đối với **Nhà tuyển dụng (Recruiters)**: Hãy đặt username theo mẫu `recruiter1`, `recruiter2`... đến `recruiter20`.
     *   Email cũng nên tương ứng (ví dụ: `candidate1@example.com`, `recruiter1@company.com`).
 
-4.  **Độ dài và Định dạng nội dung (QUAN TRỌNG):**
-    *   **Ngắn gọn:** Các trường `description` của `skills`, `industries`, `levels`, `job_types` phải **ngắn gọn, súc tích** (chỉ khoảng 1 câu).
-    *   **Chi tiết & HTML:** Trường `summary` của `users` và `description` của `job_posts` phải **dài tương đối, chi tiết** và được trình bày bằng các **thẻ HTML cơ bản** (như `<p>`, `<ul>`, `<li>`, `<b>`, `<br>`) để hiển thị đẹp trên web.
-        *   Ví dụ `summary`: `<p>Lập trình viên <b>Java</b> với 3 năm kinh nghiệm.</p><ul><li>Thành thạo Spring Boot</li><li>Có kiến thức về Microservices</li></ul>`
+4.  **Độ dài và Định dạng nội dung (ĐA DẠNG):**
+    *   **Skills, Industries, Levels, Job Types:** Mô tả ngắn gọn (1 câu).
+    *   **User Summary:** Độ dài đa dạng. Có người viết ngắn (1 dòng), có người viết vừa phải (2-3 câu). Sử dụng thẻ HTML cơ bản (`<p>`, `<b>`) nếu cần nhấn mạnh.
+    *   **Job Post Description:** Độ dài đa dạng.
+        *   Một số bài viết ngắn gọn, súc tích.
+        *   Một số bài viết dài, chi tiết, sử dụng thẻ HTML (`<ul>`, `<li>`, `<b>`, `<br>`) để trình bày yêu cầu công việc đẹp mắt.
 
-5.  **Tạo dữ liệu nhiễu (Noise) cho AI Training:**
-    *   Để phục vụ mục đích huấn luyện AI, hãy để khoảng **5%** dữ liệu có các trường bị thiếu (null) hoặc rỗng ("").
-    *   Ví dụ: thiếu `phone`, `summary`, `dob`, hoặc `expect_salary`.
-    *   Tuy nhiên, các trường khóa (username, email, password, các trường liên kết) **BẮT BUỘC** phải có đầy đủ.
+5.  **Loại hình công việc (MỚI):**
+    *   Bên cạnh các công việc truyền thống (Full-time/Part-time tại văn phòng), hãy tạo khoảng **20%** số lượng Job Post là các công việc **Làm việc Online/Freelance trên hệ thống** (Ví dụ: Nhập liệu online, Viết content tại nhà, Dịch thuật theo dự án...).
 
-6.  **Số lượng dữ liệu cần tạo (TĂNG CƯỜNG):**
+6.  **Tạo dữ liệu nhiễu (Noise):**
+    *   Khoảng **5%** dữ liệu có các trường bị thiếu (null) hoặc rỗng (ví dụ: thiếu `phone`, `summary`, `dob`).
+    *   Các trường khóa (username, email, password) bắt buộc phải có.
+
+7.  **Số lượng dữ liệu cần tạo:**
     *   **20 Skills** (Kỹ năng đa dạng: IT, Marketing, Sales, HR...)
     *   **10 Industries** (Các ngành nghề phổ biến)
     *   **5 Levels** (Thực tập, Mới tốt nghiệp, Nhân viên, Trưởng nhóm, Quản lý)
     *   **2 Job Types** (Toàn thời gian, Bán thời gian)
-    *   **40 Users** (Bao gồm: 20 ứng viên, 20 nhà tuyển dụng)
-    *   **20 Candidates** (Tương ứng với 20 user ứng viên)
-    *   **20 Recruiters** (Tương ứng với 20 user nhà tuyển dụng)
-    *   **40 Job Posts** (Bài đăng tuyển dụng đa dạng)
-    *   **40 Applications** (Đơn ứng tuyển ngẫu nhiên)
+    *   **40 Users** (20 ứng viên, 20 nhà tuyển dụng)
+    *   **20 Candidates**
+    *   **20 Recruiters**
+    *   **40 Job Posts**
+    *   **40 Applications**
 
-7.  **Logic liên kết dữ liệu:**
-    *   Sử dụng trường `username` để liên kết chính xác giữa bảng `users` với `candidates` và `recruiters`.
-    *   Sử dụng các trường `_name` hoặc `_code` để liên kết trong `job_posts`.
+8.  **Logic liên kết:**
+    *   Dùng `username` để liên kết User - Candidate/Recruiter.
+    *   Dùng `_name` hoặc `_code` để liên kết Job Post với các bảng danh mục.
 
-**Quy tắc dữ liệu chi tiết (Constraints):**
-*   **Password:** Tất cả user đều dùng chung mật khẩu là: `password`.
-*   **User Recruiter:** `full_name` phải là tên Công ty/Tổ chức.
-*   **Phone:** Định dạng số điện thoại Việt Nam.
-*   **Ngày tháng (QUAN TRỌNG):**
-    *   `created_at` (cho tất cả các bảng): Tạo ngẫu nhiên trong khoảng từ **01/11/2025** đến **31/12/2025**.
-    *   `ended_time` (trong `job_posts`):
-        *   **90%** bài đăng có thời gian hết hạn trong **Tháng 01/2026** (Còn hạn).
-        *   **10%** bài đăng có thời gian hết hạn trong **Tháng 12/2025** (Đã hết hạn).
-*   **Enum Values:**
-    *   `user_status`: 'ACTIVE', 'INACTIVE'
-    *   `gender`: 0 (Nam), 1 (Nữ), 2 (Khác)
-    *   `salary_type`: 'HOURS', 'MONTHS', 'NEGOTIATION', 'PROJECT'
-    *   `job_post_status`: 'PRIVATE', 'PUBLIC'
-    *   `application_status`: 'ACCEPTED', 'APPROVED', 'ASSIGNED', 'CANCELLED', 'PENDING', 'REJECTED'
-    *   `job_type_code`: 'FULL_TIME', 'PART_TIME'
+**Quy tắc dữ liệu chi tiết:**
+*   **Password:** `password`.
+*   **User Recruiter:** `full_name` là tên Công ty/Tổ chức.
+*   **Phone:** Số điện thoại VN.
+*   **Ngày tháng:**
+    *   `created_at`: 01/11/2025 - 31/12/2025.
+    *   `ended_time`: 90% tháng 01/2026 (còn hạn), 10% tháng 12/2025 (hết hạn).
 
-**Cấu trúc JSON mẫu (Hãy điền dữ liệu vào đây):**
+**Cấu trúc JSON mẫu:**
 
 ```json
 {
   "skills": [
-    { "name": "Java", "description": "Ngôn ngữ lập trình hướng đối tượng phổ biến." },
+    { "name": "Java", "description": "Ngôn ngữ lập trình hướng đối tượng." },
     // ...
   ],
   "industries": [
-    { "name": "Công nghệ thông tin", "description": "Lĩnh vực phần mềm và hệ thống." }
+    { "name": "Công nghệ thông tin", "description": "Phát triển phần mềm." }
     // ...
   ],
   "levels": [
-    { "name": "Thực tập sinh" },
+    { "name": "Thực tập sinh" }
     // ...
   ],
   "job_types": [
@@ -77,7 +72,7 @@ Hãy đóng vai một chuyên gia tạo dữ liệu giả lập (dummy data gene
       "email": "candidate1@example.com",
       "full_name": "Nguyễn Văn A",
       "phone": "0912345678",
-      "summary": "<p>Lập trình viên <b>Java</b> đầy nhiệt huyết.</p><ul><li>2 năm kinh nghiệm</li><li>Thích học hỏi công nghệ mới</li></ul>",
+      "summary": "Lập trình viên Java mới ra trường, ham học hỏi.",
       "user_status": "ACTIVE",
       "created_at": "2025-11-01 08:00:00"
     },
@@ -87,21 +82,11 @@ Hãy đóng vai một chuyên gia tạo dữ liệu giả lập (dummy data gene
       "email": "recruiter1@techabc.com",
       "full_name": "Công ty Cổ phần Công nghệ ABC",
       "phone": "0243888999",
-      "summary": "<p>Công ty hàng đầu về <b>giải pháp phần mềm</b>.</p><p>Môi trường làm việc chuyên nghiệp.</p>",
+      "summary": "<p>Công ty hàng đầu về <b>giải pháp phần mềm</b>.</p>",
       "user_status": "ACTIVE",
       "created_at": "2025-11-15 09:00:00"
-    },
-    {
-      "username": "candidate2",
-      "password": "password",
-      "email": "candidate2@example.com",
-      "full_name": "Trần Thị B",
-      "phone": null, // Ví dụ dữ liệu thiếu
-      "summary": null, // Ví dụ dữ liệu thiếu
-      "user_status": "ACTIVE",
-      "created_at": "2025-12-02 08:00:00"
     }
-    // ... thêm user khác
+    // ...
   ],
   "candidates": [
     {
@@ -123,8 +108,23 @@ Hãy đóng vai một chuyên gia tạo dữ liệu giả lập (dummy data gene
   ],
   "job_posts": [
     {
+      "title": "Nhập liệu Online tại nhà",
+      "description": "Công việc đơn giản, nhập dữ liệu vào hệ thống theo yêu cầu. Thời gian linh hoạt.",
+      "quantity": 10,
+      "salary": 5000000,
+      "salary_type": "PROJECT",
+      "status": "PUBLIC",
+      "created_at": "2025-11-01 10:00:00",
+      "ended_time": "2026-01-15 23:59:59",
+      "recruiter_username": "recruiter1",
+      "industry_name": "Hành chính văn phòng",
+      "job_type_code": "PART_TIME",
+      "level_name": "Thực tập sinh",
+      "skill_names": ["Tin học văn phòng"]
+    },
+    {
       "title": "Lập trình viên Backend Java",
-      "description": "<p>Chúng tôi đang tìm kiếm ứng viên <b>Backend Java</b>.</p><b>Yêu cầu:</b><ul><li>Thành thạo Java Core</li><li>Biết Spring Boot</li></ul>",
+      "description": "<p>Tuyển dụng <b>Backend Java</b>.</p><ul><li>Kinh nghiệm 2 năm</li><li>Lương thưởng hấp dẫn</li></ul>",
       "quantity": 2,
       "salary": 20000000,
       "salary_type": "MONTHS",
@@ -136,21 +136,6 @@ Hãy đóng vai một chuyên gia tạo dữ liệu giả lập (dummy data gene
       "job_type_code": "FULL_TIME",
       "level_name": "Nhân viên chính thức",
       "skill_names": ["Java"]
-    },
-    {
-      "title": "Thực tập sinh Marketing (Đã hết hạn)",
-      "description": "<p>Tuyển thực tập sinh <b>Marketing</b>.</p>",
-      "quantity": 5,
-      "salary": 3000000,
-      "salary_type": "MONTHS",
-      "status": "PUBLIC",
-      "created_at": "2025-11-01 09:00:00",
-      "ended_time": "2025-12-20 17:00:00",
-      "recruiter_username": "recruiter1",
-      "industry_name": "Marketing",
-      "job_type_code": "PART_TIME",
-      "level_name": "Thực tập sinh",
-      "skill_names": []
     }
     // ...
   ],

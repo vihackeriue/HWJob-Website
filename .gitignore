@@ -13,6 +13,10 @@ Thumbs.db
 hwjob-ai/.env
 hwjob-ai/__pycache__/
 hwjob-ai/model/data/csv_data/
+hwjob-ai/chroma_db_data/
+hwjob-ai/.venv
+
+
 
 # ------------------------------
 # Java / Spring Boot

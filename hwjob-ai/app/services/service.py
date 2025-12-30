@@ -1,1 +1,0 @@
-# Logic nghiệp vụ <-- Gọi loader, tính toán, trả kết quả

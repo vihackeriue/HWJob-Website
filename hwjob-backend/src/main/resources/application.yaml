@@ -38,7 +38,7 @@ api:
   api-province: https://provinces.open-api.vn/api/v2/
 
 cors:
-  server-api-ai: http://localhost:8000/
+  server-api-ai: http://localhost:5000/
   server-frontend: http://localhost:5173/
 
 jwt:
