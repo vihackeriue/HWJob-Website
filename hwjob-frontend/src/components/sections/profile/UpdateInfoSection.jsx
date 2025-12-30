@@ -16,6 +16,7 @@ import {useUpdateInfo} from "../../../hooks/user/useUpdateInfo.jsx";
 import {toast} from "react-toastify";
 import {ROLES} from "../../../constants/roles.jsx";
 import {hasRole} from "../../../utils/permission.jsx";
+import SkillList from "../../ui/form/SkillList.jsx";
 
 const UpdateInfoSection = ({personalInfo, onUpdated}) => {
 
@@ -280,55 +281,3 @@ const UpdateInfoSection = ({personalInfo, onUpdated}) => {
 };
 
 export default UpdateInfoSection;
-
-const SkillList = ({skillIds, allSkills, onRemove}) => {
-    const selectedSkills = allSkills?.filter(skill =>
-        skillIds.includes(skill.id)
-    ) ?? [];
-
-    return (
-        <ul className="flex flex-wrap gap-2 mt-2">
-            {selectedSkills.map(skill => (
-                <SkillTag
-                    key={skill.id}
-                    skill={skill}
-                    onRemove={onRemove}
-                />
-            ))}
-        </ul>
-    );
-};
-
-const SkillTag = ({skill, onRemove}) => (
-    <li
-        className="
-            inline-flex max-w-full
-            items-center gap-1
-            rounded-full
-            border border-sky-100
-            bg-sky-50
-            dark:text-sky-300
-            dark:border-sky-500/15
-            dark:bg-sky-500/10
-            px-3 py-1
-            text-sm
-            whitespace-normal
-        "
-    >
-        <span>{skill.name}</span>
-        <button
-            type="button"
-            onClick={() => onRemove(skill.id)}
-            className="
-                hover:bg-sky-200
-                dark:hover:bg-sky-500/20
-                rounded-full
-                p-0.5
-                transition-colors
-            "
-            title="Xóa kỹ năng"
-        >
-            <IoMdClose size={16}/>
-        </button>
-    </li>
-);

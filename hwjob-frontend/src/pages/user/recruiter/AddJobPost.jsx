@@ -13,6 +13,9 @@ import {getLevelsNotPagination} from "../../../services/levelService";
 import {createJobPost} from "../../../services/jobPostService";
 import {useNavigate} from "react-router-dom";
 import {SALARY_TYPE, STATUS_JOB_POST} from "../../../config/constants";
+import {IoMdClose} from "react-icons/io";
+import {getSkillsNotPagination} from "../../../services/skillService.jsx";
+import SkillList from "../../../components/ui/form/SkillList.jsx";
 
 const AddJobPost = () => {
     const [formJobPost, setFormJobPost] = useState({
@@ -28,6 +31,7 @@ const AddJobPost = () => {
         levelId: null,
         jobTypeId: null,
         regionId: null,
+        skillIds: [],
     });
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
@@ -35,6 +39,7 @@ const AddJobPost = () => {
     const jobTypes = useList(getJobTypesNotPagination);
     const industries = useList(getIndustriesNotPagination);
     const levels = useList(getLevelsNotPagination);
+    const skills = useList(getSkillsNotPagination);
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -81,6 +86,30 @@ const AddJobPost = () => {
         // Nếu không có lỗi → trả về true
         return Object.keys(newErrors).length === 0;
     };
+
+
+    const handleSkillsChange = (e) => {
+        const skillId = Number(e?.target?.value ?? e);
+        if (!skillId) return;
+
+        setFormJobPost(prev => {
+            if (prev.skillIds.includes(skillId)) {
+                return prev;
+            }
+            return {
+                ...prev,
+                skillIds: [...prev.skillIds, skillId]
+            };
+        });
+    };
+
+    const handleRemoveSkill = (skillId) => {
+        setFormJobPost(prev => ({
+            ...prev,
+            skillIds: prev.skillIds.filter(id => id !== skillId)
+        }));
+    };
+
 
     const handleSubmit = async () => {
         if (!validate()) {
@@ -212,6 +241,30 @@ const AddJobPost = () => {
                         placeholder="Chọn khu vực"
                         error={errors.regionId}
                     />
+
+                    <div className="mt-3">
+                        <SecondTitle></SecondTitle>
+                        <span>Kỹ năng</span>
+                        {formJobPost.skillIds.length > 0 && (
+                            <SkillList
+                                skillIds={formJobPost.skillIds}
+                                allSkills={skills.data}
+                                onRemove={handleRemoveSkill}
+                            />
+                        )}
+                        <div className="mt-3">
+                            <FormSelect
+                                label="Thêm kỹ năng"
+                                selected={null}
+                                options={skills.data?.filter(
+                                    skill => !formJobPost.skillIds.includes(skill.id)
+                                )}
+                                placeholder="Chọn kỹ năng để thêm"
+                                onChange={handleSkillsChange}
+                            />
+                        </div>
+                    </div>
+
                     <div className="flex justify-end ">
                         <PrimaryButton onClick={handleSubmit}>
                             Đăng bài tuyển dụng
@@ -224,3 +277,4 @@ const AddJobPost = () => {
 };
 
 export default AddJobPost;
+
