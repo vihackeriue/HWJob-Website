@@ -2,6 +2,7 @@ package com.hw.hwjobbackend.controller.user.recruiter;
 
 import com.hw.hwjobbackend.model.dto.request.work.UpdateWorkStatusRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
+import com.hw.hwjobbackend.model.dto.response.work.AllWorkCandidateOfRecruiterResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkCandidateResponse;
 import com.hw.hwjobbackend.service.recruiter.work.RecruiterWorkService;
 import com.hw.hwjobbackend.util.PaginationUtils;
@@ -50,7 +51,32 @@ public class RecruiterWorkController {
         }
 
         return ApiResponse.<List<WorkCandidateResponse>>builder()
-                .result(recruiterWorkService.getAllCandidateWork(jobPostId))
+                .result(recruiterWorkService.getCandidateWork(jobPostId))
+                .build();
+    }
+    @GetMapping("/candidates/all")
+    public ApiResponse<List<AllWorkCandidateOfRecruiterResponse>> getAllCandidateWork(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size
+    ) {
+        if (page != null && size != null) {
+            Page<AllWorkCandidateOfRecruiterResponse> response =
+                    recruiterWorkService.getAllCandidateWorkOfRecruiter(
+                            PaginationUtils.toZeroBasedPage(page),
+                            size
+                    );
+
+            return ApiResponse.<List<AllWorkCandidateOfRecruiterResponse>>builder()
+                    .page(PaginationUtils.toOneBasedPage(response.getNumber()))
+                    .totalPages(response.getTotalPages())
+                    .result(response.getContent())
+                    .build();
+        }
+
+        return ApiResponse.<List<AllWorkCandidateOfRecruiterResponse>>builder()
+                .result(
+                        recruiterWorkService.getAllCandidateWorkOfRecruiter()
+                )
                 .build();
     }
 }

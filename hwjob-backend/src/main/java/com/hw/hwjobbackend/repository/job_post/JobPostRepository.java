@@ -5,10 +5,13 @@ import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +55,29 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
             @Param("regionId") Integer regionId
     );
 
+    @Query("SELECT j FROM JobPost j WHERE j.recruiter.id = :recruiterId " +
+            "AND (:title IS NULL OR LOWER(j.title) LIKE LOWER(CONCAT('%', :title, '%'))) " +
+            "AND (" +
+            "(:status IS NULL) OR " +
+            "(:status = 'PUBLIC' AND j.status = 'PUBLIC' AND j.endedTime > CURRENT_TIMESTAMP) OR " +
+            "(:status = 'PRIVATE' AND (j.status = 'PRIVATE' OR (j.status = 'PUBLIC' AND j.endedTime <= CURRENT_TIMESTAMP)))" +
+            ") ORDER BY j.createdAt DESC")
+    Page<JobPost> findByRecruiterAndStatusCustom(
+            String recruiterId,
+            String status, // Dùng String ở đây để so sánh cho gọn
+            String title,
+            Pageable pageable
+    );
+
+    @Query("SELECT j FROM JobPost j WHERE j.recruiter.id = :recruiterId " +
+            "AND (:title IS NULL OR LOWER(j.title) LIKE LOWER(CONCAT('%', :title, '%'))) " +
+            "AND (" +
+            "(:status IS NULL) OR " +
+            "(:status = 'PUBLIC' AND j.status = 'PUBLIC' AND j.endedTime > CURRENT_TIMESTAMP) OR " +
+            "(:status = 'PRIVATE' AND (j.status = 'PRIVATE' OR (j.status = 'PUBLIC' AND j.endedTime <= CURRENT_TIMESTAMP)))" +
+            ") ORDER BY j.createdAt DESC")
+    List<JobPost> findAllByRecruiterAndStatusCustom(String recruiterId, String status,String title);
+
 
     Page<JobPost> findAllByRecruiterIdOrderByCreatedAtDesc(
             String recruiterId,
@@ -71,4 +97,46 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
             """)
     boolean existsValidJobPost(@Param("jobPostId") String jobPostId);
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE JobPost j SET j.viewCount = j.viewCount + :views WHERE j.id = :jobPostId")
+    void increaseViewCount(@Param("jobPostId") String jobPostId,
+                           @Param("views") Long views);
+
+
+    /* ========================================
+       Statistic
+       ======================================== */
+
+    // Tổng bài đã đăng
+    long countByRecruiterId(String recruiterId);
+
+    // Đang mở tuyển
+    @Query("""
+        SELECT COUNT(j)
+        FROM JobPost j
+        WHERE j.recruiter.id = :recruiterId
+          AND j.status = 'PUBLIC'
+          AND (j.endedTime IS NULL OR j.endedTime > CURRENT_TIMESTAMP)
+    """)
+    long countOpeningJobs(@Param("recruiterId") String recruiterId);
+
+    // Bị ẩn
+    @Query("""
+        SELECT COUNT(j)
+        FROM JobPost j
+        WHERE j.recruiter.id = :recruiterId
+          AND j.status <> 'PUBLIC'
+    """)
+    long countHiddenJobs(@Param("recruiterId") String recruiterId);
+
+    // Hết hạn
+    @Query("""
+        SELECT COUNT(j)
+        FROM JobPost j
+        WHERE j.recruiter.id = :recruiterId
+          AND j.endedTime IS NOT NULL
+          AND j.endedTime <= CURRENT_TIMESTAMP
+    """)
+    long countExpiredJobs(@Param("recruiterId") String recruiterId);
 }

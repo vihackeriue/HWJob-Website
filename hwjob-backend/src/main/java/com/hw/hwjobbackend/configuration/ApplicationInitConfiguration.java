@@ -57,7 +57,7 @@ public class ApplicationInitConfiguration {
 
                 // Khởi tạo user
 
-                initializationService.initializeTestUsers();
+//                initializationService.initializeTestUsers();
 
                 long duration = System.currentTimeMillis() - startTime;
                 log.info("=== Application initialization completed in {}ms ===", duration);

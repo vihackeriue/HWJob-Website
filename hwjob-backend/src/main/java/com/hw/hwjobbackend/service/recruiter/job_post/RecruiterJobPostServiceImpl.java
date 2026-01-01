@@ -4,16 +4,25 @@ import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostRequest;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
+import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailStatsResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
+import com.hw.hwjobbackend.model.dto.response.job_post.RecruiterJobPostStatsResponse;
 import com.hw.hwjobbackend.model.entity.job_post.JobPost;
 import com.hw.hwjobbackend.model.entity.skill.Skill;
+import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
+import com.hw.hwjobbackend.model.enums.WorkStatusEnum;
+import com.hw.hwjobbackend.repository.application.ApplicationRepository;
+import com.hw.hwjobbackend.repository.candidate_save_job.CandidateSaveJobRepository;
 import com.hw.hwjobbackend.repository.industry.IndustryRepository;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
 import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
 import com.hw.hwjobbackend.repository.level.LevelRepository;
 import com.hw.hwjobbackend.repository.region.RegionRepository;
 import com.hw.hwjobbackend.repository.user.RecruiterRepository;
+import com.hw.hwjobbackend.repository.work.WorkRepository;
+import com.hw.hwjobbackend.service.candidate.work.CandidateWorkService;
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
+import com.hw.hwjobbackend.service.shared.job_post.JobPostViewService;
 import com.hw.hwjobbackend.service.shared.skill.SkillService;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import com.hw.hwjobbackend.util.SecurityUtils;
@@ -27,7 +36,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -46,6 +57,11 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
 
     SkillService skillService;
 
+    JobPostViewService jobPostViewService;
+    ApplicationRepository applicationRepository;
+    CandidateSaveJobRepository candidateSaveJobRepository;
+    WorkRepository workRepository;
+
 
     @Override
     @Transactional
@@ -63,24 +79,24 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<JobPostResponse> getPostedJobPosts(int page, int size) {
+    public Page<JobPostResponse> getPostedJobPosts(int page, int size, JobPostStatusEnum status, String keyword) {
         String recruiterId = SecurityUtils.getCurrentUserId();
 
         Pageable pageable = PaginationUtils.buildPageable(page, size);
-
+        String statusName = (status != null) ? status.name() : null;
         Page<JobPost> jobPosts = jobPostRepository
-                .findAllByRecruiterIdOrderByCreatedAtDesc(recruiterId, pageable);
+                .findByRecruiterAndStatusCustom(recruiterId, statusName, keyword,pageable);
 
         return jobPosts.map(jobPostMapper::toJobPostResponse);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<JobPostResponse> getAllPostedJobPosts() {
+    public List<JobPostResponse> getAllPostedJobPosts(JobPostStatusEnum status,String keyword) {
         String recruiterId = SecurityUtils.getCurrentUserId();
-
+        String statusName = (status != null) ? status.name() : null;
         return jobPostRepository
-                .findAllByRecruiterIdOrderByCreatedAtDesc(recruiterId)
+                .findAllByRecruiterAndStatusCustom(recruiterId, statusName, keyword)
                 .stream()
                 .map(jobPostMapper::toJobPostResponse)
                 .toList();
@@ -146,5 +162,60 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
         } else {
             jobPost.setSkills(null);
         }
+    }
+
+    @Override
+    public RecruiterJobPostStatsResponse getRecruiterJobPostStats() {
+        String recruiterId = SecurityUtils.getCurrentUserId();
+        long totalJobs   = jobPostRepository.countByRecruiterId(recruiterId);
+        long openingJobs = jobPostRepository.countOpeningJobs(recruiterId);
+        long hiddenJobs  = jobPostRepository.countHiddenJobs(recruiterId);
+        long expiredJobs = jobPostRepository.countExpiredJobs(recruiterId);
+
+        return RecruiterJobPostStatsResponse.builder()
+                .totalJobPosts(totalJobs)
+                .openingJobPosts(openingJobs)
+                .hiddenJobPosts(hiddenJobs)
+                .expiredJobPosts(expiredJobs)
+                .build();
+    }
+
+    @Override
+    public JobPostDetailStatsResponse getJobPostDetailStats(String jobPostId) {
+        JobPost jobPost = jobPostRepository.findById(jobPostId)
+                .orElseThrow(() -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED));
+
+        // ===== Views =====
+        long totalView = Optional.ofNullable(jobPost.getViewCount()).orElse(0L)
+                + jobPostViewService.getRedisView(jobPostId);
+
+        long applyCount = applicationRepository.countByJobPostId(jobPostId);
+        long saveCount = candidateSaveJobRepository.countByJobPostId(jobPostId);
+
+
+        long viewHourly = jobPostViewService.getRedisView(jobPostId); // view giờ gần nhất
+
+        // ===== Employee / Work stats =====
+        long totalStaffCount = workRepository.countByJobPostId(jobPostId);
+        long staffCompletedCount = workRepository.countByJobPostIdAndStatus(jobPostId, WorkStatusEnum.SUBMITTED);
+
+        // ===== Payment stats =====
+        BigInteger totalSalary = workRepository.sumAgreedSalaryByJobPost(jobPostId);
+        BigInteger  paidSalary = workRepository.sumAgreedSalaryByJobPostAndStatus(jobPostId, WorkStatusEnum.PAID);
+        BigInteger  pendingSalary  = workRepository.sumAgreedSalaryByJobPostAndStatus(jobPostId, WorkStatusEnum.SUBMITTED);
+
+        // ===== Build response =====
+        return JobPostDetailStatsResponse.builder()
+                .jobPostId(jobPostId)
+                .totalView(totalView)
+                .applyCount(applyCount)
+                .saveCount(saveCount)
+                .viewHourly(viewHourly)
+                .totalStaffCount(totalStaffCount)
+                .staffCompletedCount(staffCompletedCount)
+                .totalSalary(totalSalary)
+                .paidSalary(paidSalary)
+                .pendingSalary(pendingSalary)
+                .build();
     }
 }

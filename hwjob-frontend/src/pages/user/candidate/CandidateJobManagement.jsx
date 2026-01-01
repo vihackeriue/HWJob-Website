@@ -32,22 +32,22 @@ const CandidateJobManagement = () => {
           <div className="flex gap-4 w-full bg-dark-100 p-3 rounded-2xl shadow bg-white">
             <QuantityStatisticsCard
               stat={22}
-              icon={<CiLocationOn className="size-12 text-teal-600" />}
+              icon={<CiLocationOn className="size-8 text-teal-600" />}
               title={"Đã ứng tuyển"}
             />
             <QuantityStatisticsCard
               stat={22}
-              icon={<CiLocationOn className="size-12 text-teal-600" />}
+              icon={<CiLocationOn className="size-8 text-teal-600" />}
               title={"Tổng việc làm"}
             />
             <QuantityStatisticsCard
               stat={22}
-              icon={<CiLocationOn className="size-12 text-teal-600" />}
+              icon={<CiLocationOn className="size-8 text-teal-600" />}
               title={"Việc đã xong"}
             />
             <QuantityStatisticsCard
               stat={22}
-              icon={<CiLocationOn className="size-12 text-teal-600" />}
+              icon={<CiLocationOn className="size-8 text-teal-600" />}
               title={"Việc đã lưu"}
             />
           </div>

@@ -6,6 +6,7 @@ import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.service.shared.job_post.JobPostService;
 import com.hw.hwjobbackend.util.PaginationUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -58,9 +59,9 @@ public class JobPostController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<JobPostDetailResponse> getJobPostDetail(@PathVariable String id) {
+    public ApiResponse<JobPostDetailResponse> getJobPostDetail(@PathVariable String id, HttpServletRequest request) {
         return ApiResponse.<JobPostDetailResponse>builder()
-                .result(jobPostService.getJobPostDetail(id))
+                .result(jobPostService.getJobPostDetail(id, request))
                 .build();
     }
 }

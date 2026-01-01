@@ -42,6 +42,8 @@ public class JobPost {
 
     Long salary;
 
+    Long viewCount = 0L;
+
     @Enumerated(EnumType.STRING)
     SalaryTypeEnum salaryType;
 
@@ -79,6 +81,9 @@ public class JobPost {
     public void prePersist() {
         if (status == null) {
             status = JobPostStatusEnum.PUBLIC;
+        }
+        if (viewCount == null) {
+            viewCount = 0L;
         }
     }
 
