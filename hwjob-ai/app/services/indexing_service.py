@@ -35,7 +35,6 @@ class IndexingService:
 
         vector = embedding_model.encode(processed_text).tolist()
 
-        # [SỬA LẠI] Thêm status vào metadata
         job_collection.upsert(
             ids=[str(data.job_id)],
             embeddings=[vector],
@@ -43,7 +42,7 @@ class IndexingService:
                 "skills": skills_str,
                 "level": data.level,
                 "ended_time": ended_time_timestamp,
-                "status": data.status.upper()  # Lưu status dưới dạng chữ hoa để đồng nhất
+                "status": data.status.upper()
             }],
             documents=[processed_text]
         )

@@ -2,7 +2,8 @@ package com.hw.hwjobbackend.service.recruiter.application;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.model.dto.request.application.ApplicationRecruiterRequest;
+import com.hw.hwjobbackend.model.dto.api.request.RankCandidateRequest;
+import com.hw.hwjobbackend.model.dto.api.response.RecommendationResponse;
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationStatusRequest;
 import com.hw.hwjobbackend.model.dto.request.work.WorkCreateRequest;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationCandidateResponse;
@@ -10,9 +11,8 @@ import com.hw.hwjobbackend.model.entity.application.Application;
 import com.hw.hwjobbackend.model.entity.application.ApplicationId;
 import com.hw.hwjobbackend.model.enums.ApplicationStatusEnum;
 import com.hw.hwjobbackend.repository.application.ApplicationRepository;
-import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
+import com.hw.hwjobbackend.repository.http_client.ServerAIFeignClient;
 import com.hw.hwjobbackend.repository.user.CandidateRepository;
-import com.hw.hwjobbackend.service.blockchain.BlockchainService;
 import com.hw.hwjobbackend.service.mapper.application.ApplicationMapper;
 import com.hw.hwjobbackend.service.recruiter.work.RecruiterWorkService;
 import com.hw.hwjobbackend.service.shared.loyalty_point.LoyaltyPointService;
@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +40,8 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
     ApplicationMapper applicationMapper;
     RecruiterWorkService workService;
     LoyaltyPointService loyaltyPointService;
-
+    ServerAIFeignClient serverAIFeignClient;
+    CandidateRepository candidateRepository;
 
     @Override
     public Page<ApplicationCandidateResponse> getCandidateApplications(int page, int size, String jobPostId) {
@@ -53,16 +55,31 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
         return applications.map(applicationMapper::toCandidateApplicationResponse);
     }
 
+
     @Override
     public List<ApplicationCandidateResponse> getAllCandidateApplications(String jobPostId) {
         String recruiterId = SecurityUtils.getCurrentUserId();
 
-        List<Application> applications = applicationRepository
-                .findAllByJobPostIdAndRecruiterIdOrderByCreatedAtDesc(jobPostId, recruiterId);
+        List<String> candidateAppliedId = applicationRepository
+                .findAllPendingCandidateIdAndJobPostIdAndRecruiterByCreatedAtDesc(jobPostId, recruiterId);
 
-        return applications.stream()
-                .map(applicationMapper::toCandidateApplicationResponse)
-                .toList();
+        RankCandidateRequest request = RankCandidateRequest.builder()
+                .jobPostId(jobPostId)
+                .pendingCandidateIds(candidateAppliedId)
+                .build();
+
+        RecommendationResponse rankedCandidateAppliedId = serverAIFeignClient.rankCandidates(request);
+
+        log.info(rankedCandidateAppliedId.toString());
+
+        return rankedCandidateAppliedId.getResults().stream()
+                .map(rankedItem -> {
+                    Application application = applicationRepository.findByJobPostIdAndCandidateId(jobPostId, rankedItem.getId())
+                            .orElseThrow(() -> new AppException(ErrorCode.APPLICATION_NOT_FOUND));
+                    return applicationMapper.toCandidateApplicationResponse(application);
+                })
+                .collect(Collectors.toList());
+
     }
 
     @Override
@@ -127,6 +144,7 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
 
 
     }
+
     private void validateStatusTransition(
             ApplicationStatusEnum current,
             ApplicationStatusEnum next

@@ -3,6 +3,8 @@ package com.hw.hwjobbackend.repository.http_client;
 
 import com.hw.hwjobbackend.model.dto.api.request.CandidateIndexingRequest;
 import com.hw.hwjobbackend.model.dto.api.request.JobPostIndexingRequest;
+import com.hw.hwjobbackend.model.dto.api.request.JobPostRecommendationRequest;
+import com.hw.hwjobbackend.model.dto.api.request.RankCandidateRequest;
 import com.hw.hwjobbackend.model.dto.api.response.RecommendationResponse;
 import com.hw.hwjobbackend.model.dto.api.response.ServerAIMessageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -23,8 +25,8 @@ public interface ServerAIFeignClient {
     ServerAIMessageResponse indexCandidate(@RequestBody CandidateIndexingRequest request);
 
     @PostMapping("/recommend-jobs")
-    RecommendationResponse recommendJobs(@RequestBody CandidateIndexingRequest request);
+    RecommendationResponse recommendJobs(@RequestBody JobPostRecommendationRequest request);
 
-    @PostMapping("/rank-candidates")
-    RecommendationResponse rankCandidates(@RequestBody JobPostIndexingRequest request);
+    @PostMapping("/rank-pending-candidates")
+    RecommendationResponse rankCandidates(@RequestBody RankCandidateRequest request);
 }

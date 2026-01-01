@@ -1,5 +1,6 @@
 import os
 
+
 class Config:
     """
     Lớp cấu hình tập trung cho ứng dụng AI Server.
@@ -16,7 +17,7 @@ class Config:
 
     # Đường dẫn tới file stopwords, nằm trong thư mục model/data
     STOPWORDS_PATH = os.path.join(PROJECT_ROOT, 'model', 'data', 'nlp', 'vietnamese-stopwords.txt')
-    
+
     # Đường dẫn để lưu trữ dữ liệu của ChromaDB, đặt ở thư mục gốc
     CHROMA_DB_PATH = os.path.join(PROJECT_ROOT, 'chroma_db_data')
 

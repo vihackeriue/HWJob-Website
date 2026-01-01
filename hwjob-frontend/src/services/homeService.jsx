@@ -6,3 +6,9 @@ export const getTopRecruiters = async () => {
     console.log(response.data);
     return response.data;
 }
+
+export const getRecommendJobPosts = async () => {
+    const response = await axiosPublic.get(ENDPOINTS.HOME.RECOMMEND_JOB_POSTS);
+    console.log(response.data);
+    return response.data;
+}
