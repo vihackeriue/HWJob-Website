@@ -2,10 +2,16 @@ package com.hw.hwjobbackend.service.shared.job_post;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.model.dto.api.request.CandidateIndexingRequest;
+import com.hw.hwjobbackend.model.dto.api.response.RecommendationResponse;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostRecruiterProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkOverviewResponse;
+import com.hw.hwjobbackend.model.entity.skill.Skill;
+import com.hw.hwjobbackend.model.entity.user.Candidate;
+import com.hw.hwjobbackend.repository.http_client.ServerAIFeignClient;
 import com.hw.hwjobbackend.repository.review.ReviewRepository;
+import com.hw.hwjobbackend.repository.user.CandidateRepository;
 import com.hw.hwjobbackend.repository.work.WorkRepository;
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostFilterRequest;
@@ -43,6 +49,10 @@ public class JobPostServiceImpl implements JobPostService {
     WorkRepository workRepository;
     WorkMapper workMapper;
     ReviewRepository reviewRepository;
+    ServerAIFeignClient serverAIFeignClient;
+    CandidateRepository candidateRepository;
+
+
     @Override
     public Page<JobPostResponse> getAllJobPosts(Integer page, Integer size, JobPostFilterRequest filter) {
         Pageable pageable = PaginationUtils.buildPageable(page, size);

@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface CandidateJobPostService {
 
+    List<JobPostResponse> getRecommendJobPosts(String userId);
+
     SaveJobPostResponse saveJobPost(String id);
 
     Page<JobPostResponse> getSavedJobPosts(int page, int size);

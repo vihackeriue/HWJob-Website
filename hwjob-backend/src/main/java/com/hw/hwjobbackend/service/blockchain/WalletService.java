@@ -1,5 +1,7 @@
 package com.hw.hwjobbackend.service.blockchain;
 
+import com.hw.hwjobbackend.exception.AppException;
+import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.response.wallet.WalletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +17,16 @@ public class WalletService {
 
     BlockchainService blockchainService;
 
-    public WalletResponse createWallet() throws Exception {
-        ECKeyPair keyPair = Keys.createEcKeyPair();
+    public WalletResponse createWallet() {
+        try {
+            ECKeyPair keyPair = Keys.createEcKeyPair();
 
-        String privateKey = keyPair.getPrivateKey().toString(16);
-        String address = "0x" + Keys.getAddress(keyPair.getPublicKey());
-        blockchainService.registerWalletForUser(address);
-        return new WalletResponse(address, privateKey);
+            String privateKey = keyPair.getPrivateKey().toString(16);
+            String address = "0x" + Keys.getAddress(keyPair.getPublicKey());
+            blockchainService.registerWalletForUser(address);
+            return new WalletResponse(address, privateKey);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.FAIL_PROCESS_BLOCKCHAIN);
+        }
     }
 }

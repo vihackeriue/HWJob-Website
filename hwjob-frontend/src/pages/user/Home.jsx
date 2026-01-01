@@ -17,6 +17,7 @@ export default function Home() {
     const {t} = useTranslation();
 
     const {data: recruiters} = useList(getTopRecruiters);
+    // const {data: recommendJobPosts} =useList()
 
     const jobPosts = [
         {
@@ -129,28 +130,7 @@ export default function Home() {
             isLiked: false,
         },
     ];
-    const industries = [
-        {id: 1, name: "Software Engineer", totalJob: 20},
-        {id: 2, name: "Data Analyst", totalJob: 15},
-        {id: 3, name: "UI/UX Designer", totalJob: 12},
-        {id: 4, name: "Project Manager", totalJob: 10},
-        {id: 5, name: "DevOps Engineer", totalJob: 8},
-        {id: 6, name: "Network Administrator", totalJob: 6},
-        {id: 7, name: "Cybersecurity Specialist", totalJob: 7},
-        {id: 8, name: "Mobile Developer", totalJob: 9},
-        {id: 9, name: "Frontend Developer", totalJob: 14},
-        {id: 10, name: "Backend Developer", totalJob: 13},
-        {id: 11, name: "AI / Machine Learning Engineer", totalJob: 11},
-        {id: 12, name: "Quality Assurance (QA/QC)", totalJob: 10},
-        {id: 13, name: "Business Analyst", totalJob: 8},
-        {id: 14, name: "Digital Marketing", totalJob: 16},
-        {id: 15, name: "Human Resources (HR)", totalJob: 9},
-        {id: 16, name: "Finance / Accounting", totalJob: 7},
-        {id: 17, name: "Customer Service", totalJob: 12},
-        {id: 18, name: "Sales & Business Development", totalJob: 18},
-        {id: 19, name: "Logistics / Supply Chain", totalJob: 6},
-        {id: 20, name: "Content Creator / Copywriter", totalJob: 5},
-    ];
+    const industries = [];
 
     return (
         <div>

@@ -5,19 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
-
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RankCandidateRequest {
-
-    @JsonProperty("job_id")
-    String jobPostId;
-
-    @JsonProperty("pending_candidate_ids")
-    List<String> pendingCandidateIds;
+public class JobPostRecommendationRequest {
+    @JsonProperty("candidate_id")
+    String candidateId;
 }

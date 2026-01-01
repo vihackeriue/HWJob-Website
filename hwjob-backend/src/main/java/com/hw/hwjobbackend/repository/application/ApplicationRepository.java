@@ -17,6 +17,16 @@ public interface ApplicationRepository extends JpaRepository<Application, Applic
 
     // ===== Recruiter methods =====
 
+
+    @Query("SELECT a.candidate.id FROM Application a " +
+            "WHERE a.jobPost.id = :jobPostId " +
+            "AND a.jobPost.recruiter.id =:recruiterId AND a.status = 'PENDING' " +
+            "ORDER BY a.createdAt DESC")
+    List<String> findAllPendingCandidateIdAndJobPostIdAndRecruiterByCreatedAtDesc(
+            @Param("jobPostId") String jobPostId,
+            @Param("recruiterId") String recruiterId
+    );
+
     @Query("SELECT a FROM Application a " +
             "WHERE a.jobPost.id = :jobPostId " +
             "AND a.jobPost.recruiter.id = :recruiterId " +
@@ -71,10 +81,10 @@ public interface ApplicationRepository extends JpaRepository<Application, Applic
             @Param("jobPostId") String jobPostId);
 
     @Query("""
-    SELECT a FROM Application a
-    WHERE a.jobPost.id = :jobPostId
-      AND a.candidate.id = :candidateId
-""")
+                SELECT a FROM Application a
+                WHERE a.jobPost.id = :jobPostId
+                  AND a.candidate.id = :candidateId
+            """)
     Optional<Application> findByJobPostIdAndCandidateId(
             @Param("jobPostId") String jobPostId,
             @Param("candidateId") String candidateId

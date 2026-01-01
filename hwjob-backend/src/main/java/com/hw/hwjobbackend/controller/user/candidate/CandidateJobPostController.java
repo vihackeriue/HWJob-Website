@@ -21,7 +21,14 @@ public class CandidateJobPostController {
 
     CandidateJobPostService candidateJobPostService;
 
-    @PostMapping("save/{id}")
+    @GetMapping("/recommend/{candidateId}")
+    public ApiResponse<List<JobPostResponse>> getRecommendJobPosts(@PathVariable String candidateId) {
+        return ApiResponse.<List<JobPostResponse>>builder()
+                .result(candidateJobPostService.getRecommendJobPosts(candidateId))
+                .build();
+    }
+
+    @PostMapping("/save/{id}")
     public ApiResponse<SaveJobPostResponse> saveJobPost(@PathVariable String id) {
         return ApiResponse.<SaveJobPostResponse>builder()
                 .result(candidateJobPostService.saveJobPost(id))

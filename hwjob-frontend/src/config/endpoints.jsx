@@ -84,9 +84,9 @@ export const ENDPOINTS = {
         LIST: "public/skills",
     },
 
-
     HOME: {
         TOP_RECRUITER: "/public/home/top-recruiters",
+        RECOMMEND_JOB_POSTS: "/"
     },
     WS: {
         ENDPOINT: "ws",

@@ -8,10 +8,10 @@ import java.math.BigInteger;
 public class CustomGasProvider implements ContractGasProvider {
 
     private static final BigInteger GAS_PRICE =
-            BigInteger.valueOf(20_000_000_000L); // 20 Gwei
+            BigInteger.valueOf(10_000_000_000L); // 10 Gwei
 
     private static final BigInteger GAS_LIMIT =
-            BigInteger.valueOf(6_000_000L); // 8 triệu
+            BigInteger.valueOf(1_000_000L); // 1 triệu
 
     @Override
     public BigInteger getGasPrice() {
