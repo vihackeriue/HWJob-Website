@@ -2,6 +2,7 @@ package com.hw.hwjobbackend.controller.user.recruiter;
 
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationStatusRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
+import com.hw.hwjobbackend.model.dto.response.application.ApplicationAllCandidateResponse;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationCandidateResponse;
 import com.hw.hwjobbackend.service.recruiter.application.RecruiterApplicationService;
 import com.hw.hwjobbackend.util.PaginationUtils;
@@ -41,8 +42,32 @@ public class RecruiterApplicationController {
         }
 
         return ApiResponse.<List<ApplicationCandidateResponse>>builder()
-                .result(recruiterJobPostService.getAllCandidateApplications(jobPostId))
+                .result(recruiterJobPostService.getCandidateApplications(jobPostId))
                 .build();
+    }
+    @GetMapping("/candidates/all")
+    public ApiResponse<List<ApplicationAllCandidateResponse>> getAllCandidateApplications(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size
+    ) {
+        if (page != null && size != null) {
+            Page<ApplicationAllCandidateResponse> response =
+                    recruiterJobPostService.getAllCandidateApplicationsOfRecruiter(
+                            PaginationUtils.toZeroBasedPage(page),
+                            size
+                    );
+
+            return ApiResponse.<List<ApplicationAllCandidateResponse>>builder()
+                    .page(PaginationUtils.toOneBasedPage(response.getNumber()))
+                    .totalPages(response.getTotalPages())
+                    .result(response.getContent())
+                    .build();
+        }
+
+        return ApiResponse.<List<ApplicationAllCandidateResponse>>builder()
+                .result(
+                        recruiterJobPostService.getAllCandidateApplicationsOfRecruiter()
+                ).build();
     }
 
     @PatchMapping("/job-posts/{jobPostId}/candidates/{candidateId}/status")

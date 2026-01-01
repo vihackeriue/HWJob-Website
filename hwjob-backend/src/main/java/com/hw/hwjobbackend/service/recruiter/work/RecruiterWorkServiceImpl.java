@@ -4,6 +4,7 @@ import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.request.work.UpdateWorkStatusRequest;
 import com.hw.hwjobbackend.model.dto.request.work.WorkCreateRequest;
+import com.hw.hwjobbackend.model.dto.response.work.AllWorkCandidateOfRecruiterResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkCandidateResponse;
 import com.hw.hwjobbackend.model.entity.application.Application;
 import com.hw.hwjobbackend.model.entity.application.ApplicationId;
@@ -71,7 +72,7 @@ public class RecruiterWorkServiceImpl implements RecruiterWorkService {
         });
     }
     @Override
-    public List<WorkCandidateResponse> getAllCandidateWork(String jobPostId) {
+    public List<WorkCandidateResponse> getCandidateWork(String jobPostId) {
         String recruiterId = SecurityUtils.getCurrentUserId();
 
         List<Work> works = workRepository
@@ -90,6 +91,52 @@ public class RecruiterWorkServiceImpl implements RecruiterWorkService {
         }).toList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Page<AllWorkCandidateOfRecruiterResponse> getAllCandidateWorkOfRecruiter(
+            int page,
+            int size
+    ) {
+        String recruiterId = SecurityUtils.getCurrentUserId();
+        Pageable pageable = PaginationUtils.buildPageable(page, size);
+
+        Page<Work> works =
+                workRepository.findAllByRecruiterId(recruiterId, pageable);
+
+        return works.map(work -> {
+            AllWorkCandidateOfRecruiterResponse res =
+                    workMapper.toAllWorkCandidateOfRecruiterResponse(work);
+
+            Double myRating = reviewRepository.findMyRating(
+                    work.getId(),
+                    recruiterId
+            );
+
+            res.setMyReviewRating(myRating); // null nếu chưa review
+            return res;
+        });
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<AllWorkCandidateOfRecruiterResponse> getAllCandidateWorkOfRecruiter() {
+        String recruiterId = SecurityUtils.getCurrentUserId();
+
+        return workRepository.findAllByRecruiterId(recruiterId)
+                .stream()
+                .map(work -> {
+                    AllWorkCandidateOfRecruiterResponse res =
+                            workMapper.toAllWorkCandidateOfRecruiterResponse(work);
+
+                    Double myRating = reviewRepository.findMyRating(
+                            work.getId(),
+                            recruiterId
+                    );
+
+                    res.setMyReviewRating(myRating);
+                    return res;
+                })
+                .toList();
+    }
     @Override
     public void assignWork(WorkCreateRequest request) {
         ApplicationId applicationId = ApplicationId.builder()

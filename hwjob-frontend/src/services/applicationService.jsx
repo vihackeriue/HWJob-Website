@@ -19,6 +19,20 @@ export const getAppliedJobPosts = async (page = 1, size = DEFAULT_LIMIT) => {
   return response.data;
 };
 
+export const getAllApplicantOfRecruiter = async (
+  page = 1,
+  size = DEFAULT_LIMIT
+) => {
+  const response = await axiosPrivate.get(
+    ENDPOINTS.APPLICATION.LIST_ALL_APPLICANT_OF_RECRUITER,
+    {
+      params: { page, size },
+    }
+  );
+
+  return response.data;
+};
+
 export const getCandidateApplications = async (
   jobPostId,
   page = 1,

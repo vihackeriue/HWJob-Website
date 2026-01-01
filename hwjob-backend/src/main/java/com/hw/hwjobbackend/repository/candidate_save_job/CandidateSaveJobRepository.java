@@ -41,4 +41,5 @@ public interface CandidateSaveJobRepository extends JpaRepository<CandidateSaveJ
             @Param("candidateId") String candidateId
     );
 
+    long countByJobPostId(String jobPostId);
 }

@@ -162,6 +162,7 @@ public class LoyaltyPointServiceImpl implements LoyaltyPointService {
         LoyaltyPointPayment payment =
                 loyaltyPointPaymentMapper.toEntity(req);
         payment.setUserId(userId);
+        payment.setPaymentType(PaymentTypeEnum.TOP_UP);
 
         loyaltyPointPaymentRepository.save(payment);
 

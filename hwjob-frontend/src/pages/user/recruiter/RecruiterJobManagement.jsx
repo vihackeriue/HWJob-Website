@@ -4,12 +4,15 @@ import MenuTabListVertical from "../../../components/ui/MenuTabListVertical";
 import MyJobPostSection from "../../../components/sections/recruiter/jobManagement/MyJobPostSection";
 import QuantityStatisticsCard from "../../../components/ui/cards/QuantityStatisticsCard";
 import { CiLocationOn } from "react-icons/ci";
+import ApplicantListSection from "../../../components/sections/recruiter/jobManagement/ApplicantListSection";
+import FreelancerListSection from "../../../components/sections/recruiter/jobManagement/FreelancerListSection";
+import StatisticSection from "../../../components/sections/recruiter/jobManagement/StatisticSection";
 
 const JOB_POST_MANAGEMENT_MENUS = [
-  { key: "working", label: "Tất cả bài đăng" },
-  { key: "appliedJob", label: "Việc làm đã ứng tuyển" },
-  { key: "savedJob", label: "Việc làm đã lưu" },
-  { key: "historyJob", label: "Lịch sử làm việc" },
+  { key: "all", label: "Quản lý bài đăng" },
+  { key: "applications", label: "Quản lý ứng viên" },
+  { key: "working", label: "Quản lý công việc" },
+  { key: "statistic", label: "Thống kê" },
 ];
 const RecruiterJobManagement = () => {
   return (
@@ -23,33 +26,19 @@ const RecruiterJobManagement = () => {
           />
         </div>
         <div className="col-span-2 flex flex-col gap-3 ">
-          <div className="flex gap-4 w-full bg-dark-100 p-3 rounded-2xl shadow bg-white">
-            <QuantityStatisticsCard
-              stat={22}
-              icon={<CiLocationOn className="size-12 text-teal-600" />}
-              title={"Đã ứng tuyển"}
-            />
-            <QuantityStatisticsCard
-              stat={22}
-              icon={<CiLocationOn className="size-12 text-teal-600" />}
-              title={"Tổng việc làm"}
-            />
-            <QuantityStatisticsCard
-              stat={22}
-              icon={<CiLocationOn className="size-12 text-teal-600" />}
-              title={"Việc đã xong"}
-            />
-            <QuantityStatisticsCard
-              stat={22}
-              icon={<CiLocationOn className="size-12 text-teal-600" />}
-              title={"Việc đã lưu"}
-            />
-          </div>
           <TabPanels>
             <TabPanel>
               <MyJobPostSection />
             </TabPanel>
-            <TabPanel></TabPanel>
+            <TabPanel>
+              <ApplicantListSection />
+            </TabPanel>
+            <TabPanel>
+              <FreelancerListSection />
+            </TabPanel>
+            <TabPanel>
+              <StatisticSection />
+            </TabPanel>
           </TabPanels>
         </div>
       </div>

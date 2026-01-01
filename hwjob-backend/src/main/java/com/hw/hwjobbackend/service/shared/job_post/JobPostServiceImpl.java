@@ -3,8 +3,10 @@ package com.hw.hwjobbackend.service.shared.job_post;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
+import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailStatsResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostRecruiterProfileResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkOverviewResponse;
+import com.hw.hwjobbackend.model.enums.WorkStatusEnum;
 import com.hw.hwjobbackend.repository.review.ReviewRepository;
 import com.hw.hwjobbackend.repository.work.WorkRepository;
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
@@ -20,6 +22,7 @@ import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
 import com.hw.hwjobbackend.service.mapper.work.WorkMapper;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import com.hw.hwjobbackend.util.SecurityUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,7 +31,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +48,10 @@ public class JobPostServiceImpl implements JobPostService {
     WorkRepository workRepository;
     WorkMapper workMapper;
     ReviewRepository reviewRepository;
+    JobPostViewService jobPostViewService;
+
+
+
     @Override
     public Page<JobPostResponse> getAllJobPosts(Integer page, Integer size, JobPostFilterRequest filter) {
         Pageable pageable = PaginationUtils.buildPageable(page, size);
@@ -75,17 +84,27 @@ public class JobPostServiceImpl implements JobPostService {
     }
 
     @Override
-    public JobPostDetailResponse getJobPostDetail(String id) {
+    public JobPostDetailResponse getJobPostDetail(String id, HttpServletRequest request) {
 
 
         JobPost jobPost = jobPostRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED));
+        // INCREASE VIEW
+        String viewerKey = jobPostViewService.getViewerKey(request);
+        jobPostViewService.increaseView(
+                jobPost.getId(),
+                viewerKey
+        );
+        // TOTAL VIEW
+        Long totalView = Optional.ofNullable(jobPost.getViewCount()).orElse(0L)
+                + jobPostViewService.getRedisView(jobPost.getId());
 
         JobPostDetailResponse response = jobPostMapper.toJobPostDetailResponse(jobPost);
 
         JobPostRecruiterProfileResponse recruiterResponse =
                 jobPostMapper.toJobPostRecruiterProfileResponse(jobPost.getRecruiter());
         response.setRecruiter(recruiterResponse);
+        response.setViewCount(totalView);
 
         // ===== GUEST =====
         if (!SecurityUtils.isAuthenticated()) {
@@ -143,6 +162,16 @@ public class JobPostServiceImpl implements JobPostService {
         response.setWork(null);
         return response;
 
+    }
+
+
+
+
+
+
+    @Override
+    public void increaseViewCount(String jobPostId, Long viewCount) {
+        jobPostRepository.increaseViewCount(jobPostId, viewCount);
     }
 
 

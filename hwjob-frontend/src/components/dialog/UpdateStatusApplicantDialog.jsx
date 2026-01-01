@@ -4,6 +4,8 @@ import { STATUS_APPLICATION_MAP } from "../../constants/statusApplication";
 import FormInput from "../ui/form/FormInput";
 import FormSelect from "../ui/form/FormSelect";
 import { SALARY_TYPE } from "../../config/constants";
+import { FaInfoCircle, FaTimes, FaUser, FaUserEdit } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 
 const UpdateStatusApplicantDialog = ({
   open,
@@ -115,22 +117,60 @@ const UpdateStatusApplicantDialog = ({
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-xl w-[28rem] shadow-lg">
-        <h2 className="text-xl font-semibold mb-4">Hồ sơ ứng viên</h2>
+      <div className="bg-white p-6 rounded-xl w-[48rem] shadow-lg">
+        <div className="mb-4 pb-3 border-b border-gray-200">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <FaUserEdit className="text-orange-500 text-xl" />
+              <h2 className="text-xl font-semibold">
+                Cập nhật trạng thái ứng viên
+              </h2>
+            </div>
+
+            {/* Close icon */}
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-red-500 transition"
+            >
+              <FaTimes size={20} />
+            </button>
+          </div>
+        </div>
 
         {/* Applicant info */}
-        <div className="flex gap-4 mb-4">
-          <img
-            src={applicant.imageUrl}
-            alt={applicant.fullName}
-            className="w-20 h-20 rounded-lg object-cover border"
-          />
-          <div>
-            <p className="font-semibold">{applicant.fullName}</p>
-            <p className="text-sm text-gray-500">{applicant.email}</p>
-            <p className="text-sm text-gray-500">
-              Trạng thái: <b>{statusConfig?.name}</b>
-            </p>
+        <div className="mb-5">
+          <div className="flex flex-col  items-center text-center">
+            {/* Avatar */}
+            <img
+              src={applicant.imageUrl}
+              alt={applicant.fullName}
+              className="w-36 h-36 rounded-full object-cover border-4 border-amber-500 shadow-md"
+            />
+
+            {/* Status badge */}
+            <span className="mt-3 px-4 py-1 text-sm font-medium rounded-lg bg-amber-100 text-amber-700">
+              {statusConfig?.name}
+            </span>
+
+            {/* Name */}
+            <div className="flex items-center gap-2 mt-3">
+              <FaUser className="text-gray-500" />
+              <p className="text-lg font-semibold text-gray-800">
+                {applicant.fullName}
+              </p>
+            </div>
+
+            {/* Email */}
+            <div className="flex items-center gap-2 mt-1 text-gray-500 text-sm">
+              <MdEmail />
+              <span>{applicant.email}</span>
+            </div>
+            {note && (
+              <div className="flex items-center gap-1 mt-2 bg-blue-50 border border-blue-200 text-blue-700 px-2 py-1 rounded-lg text-sm">
+                <FaInfoCircle className="size-4" />
+                <p className="leading-relaxed">{note}</p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -138,7 +178,7 @@ const UpdateStatusApplicantDialog = ({
 
         {/* Actions khác (REJECTED...) */}
         {!showAssignForm && (
-          <div className="flex flex-col gap-2">
+          <div className="flex justify-end gap-2 border-t mt-4 pt-3 border-gray-200">
             {actions
               .filter((a) => a.to !== "ASSIGNED")
               .map((action) => (
@@ -150,12 +190,6 @@ const UpdateStatusApplicantDialog = ({
                   {action.label}
                 </PrimaryButton>
               ))}
-
-            {note && (
-              <div className="text-center text-sm text-gray-600 bg-gray-100 py-2 rounded-lg">
-                {note}
-              </div>
-            )}
           </div>
         )}
 
@@ -180,35 +214,34 @@ const UpdateStatusApplicantDialog = ({
               placeholder="Chọn loại lương"
               error={errors.salaryType}
             />
-            <FormInput
-              label="Bắt đầu"
-              name="startTime"
-              type="datetime-local"
-              value={assignForm.startTime}
-              onChange={handleChange}
-              error={errors.startTime}
-            />
-            <FormInput
-              label="Kết thúc"
-              name="endTime"
-              type="datetime-local"
-              value={assignForm.endTime}
-              onChange={handleChange}
-              error={errors.endTime}
-            />
+            <div className="grid grid-cols-2 gap-2 ">
+              <FormInput
+                label="Bắt đầu"
+                name="startTime"
+                type="datetime-local"
+                value={assignForm.startTime}
+                onChange={handleChange}
+                error={errors.startTime}
+              />
+              <FormInput
+                label="Kết thúc"
+                name="endTime"
+                type="datetime-local"
+                value={assignForm.endTime}
+                onChange={handleChange}
+                error={errors.endTime}
+              />
+            </div>
 
-            <PrimaryButton onClick={handleConfirmAssign}>
-              Xác nhận giao việc
-            </PrimaryButton>
+            <div className="flex justify-end border-t mt-4 pt-3 border-gray-200">
+              <PrimaryButton onClick={handleConfirmAssign}>
+                Xác nhận giao việc
+              </PrimaryButton>
+            </div>
           </div>
         )}
 
         {/* Footer */}
-        <div className="flex justify-end mt-4">
-          <PrimaryButton variant="cancel" onClick={onClose}>
-            Đóng
-          </PrimaryButton>
-        </div>
       </div>
     </div>
   );
