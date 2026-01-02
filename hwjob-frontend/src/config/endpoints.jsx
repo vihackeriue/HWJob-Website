@@ -46,7 +46,7 @@ export const ENDPOINTS = {
         CANDIDATE_UPDATE_STATUS_APPLICANTS: (jobPostId) =>
             `/candidates/applications/job-posts/${jobPostId}/status`,
         LIST_ALL_APPLICANT_OF_RECRUITER: "recruiters/applications/candidates/all",
-        GET_RANKED_CANDIDATES: (jobPostId) => `/recruiters/applications/job-posts/${jobPostId}/candidates`,
+        GET_RANKED_CANDIDATES: (jobPostId) => `/recruiters/applications/job-posts/${jobPostId}/candidates/ranked`,
     },
     WORK: {
         CANDIDATE_WORK_OVERVIEW: (jobPostId) =>

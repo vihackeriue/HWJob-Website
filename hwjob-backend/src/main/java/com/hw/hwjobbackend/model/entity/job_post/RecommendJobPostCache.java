@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@RedisHash(value = "recommend_jobs", timeToLive = 600) // 10 minutes
+@RedisHash(value = "recommend_jobs", timeToLive = 120)
 public class RecommendJobPostCache {
     @Id
     String id;

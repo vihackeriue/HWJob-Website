@@ -42,4 +42,7 @@ public interface CandidateSaveJobRepository extends JpaRepository<CandidateSaveJ
     );
 
     long countByJobPostId(String jobPostId);
+
+    @Query("SELECT csj.jobPost.id FROM CandidateSaveJob csj WHERE csj.candidate.id = :candidateId")
+    List<String> findAllJobPostIdsByCandidateId(String candidateId);
 }

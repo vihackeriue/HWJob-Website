@@ -22,17 +22,14 @@ def hello_world():
 def recommend_jobs():
     """
     API endpoint để gợi ý việc làm cho ứng viên.
-    Có thể nhận một query param `n_results` để giới hạn số lượng kết quả.
+    [SỬA LẠI] n_results giờ được lấy từ JSON body.
     """
     try:
-        # [MỚI] Lấy n_results từ query param, mặc định là 100 nếu không có
-        n_results = request.args.get('n_results', default=100, type=int)
-
-        # Validate dữ liệu đầu vào từ body
+        # Validate dữ liệu đầu vào từ body, Pydantic sẽ tự gán giá trị mặc định cho n_results
         data = RecommendJobsRequestDTO(**request.json)
         
-        # Gọi service để lấy kết quả, truyền n_results vào
-        results = RecommendationService.recommend_jobs(data, top_k=n_results)
+        # Gọi service để lấy kết quả, truyền n_results từ DTO vào
+        results = RecommendationService.recommend_jobs(data, top_k=data.n_results)
         
         # Đóng gói response theo DTO
         response_dto = RecommendationResponseDTO(results=results)

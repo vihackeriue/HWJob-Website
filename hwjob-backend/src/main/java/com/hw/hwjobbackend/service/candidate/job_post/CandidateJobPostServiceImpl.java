@@ -49,8 +49,6 @@ public class CandidateJobPostServiceImpl implements CandidateJobPostService {
     ServerAIFeignClient serverAIFeignClient;
     JobPostCacheRepository jobPostCacheRepository;
 
-    static final int N_RESULTS = 30;
-
     @Override
     public Page<JobPostResponse> getRecommendJobPosts(int page, int size) {
         String candidateId = SecurityUtils.getCurrentUserId();
@@ -58,8 +56,7 @@ public class CandidateJobPostServiceImpl implements CandidateJobPostService {
         RecommendJobPostCache cache = jobPostCacheRepository.findById(candidateId).orElse(null);
 
         if (cache == null) {
-            List<String> jobIds = fetchJobPostIds(candidateId);
-            log.debug("Get job post cache");
+            List<String> jobIds = getJobPostRecommendationIds(candidateId);
             cache = RecommendJobPostCache.builder()
                     .id(candidateId)
                     .jobPostIds(jobIds)
@@ -91,8 +88,6 @@ public class CandidateJobPostServiceImpl implements CandidateJobPostService {
                     .isSaved(false)
                     .build();
         }
-
-
         Candidate candidate = candidateRepository.getReferenceById(candidateId);
 
         JobPost jobPost = jobPostRepository.getReferenceById(jobPostId);
@@ -134,14 +129,18 @@ public class CandidateJobPostServiceImpl implements CandidateJobPostService {
                 .toList();
     }
 
-    private List<String> fetchJobPostIds(String candidateId) {
+    private List<String> getJobPostRecommendationIds(String candidateId) {
+
         Candidate candidate = candidateRepository.findById(candidateId).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_EXISTED)
         );
 
+        List<String> savedJobPostIds = candidateSaveJobRepository.findAllJobPostIdsByCandidateId(candidateId);
+
         JobPostRecommendationRequest request = JobPostRecommendationRequest.builder()
                 .candidateId(candidate.getId())
-                .nResults(N_RESULTS)
+                .savedJobPostIds(savedJobPostIds)
+                .nResults(20)
                 .build();
 
         RecommendationResponse recommendationResponse = serverAIFeignClient.recommendJobs(request);

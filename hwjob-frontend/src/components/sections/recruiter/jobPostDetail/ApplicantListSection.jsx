@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useList} from "../../../../hooks/useList";
-import {getCandidateApplications, getRankedCandidates} from "../../../../services/applicationService";
+import {getRankedCandidates} from "../../../../services/applicationService";
 import {useParams} from "react-router-dom";
 import {HiOutlineSearch} from "react-icons/hi";
 import ApplicantCard from "../../../ui/cards/ApplicantCard";
@@ -10,13 +10,14 @@ import {useUpdateApplicationStatus} from "../../../../hooks/useUpdateApplication
 
 const ApplicantListSection = ({jobPost}) => {
     const {id} = useParams();
+
     const {updateStatus} = useUpdateApplicationStatus();
+
     const [openViewProfileApplicantDialog, setOpenViewProfileApplicantDialog] =
         useState(false);
+
     const [selectedApplicant, setSelectedApplicant] = useState(null);
-    // const applicants = useList((page, size) =>
-    //     getCandidateApplications(id, page, size)
-    // );
+
     const applicants = useList((page, size) => getRankedCandidates(id, page, size))
 
     const openViewDialog = (applicant) => {

@@ -11,6 +11,7 @@ import com.hw.hwjobbackend.model.dto.request.user.CandidateUpdateRequest;
 import com.hw.hwjobbackend.model.dto.response.user.CandidateResponse;
 import com.hw.hwjobbackend.model.entity.user.Candidate;
 import com.hw.hwjobbackend.repository.user.CandidateRepository;
+import com.hw.hwjobbackend.service.shared.indexing.IndexingService;
 import com.hw.hwjobbackend.service.shared.skill.SkillService;
 import com.hw.hwjobbackend.service.shared.user.UserService;
 import com.hw.hwjobbackend.util.SecurityUtils;
@@ -19,6 +20,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Indexed;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +35,8 @@ public class CandidateUserServiceImpl implements CandidateUserService {
     CandidateMapper candidateMapper;
     UserService userService;
     SkillService skillService;
-    ServerAIFeignClient serverAIFeignClient;
+    IndexingService indexingService;
+
 
     @Override
     @Transactional
@@ -56,23 +59,10 @@ public class CandidateUserServiceImpl implements CandidateUserService {
         candidateMapper.updateCandidate(candidate, request);
 
         candidateRepository.save(candidate);
-        createCandidateIndexing(candidate);
+        indexingService.createCandidateIndexing(candidate);
+
         return candidateMapper.toCandidateResponse(candidate);
     }
 
-    private void createCandidateIndexing(Candidate candidate) {
 
-        List<String> candidateSkills = (candidate.getSkills() != null)
-                ? candidate.getSkills().stream().map(Skill::getName).toList()
-                : List.of();
-
-        CandidateIndexingRequest request = CandidateIndexingRequest.builder()
-                .candidateId(candidate.getId())
-                .summary(candidate.getSummary())
-                .education(candidate.getEducation())
-                .skills(candidateSkills)
-                .build();
-        ServerAIMessageResponse response = serverAIFeignClient.indexCandidate(request);
-        log.info(response.getMessage());
-    }
 }

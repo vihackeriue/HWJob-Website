@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class HwjobBackendApplication {
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(HwjobBackendApplication.class, args);
     }
 
