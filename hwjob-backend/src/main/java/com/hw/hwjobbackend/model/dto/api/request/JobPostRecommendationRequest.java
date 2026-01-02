@@ -14,4 +14,7 @@ import lombok.experimental.FieldDefaults;
 public class JobPostRecommendationRequest {
     @JsonProperty("candidate_id")
     String candidateId;
+
+    @JsonProperty("n_results")
+    Integer nResults;
 }

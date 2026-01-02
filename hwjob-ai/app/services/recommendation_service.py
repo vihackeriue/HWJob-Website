@@ -13,8 +13,12 @@ class RecommendationService:
     """
     @staticmethod
     def _calculate_job_score(semantic_score: float, job_meta: Dict, candidate_meta: Dict) -> float:
-        """Hàm nội bộ tính điểm cho một cặp (Job, Candidate)."""
+        """
+        [SỬA LẠI] Hàm nội bộ tính điểm cho một cặp (Job, Candidate).
+        Nhận vào metadata của candidate thay vì cả DTO.
+        """
         job_skills = set([s.strip().lower() for s in str(job_meta.get('skills', '')).split(',') if s.strip()])
+        # Lấy skills từ metadata của candidate
         cand_skills = set([s.strip().lower() for s in str(candidate_meta.get('skills', '')).split(',') if s.strip()])
         
         skill_score = 0.0
@@ -29,9 +33,9 @@ class RecommendationService:
         return (weights['skill'] * skill_score) + (weights['semantic'] * semantic_score)
 
     @staticmethod
-    def recommend_jobs(data: RecommendJobsRequestDTO, top_k: int = 10) -> List[Dict]:
+    def recommend_jobs(data: RecommendJobsRequestDTO, top_k: int) -> List[Dict]:
         """
-        [LOGIC MỚI] Gợi ý việc làm dựa trên ID của ứng viên.
+        Gợi ý việc làm dựa trên ID của ứng viên.
         """
         print(f"Recommending jobs for candidate_id: {data.candidate_id}...")
         
@@ -54,10 +58,10 @@ class RecommendationService:
         }
         
         # 3. Truy vấn ChromaDB để lấy các job tương đồng
-        n_results = min(50, top_k * 3)
+        n_results_to_fetch = top_k * 2
         results = job_collection.query(
             query_embeddings=[query_vector], 
-            n_results=n_results, 
+            n_results=n_results_to_fetch, 
             where=where_clause,
             include=["metadatas", "distances"]
         )
@@ -66,15 +70,16 @@ class RecommendationService:
         ranked = []
         if results['ids']:
             for i in range(len(results['ids'][0])):
+                # [SỬA LẠI] Truyền candidate_meta vào hàm tính điểm
                 final_score = RecommendationService._calculate_job_score(
                     1 - results['distances'][0][i], 
                     results['metadatas'][0][i], 
-                    candidate_meta # Sử dụng metadata của candidate đã lấy ở bước 1
+                    candidate_meta 
                 )
                 ranked.append({"id": results['ids'][0][i], "score": final_score})
             
         ranked.sort(key=lambda x: x['score'], reverse=True)
-        print(f"Found and ranked {len(ranked)} jobs.")
+        print(f"Found and ranked {len(ranked)} jobs. Returning top {top_k}.")
         return ranked[:top_k]
 
     @staticmethod
@@ -97,7 +102,7 @@ class RecommendationService:
     @staticmethod
     def rank_pending_candidates(data: RankCandidatesRequestDTO) -> List[Dict]:
         """
-        [LOGIC MỚI] Xếp hạng các ứng viên đã apply dựa trên ID của Job.
+        Xếp hạng các ứng viên đã apply dựa trên ID của Job.
         """
         print(f"Ranking {len(data.pending_candidate_ids)} candidates for job_id: {data.job_id}...")
         if not data.pending_candidate_ids:
@@ -125,7 +130,7 @@ class RecommendationService:
                 final_score = RecommendationService._calculate_candidate_score(
                     float(similarity), 
                     candidates_data['metadatas'][i], 
-                    job_meta # Sử dụng metadata của job đã lấy ở bước 1
+                    job_meta
                 )
                 ranked.append({"id": candidates_data['ids'][i], "score": final_score})
 

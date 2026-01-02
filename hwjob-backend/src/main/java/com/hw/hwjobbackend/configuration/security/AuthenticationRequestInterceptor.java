@@ -11,7 +11,6 @@ import org.springframework.util.StringUtils;
 @Slf4j
 public class AuthenticationRequestInterceptor implements RequestInterceptor {
 
-
     @Value("${jwt.api-key}")
     private String apiKey;
 

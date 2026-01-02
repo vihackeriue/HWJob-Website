@@ -90,14 +90,14 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
         Pageable pageable = PaginationUtils.buildPageable(page, size);
         String statusName = (status != null) ? status.name() : null;
         Page<JobPost> jobPosts = jobPostRepository
-                .findByRecruiterAndStatusCustom(recruiterId, statusName, keyword,pageable);
+                .findByRecruiterAndStatusCustom(recruiterId, statusName, keyword, pageable);
 
         return jobPosts.map(jobPostMapper::toJobPostResponse);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<JobPostResponse> getAllPostedJobPosts(JobPostStatusEnum status,String keyword) {
+    public List<JobPostResponse> getAllPostedJobPosts(JobPostStatusEnum status, String keyword) {
         String recruiterId = SecurityUtils.getCurrentUserId();
         String statusName = (status != null) ? status.name() : null;
         return jobPostRepository
@@ -191,9 +191,9 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
     @Override
     public RecruiterJobPostStatsResponse getRecruiterJobPostStats() {
         String recruiterId = SecurityUtils.getCurrentUserId();
-        long totalJobs   = jobPostRepository.countByRecruiterId(recruiterId);
+        long totalJobs = jobPostRepository.countByRecruiterId(recruiterId);
         long openingJobs = jobPostRepository.countOpeningJobs(recruiterId);
-        long hiddenJobs  = jobPostRepository.countHiddenJobs(recruiterId);
+        long hiddenJobs = jobPostRepository.countHiddenJobs(recruiterId);
         long expiredJobs = jobPostRepository.countExpiredJobs(recruiterId);
 
         return RecruiterJobPostStatsResponse.builder()
@@ -225,8 +225,8 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
 
         // ===== Payment stats =====
         BigInteger totalSalary = workRepository.sumAgreedSalaryByJobPost(jobPostId);
-        BigInteger  paidSalary = workRepository.sumAgreedSalaryByJobPostAndStatus(jobPostId, WorkStatusEnum.PAID);
-        BigInteger  pendingSalary  = workRepository.sumAgreedSalaryByJobPostAndStatus(jobPostId, WorkStatusEnum.SUBMITTED);
+        BigInteger paidSalary = workRepository.sumAgreedSalaryByJobPostAndStatus(jobPostId, WorkStatusEnum.PAID);
+        BigInteger pendingSalary = workRepository.sumAgreedSalaryByJobPostAndStatus(jobPostId, WorkStatusEnum.SUBMITTED);
 
         // ===== Build response =====
         return JobPostDetailStatsResponse.builder()
