@@ -9,11 +9,13 @@ import com.hw.hwjobbackend.util.PaginationUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -28,6 +30,7 @@ public class RecruiterApplicationController {
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "size", required = false) Integer size
     ) {
+        log.debug("Get Running");
         if (page != null && size != null) {
             int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
 
@@ -52,6 +55,7 @@ public class RecruiterApplicationController {
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "size", required = false) Integer size
     ) {
+        log.info("Ranking Running");
         int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
         int pageSize = (size != null) ? size : 10;
 
@@ -70,6 +74,7 @@ public class RecruiterApplicationController {
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size
     ) {
+        log.debug("All Running");
         if (page != null && size != null) {
             Page<ApplicationAllCandidateResponse> response =
                     recruiterJobPostService.getAllCandidateApplicationsOfRecruiter(

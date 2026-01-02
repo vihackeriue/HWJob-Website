@@ -13,11 +13,12 @@ import java.util.List;
 public interface RecruiterJobPostService {
     JobPostResponse createJobPost(JobPostRequest request);
 
-    Page<JobPostResponse> getPostedJobPosts(int page, int size,  JobPostStatusEnum status, String keyword);
+    Page<JobPostResponse> getPostedJobPosts(int page, int size, JobPostStatusEnum status, String keyword);
 
     List<JobPostResponse> getAllPostedJobPosts(JobPostStatusEnum status, String keyword);
 
     JobPostDetailResponse editJobPost(String id, JobPostRequest request);
+
     JobPostDetailStatsResponse getJobPostDetailStats(String jobPostId);
 
     RecruiterJobPostStatsResponse getRecruiterJobPostStats();

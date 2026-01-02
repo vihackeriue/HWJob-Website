@@ -2,8 +2,6 @@ package com.hw.hwjobbackend.service.recruiter.job_post;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.model.dto.api.request.JobPostIndexingRequest;
-import com.hw.hwjobbackend.model.dto.api.response.ServerAIMessageResponse;
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostRequest;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailStatsResponse;
@@ -11,7 +9,6 @@ import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.RecruiterJobPostStatsResponse;
 import com.hw.hwjobbackend.model.entity.job_post.JobPost;
 import com.hw.hwjobbackend.model.entity.skill.Skill;
-import com.hw.hwjobbackend.repository.http_client.ServerAIFeignClient;
 import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
 import com.hw.hwjobbackend.model.enums.WorkStatusEnum;
 import com.hw.hwjobbackend.repository.application.ApplicationRepository;
@@ -25,6 +22,7 @@ import com.hw.hwjobbackend.repository.user.RecruiterRepository;
 import com.hw.hwjobbackend.repository.work.WorkRepository;
 
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
+import com.hw.hwjobbackend.service.shared.indexing.IndexingService;
 import com.hw.hwjobbackend.service.shared.job_post.JobPostViewService;
 import com.hw.hwjobbackend.service.shared.skill.SkillService;
 import com.hw.hwjobbackend.util.PaginationUtils;
@@ -56,7 +54,6 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
     LevelRepository levelRepository;
     JobTypeRepository jobTypeRepository;
     IndustryRepository industryRepository;
-    ServerAIFeignClient serverAIFeignClient;
 
     SkillService skillService;
 
@@ -64,6 +61,7 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
     ApplicationRepository applicationRepository;
     CandidateSaveJobRepository candidateSaveJobRepository;
     WorkRepository workRepository;
+    IndexingService indexingService;
 
 
     @Override
@@ -77,7 +75,7 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
         setJobPostRelations(jobPost, request);
         jobPost = jobPostRepository.save(jobPost);
 
-        createJobPostIndexing(jobPost);
+        indexingService.createJobPostIndexing(jobPost);
 
         return jobPostMapper.toJobPostResponse(jobPost);
     }
@@ -117,29 +115,14 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
                 .orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
 
         jobPostMapper.updateJobPost(request, jobPost);
+
         setJobPostRelations(jobPost, request);
+
+        indexingService.createJobPostIndexing(jobPost);
 
         return jobPostMapper.toJobPostDetailResponse(jobPost);
     }
 
-    private void createJobPostIndexing(JobPost jobPost) {
-
-        List<String> jobPostSkills = (jobPost.getSkills() != null)
-                ? jobPost.getSkills().stream().map(Skill::getName).toList()
-                : List.of();
-
-        JobPostIndexingRequest jobPostIndexingRequest = JobPostIndexingRequest.builder()
-                .jobId(jobPost.getId())
-                .title(jobPost.getTitle())
-                .description(jobPost.getDescription())
-                .level(jobPost.getLevel().getName())
-                .skills(jobPostSkills)
-                .endedTime(jobPost.getEndedTime())
-                .status(jobPost.getStatus().name())
-                .build();
-        ServerAIMessageResponse response = serverAIFeignClient.indexJobPost(jobPostIndexingRequest);
-        log.info(response.getMessage());
-    }
 
     private void setJobPostRelations(JobPost jobPost, JobPostRequest request) {
         if (request.getLevelId() != null) {

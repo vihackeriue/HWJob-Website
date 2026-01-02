@@ -7,20 +7,22 @@ from app.schemas.request.recommend_jobs_request_dto import RecommendJobsRequestD
 from app.schemas.request.rank_candidates_request_dto import RankCandidatesRequestDTO
 from typing import List, Dict
 
+
 class RecommendationService:
     """
     Lớp dịch vụ xử lý các tác vụ gợi ý và xếp hạng.
     """
+
     @staticmethod
     def _calculate_job_score(semantic_score: float, job_meta: Dict, candidate_meta: Dict) -> float:
         """
         [SỬA LẠI] Hàm nội bộ tính điểm cho một cặp (Job, Candidate).
-        Nhận vào metadata của candidate thay vì cả DTO.
+        Giờ đây nhận vào metadata của candidate thay vì cả DTO.
         """
         job_skills = set([s.strip().lower() for s in str(job_meta.get('skills', '')).split(',') if s.strip()])
-        # Lấy skills từ metadata của candidate
+        # Lấy skills từ metadata của candidate, không còn truy cập DTO
         cand_skills = set([s.strip().lower() for s in str(candidate_meta.get('skills', '')).split(',') if s.strip()])
-        
+
         skill_score = 0.0
         if job_skills:
             match_count = len(job_skills.intersection(cand_skills))
@@ -38,13 +40,13 @@ class RecommendationService:
         Gợi ý việc làm dựa trên ID của ứng viên.
         """
         print(f"Recommending jobs for candidate_id: {data.candidate_id}...")
-        
+
         # 1. Lấy vector và metadata của ứng viên từ ChromaDB
         candidate_data = candidate_collection.get(ids=[data.candidate_id], include=["embeddings", "metadatas"])
         if not candidate_data or not candidate_data['ids']:
             print(f"Warning: Candidate with ID {data.candidate_id} not found in vector store.")
             return []
-            
+
         query_vector = candidate_data['embeddings'][0]
         candidate_meta = candidate_data['metadatas'][0]
 
@@ -56,28 +58,28 @@ class RecommendationService:
                 {"ended_time": {"$gt": current_timestamp}}
             ]
         }
-        
+
         # 3. Truy vấn ChromaDB để lấy các job tương đồng
         n_results_to_fetch = top_k * 2
         results = job_collection.query(
-            query_embeddings=[query_vector], 
-            n_results=n_results_to_fetch, 
+            query_embeddings=[query_vector],
+            n_results=n_results_to_fetch,
             where=where_clause,
             include=["metadatas", "distances"]
         )
-        
+
         # 4. Re-rank các kết quả
         ranked = []
         if results['ids']:
             for i in range(len(results['ids'][0])):
-                # [SỬA LẠI] Truyền candidate_meta vào hàm tính điểm
+                # [SỬA LẠI] Truyền candidate_meta (dict) vào hàm tính điểm, không phải object DTO `data`
                 final_score = RecommendationService._calculate_job_score(
-                    1 - results['distances'][0][i], 
-                    results['metadatas'][0][i], 
-                    candidate_meta 
+                    1 - results['distances'][0][i],
+                    results['metadatas'][0][i],
+                    candidate_meta
                 )
                 ranked.append({"id": results['ids'][0][i], "score": final_score})
-            
+
         ranked.sort(key=lambda x: x['score'], reverse=True)
         print(f"Found and ranked {len(ranked)} jobs. Returning top {top_k}.")
         return ranked[:top_k]
@@ -87,12 +89,12 @@ class RecommendationService:
         """Hàm nội bộ tính điểm cho một cặp (Candidate, Job)."""
         cand_skills = set([s.strip().lower() for s in str(cand_meta.get('skills', '')).split(',') if s.strip()])
         job_skills = set([s.strip().lower() for s in str(job_meta.get('skills', '')).split(',') if s.strip()])
-        
+
         skill_score = 0.0
         if job_skills:
             match_count = len(job_skills.intersection(cand_skills))
             skill_score = match_count / len(job_skills)
-        
+
         skill_score = max(0.0, min(1.0, skill_score))
         semantic_score = max(0.0, min(1.0, semantic_score))
 
@@ -113,7 +115,7 @@ class RecommendationService:
         if not job_data or not job_data['ids']:
             print(f"Warning: Job with ID {data.job_id} not found in vector store.")
             return []
-            
+
         job_vector = np.array(job_data['embeddings'][0])
         job_meta = job_data['metadatas'][0]
 
@@ -125,11 +127,12 @@ class RecommendationService:
         if candidates_data['ids']:
             for i in range(len(candidates_data['ids'])):
                 cand_vector = np.array(candidates_data['embeddings'][i])
-                similarity = np.dot(job_vector, cand_vector) / (np.linalg.norm(job_vector) * np.linalg.norm(cand_vector))
-                
+                similarity = np.dot(job_vector, cand_vector) / (
+                            np.linalg.norm(job_vector) * np.linalg.norm(cand_vector))
+
                 final_score = RecommendationService._calculate_candidate_score(
-                    float(similarity), 
-                    candidates_data['metadatas'][i], 
+                    float(similarity),
+                    candidates_data['metadatas'][i],
                     job_meta
                 )
                 ranked.append({"id": candidates_data['ids'][i], "score": final_score})

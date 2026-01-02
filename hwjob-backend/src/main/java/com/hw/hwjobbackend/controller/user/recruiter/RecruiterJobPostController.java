@@ -57,6 +57,7 @@ public class RecruiterJobPostController {
                 .result(recruiterJobPostService.getAllPostedJobPosts(status, keyword))
                 .build();
     }
+
     @GetMapping("/stats")
     public ApiResponse<RecruiterJobPostStatsResponse> getRecruiterJobPostStats(
 
@@ -74,6 +75,7 @@ public class RecruiterJobPostController {
                 .result(stats)
                 .build();
     }
+
     @PutMapping("/{id}")
     public ApiResponse<JobPostDetailResponse> updateJobPost(
             @PathVariable String id,
