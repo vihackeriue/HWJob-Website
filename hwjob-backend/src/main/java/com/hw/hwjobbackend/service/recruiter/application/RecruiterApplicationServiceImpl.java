@@ -4,8 +4,10 @@ import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.api.request.RankCandidateRequest;
 import com.hw.hwjobbackend.model.dto.api.response.RecommendationResponse;
+
 import com.hw.hwjobbackend.model.dto.request.application.ApplicationStatusRequest;
 import com.hw.hwjobbackend.model.dto.request.work.WorkCreateRequest;
+import com.hw.hwjobbackend.model.dto.response.application.ApplicationAllCandidateResponse;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationCandidateResponse;
 import com.hw.hwjobbackend.model.entity.application.Application;
 import com.hw.hwjobbackend.model.entity.application.ApplicationId;
@@ -13,12 +15,13 @@ import com.hw.hwjobbackend.model.enums.ApplicationStatusEnum;
 import com.hw.hwjobbackend.repository.application.ApplicationRepository;
 import com.hw.hwjobbackend.repository.http_client.ServerAIFeignClient;
 import com.hw.hwjobbackend.repository.user.CandidateRepository;
+
 import com.hw.hwjobbackend.service.mapper.application.ApplicationMapper;
 import com.hw.hwjobbackend.service.recruiter.work.RecruiterWorkService;
 import com.hw.hwjobbackend.service.shared.loyalty_point.LoyaltyPointService;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import com.hw.hwjobbackend.util.SecurityUtils;
-import jakarta.transaction.Transactional;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -80,6 +84,34 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
                 })
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ApplicationAllCandidateResponse> getAllCandidateApplicationsOfRecruiter(
+            int page,
+            int size
+    ) {
+        String recruiterId = SecurityUtils.getCurrentUserId();
+        Pageable pageable = PaginationUtils.buildPageable(page, size);
+
+        Page<Application> applications =
+                applicationRepository.findAllByRecruiterId(recruiterId, pageable);
+
+        return applications.map(applicationMapper::toApplicationAllCandidateResponse);
+    }
+
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ApplicationAllCandidateResponse> getAllCandidateApplicationsOfRecruiter() {
+        String recruiterId = SecurityUtils.getCurrentUserId();
+
+        return applicationRepository.findAllByRecruiterId(recruiterId)
+                .stream()
+                .map(applicationMapper::toApplicationAllCandidateResponse)
+                .toList();
     }
 
     @Override
@@ -144,7 +176,6 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
 
 
     }
-
     private void validateStatusTransition(
             ApplicationStatusEnum current,
             ApplicationStatusEnum next

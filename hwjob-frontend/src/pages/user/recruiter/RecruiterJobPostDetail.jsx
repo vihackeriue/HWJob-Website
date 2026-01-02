@@ -8,6 +8,7 @@ import { TabGroup, TabPanel, TabPanels } from "@headlessui/react";
 import MenuTabListHorizontal from "../../../components/ui/MenuTabListHorizontal";
 import ApplicantListSection from "../../../components/sections/recruiter/jobPostDetail/ApplicantListSection";
 import StaffListSection from "../../../components/sections/recruiter/jobPostDetail/StaffListSection";
+import StatisticsSection from "../../../components/sections/recruiter/jobPostDetail/StatisticsSection";
 
 const JOB_POST_MANAGEMENT_MENUS = [
   { key: "desc", label: "Mô tả chung" },
@@ -40,6 +41,9 @@ const RecruiterJobPostDetail = () => {
             </TabPanel>
             <TabPanel>
               <StaffListSection jobPost={jobPost} />
+            </TabPanel>
+            <TabPanel>
+              <StatisticsSection jobPostId={jobPost.id} />
             </TabPanel>
           </TabPanels>
         </TabGroup>

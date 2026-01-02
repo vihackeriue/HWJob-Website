@@ -2,11 +2,15 @@ package com.hw.hwjobbackend.repository.work;
 
 
 import com.hw.hwjobbackend.model.entity.works.Work;
+import com.hw.hwjobbackend.model.enums.WorkStatusEnum;
+import feign.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,4 +35,34 @@ public interface WorkRepository extends JpaRepository<Work, String> {
     Page<Work> findByJobPostIdAndRecruiterIdOrderByCreatedAtDesc(String jobPostId, String recruiterId, Pageable pageable);
 
     List<Work> findByJobPostIdAndRecruiterIdOrderByCreatedAtDesc(String jobPostId, String recruiterId);
+
+    long countByJobPostId(String jobPostId);
+
+    long countByJobPostIdAndStatus(String jobPostId, WorkStatusEnum status);
+
+    @Query("SELECT SUM(w.agreedSalary) FROM Work w WHERE w.jobPost.id = :jobPostId")
+    BigInteger sumAgreedSalaryByJobPost(@Param("jobPostId") String jobPostId);
+
+    @Query("SELECT SUM(w.agreedSalary) FROM Work w " +
+            "WHERE w.jobPost.id = :jobPostId AND w.status = :status")
+    BigInteger sumAgreedSalaryByJobPostAndStatus(@Param("jobPostId") String jobPostId,
+                                               @Param("status") WorkStatusEnum status);
+
+    @Query("""
+        SELECT w FROM Work w
+        WHERE w.recruiter.id = :recruiterId
+        ORDER BY w.createdAt DESC
+    """)
+    Page<Work> findAllByRecruiterId(
+            @Param("recruiterId") String recruiterId,
+            Pageable pageable
+    );
+    @Query("""
+        SELECT w FROM Work w
+        WHERE w.recruiter.id = :recruiterId
+        ORDER BY w.createdAt DESC
+    """)
+    List<Work> findAllByRecruiterId(
+            @Param("recruiterId") String recruiterId
+    );
 }

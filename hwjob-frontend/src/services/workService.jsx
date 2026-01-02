@@ -31,6 +31,19 @@ export const getStaffOfWork = async (
   );
   return response.data;
 };
+export const getAllFreelancerOfRecruiter = async (
+  page = 1,
+  size = DEFAULT_LIMIT
+) => {
+  const response = await axiosPrivate.get(
+    ENDPOINTS.WORK.LIST_ALL_FREELANCER_OF_RECRUITER,
+    {
+      params: { page, size },
+    }
+  );
+
+  return response.data;
+};
 
 export const recruiterUpdateWorkStatus = (jobPostId, candidateId, data) => {
   return axiosPrivate.patch(

@@ -14,6 +14,7 @@ import { getMyLockedLoyaltyPoint } from "../../../services/LoyaltyPointService";
 
 const TRANSACTION_MANAGEMENT_MENUS = [
   { key: "topUp", label: "Nạp điểm thưởng" },
+  { key: "withdrawPoint", label: "Rút tiền" },
   { key: "historyTopUp", label: "Lịch sử nạp điểm" },
   { key: "transactionPoint", label: "Giao dịch điểm" },
 ];
@@ -61,6 +62,9 @@ const TransactionManagement = () => {
         </div>
         <div className="col-span-2 flex flex-col gap-3">
           <TabPanels>
+            <TabPanel>
+              <TopUpPointSection />
+            </TabPanel>
             <TabPanel>
               <TopUpPointSection />
             </TabPanel>

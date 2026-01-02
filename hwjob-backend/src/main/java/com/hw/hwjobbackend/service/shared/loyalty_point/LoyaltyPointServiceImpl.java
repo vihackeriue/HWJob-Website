@@ -6,14 +6,17 @@ import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.request.loyalty_point.LoyaltyPointPaymentGatewayRequest;
 import com.hw.hwjobbackend.model.dto.request.loyalty_point.LoyaltyPointTopUpRequest;
+import com.hw.hwjobbackend.model.dto.request.loyalty_point.WithdrawPointRequest;
 import com.hw.hwjobbackend.model.dto.response.loyalty_point.LoyaltyPointPaymentHistoryResponse;
 import com.hw.hwjobbackend.model.dto.response.loyalty_point.LoyaltyPointResponse;
 import com.hw.hwjobbackend.model.dto.response.loyalty_point.LoyaltyPointTopUpResponse;
+import com.hw.hwjobbackend.model.dto.response.loyalty_point.WithdrawPointResponse;
 import com.hw.hwjobbackend.model.entity.loyalty_point.LoyaltyPointPayment;
 import com.hw.hwjobbackend.model.entity.user.User;
 import com.hw.hwjobbackend.model.entity.works.Work;
 import com.hw.hwjobbackend.model.enums.PaymentMethodEnum;
 import com.hw.hwjobbackend.model.enums.PaymentStatusEnum;
+import com.hw.hwjobbackend.model.enums.PaymentTypeEnum;
 import com.hw.hwjobbackend.repository.loyalty_point.LoyaltyPointPaymentRepository;
 import com.hw.hwjobbackend.repository.user.UserRepository;
 import com.hw.hwjobbackend.repository.work.WorkRepository;
@@ -159,6 +162,7 @@ public class LoyaltyPointServiceImpl implements LoyaltyPointService {
         LoyaltyPointPayment payment =
                 loyaltyPointPaymentMapper.toEntity(req);
         payment.setUserId(userId);
+        payment.setPaymentType(PaymentTypeEnum.TOP_UP);
 
         loyaltyPointPaymentRepository.save(payment);
 
@@ -180,6 +184,38 @@ public class LoyaltyPointServiceImpl implements LoyaltyPointService {
                 .payUrl(payUrl)
                 .build();
     }
+//    // USER rút tiền
+//    public WithdrawPointResponse requestWithdraw(WithdrawPointRequest dto) {
+//
+//        String userId = SecurityUtils.getCurrentUserId();
+//
+//        User user = userRepository.findById(userId).orElseThrow();
+//
+////        if (user.getPoints().compareTo(dto.getPoints()) < 0) {
+////            throw new RuntimeException("Không đủ điểm");
+////        }
+//
+//        // Trừ điểm ngay
+////        user.setPoints(user.getPoints().subtract(dto.getPoints()));
+//
+//        LoyaltyPointPayment p = new LoyaltyPointPayment();
+//        p.setUserId(userId);
+//        p.setPaymentType(PaymentTypeEnum.WITHDRAW);
+//        p.setPaymentMethod(PaymentMethodEnum.MOMO);
+//
+//        p.setGrossAmount(dto.getAmount());
+//        p.setNetAmount(dto.getAmount());
+//        p.setPoints(dto.getPoints());
+//
+//        p.setMomoPhone(dto.getMomoPhone());
+//        p.setMomoName(dto.getMomoName());
+//
+//        p.setStatus(PaymentStatusEnum.PENDING);
+//
+//        loyaltyPointPaymentRepository.save(p);
+//        return mapper.toDto(p);
+//    }
+
     @Transactional
     public void handleMomoIpn(Map<String, String> payload) throws Exception {
 
@@ -256,5 +292,9 @@ public class LoyaltyPointServiceImpl implements LoyaltyPointService {
 
         loyaltyPointPaymentRepository.save(payment);
     }
+
+
+
+
 
 }

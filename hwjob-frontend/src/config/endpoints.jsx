@@ -32,6 +32,9 @@ export const ENDPOINTS = {
         DETAIL: (id) => `public/job-posts/${id}`,
 
         SAVE_JOB: (id) => `candidates/job-posts/save/${id}`,
+
+        DETAIL_STATS: (id) => `/recruiters/job-posts/${id}/stats`,
+        STATS_OF_RECRUITER: "recruiters/job-posts/stats",
     },
     APPLICATION: {
         APPLY_JOB: "candidates/applications",
@@ -42,6 +45,7 @@ export const ENDPOINTS = {
             `recruiters/applications/job-posts/${jobPostId}/candidates/${applicationId}/status`,
         CANDIDATE_UPDATE_STATUS_APPLICANTS: (jobPostId) =>
             `/candidates/applications/job-posts/${jobPostId}/status`,
+        LIST_ALL_APPLICANT_OF_RECRUITER: "recruiters/applications/candidates/all",
     },
     WORK: {
         CANDIDATE_WORK_OVERVIEW: (jobPostId) =>
@@ -53,6 +57,7 @@ export const ENDPOINTS = {
             `recruiters/works/job-posts/${jobPostId}/candidates/${candidateId}/status`,
         CANDIDATE_UPDATE_STATUS_WORK: (jobPostId) =>
             `candidates/works/job-posts/${jobPostId}/status`,
+        LIST_ALL_FREELANCER_OF_RECRUITER: "recruiters/works/candidates/all",
     },
     REVIEW: {
         CREATE_REVIEW: "reviews",

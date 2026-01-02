@@ -2,6 +2,7 @@ package com.hw.hwjobbackend.service.mapper.work;
 
 import com.hw.hwjobbackend.model.dto.request.work.WorkCreateRequest;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationCandidateResponse;
+import com.hw.hwjobbackend.model.dto.response.work.AllWorkCandidateOfRecruiterResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkCandidateResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkOverviewResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkResponse;
@@ -54,5 +55,14 @@ public interface WorkMapper {
     @Mapping(target = "candidateId",source = "candidate.id")
     @Mapping( target = "fullName",source = "candidate.fullName")
     @Mapping(target = "imageUrl",source = "candidate.imageUrl" )
+    @Mapping(target = "email",source = "candidate.email" )
     WorkCandidateResponse toWorkCandidateResponse(Work work);
+
+    @Mapping(source = "id", target = "workId")
+    @Mapping(source = "jobPost.title", target = "jobPostTitle")
+    @Mapping(source = "candidate.id", target = "candidateId")
+    @Mapping(source = "candidate.fullName", target = "fullName")
+    @Mapping(source = "candidate.email", target = "email")
+    @Mapping(source = "candidate.imageUrl", target = "imageUrl")
+    AllWorkCandidateOfRecruiterResponse toAllWorkCandidateOfRecruiterResponse(Work work);
 }

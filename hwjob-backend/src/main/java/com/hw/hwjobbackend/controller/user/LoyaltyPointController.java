@@ -6,7 +6,6 @@ import com.hw.hwjobbackend.model.dto.response.loyalty_point.LoyaltyPointPaymentH
 import com.hw.hwjobbackend.model.dto.response.loyalty_point.LoyaltyPointResponse;
 import com.hw.hwjobbackend.model.dto.response.loyalty_point.LoyaltyPointTopUpResponse;
 import com.hw.hwjobbackend.service.shared.loyalty_point.LoyaltyPointService;
-import com.hw.hwjobbackend.service.shared.loyalty_point.LoyaltyPointServiceImpl;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
