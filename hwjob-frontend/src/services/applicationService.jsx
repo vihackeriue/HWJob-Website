@@ -19,18 +19,31 @@ export const getAppliedJobPosts = async (page = 1, size = DEFAULT_LIMIT) => {
     return response.data;
 };
 
-export const getAllApplicantOfRecruiter = async (
-  page = 1,
-  size = DEFAULT_LIMIT
+export const getRankedCandidates = async (
+    jobPostId,
+    page = 1,
+    size = DEFAULT_LIMIT
 ) => {
-  const response = await axiosPrivate.get(
-    ENDPOINTS.APPLICATION.LIST_ALL_APPLICANT_OF_RECRUITER,
-    {
-      params: { page, size },
-    }
-  );
+    const response = await axiosPrivate.get(
+        ENDPOINTS.APPLICATION.GET_RANKED_CANDIDATES(jobPostId), {
+            params: {page, size},
+        }
+    );
+    return response.data
+}
 
-  return response.data;
+export const getAllApplicantOfRecruiter = async (
+    page = 1,
+    size = DEFAULT_LIMIT
+) => {
+    const response = await axiosPrivate.get(
+        ENDPOINTS.APPLICATION.LIST_ALL_APPLICANT_OF_RECRUITER,
+        {
+            params: {page, size},
+        }
+    );
+
+    return response.data;
 };
 
 export const getCandidateApplications = async (

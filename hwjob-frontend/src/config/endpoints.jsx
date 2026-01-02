@@ -46,6 +46,7 @@ export const ENDPOINTS = {
         CANDIDATE_UPDATE_STATUS_APPLICANTS: (jobPostId) =>
             `/candidates/applications/job-posts/${jobPostId}/status`,
         LIST_ALL_APPLICANT_OF_RECRUITER: "recruiters/applications/candidates/all",
+        GET_RANKED_CANDIDATES: (jobPostId) => `/recruiters/applications/job-posts/${jobPostId}/candidates`,
     },
     WORK: {
         CANDIDATE_WORK_OVERVIEW: (jobPostId) =>
@@ -91,7 +92,7 @@ export const ENDPOINTS = {
 
     HOME: {
         TOP_RECRUITER: "/public/home/top-recruiters",
-        RECOMMEND_JOB_POSTS: "/"
+        RECOMMEND_JOB_POSTS: "/candidates/job-posts/recommend"
     },
     WS: {
         ENDPOINT: "ws",
