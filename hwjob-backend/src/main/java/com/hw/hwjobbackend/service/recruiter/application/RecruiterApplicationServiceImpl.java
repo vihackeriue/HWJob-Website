@@ -61,7 +61,7 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
 
 
     @Override
-    public List<ApplicationCandidateResponse> getAllCandidateApplications(String jobPostId) {
+    public List<ApplicationCandidateResponse> getCandidateApplications(String jobPostId) {
         String recruiterId = SecurityUtils.getCurrentUserId();
 
         List<String> candidateAppliedId = applicationRepository
@@ -100,7 +100,6 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
 
         return applications.map(applicationMapper::toApplicationAllCandidateResponse);
     }
-
 
 
     @Override
@@ -176,6 +175,7 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
 
 
     }
+
     private void validateStatusTransition(
             ApplicationStatusEnum current,
             ApplicationStatusEnum next

@@ -16,5 +16,4 @@ public interface InitializationService {
 
     void initializeSkills();
 
-//    void initializeTestUsers();
 }

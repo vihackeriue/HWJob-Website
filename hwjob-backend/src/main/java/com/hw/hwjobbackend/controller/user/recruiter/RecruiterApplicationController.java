@@ -45,6 +45,7 @@ public class RecruiterApplicationController {
                 .result(recruiterJobPostService.getCandidateApplications(jobPostId))
                 .build();
     }
+
     @GetMapping("/candidates/all")
     public ApiResponse<List<ApplicationAllCandidateResponse>> getAllCandidateApplications(
             @RequestParam(required = false) Integer page,

@@ -11,14 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(
-        name = "reviews",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        columnNames = {"work_id", "reviewer_id"}
-                )
-        }
-)
+@Table(name = "reviews", uniqueConstraints = {@UniqueConstraint(columnNames = {"work_id", "reviewer_id"})})
 @Getter
 @Setter
 @Builder
