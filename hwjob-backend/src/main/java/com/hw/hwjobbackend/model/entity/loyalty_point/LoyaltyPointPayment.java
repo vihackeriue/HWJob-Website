@@ -2,11 +2,13 @@ package com.hw.hwjobbackend.model.entity.loyalty_point;
 
 import com.hw.hwjobbackend.model.enums.PaymentMethodEnum;
 import com.hw.hwjobbackend.model.enums.PaymentStatusEnum;
+import com.hw.hwjobbackend.model.enums.PaymentTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -19,6 +21,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EntityListeners(AuditingEntityListener.class)
 public class LoyaltyPointPayment {
 
 
@@ -44,10 +47,18 @@ public class LoyaltyPointPayment {
     @Enumerated(EnumType.STRING)
     PaymentMethodEnum paymentMethod; // MOMO | VNPAY
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    PaymentTypeEnum paymentType;
+
     // Gateway common
     String gatewayOrderId;
     String gatewayRequestId;
     String gatewayTransactionId;
+
+//     Withdraw MoMo
+    String momoPhone;
+    String momoName;
 
     // Chống IPN retry
     @Column(unique = true)

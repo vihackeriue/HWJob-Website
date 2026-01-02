@@ -20,6 +20,7 @@ public class WorkCandidateResponse {
     String workId;
     String candidateId;
     String fullName;
+    String email;
     String imageUrl;
     Long agreedSalary;
     SalaryTypeEnum salaryType;

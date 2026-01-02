@@ -15,5 +15,6 @@ public class ApplicationCandidateResponse {
     String id;
     String fullName;
     String imageUrl;
+    String email;
     ApplicationStatusEnum status;
 }

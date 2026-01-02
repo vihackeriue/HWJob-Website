@@ -125,12 +125,15 @@ export const OverviewSection = ({
             <h1 className="text-md font-semibold line-clamp-2">
               {jobPost.title}
             </h1>
-            <h1 className="text-md font-semibold line-clamp-2"></h1>
+
             <p className="flex items-center gap-1">
               <IoPersonOutline />
               <span className="font-medium">Nhà tuyển dụng:</span>{" "}
               {jobPost.recruiter.fullName}
             </p>
+            <h1 className="text-md font-semibold line-clamp-2">
+              {jobPost.viewCount}
+            </h1>
           </div>
         </div>
         <div className="absolute right-3 bottom-3 flex gap-3">

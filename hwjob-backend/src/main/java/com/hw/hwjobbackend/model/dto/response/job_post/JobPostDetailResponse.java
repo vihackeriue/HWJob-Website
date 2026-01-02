@@ -29,6 +29,7 @@ public class JobPostDetailResponse {
     Long salary;
     SalaryTypeEnum salaryType;
 
+    Long viewCount;
     String industry;
     String level;
     String jobType;
