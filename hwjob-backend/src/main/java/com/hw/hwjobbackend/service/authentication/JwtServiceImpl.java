@@ -147,10 +147,12 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public void addToBlacklist(String jwtId, Date expiryTime) {
-        if (expiryTime.after(new Date())) {
+
+        long ttlSeconds = (expiryTime.getTime() - System.currentTimeMillis()) / 1000;
+        if (ttlSeconds > 0) {
             InvalidateToken invalidateToken = InvalidateToken.builder()
                     .jwtId(jwtId)
-                    .expiryTime(expiryTime)
+                    .ttl(ttlSeconds)
                     .build();
             invalidateTokenRepository.save(invalidateToken);
             log.debug("Token added to blacklist: {}", jwtId);

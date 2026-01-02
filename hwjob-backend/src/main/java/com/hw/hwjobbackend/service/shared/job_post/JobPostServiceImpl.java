@@ -59,7 +59,6 @@ public class JobPostServiceImpl implements JobPostService {
     JobPostViewService jobPostViewService;
 
 
-
     @Override
     public Page<JobPostResponse> getAllJobPosts(Integer page, Integer size, JobPostFilterRequest filter) {
         Pageable pageable = PaginationUtils.buildPageable(page, size);
@@ -91,8 +90,9 @@ public class JobPostServiceImpl implements JobPostService {
                 .toList();
     }
 
+
     @Override
-    public JobPostDetailResponse getJobPostDetail(String id) {
+    public JobPostDetailResponse getJobPostDetail(String id, HttpServletRequest request) {
 
 
         JobPost jobPost = jobPostRepository.findById(id)

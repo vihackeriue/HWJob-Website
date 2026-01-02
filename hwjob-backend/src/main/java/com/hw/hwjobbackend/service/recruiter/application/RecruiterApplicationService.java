@@ -16,9 +16,7 @@ public interface RecruiterApplicationService {
 
     void updateCandidateApplicationStatus(String jobPostId, String candidateId, ApplicationStatusRequest request);
 
-    Page<ApplicationAllCandidateResponse> getAllCandidateApplicationsOfRecruiter(
-            int page,
-            int size
-    );
+    Page<ApplicationAllCandidateResponse> getAllCandidateApplicationsOfRecruiter(int page, int size);
+
     List<ApplicationAllCandidateResponse> getAllCandidateApplicationsOfRecruiter();
 }
