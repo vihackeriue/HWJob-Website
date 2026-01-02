@@ -21,10 +21,20 @@ public class CandidateJobPostController {
 
     CandidateJobPostService candidateJobPostService;
 
-    @GetMapping("/recommend/{candidateId}")
-    public ApiResponse<List<JobPostResponse>> getRecommendJobPosts(@PathVariable String candidateId) {
+    @GetMapping("/recommend")
+    public ApiResponse<List<JobPostResponse>> getRecommendJobPosts(
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size
+    ) {
+        int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
+        int pageSize = (size != null) ? size : 10;
+
+        Page<JobPostResponse> response = candidateJobPostService.getRecommendJobPosts(zeroBasedPage, pageSize);
+
         return ApiResponse.<List<JobPostResponse>>builder()
-                .result(candidateJobPostService.getRecommendJobPosts(candidateId))
+                .page(PaginationUtils.toOneBasedPage(response.getNumber()))
+                .totalPages(response.getTotalPages())
+                .result(response.getContent())
                 .build();
     }
 

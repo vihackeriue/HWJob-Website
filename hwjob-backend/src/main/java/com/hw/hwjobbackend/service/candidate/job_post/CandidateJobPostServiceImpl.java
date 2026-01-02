@@ -2,18 +2,19 @@ package com.hw.hwjobbackend.service.candidate.job_post;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
-import com.hw.hwjobbackend.model.dto.api.request.CandidateIndexingRequest;
 import com.hw.hwjobbackend.model.dto.api.request.JobPostRecommendationRequest;
+import com.hw.hwjobbackend.model.dto.api.response.RankedItemResponse;
 import com.hw.hwjobbackend.model.dto.api.response.RecommendationResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.SaveJobPostResponse;
 import com.hw.hwjobbackend.model.entity.candidate_save_job.CandidateSaveJob;
 import com.hw.hwjobbackend.model.entity.candidate_save_job.CandidateSaveJobId;
 import com.hw.hwjobbackend.model.entity.job_post.JobPost;
-import com.hw.hwjobbackend.model.entity.skill.Skill;
+import com.hw.hwjobbackend.model.entity.job_post.RecommendJobPostCache;
 import com.hw.hwjobbackend.model.entity.user.Candidate;
 import com.hw.hwjobbackend.repository.candidate_save_job.CandidateSaveJobRepository;
 import com.hw.hwjobbackend.repository.http_client.ServerAIFeignClient;
+import com.hw.hwjobbackend.repository.job_post.JobPostCacheRepository;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
 import com.hw.hwjobbackend.repository.user.CandidateRepository;
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
@@ -24,12 +25,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,26 +47,26 @@ public class CandidateJobPostServiceImpl implements CandidateJobPostService {
     CandidateRepository candidateRepository;
     JobPostMapper jobPostMapper;
     ServerAIFeignClient serverAIFeignClient;
+    JobPostCacheRepository jobPostCacheRepository;
+
+    static final int N_RESULTS = 30;
 
     @Override
-    public List<JobPostResponse> getRecommendJobPosts(String userId) {
+    public Page<JobPostResponse> getRecommendJobPosts(int page, int size) {
+        String candidateId = SecurityUtils.getCurrentUserId();
 
-        Candidate candidate = candidateRepository.findById(userId).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
-        );
+        RecommendJobPostCache cache = jobPostCacheRepository.findById(candidateId).orElse(null);
 
-        JobPostRecommendationRequest request = JobPostRecommendationRequest.builder()
-                .candidateId(candidate.getId())
-                .build();
-
-        RecommendationResponse recommendationResponse = serverAIFeignClient.recommendJobs(request);
-
-        return recommendationResponse
-                .getResults().stream()
-                .map(rankedItemResponse -> jobPostRepository.findById(rankedItemResponse.getId())
-                        .orElseThrow(() -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED)))
-                .map(jobPostMapper::toJobPostResponse)
-                .toList();
+        if (cache == null) {
+            List<String> jobIds = fetchJobPostIds(candidateId);
+            log.debug("Get job post cache");
+            cache = RecommendJobPostCache.builder()
+                    .id(candidateId)
+                    .jobPostIds(jobIds)
+                    .build();
+            jobPostCacheRepository.save(cache);
+        }
+        return getJobPostsPage(cache.getJobPostIds(), page, size);
     }
 
     @Override
@@ -76,7 +81,6 @@ public class CandidateJobPostServiceImpl implements CandidateJobPostService {
                 .candidateId(candidateId)
                 .jobPostId(jobPostId)
                 .build();
-
 
         if (candidateSaveJobRepository.existsById(candidateSaveJobId)) {
 
@@ -128,5 +132,49 @@ public class CandidateJobPostServiceImpl implements CandidateJobPostService {
         return jobPosts.stream()
                 .map(jobPostMapper::toJobPostResponse)
                 .toList();
+    }
+
+    private List<String> fetchJobPostIds(String candidateId) {
+        Candidate candidate = candidateRepository.findById(candidateId).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
+        );
+
+        JobPostRecommendationRequest request = JobPostRecommendationRequest.builder()
+                .candidateId(candidate.getId())
+                .nResults(N_RESULTS)
+                .build();
+
+        RecommendationResponse recommendationResponse = serverAIFeignClient.recommendJobs(request);
+
+        return recommendationResponse.getResults().stream()
+                .map(RankedItemResponse::getId)
+                .collect(Collectors.toList());
+    }
+
+    private Page<JobPostResponse> getJobPostsPage(List<String> jobIds, int page, int size) {
+        int start = page * size;
+        int end = Math.min(start + size, jobIds.size());
+
+        if (start >= jobIds.size()) {
+            return new PageImpl<>(Collections.emptyList(), PaginationUtils.buildPageable(page, size), jobIds.size());
+        }
+
+        List<String> pageJobIds = jobIds.subList(start, end);
+
+        // Fetch JobPosts from DB
+        List<JobPost> jobPosts = jobPostRepository.findAllById(pageJobIds);
+
+        // Sort JobPosts based on the order of pageJobIds
+        Map<String, JobPost> jobPostMap = jobPosts.stream()
+                .collect(Collectors.toMap(JobPost::getId, Function.identity()));
+
+        List<JobPostResponse> jobPostResponses = new ArrayList<>();
+        for (String id : pageJobIds) {
+            if (jobPostMap.containsKey(id)) {
+                jobPostResponses.add(jobPostMapper.toJobPostResponse(jobPostMap.get(id)));
+            }
+        }
+
+        return new PageImpl<>(jobPostResponses, PaginationUtils.buildPageable(page, size), jobIds.size());
     }
 }

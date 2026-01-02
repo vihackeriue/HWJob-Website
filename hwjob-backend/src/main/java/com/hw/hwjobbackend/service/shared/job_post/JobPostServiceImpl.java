@@ -93,8 +93,6 @@ public class JobPostServiceImpl implements JobPostService {
 
     @Override
     public JobPostDetailResponse getJobPostDetail(String id, HttpServletRequest request) {
-
-
         JobPost jobPost = jobPostRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED));
         // INCREASE VIEW

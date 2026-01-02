@@ -46,6 +46,25 @@ public class RecruiterApplicationController {
                 .build();
     }
 
+    @GetMapping("/job-posts/{jobPostId}/candidates/ranked")
+    public ApiResponse<List<ApplicationCandidateResponse>> getRankedCandidatesAppliedJob(
+            @PathVariable String jobPostId,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size
+    ) {
+        int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
+        int pageSize = (size != null) ? size : 10;
+
+        Page<ApplicationCandidateResponse> response = recruiterJobPostService
+                .getRankedCandidateApplication(zeroBasedPage, pageSize, jobPostId);
+
+        return ApiResponse.<List<ApplicationCandidateResponse>>builder()
+                .page(PaginationUtils.toOneBasedPage(response.getNumber()))
+                .totalPages(response.getTotalPages())
+                .result(response.getContent())
+                .build();
+    }
+
     @GetMapping("/candidates/all")
     public ApiResponse<List<ApplicationAllCandidateResponse>> getAllCandidateApplications(
             @RequestParam(required = false) Integer page,

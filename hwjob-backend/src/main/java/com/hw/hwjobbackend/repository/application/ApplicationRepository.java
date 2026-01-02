@@ -15,8 +15,7 @@ import java.util.Optional;
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, ApplicationId> {
 
-    // ===== Recruiter methods =====
-
+    long countByJobPostId(String jobPostId);
 
     @Query("SELECT a.candidate.id FROM Application a " +
             "WHERE a.jobPost.id = :jobPostId " +
@@ -26,6 +25,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Applic
             @Param("jobPostId") String jobPostId,
             @Param("recruiterId") String recruiterId
     );
+
 
     @Query("SELECT a FROM Application a " +
             "WHERE a.jobPost.id = :jobPostId " +
@@ -73,13 +73,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Applic
             @Param("candidateId") String candidateId
     );
 
-    @Query("SELECT CASE WHEN COUNT(a) > 0 THEN true ELSE false END " +
-            "FROM Application a " +
-            "WHERE a.candidate.id = :candidateId AND a.jobPost.id = :jobPostId")
-    boolean existsByCandidateIdAndJobPostId(
-            @Param("candidateId") String candidateId,
-            @Param("jobPostId") String jobPostId);
-
     @Query("""
                 SELECT a FROM Application a
                 WHERE a.jobPost.id = :jobPostId
@@ -90,25 +83,13 @@ public interface ApplicationRepository extends JpaRepository<Application, Applic
             @Param("candidateId") String candidateId
     );
 
-    long countByJobPostId(String jobPostId);
-
-    @Query("""
-        SELECT a FROM Application a
-        WHERE a.jobPost.recruiter.id = :recruiterId
-        ORDER BY a.createdAt DESC
-    """)
-    Page<Application> findAllByRecruiterId(
-            @Param("recruiterId") String recruiterId,
-            Pageable pageable
-    );
-
-    @Query("""
-        SELECT a FROM Application a
-        WHERE a.jobPost.recruiter.id = :recruiterId
-        ORDER BY a.createdAt DESC
-    """)
-    List<Application> findAllByRecruiterId(
-            @Param("recruiterId") String recruiterId
+    @Query("SELECT a FROM Application a " +
+            "JOIN FETCH a.candidate " +
+            "WHERE a.jobPost.id = :jobPostId " +
+            "AND a.candidate.id IN :candidateIds")
+    List<Application> findByJobPostIdAndCandidateIdIn(
+            @Param("jobPostId") String jobPostId,
+            @Param("candidateIds") List<String> candidateIds
     );
 
 }

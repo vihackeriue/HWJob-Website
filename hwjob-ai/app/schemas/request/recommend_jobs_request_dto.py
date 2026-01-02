@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class RecommendJobsRequestDTO(BaseModel):
     """
     DTO cho request gợi ý việc làm cho một ứng viên.
