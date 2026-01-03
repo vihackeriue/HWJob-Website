@@ -3,10 +3,10 @@ package com.hw.hwjobbackend.service.recruiter.job_post;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostRequest;
-import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
-import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailStatsResponse;
-import com.hw.hwjobbackend.model.dto.response.job_post.JobPostResponse;
-import com.hw.hwjobbackend.model.dto.response.job_post.RecruiterJobPostStatsResponse;
+import com.hw.hwjobbackend.model.dto.response.application.projection.ApplyGoldenHourResponse;
+import com.hw.hwjobbackend.model.dto.response.job_post.*;
+import com.hw.hwjobbackend.model.dto.response.job_post.projection.RecruiterPostingFrequencyResponse;
+import com.hw.hwjobbackend.model.dto.response.job_post.projection.RecruiterWorkSalaryStatsResponse;
 import com.hw.hwjobbackend.model.entity.job_post.JobPost;
 import com.hw.hwjobbackend.model.entity.skill.Skill;
 import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
@@ -20,7 +20,6 @@ import com.hw.hwjobbackend.repository.level.LevelRepository;
 import com.hw.hwjobbackend.repository.region.RegionRepository;
 import com.hw.hwjobbackend.repository.user.RecruiterRepository;
 import com.hw.hwjobbackend.repository.work.WorkRepository;
-import com.hw.hwjobbackend.service.candidate.work.CandidateWorkService;
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
 import com.hw.hwjobbackend.service.shared.job_post.JobPostViewService;
 import com.hw.hwjobbackend.service.shared.skill.SkillService;
@@ -32,11 +31,11 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -172,11 +171,33 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
         long hiddenJobs  = jobPostRepository.countHiddenJobs(recruiterId);
         long expiredJobs = jobPostRepository.countExpiredJobs(recruiterId);
 
-        return RecruiterJobPostStatsResponse.builder()
+        JobPostStatsResponse jobPostStatsResponse = JobPostStatsResponse.builder()
                 .totalJobPosts(totalJobs)
                 .openingJobPosts(openingJobs)
                 .hiddenJobPosts(hiddenJobs)
                 .expiredJobPosts(expiredJobs)
+                .build();
+
+
+        List<ApplyGoldenHourResponse> applyGoldenHourSystem = applicationRepository.getApplyGoldenHour();
+        List<ApplyGoldenHourResponse> applyGoldenHourOfRecruiter = applicationRepository.getApplyGoldenHourByRecruiter(recruiterId);
+
+        LocalDateTime fromDate = LocalDateTime
+                .now()
+                .minusMonths(12)
+                .withDayOfMonth(1)
+                .withHour(0).withMinute(0).withSecond(0);
+        List<RecruiterPostingFrequencyResponse> recruiterPostingFrequency = jobPostRepository
+                .getPostingFrequencyOfRecruiter(recruiterId, fromDate);
+
+        RecruiterWorkSalaryStatsResponse recruiterWorkSalaryStats = workRepository.getRecruiterWorkSalaryStats(recruiterId);
+
+        return RecruiterJobPostStatsResponse.builder()
+                .jobPostStats(jobPostStatsResponse)
+                .systemApplyGoldenHour(applyGoldenHourSystem)
+                .recruiterApplyGoldenHour(applyGoldenHourOfRecruiter)
+                .postingFrequency(recruiterPostingFrequency)
+                .workSalaryStats(recruiterWorkSalaryStats)
                 .build();
     }
 
