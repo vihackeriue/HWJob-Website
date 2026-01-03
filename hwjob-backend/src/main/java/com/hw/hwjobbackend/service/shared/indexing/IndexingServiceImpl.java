@@ -1,6 +1,5 @@
 package com.hw.hwjobbackend.service.shared.indexing;
 
-
 import com.hw.hwjobbackend.model.dto.api.request.CandidateIndexingRequest;
 import com.hw.hwjobbackend.model.dto.api.request.JobPostIndexingRequest;
 import com.hw.hwjobbackend.model.dto.api.response.ServerAIMessageResponse;
@@ -69,7 +68,7 @@ public class IndexingServiceImpl implements IndexingService {
     }
 
     @Override
-    @Scheduled(cron = "0 */30 * * * ?") // Chạy mỗi 15 phút
+    @Scheduled(cron = "0 */30 * * * ?")
     @Transactional(readOnly = true)
     public void indexAllCandidates() {
         log.info("Starting scheduled indexing for all candidates...");
@@ -85,7 +84,7 @@ public class IndexingServiceImpl implements IndexingService {
     }
 
     @Override
-    @Scheduled(cron = "0 */30 * * * ?") // Chạy mỗi 15 phút
+    @Scheduled(cron = "0 */30 * * * ?")
     @Transactional(readOnly = true)
     public void indexAllJobPosts() {
         log.info("Starting scheduled indexing for all job posts...");
