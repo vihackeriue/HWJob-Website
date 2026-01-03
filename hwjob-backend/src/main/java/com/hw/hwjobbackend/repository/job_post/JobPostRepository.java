@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.repository.job_post;
 
+import com.hw.hwjobbackend.model.dto.response.job_post.projection.RecruiterPostingFrequencyResponse;
 import com.hw.hwjobbackend.model.entity.job_post.JobPost;
 import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
 import org.springframework.data.domain.Page;
@@ -139,4 +140,24 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
           AND j.endedTime <= CURRENT_TIMESTAMP
     """)
     long countExpiredJobs(@Param("recruiterId") String recruiterId);
+
+    @Query("""
+    SELECT
+        YEAR(j.createdAt)  AS year,
+        MONTH(j.createdAt) AS month,
+        COUNT(j)           AS count
+    FROM JobPost j
+    WHERE j.recruiter.id = :recruiterId
+      AND j.createdAt >= :fromDate
+    GROUP BY
+        YEAR(j.createdAt),
+        MONTH(j.createdAt)
+    ORDER BY
+        YEAR(j.createdAt),
+        MONTH(j.createdAt)
+    """)
+    List<RecruiterPostingFrequencyResponse> getPostingFrequencyOfRecruiter(
+            @Param("recruiterId") String recruiterId,
+            @Param("fromDate") LocalDateTime fromDate
+    );
 }

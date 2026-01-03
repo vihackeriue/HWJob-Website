@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.repository.application;
 
+import com.hw.hwjobbackend.model.dto.response.application.projection.ApplyGoldenHourResponse;
 import com.hw.hwjobbackend.model.entity.application.Application;
 import com.hw.hwjobbackend.model.entity.application.ApplicationId;
 import org.springframework.data.domain.Page;
@@ -92,4 +93,33 @@ public interface ApplicationRepository extends JpaRepository<Application, Applic
             @Param("candidateIds") List<String> candidateIds
     );
 
+    //Statistic
+
+    // Apply Golden Hour
+    @Query("""
+        SELECT
+            FUNCTION('DAYOFWEEK', a.createdAt) AS dayOfWeek,
+            FUNCTION('HOUR', a.createdAt) AS hour,
+            COUNT(a) AS total
+        FROM Application a
+        WHERE a.jobPost.recruiter.id = :recruiterId
+        GROUP BY
+            FUNCTION('DAYOFWEEK', a.createdAt),
+            FUNCTION('HOUR', a.createdAt)
+    """)
+    List<ApplyGoldenHourResponse> getApplyGoldenHourByRecruiter(
+            @Param("recruiterId") String recruiterId
+    );
+
+    @Query("""
+        SELECT
+            FUNCTION('DAYOFWEEK', a.createdAt) AS dayOfWeek,
+            FUNCTION('HOUR', a.createdAt) AS hour,
+            COUNT(a) AS total
+        FROM Application a
+        GROUP BY
+            FUNCTION('DAYOFWEEK', a.createdAt),
+            FUNCTION('HOUR', a.createdAt)
+    """)
+    List<ApplyGoldenHourResponse> getApplyGoldenHour();
 }
