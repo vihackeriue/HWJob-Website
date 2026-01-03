@@ -59,8 +59,8 @@ app:
 
 blockchain:
   ganache-url: http://127.0.0.1:7545
-  contract-address: "0x68254d977d6847444CCfe1d6f05f75b3Ea1e9C99"
-  private-key: "0xcc9d2a081b003e3d91bf070d9d31b5b025433666e48fd2d415492efb9ae71217"
+  contract-address: "0x7eB3d6B76D56622A6751b7e7071dF36FaAF7b1e5"
+  private-key: "0x61b31d982de276903413b79877abfef2b1a2e72c669e5452e899f0a82e4d696d"
 
 momo:
   partner-code: MOMO
