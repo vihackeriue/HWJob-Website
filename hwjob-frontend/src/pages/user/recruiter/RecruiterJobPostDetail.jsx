@@ -18,6 +18,7 @@ const JOB_POST_MANAGEMENT_MENUS = [
 ];
 
 const RecruiterJobPostDetail = () => {
+
     const {id} = useParams();
     const {data, loading} = useDetail(getJobPostById, id);
     const [jobPost, setJobPost] = useState(null);
@@ -27,11 +28,10 @@ const RecruiterJobPostDetail = () => {
     if (loading || !jobPost) return <div>Đang tải...</div>;
     return (
         <div className="flex flex-col gap-3 mt-10 ">
-            <OverviewSection jobPost={jobPost}/>
+            <OverviewSection jobPost={jobPost} setJobPost={setJobPost}/>
             <div className="">
                 <TabGroup>
                     <MenuTabListHorizontal menus={JOB_POST_MANAGEMENT_MENUS}/>
-
                     <TabPanels className="bg-white rounded-2xl p-5 mt-3 ">
                         <TabPanel>
                             <DescriptionSection jobPost={jobPost}/>

@@ -1,16 +1,17 @@
 import {useParams} from "react-router-dom";
 import {useDetail} from "../../hooks/useDetail.jsx";
-import {getUserProfileById} from "../../services/userService.jsx";
+
 import React from "react";
 import SecondTitle from "../../components/ui/title/SecondTitle.jsx";
 import useChat from "../../hooks/useChat.jsx";
 import {toast} from "react-toastify";
 import {chatService} from "../../services/chatService.jsx";
 import useAuth from "../../hooks/useAuth.jsx";
+import {getRecruiterProfileById} from "../../services/userService.jsx";
 
 const PublicProfile = () => {
     const {id} = useParams();
-    const {data: userProfile, loading} = useDetail(getUserProfileById, id);
+    const {data: userProfile, loading} = useDetail(getRecruiterProfileById, id);
     const {auth} = useAuth();
     const {openConversation} = useChat();
 

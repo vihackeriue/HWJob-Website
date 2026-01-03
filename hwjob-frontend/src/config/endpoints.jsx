@@ -14,15 +14,18 @@ export const ENDPOINTS = {
 
         CANDIDATE: {
             UPDATE_INFO: "candidates/users",
+            PROFILE: (id) => `public/profiles/candidate/${id}`,
         },
         RECRUITER: {
             UPDATE_INFO: "recruiters/users",
+            PROFILE: (id) => `public/profiles/recruiter/${id}`,
         },
-        PROFILE: (id) => `public/profiles/recruiter/${id}`,
+
     },
 
     JOB_POST: {
         CREATE: "recruiters/job-posts",
+        UPDATE: (id) => `recruiters/job-posts/${id}`,
         LIST: "public/job-posts",
         LIST_WORKING_JOBS: "public/job-posts",
         LIST_SAVED_JOB_POSTS: "candidates/job-posts/saved",

@@ -13,7 +13,6 @@ import {getLevelsNotPagination} from "../../../services/levelService";
 import {createJobPost} from "../../../services/jobPostService";
 import {useNavigate} from "react-router-dom";
 import {SALARY_TYPE, STATUS_JOB_POST} from "../../../config/constants";
-import {IoMdClose} from "react-icons/io";
 import {getSkillsNotPagination} from "../../../services/skillService.jsx";
 import SkillList from "../../../components/ui/form/SkillList.jsx";
 
@@ -123,7 +122,6 @@ const AddJobPost = () => {
         } catch (error) {
             alert(error.response?.data?.message || "Đăng ký tài khoản thất bại!");
         }
-
         // Call API tạo job post
     };
 

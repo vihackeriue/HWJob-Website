@@ -5,6 +5,12 @@ export const createJobPost = async (data) => {
   const response = await axiosPrivate.post(ENDPOINTS.JOB_POST.CREATE, data);
   return response.data;
 };
+
+export const updateJobPost = async (id, data) => {
+  const response = await axiosPrivate.put(ENDPOINTS.JOB_POST.UPDATE(id), data);
+  return response.data;
+};
+
 export const getJobPosts = async (
   page = 1,
   size = DEFAULT_LIMIT,

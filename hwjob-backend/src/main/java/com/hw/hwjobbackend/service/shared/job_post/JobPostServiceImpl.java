@@ -95,12 +95,14 @@ public class JobPostServiceImpl implements JobPostService {
     public JobPostDetailResponse getJobPostDetail(String id, HttpServletRequest request) {
         JobPost jobPost = jobPostRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.JOB_POST_NOT_EXISTED));
+
         // INCREASE VIEW
         String viewerKey = jobPostViewService.getViewerKey(request);
         jobPostViewService.increaseView(
                 jobPost.getId(),
                 viewerKey
         );
+
         // TOTAL VIEW
         Long totalView = Optional.ofNullable(jobPost.getViewCount()).orElse(0L)
                 + jobPostViewService.getRedisView(jobPost.getId());
