@@ -50,27 +50,27 @@ const DescriptionSection = ({jobPost}) => {
                     <InfoCard
                         icon={<IoEarth className="size-12 text-teal-600"/>}
                         label="Trạng thái"
-                        value={jobPost.status}
+                        value={jobPost.status || "Không có"}
                     />
                     <InfoCard
                         icon={<LiaIndustrySolid className="size-12 text-teal-600"/>}
                         label="Ngành"
-                        value={jobPost.industry.name}
+                        value={jobPost.industry?.name || "Không có"}
                     />
                     <InfoCard
                         icon={<CiLocationOn className="size-12 text-teal-600"/>}
                         label="Khu vực"
-                        value={jobPost.region.name}
+                        value={jobPost.region?.name || "Không có"}
                     />
                     <InfoCard
                         icon={<SiLevelsdotfyi className="size-12 text-teal-600"/>}
                         label="Cấp độ"
-                        value={jobPost.level.name}
+                        value={jobPost.level?.name || "Không có"}
                     />
                     <InfoCard
                         icon={<FaPeopleCarryBox className="size-12 text-teal-600"/>}
                         label="Loại công việc"
-                        value={jobPost.jobType.name}
+                        value={jobPost.jobType?.name || "Không có"}
                     />
                 </div>
             </div>
