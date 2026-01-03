@@ -1,6 +1,7 @@
 package com.hw.hwjobbackend.repository.work;
 
 
+import com.hw.hwjobbackend.model.dto.response.job_post.projection.RecruiterWorkSalaryStatsResponse;
 import com.hw.hwjobbackend.model.entity.works.Work;
 import com.hw.hwjobbackend.model.enums.WorkStatusEnum;
 import feign.Param;
@@ -65,4 +66,21 @@ public interface WorkRepository extends JpaRepository<Work, String> {
     List<Work> findAllByRecruiterId(
             @Param("recruiterId") String recruiterId
     );
-}
+
+
+//    Stats Salary
+    @Query("""
+        SELECT
+            COALESCE(SUM(CASE WHEN w.status = 'PAID' THEN w.agreedSalary ELSE 0 END), 0)
+                AS paidSalary,
+            COALESCE(SUM(CASE WHEN w.status <> 'PAID' THEN w.agreedSalary ELSE 0 END), 0)
+                AS unpaidSalary,
+            COALESCE(SUM(w.agreedSalary), 0)
+                AS totalSalary
+        FROM Work w
+        WHERE w.recruiter.id = :recruiterId
+    """)
+    RecruiterWorkSalaryStatsResponse getRecruiterWorkSalaryStats(
+            @Param("recruiterId") String recruiterId
+    );
+    }
