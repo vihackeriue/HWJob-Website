@@ -15,11 +15,10 @@ class RecommendationService:
     @staticmethod
     def _calculate_job_score(semantic_score: float, job_meta: Dict, candidate_meta: Dict) -> float:
         """
-        [SỬA LẠI] Hàm nội bộ tính điểm cho một cặp (Job, Candidate).
-        Giờ đây nhận vào metadata của candidate thay vì cả DTO.
+        Hàm nội bộ tính điểm cho một cặp (Job, Candidate).
         """
         job_skills = set([s.strip().lower() for s in str(job_meta.get('skills', '')).split(',') if s.strip()])
-        # Lấy skills từ metadata của candidate, không còn truy cập DTO
+        # Lấy skills từ metadata của candidate
         cand_skills = set([s.strip().lower() for s in str(candidate_meta.get('skills', '')).split(',') if s.strip()])
 
         skill_score = 0.0
@@ -30,7 +29,7 @@ class RecommendationService:
         skill_score = max(0.0, min(1.0, skill_score))
         semantic_score = max(0.0, min(1.0, semantic_score))
 
-        weights = get_dynamic_weights(job_meta.get('level', 'Junior'))
+        weights = get_dynamic_weights()
         return (weights['skill'] * skill_score) + (weights['semantic'] * semantic_score)
 
     @staticmethod
@@ -71,7 +70,7 @@ class RecommendationService:
         ranked = []
         if results['ids']:
             for i in range(len(results['ids'][0])):
-                # [SỬA LẠI] Truyền candidate_meta (dict) vào hàm tính điểm, không phải object DTO `data`
+                #Truyền candidate_meta (dict) vào hàm tính điểm
                 final_score = RecommendationService._calculate_job_score(
                     1 - results['distances'][0][i],
                     results['metadatas'][0][i],
@@ -97,7 +96,7 @@ class RecommendationService:
         skill_score = max(0.0, min(1.0, skill_score))
         semantic_score = max(0.0, min(1.0, semantic_score))
 
-        weights = get_dynamic_weights(job_meta.get('level', 'Junior'))
+        weights = get_dynamic_weights()
         return (weights['skill'] * skill_score) + (weights['semantic'] * semantic_score)
 
     @staticmethod

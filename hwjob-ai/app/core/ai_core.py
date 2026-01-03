@@ -27,7 +27,7 @@ try:
     # Lấy hoặc tạo collection cho Job Posts
     job_collection = chroma_client.get_or_create_collection(
         name=Config.JOB_COLLECTION_NAME,
-        metadata={"hnsw:space": "cosine"}  # Sử dụng cosine similarity để đo lường khoảng cách
+        metadata={"hnsw:space": "cosine"}  # Sử dụng cosine similarity để đo lường
     )
 
     # Lấy hoặc tạo collection cho Candidates
