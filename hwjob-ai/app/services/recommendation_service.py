@@ -1,7 +1,6 @@
 import numpy as np
 import time
 from app.core.ai_core import embedding_model, job_collection, candidate_collection
-from app.utils.text_processing import preprocess_vietnamese_text
 from app.utils.scoring import get_dynamic_weights
 from app.schemas.request.recommend_jobs_request_dto import RecommendJobsRequestDTO
 from app.schemas.request.rank_candidates_request_dto import RankCandidatesRequestDTO
@@ -128,7 +127,7 @@ class RecommendationService:
             for i in range(len(candidates_data['ids'])):
                 cand_vector = np.array(candidates_data['embeddings'][i])
                 similarity = np.dot(job_vector, cand_vector) / (
-                            np.linalg.norm(job_vector) * np.linalg.norm(cand_vector))
+                        np.linalg.norm(job_vector) * np.linalg.norm(cand_vector))
 
                 final_score = RecommendationService._calculate_candidate_score(
                     float(similarity),

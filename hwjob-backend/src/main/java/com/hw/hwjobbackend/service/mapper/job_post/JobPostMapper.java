@@ -28,10 +28,10 @@ public interface JobPostMapper {
     @Mapping(source = "recruiter", target = "recruiter")
     JobPostResponse toJobPostResponse(JobPost jobPost);
 
-    @Mapping(source = "industry.name", target = "industry")
-    @Mapping(source = "level.name", target = "level")
-    @Mapping(source = "jobType.name", target = "jobType")
-    @Mapping(source = "region.name", target = "region")
+    @Mapping(source = "industry", target = "industry")
+    @Mapping(source = "level", target = "level")
+    @Mapping(source = "jobType", target = "jobType")
+    @Mapping(source = "region", target = "region")
     @Mapping(target = "recruiter", ignore = true)
     @Mapping(target = "application", ignore = true)
     @Mapping(target = "viewCount", ignore = true)

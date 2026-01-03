@@ -3,7 +3,11 @@ package com.hw.hwjobbackend.model.dto.response.job_post;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hw.hwjobbackend.model.dto.response.application.ApplicationResponse;
+import com.hw.hwjobbackend.model.dto.response.industry.IndustryResponse;
+import com.hw.hwjobbackend.model.dto.response.job_type.JobTypeResponse;
+import com.hw.hwjobbackend.model.dto.response.level.LevelResponse;
 import com.hw.hwjobbackend.model.dto.response.profile.RecruiterProfileResponse;
+import com.hw.hwjobbackend.model.dto.response.region.RegionResponse;
 import com.hw.hwjobbackend.model.dto.response.skill.SkillResponse;
 import com.hw.hwjobbackend.model.dto.response.work.WorkOverviewResponse;
 import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
@@ -30,9 +34,10 @@ public class JobPostDetailResponse {
     SalaryTypeEnum salaryType;
 
     Long viewCount;
-    String industry;
-    String level;
-    String jobType;
+
+    IndustryResponse industry;
+    LevelResponse level;
+    JobTypeResponse jobType;
 
     JobPostRecruiterProfileResponse recruiter;
 
@@ -40,7 +45,7 @@ public class JobPostDetailResponse {
     Date createdAt;
     LocalDateTime endedTime;
 
-    String region;
+    RegionResponse region;
 
     Set<SkillResponse> skills;
 

@@ -7,22 +7,28 @@ import ApplicantCard from "../../../ui/cards/ApplicantCard";
 import Pagination from "../../../ui/pagination/Pagination";
 import UpdateStatusApplicantDialog from "../../../dialog/UpdateStatusApplicantDialog";
 import {useUpdateApplicationStatus} from "../../../../hooks/useUpdateApplicationStatus";
+import ViewCandidateProfileDialog from "../../../dialog/recruiter/ViewCandidateProfileDialog";
 
 const ApplicantListSection = ({jobPost}) => {
     const {id} = useParams();
 
     const {updateStatus} = useUpdateApplicationStatus();
 
-    const [openViewProfileApplicantDialog, setOpenViewProfileApplicantDialog] =
-        useState(false);
+    const [openUpdateStatusDialog, setOpenUpdateStatusDialog] = useState(false);
+    const [openViewProfileDialog, setOpenViewProfileDialog] = useState(false);
 
     const [selectedApplicant, setSelectedApplicant] = useState(null);
 
     const applicants = useList((page, size) => getRankedCandidates(id, page, size))
 
-    const openViewDialog = (applicant) => {
+    const handleOpenUpdateStatus = (applicant) => {
         setSelectedApplicant(applicant);
-        setOpenViewProfileApplicantDialog(true);
+        setOpenUpdateStatusDialog(true);
+    };
+
+    const handleOpenViewProfile = (applicant) => {
+        setSelectedApplicant(applicant);
+        setOpenViewProfileDialog(true);
     };
 
     const handleUpdateStatus = async (applicationId, status, payload = {}) => {
@@ -60,8 +66,8 @@ const ApplicantListSection = ({jobPost}) => {
                     <ApplicantCard
                         key={applicant.id}
                         applicant={applicant}
-                        onView={openViewDialog}
-                        onUpdate={openViewDialog}
+                        onView={handleOpenViewProfile}
+                        onUpdate={handleOpenUpdateStatus}
                     />
                 ))}
             </div>
@@ -74,12 +80,21 @@ const ApplicantListSection = ({jobPost}) => {
                     }}
                 />
             </div>
+
+            {/* Dialog cập nhật trạng thái */}
             <UpdateStatusApplicantDialog
-                open={openViewProfileApplicantDialog}
+                open={openUpdateStatusDialog}
                 applicant={selectedApplicant}
                 jobPost={jobPost}
-                onClose={() => setOpenViewProfileApplicantDialog(false)}
+                onClose={() => setOpenUpdateStatusDialog(false)}
                 onUpdateStatus={handleUpdateStatus}
+            />
+
+            {/* Dialog xem hồ sơ ứng viên */}
+            <ViewCandidateProfileDialog
+                open={openViewProfileDialog}
+                onClose={() => setOpenViewProfileDialog(false)}
+                candidate={selectedApplicant}
             />
         </div>
     );

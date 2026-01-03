@@ -62,8 +62,12 @@ export const updateUserInfo = async (data, role) => {
     throw new Error("Unsupported role");
 };
 
-export const getUserProfileById = async (id) => {
-    const response = await axiosPrivate.get(ENDPOINTS.USER.PROFILE(id));
+export const getRecruiterProfileById = async (id) => {
+    const response = await axiosPrivate.get(ENDPOINTS.USER.RECRUITER.PROFILE(id));
     return response.data;
 };
 
+export const getCandidateProfileById = async (id) => {
+    const response = await axiosPrivate.get(ENDPOINTS.USER.CANDIDATE.PROFILE(id));
+    return response.data;
+};

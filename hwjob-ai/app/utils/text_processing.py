@@ -8,7 +8,7 @@ def preprocess_vietnamese_text(text: Any) -> str:
     1. Loại bỏ thẻ HTML.
     2. Chuyển thành chữ thường.
     3. Loại bỏ email và URL.
-    4. Loại bỏ các ký tự không cần thiết.
+    4. Loại bỏ các ký tự không cần thiết (nhưng giữ lại '+' và '#').
     5. Tách từ (tokenize).
     """
     if not text or not isinstance(text, str):
@@ -24,11 +24,10 @@ def preprocess_vietnamese_text(text: Any) -> str:
     text = re.sub(r'\S+@\S+', ' ', text)
     text = re.sub(r'http\S+', ' ', text)
     
-    # 4. Loại bỏ các ký tự đặc biệt, chỉ giữ lại chữ, số và khoảng trắng
-    text = re.sub(r'[^a-zàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ0-9\s]', ' ', text)
+    # 4. [SỬA LẠI] Loại bỏ các ký tự đặc biệt, nhưng giữ lại chữ, số, khoảng trắng, và các ký tự '+' '#'
+    text = re.sub(r'[^a-zàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ0-9\s+#]', ' ', text)
     
     # 5. Tách từ bằng underthesea và nối lại
-    # Không còn bước loại bỏ stopword
     tokens = word_tokenize(text, format="text")
     
     return tokens
