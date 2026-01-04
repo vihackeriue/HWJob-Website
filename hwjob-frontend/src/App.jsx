@@ -17,7 +17,7 @@ const Register = lazy(() => import("./pages/auth/Register"));
 const Home = lazy(() => import("./pages/user/Home"));
 const JobPostList = lazy(() => import("./pages/user/JobPostList"));
 const JobPostDetail = lazy(() => import("./pages/user/JobPostDetail"));
-const PublicProfile = lazy(() => import("./pages/user/PublicProfile.jsx"));
+const PublicProfile = lazy(() => import("./pages/user/./RecruiterPublicProfile"));
 const MyProfile = lazy(() => import("./pages/user/shared/MyProfile.jsx"));
 const TransactionManagement = lazy(() => import("./pages/user/shared/TransactionManagement.jsx"));
 const PaymentResult = lazy(() => import("./pages/user/shared/PaymentResult.jsx"));

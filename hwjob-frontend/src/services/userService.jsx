@@ -63,7 +63,7 @@ export const updateUserInfo = async (data, role) => {
 };
 
 export const getRecruiterProfileById = async (id) => {
-    const response = await axiosPrivate.get(ENDPOINTS.USER.RECRUITER.PROFILE(id));
+    const response = await axiosPublic.get(ENDPOINTS.USER.RECRUITER.PROFILE(id));
     return response.data;
 };
 

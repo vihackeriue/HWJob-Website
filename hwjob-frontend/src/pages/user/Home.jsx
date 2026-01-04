@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import BannerSection from "../../components/sections/BannerSection";
 import {TopJobSection} from "../../components/sections/TopJobSection";
-
 import {useTranslation} from "react-i18next";
 
 import FeatureSection from "../../components/sections/FeatureSection";
@@ -21,8 +20,6 @@ export default function Home() {
     const {auth} = useAuth();
 
     const {data: recruiters} = useList(getTopRecruiters);
-    // const {data: recommendJobPosts} =useList()
-    // const recommendJobPosts = useList(getTop10RecommendJobPosts);
 
     const [recommendJobPosts, setRecommendJobPosts] = useState([]);
 
@@ -36,10 +33,9 @@ export default function Home() {
 
     const jobPosts = useList(getJobPosts);
 
-    // const industries = [];
-
     return (
         <div>
+            {/* Banner & Search Bar */}
             <div className="w-screen relative left-1/2 right-1/2 -translate-x-1/2">
                 <BannerSection/>
                 <div
@@ -48,19 +44,31 @@ export default function Home() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 justify-between mt-20">
-                <div className="flex flex-col gap-3">
-                    {/*<TopIndustrySection t={t} industries={industries}/>*/}
-                    {auth?.roles?.includes(ROLES.CANDIDATE) && (
+            {/* Main Content - Xếp theo chiều dọc, mỗi section là một hàng ngang */}
+            <div className="flex flex-col gap-16 mt-24 mb-10">
+                
+                {/* 1. Nhà tuyển dụng hàng đầu */}
+                <section>
+                    <TopRecruiterSection recruiters={recruiters} t={t}/>
+                </section>
+
+                {/* 2. Tin tuyển dụng nổi bật */}
+                <section className="container mx-auto px-4">
+                    {/* Truyền jobPosts.data thay vì toàn bộ object jobPosts */}
+                    <TopJobSection jobPosts={jobPosts.data} t={t}/>
+                </section>
+
+                {/* 3. Recommend Job (Chỉ hiển thị cho Candidate) */}
+                {auth?.roles?.includes(ROLES.CANDIDATE) && (
+                    <section className="container mx-auto px-4">
                         <SuggestedJobSection t={t} jobPosts={recommendJobPosts}/>
-                    )}
-                </div>
-                <TopJobSection jobPosts={jobPosts.data} t={t}/>
+                    </section>
+                )}
+
+                {/* Các phần khác */}
+                <IntroduceRecruiterSection t={t}/>
+                <FeatureSection t={t}/>
             </div>
-            <IntroduceRecruiterSection t={t}/>
-            <TopRecruiterSection recruiters={recruiters} t={t}/>
-            <FeatureSection t={t}/>
-            <div>hotline</div>
         </div>
     );
 }

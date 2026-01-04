@@ -62,7 +62,6 @@ export default function Navbar() {
                 NAVBAR_RECRUITER_LINKS.map((item) => (
                   <NavbarLink key={item.key} item={item} />
                 ))}
-              <DarkMode />
             </div>
           </div>
           <div className="hidden md:block">
@@ -103,6 +102,12 @@ export default function Navbar() {
                       ))}
                       <div className="my-1 h-px bg-gray-200" />
                       <MenuItem>
+                        <div className="px-4 py-2 flex justify-between items-center">
+                          <span>Chế độ tối</span>
+                          <DarkMode />
+                        </div>
+                      </MenuItem>
+                      <MenuItem>
                         <button
                           className={menuItemClasses}
                           onClick={() => logout()}
@@ -114,10 +119,13 @@ export default function Navbar() {
                   </Menu>
                 </>
               ) : (
-                <PrimaryButton onClick={() => navigate("/login")}>
-                  <GrLogin size={18} />
-                  {t("auth.login")}
-                </PrimaryButton>
+                <div className="flex items-center gap-3">
+                  {/* Đã xóa DarkMode ở đây */}
+                  <PrimaryButton onClick={() => navigate("/login")}>
+                    <GrLogin size={18} />
+                    {t("auth.login")}
+                  </PrimaryButton>
+                </div>
               )}
             </div>
           </div>

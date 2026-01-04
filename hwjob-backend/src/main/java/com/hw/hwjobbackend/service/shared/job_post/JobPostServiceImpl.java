@@ -52,8 +52,6 @@ public class JobPostServiceImpl implements JobPostService {
     WorkRepository workRepository;
     WorkMapper workMapper;
     ReviewRepository reviewRepository;
-    ServerAIFeignClient serverAIFeignClient;
-    CandidateRepository candidateRepository;
 
 
     JobPostViewService jobPostViewService;
@@ -88,6 +86,17 @@ public class JobPostServiceImpl implements JobPostService {
         return jobPosts.stream()
                 .map(jobPostMapper::toJobPostResponse)
                 .toList();
+    }
+
+
+    @Override
+    public Page<JobPostResponse> getAllJobPostsByRecruiterId(Integer page, Integer size, String recruiterId) {
+
+        Pageable pageable = PaginationUtils.buildPageable(page, size);
+        Page<JobPost> jobPosts = jobPostRepository
+                .getAllJobPostsByRecruiterId(JobPostStatusEnum.PUBLIC, recruiterId, pageable);
+
+        return jobPosts.map(jobPostMapper::toJobPostResponse);
     }
 
 
@@ -176,6 +185,5 @@ public class JobPostServiceImpl implements JobPostService {
     public void increaseViewCount(String jobPostId, Long viewCount) {
         jobPostRepository.increaseViewCount(jobPostId, viewCount);
     }
-
 
 }

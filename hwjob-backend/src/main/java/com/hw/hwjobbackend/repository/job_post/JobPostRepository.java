@@ -38,6 +38,15 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
             Pageable pageable
     );
 
+    @Query("SELECT jp FROM JobPost jp " +
+            "WHERE jp.status = :status " +
+            "AND jp.recruiter.id = :recruiterId " +
+            "ORDER BY jp.createdAt DESC")
+    Page<JobPost> getAllJobPostsByRecruiterId(
+            @Param("status") JobPostStatusEnum status,
+            @Param("recruiterId") String recruiterId,
+            Pageable pageable);
+
     @Query("""
              SELECT jp FROM JobPost jp
              WHERE jp.status = :status
@@ -55,6 +64,7 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
             @Param("jobTypeId") Long jobTypeId,
             @Param("regionId") Integer regionId
     );
+
 
     @Query("SELECT j FROM JobPost j WHERE j.recruiter.id = :recruiterId " +
             "AND (:title IS NULL OR LOWER(j.title) LIKE LOWER(CONCAT('%', :title, '%'))) " +
@@ -77,7 +87,7 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
             "(:status = 'PUBLIC' AND j.status = 'PUBLIC' AND j.endedTime > CURRENT_TIMESTAMP) OR " +
             "(:status = 'PRIVATE' AND (j.status = 'PRIVATE' OR (j.status = 'PUBLIC' AND j.endedTime <= CURRENT_TIMESTAMP)))" +
             ") ORDER BY j.createdAt DESC")
-    List<JobPost> findAllByRecruiterAndStatusCustom(String recruiterId, String status,String title);
+    List<JobPost> findAllByRecruiterAndStatusCustom(String recruiterId, String status, String title);
 
 
     Page<JobPost> findAllByRecruiterIdOrderByCreatedAtDesc(
@@ -114,50 +124,52 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
 
     // Đang mở tuyển
     @Query("""
-        SELECT COUNT(j)
-        FROM JobPost j
-        WHERE j.recruiter.id = :recruiterId
-          AND j.status = 'PUBLIC'
-          AND (j.endedTime IS NULL OR j.endedTime > CURRENT_TIMESTAMP)
-    """)
+                SELECT COUNT(j)
+                FROM JobPost j
+                WHERE j.recruiter.id = :recruiterId
+                  AND j.status = 'PUBLIC'
+                  AND (j.endedTime IS NULL OR j.endedTime > CURRENT_TIMESTAMP)
+            """)
     long countOpeningJobs(@Param("recruiterId") String recruiterId);
 
     // Bị ẩn
     @Query("""
-        SELECT COUNT(j)
-        FROM JobPost j
-        WHERE j.recruiter.id = :recruiterId
-          AND j.status <> 'PUBLIC'
-    """)
+                SELECT COUNT(j)
+                FROM JobPost j
+                WHERE j.recruiter.id = :recruiterId
+                  AND j.status <> 'PUBLIC'
+            """)
     long countHiddenJobs(@Param("recruiterId") String recruiterId);
 
     // Hết hạn
     @Query("""
-        SELECT COUNT(j)
-        FROM JobPost j
-        WHERE j.recruiter.id = :recruiterId
-          AND j.endedTime IS NOT NULL
-          AND j.endedTime <= CURRENT_TIMESTAMP
-    """)
+                SELECT COUNT(j)
+                FROM JobPost j
+                WHERE j.recruiter.id = :recruiterId
+                  AND j.endedTime IS NOT NULL
+                  AND j.endedTime <= CURRENT_TIMESTAMP
+            """)
     long countExpiredJobs(@Param("recruiterId") String recruiterId);
 
     @Query("""
-    SELECT
-        YEAR(j.createdAt)  AS year,
-        MONTH(j.createdAt) AS month,
-        COUNT(j)           AS count
-    FROM JobPost j
-    WHERE j.recruiter.id = :recruiterId
-      AND j.createdAt >= :fromDate
-    GROUP BY
-        YEAR(j.createdAt),
-        MONTH(j.createdAt)
-    ORDER BY
-        YEAR(j.createdAt),
-        MONTH(j.createdAt)
-    """)
+            SELECT
+                YEAR(j.createdAt)  AS year,
+                MONTH(j.createdAt) AS month,
+                COUNT(j)           AS count
+            FROM JobPost j
+            WHERE j.recruiter.id = :recruiterId
+              AND j.createdAt >= :fromDate
+            GROUP BY
+                YEAR(j.createdAt),
+                MONTH(j.createdAt)
+            ORDER BY
+                YEAR(j.createdAt),
+                MONTH(j.createdAt)
+            """)
     List<RecruiterPostingFrequencyResponse> getPostingFrequencyOfRecruiter(
             @Param("recruiterId") String recruiterId,
             @Param("fromDate") LocalDateTime fromDate
     );
+
+
 }

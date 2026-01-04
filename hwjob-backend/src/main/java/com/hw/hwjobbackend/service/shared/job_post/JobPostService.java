@@ -17,4 +17,7 @@ public interface JobPostService {
     JobPostDetailResponse getJobPostDetail(String id, HttpServletRequest request);
 
     void increaseViewCount(String jobPostId, Long viewCount);
+
+    Page<JobPostResponse> getAllJobPostsByRecruiterId(Integer page, Integer size, String recruiterId);
+
 }

@@ -2,8 +2,10 @@ import numpy as np
 import time
 from app.core.ai_core import embedding_model, job_collection, candidate_collection
 from app.utils.scoring import get_dynamic_weights
+from app.utils.text_processing import preprocess_vietnamese_text
 from app.schemas.request.recommend_jobs_request_dto import RecommendJobsRequestDTO
 from app.schemas.request.rank_candidates_request_dto import RankCandidatesRequestDTO
+from app.schemas.request.search_job_dto import SearchJobRequestDTO
 from typing import List, Dict
 
 
@@ -137,4 +139,46 @@ class RecommendationService:
 
         ranked.sort(key=lambda x: x['score'], reverse=True)
         print(f"Ranked {len(ranked)} candidates successfully.")
+        return ranked
+
+    @staticmethod
+    def search_jobs(data: SearchJobRequestDTO) -> List[Dict]:
+        """
+        Tìm kiếm Job theo từ khóa (Semantic Search).
+        """
+        print(f"Searching jobs with keyword: '{data.keyword}'...")
+
+        # 1. Tiền xử lý và Vector hóa từ khóa tìm kiếm
+        processed_query = preprocess_vietnamese_text(data.keyword)
+        query_vector = embedding_model.encode(processed_query).tolist()
+
+        # 2. Tạo điều kiện lọc
+        current_timestamp = int(time.time())
+        where_clause = {
+            "$and": [
+                {"status": {"$eq": "PUBLIC"}},
+                {"ended_time": {"$gt": current_timestamp}}
+            ]
+        }
+
+        # Nếu có lọc theo level
+        if data.level:
+            where_clause["$and"].append({"level": {"$eq": data.level}})
+
+        # 3. Truy vấn ChromaDB
+        results = job_collection.query(
+            query_embeddings=[query_vector],
+            n_results=data.top_k,
+            where=where_clause,
+            include=["metadatas", "distances"]
+        )
+
+        # 4. Trả về kết quả (Không cần re-rank vì đây là search thuần túy)
+        ranked = []
+        if results['ids']:
+            for i in range(len(results['ids'][0])):
+                # Score ở đây chính là Semantic Similarity (1 - distance)
+                score = 1 - results['distances'][0][i]
+                ranked.append({"id": results['ids'][0][i], "score": score})
+
         return ranked
