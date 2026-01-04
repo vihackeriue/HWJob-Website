@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import java.util.List;
 public class JobPostController {
 
     JobPostService jobPostService;
+    private final RestClient.Builder builder;
 
     @GetMapping
     public ApiResponse<List<JobPostResponse>> getAllJobPosts(
@@ -57,6 +59,21 @@ public class JobPostController {
                 .result(jobPostService.getAllJobPosts(filterRequest))
                 .build();
     }
+
+    @GetMapping("/recruiters/{recruiterId}")
+    public ApiResponse<List<JobPostResponse>> getAllJobPostsByRecruiterId(
+            @PathVariable String recruiterId,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size) {
+        int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
+        Page<JobPostResponse> response = jobPostService.getAllJobPostsByRecruiterId(zeroBasedPage, size, recruiterId);
+        return ApiResponse.<List<JobPostResponse>>builder()
+                .page(PaginationUtils.toOneBasedPage(response.getNumber()))
+                .totalPages(response.getTotalPages())
+                .result(response.getContent())
+                .build();
+    }
+
 
     @GetMapping("/{id}")
     public ApiResponse<JobPostDetailResponse> getJobPostDetail(@PathVariable String id, HttpServletRequest request) {
