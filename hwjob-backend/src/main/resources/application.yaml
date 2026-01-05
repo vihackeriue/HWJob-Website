@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/hwjob_db?createDatabaseIfNotExist=true
     username: root
-    password: 123456
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -59,8 +59,9 @@ app:
 
 blockchain:
   ganache-url: http://127.0.0.1:7545
-  contract-address: "0xa93f02bf2A9367C5f826255e658D9Bb983C2dF63"
-  private-key: "0x734d09c7aeaad6cec8eadb54e3db5d926defe60345e0104a85613e17cf51c807"
+  contract-address: 0x7eB3d6B76D56622A6751b7e7071dF36FaAF7b1e5
+  private-key: 0x61b31d982de276903413b79877abfef2b1a2e72c669e5452e899f0a82e4d696d
+
 loyalty:
   withdraw:
     point-per-eth: 96000000
@@ -79,7 +80,8 @@ vnpay:
   hash-secret: E6W3C9Q4OAO1H2X8857RIRBHO6BYRTQF
   pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
   return-url: http://localhost:5173/payment-result
-  ipn-url: https://transpalmar-anaya-banteringly.ngrok-free.dev/hwjob/api/public/vnpay/ipn
+  ipn-url: https://peachiest-myron-dramatically.ngrok-free.dev/hwjob/api/public/vnpay/ipn
+
 
 # ngrok domain
 # .\ngrok http 8080

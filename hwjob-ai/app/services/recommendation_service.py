@@ -37,7 +37,7 @@ class RecommendationService:
     @staticmethod
     def recommend_jobs(data: RecommendJobsRequestDTO, top_k: int) -> List[Dict]:
         """
-        Gợi ý việc làm dựa trên ID của ứng viên.
+        Gợi ý việc làm dựa trên ID của ứng viên, có kết hợp lịch sử đã lưu.
         """
         print(f"Recommending jobs for candidate_id: {data.candidate_id}...")
 
@@ -47,8 +47,31 @@ class RecommendationService:
             print(f"Warning: Candidate with ID {data.candidate_id} not found in vector store.")
             return []
 
-        query_vector = candidate_data['embeddings'][0]
+        # Vector gốc của ứng viên (Profile Vector)
+        profile_vector = np.array(candidate_data['embeddings'][0])
         candidate_meta = candidate_data['metadatas'][0]
+
+        # Xử lý Vector hành vi (Behavior Vector) từ saved_job_ids
+        final_query_vector = profile_vector
+
+        if data.saved_job_ids:
+            print(f"Found {len(data.saved_job_ids)} saved jobs. Augmenting query vector...")
+            saved_jobs_data = job_collection.get(ids=data.saved_job_ids, include=["embeddings"])
+
+            if saved_jobs_data['embeddings']:
+                # Tính trung bình cộng các vector job đã lưu
+                behavior_vector = np.mean(saved_jobs_data['embeddings'], axis=0)
+
+                # Trộn vector: 70% Profile + 30% Behavior
+                # Cần chuẩn hóa vector về đơn vị (unit vector) trước khi cộng để tránh lệch tỷ lệ
+                profile_norm = profile_vector / np.linalg.norm(profile_vector)
+                behavior_norm = behavior_vector / np.linalg.norm(behavior_vector)
+
+                final_query_vector = (0.7 * profile_norm) + (0.3 * behavior_norm)
+                print("Query vector augmented successfully.")
+
+        # Chuyển về list để đưa vào ChromaDB
+        query_vector_list = final_query_vector.tolist()
 
         # 2. Tạo điều kiện lọc (còn hạn và public)
         current_timestamp = int(time.time())
@@ -59,26 +82,34 @@ class RecommendationService:
             ]
         }
 
-        # 3. Truy vấn ChromaDB để lấy các job tương đồng
-        n_results_to_fetch = top_k * 2
+        # 3. Truy vấn ChromaDB
+        # Lấy dư ra nhiều hơn để bù cho việc loại trừ các job đã lưu
+        n_results_to_fetch = top_k * 3
         results = job_collection.query(
-            query_embeddings=[query_vector],
+            query_embeddings=[query_vector_list],
             n_results=n_results_to_fetch,
             where=where_clause,
             include=["metadatas", "distances"]
         )
 
-        # 4. Re-rank các kết quả
+        # 4. Re-rank và Lọc trùng
         ranked = []
+        saved_ids_set = set(data.saved_job_ids) if data.saved_job_ids else set()
+
         if results['ids']:
             for i in range(len(results['ids'][0])):
-                #Truyền candidate_meta (dict) vào hàm tính điểm
+                job_id = results['ids'][0][i]
+
+                # [MỚI] Bỏ qua nếu job này đã nằm trong danh sách đã lưu
+                if job_id in saved_ids_set:
+                    continue
+
                 final_score = RecommendationService._calculate_job_score(
                     1 - results['distances'][0][i],
                     results['metadatas'][0][i],
                     candidate_meta
                 )
-                ranked.append({"id": results['ids'][0][i], "score": final_score})
+                ranked.append({"id": job_id, "score": final_score})
 
         ranked.sort(key=lambda x: x['score'], reverse=True)
         print(f"Found and ranked {len(ranked)} jobs. Returning top {top_k}.")
