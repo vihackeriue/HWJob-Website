@@ -200,8 +200,6 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
 
             workService.assignWork(workRequest);
         }
-
-
     }
 
     @Override

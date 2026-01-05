@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.model.entity.review;
 
+import com.hw.hwjobbackend.model.entity.user.Candidate;
 import com.hw.hwjobbackend.model.entity.user.User;
 import com.hw.hwjobbackend.model.entity.works.Work;
 import jakarta.persistence.*;
