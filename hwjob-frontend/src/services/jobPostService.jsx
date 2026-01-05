@@ -10,7 +10,13 @@ export const updateJobPost = async (id, data) => {
   const response = await axiosPrivate.put(ENDPOINTS.JOB_POST.UPDATE(id), data);
   return response.data;
 };
-
+export const boostJobPost = async (id, data) => {
+  const response = await axiosPrivate.post(
+    ENDPOINTS.JOB_POST.BOOST_JOB_POST(id),
+    data
+  );
+  return response.data;
+};
 export const getJobPosts = async (
   page = 1,
   size = DEFAULT_LIMIT,
@@ -82,4 +88,15 @@ export const getJobPostOfRecruiterStats = async () => {
 export const saveJob = async (id) => {
   const response = await axiosPrivate.post(ENDPOINTS.JOB_POST.SAVE_JOB(id));
   return response.data;
+};
+
+export const getJobPostsByRecruiterId = async (recruiterId, page = 1, size = DEFAULT_LIMIT) => {
+    const response = await axiosPublic.get(ENDPOINTS.JOB_POST.LIST, {
+        params: {
+            page,
+            size,
+            recruiterId: recruiterId
+        }
+    });
+    return response.data;
 };

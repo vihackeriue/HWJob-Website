@@ -34,7 +34,7 @@ export const JobPostFilterSection = ({
   );
   const resetFilter = () => setFormFilter(defaultFilter);
   return (
-    <div className="col-span-1 bg-white dark:bg-stoneBrown-900/50 rounded-2xl p-3 flex flex-col gap-3">
+    <div className=" bg-white dark:bg-stoneBrown-900/50 rounded-2xl p-3 flex flex-col gap-3">
       <SecondTitle>Lọc nâng cao</SecondTitle>
 
       <FormSelect

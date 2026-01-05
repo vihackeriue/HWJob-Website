@@ -58,6 +58,29 @@ public class JobPostController {
                 .build();
     }
 
+    @GetMapping("/recruiters/{recruiterId}")
+    public ApiResponse<List<JobPostResponse>> getAllJobPostsByRecruiterId(
+            @PathVariable String recruiterId,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size) {
+        int zeroBasedPage = PaginationUtils.toZeroBasedPage(page);
+        Page<JobPostResponse> response = jobPostService.getAllJobPostsByRecruiterId(zeroBasedPage, size, recruiterId);
+        return ApiResponse.<List<JobPostResponse>>builder()
+                .page(PaginationUtils.toOneBasedPage(response.getNumber()))
+                .totalPages(response.getTotalPages())
+                .result(response.getContent())
+                .build();
+    }
+
+    @GetMapping("/top-boosted")
+    public ApiResponse<List<JobPostResponse>> getTopBoostedJobPosts() {
+
+        return ApiResponse.<List<JobPostResponse>>builder()
+                .result(jobPostService.getTop12BoostedJobPosts())
+                .build();
+    }
+
+
     @GetMapping("/{id}")
     public ApiResponse<JobPostDetailResponse> getJobPostDetail(@PathVariable String id, HttpServletRequest request) {
         return ApiResponse.<JobPostDetailResponse>builder()

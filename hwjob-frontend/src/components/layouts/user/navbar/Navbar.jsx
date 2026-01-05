@@ -62,7 +62,7 @@ export default function Navbar() {
                 NAVBAR_RECRUITER_LINKS.map((item) => (
                   <NavbarLink key={item.key} item={item} />
                 ))}
-              <DarkMode />
+              {/* <DarkMode /> */}
             </div>
           </div>
           <div className="hidden md:block">
@@ -89,8 +89,10 @@ export default function Navbar() {
                           alt={auth.fullname}
                           className="h-12 w-12 rounded-full object-cover border border-red-300"
                         />
-                        <span className="text-lg uppercase">
-                          {auth.fullname}
+                        <span className="text-lg ">
+                          {auth.fullname.length > 20
+                            ? auth.fullname.slice(0, 20) + "…"
+                            : auth.fullname}
                         </span>
                       </div>
                     </MenuButton>
