@@ -2,18 +2,23 @@ package com.hw.hwjobbackend.service.recruiter.job_post;
 
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
+import com.hw.hwjobbackend.model.dto.request.job_post.BoostJobPostRequest;
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostRequest;
 import com.hw.hwjobbackend.model.dto.response.application.projection.ApplyGoldenHourResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.*;
 import com.hw.hwjobbackend.model.dto.response.job_post.projection.RecruiterPostingFrequencyResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.projection.RecruiterWorkSalaryStatsResponse;
+import com.hw.hwjobbackend.model.dto.response.loyalty_point.LoyaltyPointResponse;
 import com.hw.hwjobbackend.model.entity.job_post.JobPost;
+import com.hw.hwjobbackend.model.entity.job_post.JobPostBoostHistory;
 import com.hw.hwjobbackend.model.entity.skill.Skill;
+import com.hw.hwjobbackend.model.enums.BoostPackageEnum;
 import com.hw.hwjobbackend.model.enums.JobPostStatusEnum;
 import com.hw.hwjobbackend.model.enums.WorkStatusEnum;
 import com.hw.hwjobbackend.repository.application.ApplicationRepository;
 import com.hw.hwjobbackend.repository.candidate_save_job.CandidateSaveJobRepository;
 import com.hw.hwjobbackend.repository.industry.IndustryRepository;
+import com.hw.hwjobbackend.repository.job_post.JobPostBoostHistoryRepository;
 import com.hw.hwjobbackend.repository.job_post.JobPostRepository;
 import com.hw.hwjobbackend.repository.job_type.JobTypeRepository;
 import com.hw.hwjobbackend.repository.level.LevelRepository;
@@ -21,6 +26,7 @@ import com.hw.hwjobbackend.repository.region.RegionRepository;
 import com.hw.hwjobbackend.repository.user.RecruiterRepository;
 import com.hw.hwjobbackend.repository.work.WorkRepository;
 
+import com.hw.hwjobbackend.service.blockchain.BlockchainService;
 import com.hw.hwjobbackend.service.mapper.job_post.JobPostMapper;
 import com.hw.hwjobbackend.service.shared.indexing.IndexingService;
 import com.hw.hwjobbackend.service.shared.job_post.JobPostViewService;
@@ -33,11 +39,14 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -63,6 +72,8 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
     CandidateSaveJobRepository candidateSaveJobRepository;
     WorkRepository workRepository;
     IndexingService indexingService;
+    BlockchainService blockchainService;
+    JobPostBoostHistoryRepository jobPostBoostHistoryRepository;
 
 
     @Override
@@ -80,7 +91,103 @@ public class RecruiterJobPostServiceImpl implements RecruiterJobPostService {
 
         return jobPostMapper.toJobPostResponse(jobPost);
     }
+    private static final long COST_PER_DAY = 10_000L;
+    private static final int PRIORITY_PER_DAY = 10;
+    @Override
+    @Transactional
+    public void boostJobPost(String jobPostId, BoostJobPostRequest request) {
 
+        String recruiterId = SecurityUtils.getCurrentUserId();
+
+        JobPost jobPost = jobPostRepository
+                .findByIdAndRecruiterId(jobPostId, recruiterId)
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
+
+        String wallet = jobPost.getRecruiter().getWalletAddress();
+
+        LoyaltyPointResponse loyaltyPoint =
+                blockchainService.getPointOfUser(wallet);
+
+        BigInteger currentPoint = loyaltyPoint.getPoints();
+
+        /* ================= 1. DETERMINE DAYS & COST ================= */
+        int days;
+        long finalCost;
+
+        BoostPackageEnum boostPackage = null;
+
+        if (request.getPackageKey() != null) {
+            boostPackage = BoostPackageEnum.fromKey(request.getPackageKey())
+                    .orElseThrow(() -> new AppException(ErrorCode.INVALID_PACKAGE));
+
+            days = boostPackage.getDays();
+
+            long original = days * COST_PER_DAY;
+            long discount = original * boostPackage.getDiscountPercent() / 100;
+            finalCost = original - discount;
+
+        } else {
+            if (request.getDays() <= 0) {
+                throw new AppException(ErrorCode.INVALID_AMOUNT);
+            }
+
+            days = request.getDays();
+            finalCost = days * COST_PER_DAY;
+        }
+
+        BigInteger cost = BigInteger.valueOf(finalCost);
+
+        /* ================= 2. CHECK POINT ================= */
+        if (currentPoint.compareTo(cost) < 0) {
+            throw new AppException(ErrorCode.NOT_ENOUGH_POINT);
+        }
+
+        /* ================= 3. BURN POINT ================= */
+        blockchainService.burnPoint(wallet, cost);
+
+        /* ================= 4. BOOST LOGIC ================= */
+        LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime baseTime =
+                jobPost.getBoostExpiredAt() == null ||
+                        jobPost.getBoostExpiredAt().isBefore(now)
+                        ? now
+                        : jobPost.getBoostExpiredAt();
+
+        LocalDateTime newExpiredAt = baseTime.plusDays(days);
+
+        long remainingDays = Duration.between(now, newExpiredAt).toDays();
+        if (Duration.between(now, newExpiredAt).toHours() % 24 != 0) {
+            remainingDays++;
+        }
+
+        int priority = (int) remainingDays * PRIORITY_PER_DAY;
+
+        jobPost.setBoostExpiredAt(newExpiredAt);
+        jobPost.setBoostPriority(priority);
+        jobPost.setIsBoosted(true);
+
+        /* ================= 5. SAVE HISTORY ================= */
+        jobPostBoostHistoryRepository.save(
+                JobPostBoostHistory.builder()
+                        .jobPost(jobPost)
+                        .recruiter(jobPost.getRecruiter())
+                        .boostDays(days)
+                        .cost(finalCost)
+                        .build()
+        );
+    }
+    @Scheduled(cron = "0 */5 * * * *")
+    @Transactional
+    public void disableExpiredBoost() {
+        List<JobPost> expired =
+                jobPostRepository.findByIsBoostedTrueAndBoostExpiredAtBefore(LocalDateTime.now());
+
+        expired.forEach(jp -> {
+            jp.setIsBoosted(false);
+            jp.setBoostPriority(0);
+        });
+    }
     @Override
     @Transactional(readOnly = true)
     public Page<JobPostResponse> getPostedJobPosts(int page, int size, JobPostStatusEnum status, String keyword) {

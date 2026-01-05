@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/hwjob_db?createDatabaseIfNotExist=true
     username: root
-    password: root
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -59,9 +59,13 @@ app:
 
 blockchain:
   ganache-url: http://127.0.0.1:7545
-  contract-address: "0x7eB3d6B76D56622A6751b7e7071dF36FaAF7b1e5"
-  private-key: "0x61b31d982de276903413b79877abfef2b1a2e72c669e5452e899f0a82e4d696d"
-
+  contract-address: "0xa93f02bf2A9367C5f826255e658D9Bb983C2dF63"
+  private-key: "0x734d09c7aeaad6cec8eadb54e3db5d926defe60345e0104a85613e17cf51c807"
+loyalty:
+  withdraw:
+    point-per-eth: 96000000
+    min-withdraw-point: 1000
+    withdraw-fee-point: 1000
 momo:
   partner-code: MOMO
   access-key: F8BBA842ECF85
@@ -78,5 +82,5 @@ vnpay:
   ipn-url: https://transpalmar-anaya-banteringly.ngrok-free.dev/hwjob/api/public/vnpay/ipn
 
 # ngrok domain
-# ngrok http 8080
+# .\ngrok http 8080
 

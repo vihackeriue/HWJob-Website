@@ -122,6 +122,10 @@ public enum ErrorCode {
     // ========================================
     USER_WALLET_NOT_EXISTED(2201, "error.user_wallet_not_existed", HttpStatus.NOT_FOUND),
     INVALID_AMOUNT(2202, "error.invalid_amount", HttpStatus.BAD_REQUEST),
+    NOT_ENOUGH_POINT(2203, "error.not_enough_point", HttpStatus.BAD_REQUEST),
+    DUPLICATE_REQUEST(2204, "error.duplicate_request", HttpStatus.BAD_REQUEST),
+    MIN_WITHDRAW_NOT_MET(2205, "error.min_withdraw_not_met", HttpStatus.BAD_REQUEST),
+    INVALID_PACKAGE(2206, "error.invalid_package", HttpStatus.BAD_REQUEST),
     // ========================================
     // BLOCkCHAIN(23xx)
     // ========================================

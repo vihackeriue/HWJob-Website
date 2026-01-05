@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
@@ -24,7 +23,6 @@ import java.util.List;
 public class JobPostController {
 
     JobPostService jobPostService;
-    private final RestClient.Builder builder;
 
     @GetMapping
     public ApiResponse<List<JobPostResponse>> getAllJobPosts(
@@ -71,6 +69,14 @@ public class JobPostController {
                 .page(PaginationUtils.toOneBasedPage(response.getNumber()))
                 .totalPages(response.getTotalPages())
                 .result(response.getContent())
+                .build();
+    }
+
+    @GetMapping("/top-boosted")
+    public ApiResponse<List<JobPostResponse>> getTopBoostedJobPosts() {
+
+        return ApiResponse.<List<JobPostResponse>>builder()
+                .result(jobPostService.getTop12BoostedJobPosts())
                 .build();
     }
 

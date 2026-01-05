@@ -7,7 +7,7 @@ import Pagination from "../../../ui/pagination/Pagination";
 
 import PrimaryTitle from "../../../ui/title/PrimaryTitle";
 
-const HistoryTopUpSection = () => {
+const HistoryTransactionSection = () => {
   const historyPayments = useList(getHistoryPayment);
   return (
     <div className="bg-white rounded-2xl p-5 min-h-150 space-y-2">
@@ -38,4 +38,4 @@ const HistoryTopUpSection = () => {
   );
 };
 
-export default HistoryTopUpSection;
+export default HistoryTransactionSection;

@@ -68,7 +68,7 @@ public class IndexingServiceImpl implements IndexingService {
     }
 
     @Override
-    @Scheduled(cron = "0 */30 * * * ?")
+    @Scheduled(cron = "0 */01 * * * ?")
     @Transactional(readOnly = true)
     public void indexAllCandidates() {
         log.info("Starting scheduled indexing for all candidates...");
@@ -84,7 +84,7 @@ public class IndexingServiceImpl implements IndexingService {
     }
 
     @Override
-    @Scheduled(cron = "0 */30 * * * ?")
+    @Scheduled(cron = "0 */01 * * * ?")
     @Transactional(readOnly = true)
     public void indexAllJobPosts() {
         log.info("Starting scheduled indexing for all job posts...");

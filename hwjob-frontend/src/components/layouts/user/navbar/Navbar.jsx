@@ -62,6 +62,7 @@ export default function Navbar() {
                 NAVBAR_RECRUITER_LINKS.map((item) => (
                   <NavbarLink key={item.key} item={item} />
                 ))}
+              {/* <DarkMode /> */}
             </div>
           </div>
           <div className="hidden md:block">
@@ -88,8 +89,10 @@ export default function Navbar() {
                           alt={auth.fullname}
                           className="h-12 w-12 rounded-full object-cover border border-red-300"
                         />
-                        <span className="text-lg uppercase">
-                          {auth.fullname}
+                        <span className="text-lg ">
+                          {auth.fullname.length > 20
+                            ? auth.fullname.slice(0, 20) + "…"
+                            : auth.fullname}
                         </span>
                       </div>
                     </MenuButton>
@@ -102,12 +105,6 @@ export default function Navbar() {
                       ))}
                       <div className="my-1 h-px bg-gray-200" />
                       <MenuItem>
-                        <div className="px-4 py-2 flex justify-between items-center">
-                          <span>Chế độ tối</span>
-                          <DarkMode />
-                        </div>
-                      </MenuItem>
-                      <MenuItem>
                         <button
                           className={menuItemClasses}
                           onClick={() => logout()}
@@ -119,13 +116,10 @@ export default function Navbar() {
                   </Menu>
                 </>
               ) : (
-                <div className="flex items-center gap-3">
-                  {/* Đã xóa DarkMode ở đây */}
-                  <PrimaryButton onClick={() => navigate("/login")}>
-                    <GrLogin size={18} />
-                    {t("auth.login")}
-                  </PrimaryButton>
-                </div>
+                <PrimaryButton onClick={() => navigate("/login")}>
+                  <GrLogin size={18} />
+                  {t("auth.login")}
+                </PrimaryButton>
               )}
             </div>
           </div>
