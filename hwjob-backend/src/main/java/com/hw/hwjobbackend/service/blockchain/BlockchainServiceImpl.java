@@ -13,19 +13,27 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 import lombok.experimental.FieldDefaults;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.Transfer;
+import org.web3j.utils.Convert;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Log4j2
 public class BlockchainServiceImpl implements BlockchainService {
     ContractFactory contractFactory;
     UserRepository userRepository;
     Credentials ownerCredentials;
+    Web3j web3j;
 
     @Override
     public String registerWalletForUser(String walletAddress) throws Exception {
@@ -174,14 +182,42 @@ public class BlockchainServiceImpl implements BlockchainService {
                 .getTransactionHash();
     }
     @Override
-    public LoyaltyPointResponse getPointOfUser(String walletAddress) throws Exception {
+    public String burnPoint(String walletAddress, BigInteger amount) {
+        if (walletAddress == null || walletAddress.isBlank()) {
+            throw new AppException(ErrorCode.USER_WALLET_NOT_EXISTED);
+        }
+
+        if (amount == null || amount.compareTo(BigInteger.ZERO) <= 0) {
+            throw new AppException(ErrorCode.INVALID_AMOUNT);
+        }
+
+        HWJob contract = contractFactory.loadWithCredentials(ownerCredentials);
+
+        try {
+            return contract
+                    .burnPoint(walletAddress, amount)
+                    .send()
+                    .getTransactionHash();
+        } catch (Exception e) {
+            log.error("Burn point failed. wallet={}, amount={}", walletAddress, amount, e);
+            throw new AppException(ErrorCode.FAIL_PROCESS_BLOCKCHAIN);
+        }
+    }
+
+    @Override
+    public LoyaltyPointResponse getPointOfUser(String walletAddress) {
         if (walletAddress == null) {
             throw new AppException(ErrorCode.USER_WALLET_NOT_EXISTED);
         }
         // Load contract (chỉ đọc, dùng ownerCredentials hoặc credentials bất kỳ)
         HWJob contract = contractFactory.loadWithCredentials(ownerCredentials);
         // Gọi balanceOf trên blockchain
-        BigInteger balance = contract.balanceOf(walletAddress).send();
+        BigInteger balance = null;
+        try {
+            balance = contract.balanceOf(walletAddress).send();
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.FAIL_PROCESS_BLOCKCHAIN);
+        }
         return new LoyaltyPointResponse(balance);
     }
     @Override
@@ -228,6 +264,36 @@ public class BlockchainServiceImpl implements BlockchainService {
                 .penalizeReputation(walletAddress, penalty)
                 .send()
                 .getTransactionHash();
+    }
+
+    @Override
+    public String sendEth(String toWallet, BigDecimal ethAmount) {
+
+        if (toWallet == null || toWallet.isBlank()) {
+            throw new AppException(ErrorCode.USER_WALLET_NOT_EXISTED);
+        }
+
+        if (ethAmount == null || ethAmount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new AppException(ErrorCode.INVALID_AMOUNT);
+        }
+
+        try {
+            TransactionReceipt receipt =
+                    Transfer.sendFunds(
+                            web3j,
+                            ownerCredentials,
+                            toWallet,
+                            ethAmount,
+                            Convert.Unit.ETHER
+                    ).send();
+
+            return receipt.getTransactionHash();
+
+        } catch (Exception e) {
+            log.error("Send ETH failed. toWallet={}, ethAmount={}",
+                    toWallet, ethAmount, e);
+            throw new AppException(ErrorCode.FAIL_PROCESS_BLOCKCHAIN);
+        }
     }
 
 }

@@ -44,6 +44,12 @@ public class JobPost {
 
     Long viewCount = 0L;
 
+    Boolean isBoosted = false;
+
+    LocalDateTime boostExpiredAt;
+
+    Integer boostPriority = 0;
+
     @Enumerated(EnumType.STRING)
     SalaryTypeEnum salaryType;
 
@@ -85,6 +91,8 @@ public class JobPost {
         if (viewCount == null) {
             viewCount = 0L;
         }
+        if (isBoosted == null) isBoosted = false;
+        if (boostPriority == null) boostPriority = 0;
     }
 
 

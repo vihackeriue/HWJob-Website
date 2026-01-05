@@ -57,7 +57,13 @@ public class JobPostController {
                 .result(jobPostService.getAllJobPosts(filterRequest))
                 .build();
     }
+    @GetMapping("/top-boosted")
+    public ApiResponse<List<JobPostResponse>> getTopBoostedJobPosts() {
 
+        return ApiResponse.<List<JobPostResponse>>builder()
+                .result(jobPostService.getTop12BoostedJobPosts())
+                .build();
+    }
     @GetMapping("/{id}")
     public ApiResponse<JobPostDetailResponse> getJobPostDetail(@PathVariable String id, HttpServletRequest request) {
         return ApiResponse.<JobPostDetailResponse>builder()

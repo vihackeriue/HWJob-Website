@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import {
   PieChart,
   Pie,
@@ -24,6 +24,7 @@ import { getJobPostOfRecruiterStats } from "../../../../services/jobPostService"
 import QuantityStatisticsCard from "../../../ui/cards/QuantityStatisticsCard";
 import Loading from "../../../ui/Loading";
 import { IoCashOutline } from "react-icons/io5";
+import PrimaryTitle from "../../../ui/title/PrimaryTitle";
 
 /* ================= CONSTANT ================= */
 
@@ -128,183 +129,145 @@ const StatisticSection = () => {
 
   return (
     <div className="space-y-6">
-      {/* ===== OVERVIEW ===== */}
-      <div className="flex gap-4 bg-white p-4 rounded-2xl shadow">
-        <QuantityStatisticsCard
-          stat={jobPostStats.totalJobPosts}
-          icon={<MdWorkOutline className="size-8 text-blue-600" />}
-          title="Tổng việc làm"
-        />
-        <QuantityStatisticsCard
-          stat={jobPostStats.openingJobPosts}
-          icon={<CiSearch className="size-8 text-green-600" />}
-          title="Mở tuyển"
-        />
-        <QuantityStatisticsCard
-          stat={jobPostStats.hiddenJobPosts}
-          icon={<HiOutlineEyeOff className="size-8 text-gray-600" />}
-          title="Bị ẩn"
-        />
-        <QuantityStatisticsCard
-          stat={jobPostStats.expiredJobPosts}
-          icon={<CiClock2 className="size-8 text-red-600" />}
-          title="Hết hạn"
-        />
-      </div>
-
+      <PrimaryTitle>Bài đăng </PrimaryTitle>
       {/* ===== DONUTS ===== */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-4 rounded-2xl shadow h-72">
-          <h3 className="font-semibold mb-2">Trạng thái bài đăng</h3>
-          <ResponsiveContainer>
-            <PieChart>
-              <Pie
-                data={jobStatusData}
-                dataKey="value"
-                innerRadius={55}
-                outerRadius={85}
-              >
-                {jobStatusData.map((_, i) => (
-                  <Cell key={i} fill={STATUS_COLORS[i]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="grid grid-cols-1 gap-3">
-          {/* ===== TINY LINE – RECRUITER ===== */}
-          <div className="bg-white p-4 rounded-2xl shadow">
-            <h3 className="font-semibold mb-2">
-              Xu hướng apply theo giờ (Của tôi)
-            </h3>
+      <div className="grid grid-cols-12 gap-6">
+        {/* ================= LEFT – DONUT ================= */}
+        <div className="col-span-12 md:col-span-5">
+          <div className="bg-white p-5 rounded-2xl shadow-sm h-full flex flex-col">
+            {/* Header */}
+            <h3 className="font-semibold text-lg">Trạng thái bài đăng</h3>
 
-            <div className="h-24">
-              <ResponsiveContainer>
-                <LineChart
-                  data={recruiterHourly}
-                  margin={{
-                    top: 15,
-                    right: 0,
-                    left: 0,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
+            {/* Chart */}
+            <div className="relative h-[220px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={jobStatusData}
+                    dataKey="value"
+                    innerRadius={60}
+                    outerRadius={95}
+                    paddingAngle={3}
+                    cornerRadius={10}
+                  >
+                    {jobStatusData.map((_, i) => (
+                      <Cell
+                        key={i}
+                        fill={STATUS_COLORS[i]}
+                        stroke="white"
+                        strokeWidth={2}
+                      />
+                    ))}
+                  </Pie>
 
-                  <YAxis yAxisId="left" orientation="left" />
-                  <YAxis yAxisId="right" orientation="right" width="auto" />
-                  <Tooltip
-                    formatter={(v) => [`${v} apply`, ""]}
-                    labelFormatter={(h) => `Giờ ${h}`}
-                  />
-                  <Line
-                    yAxisId="left"
-                    type="monotone"
-                    dataKey="total"
-                    stroke="#3b82f6"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                </LineChart>
+                  <Tooltip formatter={(v) => `${v} bài`} />
+                </PieChart>
               </ResponsiveContainer>
-            </div>
-          </div>
 
-          {/* ===== TINY LINE – SYSTEM ===== */}
-          <div className="bg-white p-4 rounded-2xl shadow">
-            <h3 className="font-semibold mb-2">
-              Xu hướng apply theo giờ (Toàn hệ thống)
-            </h3>
-
-            <div className="h-24">
-              <ResponsiveContainer>
-                <LineChart data={systemHourly}>
-                  <YAxis yAxisId="right" orientation="right" hide />
-                  <Tooltip
-                    formatter={(v) => [`${v} apply`, ""]}
-                    labelFormatter={(h) => `Giờ ${h}`}
-                  />
-                  <Line
-                    yAxisId="right"
-                    type="monotone"
-                    dataKey="total"
-                    stroke="#9ca3af"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              {/* Center info */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <p className="text-xs text-gray-500">Tổng</p>
+                <p className="text-3xl font-semibold">
+                  {jobStatusData.reduce((s, i) => s + i.value, 0)}
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="flex gap-4 bg-white p-4 rounded-2xl shadow">
-        <QuantityStatisticsCard
-          stat={formatMoney(workSalaryStats.totalSalary)}
-          icon={<GiMoneyStack className="size-8 text-blue-600" />}
-          title="Tổng thanh toán"
-        />
-        <QuantityStatisticsCard
-          stat={formatMoney(workSalaryStats.paidSalary)}
-          icon={<IoCashOutline className="size-8 text-green-600" />}
-          title="Đã thanh toán"
-        />
-        <QuantityStatisticsCard
-          stat={formatMoney(workSalaryStats.unpaidSalary)}
-          icon={<FaMoneyCheck className="size-8 text-gray-600" />}
-          title="Chưa thanh toán"
-        />
-      </div>
 
-      <div className="bg-white p-5 rounded-2xl shadow-sm h-72 flex flex-col">
-        {/* Header */}
-        <div className="mb-3">
-          <h3 className="font-semibold text-lg">Thanh toán</h3>
-          <p className="text-sm text-gray-500">
-            Đã thanh toán{" "}
-            <span className="font-medium text-green-600">{paidPercent}%</span>
-          </p>
-        </div>
+        {/* ================= RIGHT – OVERVIEW ================= */}
+        <div className="col-span-12 md:col-span-7">
+          <div className="bg-white p-5 rounded-2xl shadow-sm h-full">
+            <h3 className="font-semibold text-lg mb-4">Tổng quan bài đăng</h3>
 
-        {/* Chart */}
-        <div className="flex-1 relative">
-          <ResponsiveContainer>
-            <PieChart>
-              <Pie
-                data={salaryData}
-                dataKey="value"
-                innerRadius={55}
-                outerRadius={85}
-                paddingAngle={3}
-                cornerRadius={10}
-              >
-                {salaryData.map((_, i) => (
-                  <Cell
-                    key={i}
-                    fill={SALARY_COLORS[i]}
-                    stroke="white"
-                    strokeWidth={2}
-                  />
-                ))}
-              </Pie>
-
-              <Tooltip
-                formatter={(value) => value.toLocaleString("vi-VN") + " đ"}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <QuantityStatisticsCard
+                stat={jobPostStats.totalJobPosts}
+                icon={<MdWorkOutline className="size-7 text-blue-600" />}
+                title="Tổng việc làm"
               />
-            </PieChart>
-          </ResponsiveContainer>
 
-          {/* Center text */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <p className="text-xs text-gray-500">Đã thanh toán</p>
-            <p className="text-2xl font-semibold text-green-600">
-              {paidPercent}%
-            </p>
+              <QuantityStatisticsCard
+                stat={jobPostStats.openingJobPosts}
+                icon={<CiSearch className="size-7 text-green-600" />}
+                title="Đang mở"
+              />
+
+              <QuantityStatisticsCard
+                stat={jobPostStats.hiddenJobPosts}
+                icon={<HiOutlineEyeOff className="size-7 text-gray-500" />}
+                title="Bị ẩn"
+              />
+
+              <QuantityStatisticsCard
+                stat={jobPostStats.expiredJobPosts}
+                icon={<CiClock2 className="size-7 text-red-600" />}
+                title="Hết hạn"
+              />
+            </div>
           </div>
         </div>
       </div>
+      <PrimaryTitle>Hoạt động </PrimaryTitle>
+      <div className="grid grid-cols-2 gap-3">
+        {/* ===== TINY LINE – RECRUITER ===== */}
+        <div className="bg-white p-5 rounded-2xl shadow-sm">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="w-2 h-2 rounded-full bg-blue-500" />
+            <h3 className="font-semibold text-sm">
+              Giờ vàng tuyển dụng của bạn
+            </h3>
+          </div>
 
+          <div className="h-24">
+            <ResponsiveContainer>
+              <LineChart data={recruiterHourly}>
+                <Tooltip
+                  formatter={(v) => [`${v} ứng tuyển`, ""]}
+                  labelFormatter={(h) => `${h}h`}
+                />
+
+                <Line
+                  type="monotone"
+                  dataKey="total"
+                  stroke="#3b82f6"
+                  strokeWidth={2.5}
+                  dot={false}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* ===== TINY LINE – SYSTEM ===== */}
+        <div className="bg-white p-5 rounded-2xl shadow-sm">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="w-2 h-2 rounded-full bg-gray-400" />
+            <h3 className="font-semibold text-sm">
+              Giờ vàng tuyển dụng của hệ thống
+            </h3>
+          </div>
+
+          <div className="h-24">
+            <ResponsiveContainer>
+              <LineChart data={systemHourly}>
+                <Tooltip
+                  formatter={(v) => [`${v} apply`, ""]}
+                  labelFormatter={(h) => `Giờ ${h}`}
+                />
+
+                <Line
+                  type="monotone"
+                  dataKey="total"
+                  stroke="#9ca3af"
+                  strokeWidth={2}
+                  dot={false}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
       {/* ===== POSTING FREQUENCY ===== */}
       <div className="bg-white rounded-2xl shadow-sm p-5 h-80 flex flex-col">
         {/* Header */}
@@ -349,6 +312,64 @@ const StatisticSection = () => {
               />
             </BarChart>
           </ResponsiveContainer>
+        </div>
+      </div>
+      <PrimaryTitle>Thanh toán</PrimaryTitle>
+      <div className="bg-white p-5 rounded-2xl shadow-sm h-72 flex ">
+        {/* Header */}
+
+        {/* Chart */}
+        <div className="flex-1 relative">
+          <ResponsiveContainer>
+            <PieChart>
+              <Pie
+                data={salaryData}
+                dataKey="value"
+                innerRadius={55}
+                outerRadius={85}
+                paddingAngle={3}
+                cornerRadius={10}
+              >
+                {salaryData.map((_, i) => (
+                  <Cell
+                    key={i}
+                    fill={SALARY_COLORS[i]}
+                    stroke="white"
+                    strokeWidth={2}
+                  />
+                ))}
+              </Pie>
+
+              <Tooltip
+                formatter={(value) => value.toLocaleString("vi-VN") + " đ"}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+
+          {/* Center text */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <p className="text-xs text-gray-500">Đã thanh toán</p>
+            <p className="text-2xl font-semibold text-green-600">
+              {paidPercent}%
+            </p>
+          </div>
+        </div>
+        <div className="flex-1 flex flex-col gap-3 ">
+          <QuantityStatisticsCard
+            stat={formatMoney(workSalaryStats.totalSalary)}
+            icon={<GiMoneyStack className="size-8 text-blue-600" />}
+            title="Tổng thanh toán"
+          />
+          <QuantityStatisticsCard
+            stat={formatMoney(workSalaryStats.paidSalary)}
+            icon={<IoCashOutline className="size-8 text-green-600" />}
+            title="Đã thanh toán"
+          />
+          <QuantityStatisticsCard
+            stat={formatMoney(workSalaryStats.unpaidSalary)}
+            icon={<FaMoneyCheck className="size-8 text-gray-600" />}
+            title="Chưa thanh toán"
+          />
         </div>
       </div>
     </div>

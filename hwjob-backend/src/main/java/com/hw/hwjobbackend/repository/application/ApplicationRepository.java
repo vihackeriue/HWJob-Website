@@ -18,6 +18,25 @@ public interface ApplicationRepository extends JpaRepository<Application, Applic
 
     long countByJobPostId(String jobPostId);
 
+    @Query("""
+        SELECT a FROM Application a
+        WHERE a.jobPost.recruiter.id = :recruiterId
+        ORDER BY a.createdAt DESC
+    """)
+    Page<Application> findAllByRecruiterId(
+            @Param("recruiterId") String recruiterId,
+            Pageable pageable
+    );
+
+    @Query("""
+        SELECT a FROM Application a
+        WHERE a.jobPost.recruiter.id = :recruiterId
+        ORDER BY a.createdAt DESC
+    """)
+    List<Application> findAllByRecruiterId(
+            @Param("recruiterId") String recruiterId
+    );
+
     @Query("SELECT a.candidate.id FROM Application a " +
             "WHERE a.jobPost.id = :jobPostId " +
             "AND a.jobPost.recruiter.id =:recruiterId AND a.status = 'PENDING' " +

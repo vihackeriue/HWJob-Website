@@ -38,6 +38,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -89,7 +90,13 @@ public class JobPostServiceImpl implements JobPostService {
                 .map(jobPostMapper::toJobPostResponse)
                 .toList();
     }
+    @Override
+    public List<JobPostResponse> getTop12BoostedJobPosts() {
+        List<JobPost> jobPosts = jobPostRepository.findTop12BoostedJobPosts(
+                JobPostStatusEnum.PUBLIC);
 
+        return jobPosts.stream().map(jobPostMapper::toJobPostResponse).toList();
+    }
 
     @Override
     public JobPostDetailResponse getJobPostDetail(String id, HttpServletRequest request) {

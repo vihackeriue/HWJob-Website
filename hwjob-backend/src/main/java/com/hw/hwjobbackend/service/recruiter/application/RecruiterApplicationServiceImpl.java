@@ -22,7 +22,7 @@ import com.hw.hwjobbackend.service.recruiter.work.RecruiterWorkService;
 import com.hw.hwjobbackend.service.shared.loyalty_point.LoyaltyPointService;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import com.hw.hwjobbackend.util.SecurityUtils;
-import jakarta.transaction.Transactional;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -31,6 +31,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -205,14 +206,30 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
     }
 
     @Override
-    public Page<ApplicationAllCandidateResponse> getAllCandidateApplicationsOfRecruiter(int page, int size) {
-        return null;
+
+    public Page<ApplicationAllCandidateResponse> getAllCandidateApplicationsOfRecruiter(
+            int page,
+            int size
+    ) {
+        String recruiterId = SecurityUtils.getCurrentUserId();
+        Pageable pageable = PaginationUtils.buildPageable(page, size);
+
+        Page<Application> applications =
+                applicationRepository.findAllByRecruiterId(recruiterId, pageable);
+
+        return applications.map(applicationMapper::toApplicationAllCandidateResponse);
+    }
+    @Override
+
+    public List<ApplicationAllCandidateResponse> getAllCandidateApplicationsOfRecruiter() {
+        String recruiterId = SecurityUtils.getCurrentUserId();
+
+        return applicationRepository.findAllByRecruiterId(recruiterId)
+                .stream()
+                .map(applicationMapper::toApplicationAllCandidateResponse)
+                .toList();
     }
 
-    @Override
-    public List<ApplicationAllCandidateResponse> getAllCandidateApplicationsOfRecruiter() {
-        return null;
-    }
 
     private void validateStatusTransition(
             ApplicationStatusEnum current,
