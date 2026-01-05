@@ -20,15 +20,23 @@ import java.util.Optional;
 public interface JobPostRepository extends JpaRepository<JobPost, String> {
 
     @Query("""
-             SELECT jp FROM JobPost jp
-             WHERE jp.status = :status
-               AND (jp.endedTime IS NULL OR jp.endedTime > CURRENT_TIMESTAMP)
-               AND (:industryId IS NULL OR jp.industry.id = :industryId)
-               AND (:levelId IS NULL OR jp.level.id = :levelId)
-               AND (:jobTypeId IS NULL OR jp.jobType.id = :jobTypeId)
-               AND (:regionId IS NULL OR jp.region.id = :regionId)
-             ORDER BY jp.createdAt DESC
-            """)
+    SELECT jp FROM JobPost jp
+    WHERE jp.status = :status
+      AND (jp.endedTime IS NULL OR jp.endedTime > CURRENT_TIMESTAMP)
+      AND (:industryId IS NULL OR jp.industry.id = :industryId)
+      AND (:levelId IS NULL OR jp.level.id = :levelId)
+      AND (:jobTypeId IS NULL OR jp.jobType.id = :jobTypeId)
+      AND (:regionId IS NULL OR jp.region.id = :regionId)
+    ORDER BY
+      CASE
+        WHEN jp.isBoosted = true
+         AND jp.boostExpiredAt IS NOT NULL
+         AND jp.boostExpiredAt > CURRENT_TIMESTAMP
+        THEN jp.boostPriority
+        ELSE 0
+      END DESC,
+      jp.createdAt DESC
+""")
     Page<JobPost> getAllJobPosts(
             @Param("status") JobPostStatusEnum status,
             @Param("industryId") Long industryId,
@@ -36,6 +44,32 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
             @Param("jobTypeId") Long jobTypeId,
             @Param("regionId") Integer regionId,
             Pageable pageable
+    );
+
+    @Query("""
+    SELECT jp FROM JobPost jp
+    WHERE jp.status = :status
+      AND (jp.endedTime IS NULL OR jp.endedTime > CURRENT_TIMESTAMP)
+      AND (:industryId IS NULL OR jp.industry.id = :industryId)
+      AND (:levelId IS NULL OR jp.level.id = :levelId)
+      AND (:jobTypeId IS NULL OR jp.jobType.id = :jobTypeId)
+      AND (:regionId IS NULL OR jp.region.id = :regionId)
+    ORDER BY
+      CASE
+        WHEN jp.isBoosted = true
+         AND jp.boostExpiredAt IS NOT NULL
+         AND jp.boostExpiredAt > CURRENT_TIMESTAMP
+        THEN jp.boostPriority
+        ELSE 0
+      END DESC,
+      jp.createdAt DESC
+""")
+    List<JobPost> getAllJobPosts(
+            @Param("status") JobPostStatusEnum status,
+            @Param("industryId") Long industryId,
+            @Param("levelId") Long levelId,
+            @Param("jobTypeId") Long jobTypeId,
+            @Param("regionId") Integer regionId
     );
 
     @Query("SELECT jp FROM JobPost jp " +
@@ -48,23 +82,19 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
             Pageable pageable);
 
     @Query("""
-             SELECT jp FROM JobPost jp
-             WHERE jp.status = :status
-               AND (jp.endedTime IS NULL OR jp.endedTime > CURRENT_TIMESTAMP)
-               AND (:industryId IS NULL OR jp.industry.id = :industryId)
-               AND (:levelId IS NULL OR jp.level.id = :levelId)
-               AND (:jobTypeId IS NULL OR jp.jobType.id = :jobTypeId)
-               AND (:regionId IS NULL OR jp.region.id = :regionId)
-             ORDER BY jp.createdAt DESC
-            """)
-    List<JobPost> getAllJobPosts(
-            @Param("status") JobPostStatusEnum status,
-            @Param("industryId") Long industryId,
-            @Param("levelId") Long levelId,
-            @Param("jobTypeId") Long jobTypeId,
-            @Param("regionId") Integer regionId
+    SELECT jp FROM JobPost jp
+    WHERE jp.status = :status
+      AND jp.isBoosted = TRUE
+      AND jp.boostExpiredAt IS NOT NULL
+      AND jp.boostExpiredAt > CURRENT_TIMESTAMP
+      AND (jp.endedTime IS NULL OR jp.endedTime > CURRENT_TIMESTAMP)
+    ORDER BY
+      jp.boostPriority DESC,
+      jp.createdAt DESC
+""")
+    List<JobPost> findTop12BoostedJobPosts(
+            @Param("status") JobPostStatusEnum status
     );
-
 
     @Query("SELECT j FROM JobPost j WHERE j.recruiter.id = :recruiterId " +
             "AND (:title IS NULL OR LOWER(j.title) LIKE LOWER(CONCAT('%', :title, '%'))) " +
@@ -87,7 +117,7 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
             "(:status = 'PUBLIC' AND j.status = 'PUBLIC' AND j.endedTime > CURRENT_TIMESTAMP) OR " +
             "(:status = 'PRIVATE' AND (j.status = 'PRIVATE' OR (j.status = 'PUBLIC' AND j.endedTime <= CURRENT_TIMESTAMP)))" +
             ") ORDER BY j.createdAt DESC")
-    List<JobPost> findAllByRecruiterAndStatusCustom(String recruiterId, String status, String title);
+    List<JobPost> findAllByRecruiterAndStatusCustom(String recruiterId, String status,String title);
 
 
     Page<JobPost> findAllByRecruiterIdOrderByCreatedAtDesc(
@@ -124,52 +154,54 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
 
     // Đang mở tuyển
     @Query("""
-                SELECT COUNT(j)
-                FROM JobPost j
-                WHERE j.recruiter.id = :recruiterId
-                  AND j.status = 'PUBLIC'
-                  AND (j.endedTime IS NULL OR j.endedTime > CURRENT_TIMESTAMP)
-            """)
+        SELECT COUNT(j)
+        FROM JobPost j
+        WHERE j.recruiter.id = :recruiterId
+          AND j.status = 'PUBLIC'
+          AND (j.endedTime IS NULL OR j.endedTime > CURRENT_TIMESTAMP)
+    """)
     long countOpeningJobs(@Param("recruiterId") String recruiterId);
 
     // Bị ẩn
     @Query("""
-                SELECT COUNT(j)
-                FROM JobPost j
-                WHERE j.recruiter.id = :recruiterId
-                  AND j.status <> 'PUBLIC'
-            """)
+        SELECT COUNT(j)
+        FROM JobPost j
+        WHERE j.recruiter.id = :recruiterId
+          AND j.status <> 'PUBLIC'
+    """)
     long countHiddenJobs(@Param("recruiterId") String recruiterId);
 
     // Hết hạn
     @Query("""
-                SELECT COUNT(j)
-                FROM JobPost j
-                WHERE j.recruiter.id = :recruiterId
-                  AND j.endedTime IS NOT NULL
-                  AND j.endedTime <= CURRENT_TIMESTAMP
-            """)
+        SELECT COUNT(j)
+        FROM JobPost j
+        WHERE j.recruiter.id = :recruiterId
+          AND j.endedTime IS NOT NULL
+          AND j.endedTime <= CURRENT_TIMESTAMP
+    """)
     long countExpiredJobs(@Param("recruiterId") String recruiterId);
 
     @Query("""
-            SELECT
-                YEAR(j.createdAt)  AS year,
-                MONTH(j.createdAt) AS month,
-                COUNT(j)           AS count
-            FROM JobPost j
-            WHERE j.recruiter.id = :recruiterId
-              AND j.createdAt >= :fromDate
-            GROUP BY
-                YEAR(j.createdAt),
-                MONTH(j.createdAt)
-            ORDER BY
-                YEAR(j.createdAt),
-                MONTH(j.createdAt)
-            """)
+    SELECT
+        YEAR(j.createdAt)  AS year,
+        MONTH(j.createdAt) AS month,
+        COUNT(j)           AS count
+    FROM JobPost j
+    WHERE j.recruiter.id = :recruiterId
+      AND j.createdAt >= :fromDate
+    GROUP BY
+        YEAR(j.createdAt),
+        MONTH(j.createdAt)
+    ORDER BY
+        YEAR(j.createdAt),
+        MONTH(j.createdAt)
+    """)
     List<RecruiterPostingFrequencyResponse> getPostingFrequencyOfRecruiter(
             @Param("recruiterId") String recruiterId,
             @Param("fromDate") LocalDateTime fromDate
     );
 
 
+
+    List<JobPost> findByIsBoostedTrueAndBoostExpiredAtBefore(LocalDateTime boostExpiredAtBefore);
 }

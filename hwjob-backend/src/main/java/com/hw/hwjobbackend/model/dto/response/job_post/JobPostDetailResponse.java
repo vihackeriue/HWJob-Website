@@ -35,6 +35,12 @@ public class JobPostDetailResponse {
 
     Long viewCount;
 
+    Boolean isBoosted;
+
+    LocalDateTime boostExpiredAt;
+
+    Integer boostPriority;
+
     IndustryResponse industry;
     LevelResponse level;
     JobTypeResponse jobType;

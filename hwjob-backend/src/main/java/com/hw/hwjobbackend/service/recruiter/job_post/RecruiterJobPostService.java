@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.service.recruiter.job_post;
 
+import com.hw.hwjobbackend.model.dto.request.job_post.BoostJobPostRequest;
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostRequest;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailStatsResponse;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public interface RecruiterJobPostService {
     JobPostResponse createJobPost(JobPostRequest request);
-
+    void boostJobPost(String jobPostId, BoostJobPostRequest request);
     Page<JobPostResponse> getPostedJobPosts(int page, int size, JobPostStatusEnum status, String keyword);
 
     List<JobPostResponse> getAllPostedJobPosts(JobPostStatusEnum status, String keyword);
@@ -22,5 +23,6 @@ public interface RecruiterJobPostService {
     JobPostDetailStatsResponse getJobPostDetailStats(String jobPostId);
 
     RecruiterJobPostStatsResponse getRecruiterJobPostStats();
+
 
 }

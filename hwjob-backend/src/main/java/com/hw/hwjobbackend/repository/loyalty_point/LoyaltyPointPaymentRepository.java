@@ -22,4 +22,5 @@ public interface LoyaltyPointPaymentRepository extends JpaRepository<LoyaltyPoin
             String userId,
             PaymentStatusEnum status
     );
+    boolean existsByIdempotentKey(String idempotentKey);
 }

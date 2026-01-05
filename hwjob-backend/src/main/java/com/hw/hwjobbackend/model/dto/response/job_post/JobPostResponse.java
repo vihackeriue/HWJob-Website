@@ -21,6 +21,8 @@ public class JobPostResponse {
 
     String region;
 
+    Boolean isBoosted;
+
     ApplicationStatusEnum applicationStatus;
     JobPostRecruiterProfileResponse recruiter;
 
