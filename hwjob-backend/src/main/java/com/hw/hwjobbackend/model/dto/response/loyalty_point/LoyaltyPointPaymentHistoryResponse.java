@@ -2,6 +2,7 @@ package com.hw.hwjobbackend.model.dto.response.loyalty_point;
 
 import com.hw.hwjobbackend.model.enums.PaymentMethodEnum;
 import com.hw.hwjobbackend.model.enums.PaymentStatusEnum;
+import com.hw.hwjobbackend.model.enums.PaymentTypeEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -22,6 +23,8 @@ public class LoyaltyPointPaymentHistoryResponse {
      BigInteger points;
 
      PaymentMethodEnum paymentMethod;
+
+     PaymentTypeEnum paymentType;
 
      PaymentStatusEnum status;
 

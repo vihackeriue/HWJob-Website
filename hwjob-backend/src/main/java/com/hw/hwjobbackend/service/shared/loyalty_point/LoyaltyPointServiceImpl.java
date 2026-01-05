@@ -2,6 +2,7 @@ package com.hw.hwjobbackend.service.shared.loyalty_point;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hw.hwjobbackend.configuration.blockchain.LoyaltyWithdrawConfig;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.request.loyalty_point.LoyaltyPointPaymentGatewayRequest;
@@ -37,7 +38,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.web3j.utils.Convert;
+
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +60,8 @@ public class LoyaltyPointServiceImpl implements LoyaltyPointService {
     MomoService momoService;
     VnPayService vnPayService;
     WorkRepository workRepository;
+
+    LoyaltyWithdrawConfig withdrawConfig;
 
 
     @Override
@@ -184,40 +191,132 @@ public class LoyaltyPointServiceImpl implements LoyaltyPointService {
                 .payUrl(payUrl)
                 .build();
     }
-//    // USER rút tiền
-//    public WithdrawPointResponse requestWithdraw(WithdrawPointRequest dto) {
-//
-//        String userId = SecurityUtils.getCurrentUserId();
-//
-//        User user = userRepository.findById(userId).orElseThrow();
-//
-////        if (user.getPoints().compareTo(dto.getPoints()) < 0) {
-////            throw new RuntimeException("Không đủ điểm");
-////        }
-//
-//        // Trừ điểm ngay
-////        user.setPoints(user.getPoints().subtract(dto.getPoints()));
-//
-//        LoyaltyPointPayment p = new LoyaltyPointPayment();
-//        p.setUserId(userId);
-//        p.setPaymentType(PaymentTypeEnum.WITHDRAW);
-//        p.setPaymentMethod(PaymentMethodEnum.MOMO);
-//
-//        p.setGrossAmount(dto.getAmount());
-//        p.setNetAmount(dto.getAmount());
-//        p.setPoints(dto.getPoints());
-//
-//        p.setMomoPhone(dto.getMomoPhone());
-//        p.setMomoName(dto.getMomoName());
-//
-//        p.setStatus(PaymentStatusEnum.PENDING);
-//
-//        loyaltyPointPaymentRepository.save(p);
-//        return mapper.toDto(p);
-//    }
+
+    @Override
+    @Transactional
+    public WithdrawPointResponse withdraw(
+            WithdrawPointRequest request,
+            String idempotentKey
+    ) {
+        String userId = SecurityUtils.getCurrentUserId();
+
+        /* =====================================================
+         * 0. IDEMPOTENT CHECK
+         * ===================================================== */
+        if (loyaltyPointPaymentRepository.existsByIdempotentKey(idempotentKey)) {
+            throw new AppException(ErrorCode.DUPLICATE_REQUEST);
+        }
+
+        /* =====================================================
+         * 1. USER & WALLET
+         * ===================================================== */
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        String wallet = user.getWalletAddress();
+        if (wallet == null || wallet.isBlank()) {
+            throw new AppException(ErrorCode.USER_WALLET_NOT_EXISTED);
+        }
+
+        /* =====================================================
+         * 2. VALIDATE AMOUNT
+         * ===================================================== */
+        BigInteger requestPoint = request.getAmount();
+
+        if (requestPoint == null || requestPoint.compareTo(BigInteger.ZERO) <= 0) {
+            throw new AppException(ErrorCode.INVALID_AMOUNT);
+        }
+
+        if (requestPoint.compareTo(withdrawConfig.getMinWithdrawPoint()) < 0) {
+            throw new AppException(ErrorCode.MIN_WITHDRAW_NOT_MET);
+        }
+
+        BigInteger totalPointRequired =
+                requestPoint.add(withdrawConfig.getWithdrawFeePoint());
+
+        /* =====================================================
+         * 3. CHECK ON-CHAIN BALANCE
+         * ===================================================== */
+        LoyaltyPointResponse loyaltyPoint =
+                blockchainService.getPointOfUser(wallet);
+
+        BigInteger onChainPoint = loyaltyPoint.getPoints();
+
+        if (onChainPoint.compareTo(totalPointRequired) < 0) {
+            throw new AppException(ErrorCode.NOT_ENOUGH_POINT);
+        }
+
+        /* =====================================================
+         * 4. CALCULATE ETH (ROUND DOWN)
+         * ===================================================== */
+        BigDecimal ethAmount = new BigDecimal(requestPoint)
+                .divide(withdrawConfig.getPointPerEth(), 18, RoundingMode.DOWN);
+
+        BigInteger weiAmount =
+                Convert.toWei(ethAmount, Convert.Unit.ETHER).toBigInteger();
+
+        /* =====================================================
+         * 5. CREATE PAYMENT (PENDING)
+         * ===================================================== */
+        LoyaltyPointPayment payment = new LoyaltyPointPayment();
+        payment.setUserId(userId);
+        payment.setPoints(requestPoint);
+        payment.setFeeAmount(withdrawConfig.getWithdrawFeePoint().longValue());
+        payment.setGrossAmount(weiAmount.longValue());
+        payment.setNetAmount(weiAmount.longValue());
+        payment.setPaymentType(PaymentTypeEnum.WITHDRAW);
+        payment.setPaymentMethod(PaymentMethodEnum.ETH);
+        payment.setStatus(PaymentStatusEnum.PENDING);
+        payment.setIdempotentKey(idempotentKey);
+
+        loyaltyPointPaymentRepository.save(payment);
+
+        try {
+            /* =====================================================
+             * 6. BURN POINT (POINT + FEE)
+             * ===================================================== */
+            String burnTxHash = blockchainService.burnPoint(
+                    wallet,
+                    totalPointRequired
+            );
+
+            payment.setBlockchainTxHash(burnTxHash);
+            payment.setStatus(PaymentStatusEnum.BURNED);
+            loyaltyPointPaymentRepository.save(payment);
+
+            /* =====================================================
+             * 7. SEND ETH
+             * ===================================================== */
+            String ethTxHash =
+                    blockchainService.sendEth(wallet, ethAmount);
+
+            payment.setRawIpnPayload(ethTxHash);
+            payment.setStatus(PaymentStatusEnum.PAID);
+            loyaltyPointPaymentRepository.save(payment);
+
+            /* =====================================================
+             * 8. RESPONSE
+             * ===================================================== */
+            return new WithdrawPointResponse(
+                    payment.getId(),
+                    payment.getStatus(),
+                    burnTxHash
+            );
+
+        } catch (Exception ex) {
+            log.error("Withdraw failed userId={}", userId, ex);
+
+            payment.setStatus(PaymentStatusEnum.FAILED);
+            payment.setRawIpnPayload(ex.getMessage());
+            loyaltyPointPaymentRepository.save(payment);
+
+            throw new AppException(ErrorCode.FAIL_PROCESS_BLOCKCHAIN);
+        }
+    }
+
 
     @Transactional
-    public void handleMomoIpn(Map<String, String> payload) throws Exception {
+    public void handleMomoIpn(Map<String, String> payload)  {
 
         momoService.verifySignature(payload);
 
@@ -229,7 +328,7 @@ public class LoyaltyPointServiceImpl implements LoyaltyPointService {
         );
     }
 //    @Transactional
-    public void processVnPayIpn(HttpServletRequest request) throws Exception {
+    public void processVnPayIpn(HttpServletRequest request) {
 
         Map<String, String> params = new HashMap<>();
         request.getParameterMap()

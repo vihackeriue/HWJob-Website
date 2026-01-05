@@ -1,6 +1,7 @@
 package com.hw.hwjobbackend.controller.user.recruiter;
 
 
+import com.hw.hwjobbackend.model.dto.request.job_post.BoostJobPostRequest;
 import com.hw.hwjobbackend.model.dto.request.job_post.JobPostRequest;
 import com.hw.hwjobbackend.model.dto.response.ApiResponse;
 import com.hw.hwjobbackend.model.dto.response.job_post.JobPostDetailResponse;
@@ -33,6 +34,19 @@ public class RecruiterJobPostController {
                 .result(recruiterJobPostService.createJobPost(request))
                 .build();
     }
+
+    @PostMapping("/{id}/boost")
+    public ApiResponse<Void> boostJobPost(
+            @PathVariable String id,
+            @RequestBody BoostJobPostRequest request
+
+    ) {
+        recruiterJobPostService.boostJobPost(id, request);
+        return ApiResponse.<Void>builder()
+                .message("Đẩy tin thành công")
+                .build();
+    }
+
 
     @GetMapping
     public ApiResponse<List<JobPostResponse>> getPostedJobPosts(

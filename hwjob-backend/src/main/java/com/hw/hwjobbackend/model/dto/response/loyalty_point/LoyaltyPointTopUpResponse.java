@@ -10,6 +10,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LoyaltyPointTopUpResponse {
-    private String topUpId;
-    private String payUrl;
+     String topUpId;
+     String payUrl;
 }

@@ -13,7 +13,7 @@ public interface JobPostService {
     Page<JobPostResponse> getAllJobPosts(Integer page, Integer size, JobPostFilterRequest filter);
 
     List<JobPostResponse> getAllJobPosts(JobPostFilterRequest filter);
-
+   List<JobPostResponse> getTop12BoostedJobPosts();
     JobPostDetailResponse getJobPostDetail(String id, HttpServletRequest request);
 
     void increaseViewCount(String jobPostId, Long viewCount);
