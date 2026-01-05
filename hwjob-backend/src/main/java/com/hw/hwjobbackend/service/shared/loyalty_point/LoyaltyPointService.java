@@ -1,9 +1,11 @@
 package com.hw.hwjobbackend.service.shared.loyalty_point;
 
 import com.hw.hwjobbackend.model.dto.request.loyalty_point.LoyaltyPointTopUpRequest;
+import com.hw.hwjobbackend.model.dto.request.loyalty_point.WithdrawPointRequest;
 import com.hw.hwjobbackend.model.dto.response.loyalty_point.LoyaltyPointPaymentHistoryResponse;
 import com.hw.hwjobbackend.model.dto.response.loyalty_point.LoyaltyPointResponse;
 import com.hw.hwjobbackend.model.dto.response.loyalty_point.LoyaltyPointTopUpResponse;
+import com.hw.hwjobbackend.model.dto.response.loyalty_point.WithdrawPointResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 
@@ -25,7 +27,11 @@ public interface LoyaltyPointService {
             LoyaltyPointTopUpRequest req,
             HttpServletRequest httpRequest
     );
+    WithdrawPointResponse withdraw(
 
+            WithdrawPointRequest request,
+            String idempotentKey
+    );
     void refundPointToRecruiter(String jobPostId, String candidateId);
 
     void refundPointToRecruiterAndDeductReputation(String recruiterUserId, String freelancerUserId, BigInteger amount);

@@ -8,12 +8,19 @@ import {toast} from "react-toastify";
 import {chatService} from "../../services/chatService.jsx";
 import useAuth from "../../hooks/useAuth.jsx";
 import {getRecruiterProfileById} from "../../services/userService.jsx";
+import {useList} from "../../hooks/useList.jsx";
+import {getJobPostsByRecruiterId} from "../../services/jobPostService.jsx";
+import JobPostCard from "../../components/ui/cards/JobPostCard.jsx";
+import Pagination from "../../components/ui/pagination/Pagination.jsx";
 
-const PublicProfile = () => {
+const RecruiterPublicProfile = () => {
     const {id} = useParams();
     const {data: userProfile, loading} = useDetail(getRecruiterProfileById, id);
     const {auth} = useAuth();
     const {openConversation} = useChat();
+
+    // Lấy danh sách job post của recruiter này
+    const jobPosts = useList((page, size) => getJobPostsByRecruiterId(id, page, size));
 
     const handleMessage = async () => {
         try {
@@ -105,6 +112,37 @@ const PublicProfile = () => {
                     <InformationField label="Website" value={userProfile.website}/>
                 </div>
             </div>
+
+            {/* Danh sách việc làm của Recruiter */}
+            <div className="bg-white dark:bg-stoneBrown-900/50 rounded-2xl shadow-sm p-8 mb-6">
+                <SecondTitle>Việc làm đang tuyển</SecondTitle>
+                <div className="mt-6">
+                    {jobPosts.loading ? (
+                        <div className="text-center py-4">Đang tải danh sách việc làm...</div>
+                    ) : jobPosts.data.length > 0 ? (
+                        <div className="flex flex-col gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {jobPosts.data.map((job) => (
+                                    <JobPostCard key={job.id} jobPost={job}/>
+                                ))}
+                            </div>
+                            <div className="flex justify-center mt-4">
+                                <Pagination
+                                    pagination={{
+                                        page: jobPosts.page,
+                                        totalPages: jobPosts.totalPages,
+                                        setPage: jobPosts.setPage,
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="text-center py-4 text-gray-500 italic">
+                            Nhà tuyển dụng này chưa có bài đăng nào.
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 };
@@ -126,4 +164,4 @@ const InformationField = ({label, value}) => {
     );
 };
 
-export default PublicProfile;
+export default RecruiterPublicProfile;

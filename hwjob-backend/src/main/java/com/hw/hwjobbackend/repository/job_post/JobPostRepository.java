@@ -20,15 +20,23 @@ import java.util.Optional;
 public interface JobPostRepository extends JpaRepository<JobPost, String> {
 
     @Query("""
-             SELECT jp FROM JobPost jp
-             WHERE jp.status = :status
-               AND (jp.endedTime IS NULL OR jp.endedTime > CURRENT_TIMESTAMP)
-               AND (:industryId IS NULL OR jp.industry.id = :industryId)
-               AND (:levelId IS NULL OR jp.level.id = :levelId)
-               AND (:jobTypeId IS NULL OR jp.jobType.id = :jobTypeId)
-               AND (:regionId IS NULL OR jp.region.id = :regionId)
-             ORDER BY jp.createdAt DESC
-            """)
+    SELECT jp FROM JobPost jp
+    WHERE jp.status = :status
+      AND (jp.endedTime IS NULL OR jp.endedTime > CURRENT_TIMESTAMP)
+      AND (:industryId IS NULL OR jp.industry.id = :industryId)
+      AND (:levelId IS NULL OR jp.level.id = :levelId)
+      AND (:jobTypeId IS NULL OR jp.jobType.id = :jobTypeId)
+      AND (:regionId IS NULL OR jp.region.id = :regionId)
+    ORDER BY
+      CASE
+        WHEN jp.isBoosted = true
+         AND jp.boostExpiredAt IS NOT NULL
+         AND jp.boostExpiredAt > CURRENT_TIMESTAMP
+        THEN jp.boostPriority
+        ELSE 0
+      END DESC,
+      jp.createdAt DESC
+""")
     Page<JobPost> getAllJobPosts(
             @Param("status") JobPostStatusEnum status,
             @Param("industryId") Long industryId,
@@ -39,21 +47,53 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
     );
 
     @Query("""
-             SELECT jp FROM JobPost jp
-             WHERE jp.status = :status
-               AND (jp.endedTime IS NULL OR jp.endedTime > CURRENT_TIMESTAMP)
-               AND (:industryId IS NULL OR jp.industry.id = :industryId)
-               AND (:levelId IS NULL OR jp.level.id = :levelId)
-               AND (:jobTypeId IS NULL OR jp.jobType.id = :jobTypeId)
-               AND (:regionId IS NULL OR jp.region.id = :regionId)
-             ORDER BY jp.createdAt DESC
-            """)
+    SELECT jp FROM JobPost jp
+    WHERE jp.status = :status
+      AND (jp.endedTime IS NULL OR jp.endedTime > CURRENT_TIMESTAMP)
+      AND (:industryId IS NULL OR jp.industry.id = :industryId)
+      AND (:levelId IS NULL OR jp.level.id = :levelId)
+      AND (:jobTypeId IS NULL OR jp.jobType.id = :jobTypeId)
+      AND (:regionId IS NULL OR jp.region.id = :regionId)
+    ORDER BY
+      CASE
+        WHEN jp.isBoosted = true
+         AND jp.boostExpiredAt IS NOT NULL
+         AND jp.boostExpiredAt > CURRENT_TIMESTAMP
+        THEN jp.boostPriority
+        ELSE 0
+      END DESC,
+      jp.createdAt DESC
+""")
     List<JobPost> getAllJobPosts(
             @Param("status") JobPostStatusEnum status,
             @Param("industryId") Long industryId,
             @Param("levelId") Long levelId,
             @Param("jobTypeId") Long jobTypeId,
             @Param("regionId") Integer regionId
+    );
+
+    @Query("SELECT jp FROM JobPost jp " +
+            "WHERE jp.status = :status " +
+            "AND jp.recruiter.id = :recruiterId " +
+            "ORDER BY jp.createdAt DESC")
+    Page<JobPost> getAllJobPostsByRecruiterId(
+            @Param("status") JobPostStatusEnum status,
+            @Param("recruiterId") String recruiterId,
+            Pageable pageable);
+
+    @Query("""
+    SELECT jp FROM JobPost jp
+    WHERE jp.status = :status
+      AND jp.isBoosted = TRUE
+      AND jp.boostExpiredAt IS NOT NULL
+      AND jp.boostExpiredAt > CURRENT_TIMESTAMP
+      AND (jp.endedTime IS NULL OR jp.endedTime > CURRENT_TIMESTAMP)
+    ORDER BY
+      jp.boostPriority DESC,
+      jp.createdAt DESC
+""")
+    List<JobPost> findTop12BoostedJobPosts(
+            @Param("status") JobPostStatusEnum status
     );
 
     @Query("SELECT j FROM JobPost j WHERE j.recruiter.id = :recruiterId " +
@@ -160,4 +200,8 @@ public interface JobPostRepository extends JpaRepository<JobPost, String> {
             @Param("recruiterId") String recruiterId,
             @Param("fromDate") LocalDateTime fromDate
     );
+
+
+
+    List<JobPost> findByIsBoostedTrueAndBoostExpiredAtBefore(LocalDateTime boostExpiredAtBefore);
 }

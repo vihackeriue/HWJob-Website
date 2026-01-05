@@ -1,22 +1,20 @@
 import { TabGroup, TabPanel, TabPanels } from "@headlessui/react";
 import React from "react";
 import MenuTabListVertical from "../../../components/ui/MenuTabListVertical";
-import MenuTabListHorizontal from "../../../components/ui/MenuTabListHorizontal";
 import TopUpPointSection from "../../../components/sections/shared/transactionManagement/TopUpPointSection";
 import { useLoyaltyPoints } from "../../../hooks/useLoyaltyPoints";
 import Loading from "../../../components/ui/Loading";
 import { PiCoinsFill } from "react-icons/pi";
-import HistoryTopUpSection from "../../../components/sections/shared/transactionManagement/HistoryTopUpSection";
-import TransactionPointSection from "../../../components/sections/shared/transactionManagement/TransactionPointSection";
-import Lottie from "lottie-react";
 import { useDetail } from "../../../hooks/useDetail";
 import { getMyLockedLoyaltyPoint } from "../../../services/LoyaltyPointService";
+import WithdrawPointSection from "../../../components/sections/shared/transactionManagement/WithdrawPointSection";
+import HistoryTransactionSection from "../../../components/sections/shared/transactionManagement/HistoryTransactionSection";
 
 const TRANSACTION_MANAGEMENT_MENUS = [
   { key: "topUp", label: "Nạp điểm thưởng" },
   { key: "withdrawPoint", label: "Rút tiền" },
-  { key: "historyTopUp", label: "Lịch sử nạp điểm" },
-  { key: "transactionPoint", label: "Giao dịch điểm" },
+  { key: "historyTopUp", label: "Lịch sử đổi điểm" },
+  { key: "historyWithdraw", label: "Lịch sử giao dịch" },
 ];
 
 const TransactionManagement = () => {
@@ -66,13 +64,10 @@ const TransactionManagement = () => {
               <TopUpPointSection />
             </TabPanel>
             <TabPanel>
-              <TopUpPointSection />
+              <WithdrawPointSection />
             </TabPanel>
             <TabPanel>
-              <HistoryTopUpSection />
-            </TabPanel>
-            <TabPanel>
-              <TransactionPointSection />
+              <HistoryTransactionSection />
             </TabPanel>
           </TabPanels>
         </div>

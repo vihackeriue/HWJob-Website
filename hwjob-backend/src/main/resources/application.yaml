@@ -59,9 +59,14 @@ app:
 
 blockchain:
   ganache-url: http://127.0.0.1:7545
-  contract-address: "0x7eB3d6B76D56622A6751b7e7071dF36FaAF7b1e5"
-  private-key: "0x61b31d982de276903413b79877abfef2b1a2e72c669e5452e899f0a82e4d696d"
+  contract-address: 0x7eB3d6B76D56622A6751b7e7071dF36FaAF7b1e5
+  private-key: 0x61b31d982de276903413b79877abfef2b1a2e72c669e5452e899f0a82e4d696d
 
+loyalty:
+  withdraw:
+    point-per-eth: 96000000
+    min-withdraw-point: 1000
+    withdraw-fee-point: 1000
 momo:
   partner-code: MOMO
   access-key: F8BBA842ECF85
@@ -75,8 +80,9 @@ vnpay:
   hash-secret: E6W3C9Q4OAO1H2X8857RIRBHO6BYRTQF
   pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
   return-url: http://localhost:5173/payment-result
-  ipn-url: https://transpalmar-anaya-banteringly.ngrok-free.dev/hwjob/api/public/vnpay/ipn
+  ipn-url: https://peachiest-myron-dramatically.ngrok-free.dev/hwjob/api/public/vnpay/ipn
+
 
 # ngrok domain
-# ngrok http 8080
+# .\ngrok http 8080
 

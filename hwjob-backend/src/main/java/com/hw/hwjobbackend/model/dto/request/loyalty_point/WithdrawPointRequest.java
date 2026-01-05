@@ -1,11 +1,12 @@
 package com.hw.hwjobbackend.model.dto.request.loyalty_point;
 
-import jakarta.validation.constraints.NotBlank;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
+
 
 @Getter
 @Setter
@@ -15,13 +16,13 @@ import java.math.BigInteger;
 public class WithdrawPointRequest {
 
     @NotNull
-    Long amount;
+    BigInteger amount;
 
-    @NotNull
-    BigInteger points;
-
-    @NotBlank
-    String momoPhone;
-
-    String momoName;
+//    @NotNull
+//    BigInteger points;
+//
+//    @NotBlank
+//    String momoPhone;
+//
+//    String momoName;
 }

@@ -11,6 +11,7 @@ import { getAllFreelancerOfRecruiter } from "../../../../services/workService";
 import { useList } from "../../../../hooks/useList";
 import Pagination from "../../../ui/pagination/Pagination";
 import { STATUS_WORK_MAP } from "../../../../constants/statusWork";
+import PrimaryTitle from "../../../ui/title/PrimaryTitle";
 
 const formatDate = (date) =>
   date ? new Date(date).toLocaleDateString("vi-VN") : "--";
@@ -22,10 +23,10 @@ const FreelancerListSection = () => {
   const works = useList(getAllFreelancerOfRecruiter);
 
   return (
-    <div className="space-y-5">
-      {/* Title */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold">Quản lý công việc</h2>
+    <div className="bg-white rounded-2xl p-3 space-y-3">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+        <PrimaryTitle>Quản lý công việc</PrimaryTitle>
         <span className="text-sm text-gray-500">
           {works.totalElements || works.data?.length || 0} công việc
         </span>
@@ -39,33 +40,35 @@ const FreelancerListSection = () => {
           return (
             <div
               key={item.workId}
-              className="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-md transition"
+              className="rounded-2xl bg-lightGrayishBlue border border-gray-300 p-5 hover:shadow-lg transition-all duration-200"
             >
-              <div className="flex gap-5">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                 {/* Avatar */}
-                <img
-                  src={item.imageUrl}
-                  alt={item.fullName}
-                  className="w-16 h-16 rounded-full object-cover ring-2 ring-gray-100"
-                />
+                <div className="flex-shrink-0">
+                  <img
+                    src={item.imageUrl}
+                    alt={item.fullName}
+                    className="w-16 h-16 rounded-full object-cover ring-2 ring-gray-100"
+                  />
+                </div>
 
                 {/* Content */}
-                <div className="flex-1 space-y-3">
-                  {/* Header */}
-                  <div className="flex flex-wrap justify-between gap-3">
-                    <div>
-                      <p className="font-semibold text-lg leading-tight">
+                <div className="flex-1 flex flex-col justify-between gap-2">
+                  {/* Header: Name + Status */}
+                  <div className="flex flex-wrap justify-between items-start gap-2">
+                    <div className="space-y-1 min-w-0">
+                      <p className="font-semibold text-lg line-clamp-1">
                         {item.fullName}
                       </p>
-                      <div className="flex items-center gap-1 text-sm text-gray-500">
-                        <IoMailOutline className="size-4" />
+                      <div className="flex items-center gap-1 text-sm text-gray-500 line-clamp-1">
+                        <IoMailOutline size={14} />
                         {item.email}
                       </div>
                     </div>
 
                     {status && (
                       <span
-                        className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap ${status.className}`}
+                        className={`px-3 py-1 rounded-lg text-md font-semibold whitespace-nowrap ${status.className}`}
                       >
                         {status.name}
                       </span>
@@ -73,28 +76,29 @@ const FreelancerListSection = () => {
                   </div>
 
                   {/* Job */}
-                  <div className="flex items-center gap-2 text-sm">
-                    <IoBriefcaseOutline className="size-4 text-gray-500" />
-                    <span className="font-medium">{item.jobPostTitle}</span>
+                  <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
+                    <IoBriefcaseOutline size={16} />
+                    <span className="font-medium line-clamp-1">
+                      {item.jobPostTitle}
+                    </span>
                   </div>
 
                   {/* Meta */}
-                  <div className="flex flex-wrap gap-6 text-sm text-gray-600">
+                  <div className="flex flex-wrap gap-6 text-sm text-gray-500 mt-1">
                     <div className="flex items-center gap-2">
-                      <IoCalendarOutline className="size-4" />
+                      <IoCalendarOutline size={16} />
                       {formatDate(item.startTime)} → {formatDate(item.endTime)}
                     </div>
-
                     <div className="flex items-center gap-2">
-                      <IoCashOutline className="size-4" />
+                      <IoCashOutline size={16} />
                       {formatSalary(item.agreedSalary)} ({item.salaryType})
                     </div>
                   </div>
 
                   {/* Rating */}
                   {item.myReviewRating != null && (
-                    <div className="flex items-center gap-1 text-yellow-500">
-                      <FaStar className="size-4" />
+                    <div className="flex items-center gap-1 text-yellow-500 mt-1">
+                      <FaStar size={14} />
                       <span className="text-sm font-semibold">
                         {item.myReviewRating}/5
                       </span>
@@ -107,9 +111,9 @@ const FreelancerListSection = () => {
         })}
       </div>
 
-      {/* Empty */}
+      {/* Empty state */}
       {works.data?.length === 0 && (
-        <p className="text-center text-gray-500 py-12">Chưa có công việc nào</p>
+        <p className="text-center text-gray-400 py-12">Chưa có công việc nào</p>
       )}
 
       {/* Pagination */}
