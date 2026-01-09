@@ -46,7 +46,7 @@ const ApplicantListSection = ({ jobPost }) => {
 
   return (
     <div>
-      <div className="flex gap-3 mb-6 items-center">
+      {/* <div className="flex gap-3 mb-6 items-center">
         <div className="relative">
           <HiOutlineSearch
             size={20}
@@ -62,7 +62,7 @@ const ApplicantListSection = ({ jobPost }) => {
         </div>
         <div>Lọc theo STATUS</div>
         <h1>Số lượng đã ứng tuyển: {applicants.data.length}</h1>
-      </div>
+      </div> */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-5">
         {applicants.data.map((applicant) => (
           <ApplicantCard
