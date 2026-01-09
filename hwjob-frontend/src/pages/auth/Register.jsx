@@ -9,6 +9,7 @@ import FormSelect from "../../components/ui/form/FormSelect";
 import FormInput from "../../components/ui/form/FormInput";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../../services/userService";
+import { toast } from "react-toastify";
 export default function Register() {
   const roles = [
     { code: "CANDIDATE", name: "Ứng viên" },
@@ -58,10 +59,12 @@ export default function Register() {
       };
       // gọi API backend đăng ký
       await createUser(user);
-      alert("Đăng ký thành công");
+      toast.success("Đăng ký thành công");
       navigate("/login");
     } catch (error) {
-      alert(error.response?.data?.message || "Đăng ký tài khoản thất bại!");
+      toast.error(
+        error.response?.data?.message || "Đăng ký tài khoản thất bại!"
+      );
     }
   };
 

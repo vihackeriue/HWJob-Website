@@ -44,4 +44,12 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "FROM Review r " +
             "WHERE r.work.jobPost.id = :jobPostId ")
     Double findAverageRatingByJobPost(@Param("jobPostId") String jobPostId);
+
+    @Query("""
+        SELECT r.reviewee.id, AVG(r.rating)
+        FROM Review r
+        WHERE r.reviewee.id IN :userIds
+        GROUP BY r.reviewee.id
+    """)
+    List<Object[]> getAverageRatingByUserIds(@Param("userIds") List<String> userIds);
 }

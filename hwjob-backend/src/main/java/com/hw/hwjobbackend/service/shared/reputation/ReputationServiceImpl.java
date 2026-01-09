@@ -15,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -41,6 +44,48 @@ public class ReputationServiceImpl implements ReputationService {
             log.error(e.getMessage());
             throw new AppException(ErrorCode.FAIL_PROCESS_BLOCKCHAIN);
         }
+    }
+    @Override
+    public ReputationResponse getUserReputation(String userId) {
+        // 1. Lấy user
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        // Lấy địa chỉ ví
+        String walletAddress = user.getWalletAddress();
+
+        try {
+            return blockchainService.getReputationOfUser(walletAddress);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new AppException(ErrorCode.FAIL_PROCESS_BLOCKCHAIN);
+        }
+    }
+    @Override
+    public Map<String, BigInteger> getReputationByUserIds(List<String> userIds) {
+
+        Map<String, BigInteger> result = new HashMap<>();
+
+        List<User> users = userRepository.findAllById(userIds);
+
+        for (User user : users) {
+            try {
+                if (user.getWalletAddress() == null) {
+                    result.put(user.getId(), BigInteger.ZERO);
+                    continue;
+                }
+
+                BigInteger reputation = blockchainService
+                        .getReputationOfUser(user.getWalletAddress())
+                        .getReputation();
+
+                result.put(user.getId(), reputation);
+            } catch (Exception e) {
+                log.error("Fail get reputation for user {}", user.getId(), e);
+                result.put(user.getId(), BigInteger.ZERO);
+            }
+        }
+        return result;
     }
 
     public void deductReputation(String userId, BigInteger penalty){

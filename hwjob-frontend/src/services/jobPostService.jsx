@@ -17,6 +17,11 @@ export const boostJobPost = async (id, data) => {
   );
   return response.data;
 };
+
+export const getTop12BoostJobPost = async () => {
+  const response = await axiosPublic.get(ENDPOINTS.JOB_POST.TOP_BOOST_JOB_POST);
+  return response.data;
+};
 export const getJobPosts = async (
   page = 1,
   size = DEFAULT_LIMIT,
@@ -27,6 +32,7 @@ export const getJobPosts = async (
   });
   return response.data;
 };
+
 export const getWorkingJobPosts = async (page = 1, size = DEFAULT_LIMIT) => {
   const response = await axiosPublic.get(ENDPOINTS.JOB_POST.LIST_WORKING_JOBS, {
     params: { page, size },
@@ -90,13 +96,17 @@ export const saveJob = async (id) => {
   return response.data;
 };
 
-export const getJobPostsByRecruiterId = async (recruiterId, page = 1, size = DEFAULT_LIMIT) => {
-    const response = await axiosPublic.get(ENDPOINTS.JOB_POST.LIST, {
-        params: {
-            page,
-            size,
-            recruiterId: recruiterId
-        }
-    });
-    return response.data;
+export const getJobPostsByRecruiterId = async (
+  recruiterId,
+  page = 1,
+  size = DEFAULT_LIMIT
+) => {
+  const response = await axiosPublic.get(ENDPOINTS.JOB_POST.LIST, {
+    params: {
+      page,
+      size,
+      recruiterId: recruiterId,
+    },
+  });
+  return response.data;
 };

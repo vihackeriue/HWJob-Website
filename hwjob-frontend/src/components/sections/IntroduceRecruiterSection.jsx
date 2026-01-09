@@ -8,7 +8,7 @@ import { tGlobal } from "../../utils/translator";
 const IntroduceRecruiterSection = () => {
   return (
     <div>
-      <div className="flex flex-col md:flex-row items-center p-2 bg-stoneBrown-900/50 rounded-2xl my-10">
+      <div className="flex flex-col md:flex-row items-center p-2 bg-stoneBrown-900/50 rounded-2xl ">
         <img src={recruitment} alt="recruitment" className="size-40" />
 
         <div className="flex flex-col-reverse md:flex-row justify-around w-full p-3">

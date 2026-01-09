@@ -5,6 +5,8 @@ import com.hw.hwjobbackend.model.enums.ApplicationStatusEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigInteger;
+
 @Getter
 @Setter
 @Builder
@@ -16,5 +18,7 @@ public class ApplicationCandidateResponse {
     String fullName;
     String imageUrl;
     String email;
+    BigInteger reputation;
+    Double averageRating;
     ApplicationStatusEnum status;
 }

@@ -25,7 +25,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -133,5 +135,29 @@ public class ReviewServiceImpl implements ReviewService {
         AverageRatingResponse averageRatingResponse = new AverageRatingResponse();
         averageRatingResponse.setAverageRating(avg);
         return averageRatingResponse;
+    }
+    @Override
+    public AverageRatingResponse getAverageRating(String userId) {
+
+
+        Double avg = reviewRepository.getAverageRating(userId);
+        AverageRatingResponse averageRatingResponse = new AverageRatingResponse();
+        averageRatingResponse.setAverageRating(avg);
+        return averageRatingResponse;
+    }
+    public Map<String, Double> getAverageRatingByUserIds(List<String> userIds) {
+
+        Map<String, Double> result = new HashMap<>();
+
+        List<Object[]> rows =
+                reviewRepository.getAverageRatingByUserIds(userIds);
+
+        for (Object[] row : rows) {
+            String userId = (String) row[0];
+            Double avg = (Double) row[1];
+            result.put(userId, avg);
+        }
+
+        return result;
     }
 }

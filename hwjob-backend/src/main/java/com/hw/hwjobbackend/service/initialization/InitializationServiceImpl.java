@@ -107,6 +107,7 @@ public class InitializationServiceImpl implements InitializationService {
         User adminUser = User.builder()
                 .username(ADMIN_USERNAME)
                 .fullName(ADMIN_NAME)
+                .email("admin@gmail.com")
                 .userStatus(UserStatusEnum.ACTIVE)
                 .roles(roles)
                 .password(passwordEncoder.encode(ADMIN_PASSWORD))

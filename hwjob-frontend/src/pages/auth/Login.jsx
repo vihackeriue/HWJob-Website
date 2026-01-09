@@ -6,6 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import useAuth from "../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 function Login() {
   const { t } = useTranslation();
@@ -30,7 +31,7 @@ function Login() {
       await login(input);
       return;
     }
-    alert("please provide a valid input");
+    toast.warn("Nhập đầy đủ thông tin!");
   };
 
   return (

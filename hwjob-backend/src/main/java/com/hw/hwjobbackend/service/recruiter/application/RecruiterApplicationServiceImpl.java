@@ -1,5 +1,6 @@
 package com.hw.hwjobbackend.service.recruiter.application;
 
+import com.hw.hwjobbackend.event.ApplicationStatusChangedEvent;
 import com.hw.hwjobbackend.exception.AppException;
 import com.hw.hwjobbackend.exception.ErrorCode;
 import com.hw.hwjobbackend.model.dto.api.request.RankCandidateRequest;
@@ -20,6 +21,8 @@ import com.hw.hwjobbackend.repository.user.CandidateRepository;
 import com.hw.hwjobbackend.service.mapper.application.ApplicationMapper;
 import com.hw.hwjobbackend.service.recruiter.work.RecruiterWorkService;
 import com.hw.hwjobbackend.service.shared.loyalty_point.LoyaltyPointService;
+import com.hw.hwjobbackend.service.shared.reputation.ReputationService;
+import com.hw.hwjobbackend.service.shared.review.ReviewService;
 import com.hw.hwjobbackend.util.PaginationUtils;
 import com.hw.hwjobbackend.util.SecurityUtils;
 
@@ -27,12 +30,14 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -52,6 +57,9 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
     LoyaltyPointService loyaltyPointService;
     ServerAIFeignClient serverAIFeignClient;
     RankedCandidateCacheRepository rankedCandidateCacheRepository;
+    ApplicationEventPublisher eventPublisher;
+    ReputationService reputationService;
+    ReviewService reviewService;
 
     @Override
     public Page<ApplicationCandidateResponse> getRankedCandidateApplication(Integer page, Integer size, String jobPostId) {
@@ -103,14 +111,38 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
         // 5. Query DB lấy chi tiết Application
         List<Application> applications = applicationRepository.findByJobPostIdAndCandidateIdIn(jobPostId, pageCandidateIds);
 
+        // Lấy danh sách candidateId
+        List<String> candidateIds = applications.stream()
+                .map(app -> app.getCandidate().getId())
+                .distinct()
+                .toList();
+
+        // 5.1 Lấy reputation
+        Map<String, BigInteger> reputationMap =
+                reputationService.getReputationByUserIds(candidateIds);
+//        get rating
+        Map<String, Double> reviewMap =
+                reviewService.getAverageRatingByUserIds(candidateIds);
+
         // 6. Sắp xếp lại kết quả DB theo thứ tự của pageCandidateIds
         Map<String, Application> applicationMap = applications.stream()
                 .collect(Collectors.toMap(app -> app.getCandidate().getId(), Function.identity()));
 
         List<ApplicationCandidateResponse> responses = new ArrayList<>();
         for (String candidateId : pageCandidateIds) {
-            if (applicationMap.containsKey(candidateId)) {
-                responses.add(applicationMapper.toCandidateApplicationResponse(applicationMap.get(candidateId)));
+            Application app = applicationMap.get(candidateId);
+            if (app != null) {
+                ApplicationCandidateResponse response =
+                        applicationMapper.toCandidateApplicationResponse(app);
+
+                response.setReputation(
+                        reputationMap.getOrDefault(candidateId, BigInteger.ZERO)
+                );
+                response.setAverageRating(
+                        reviewMap.getOrDefault(candidateId, 0.0)
+                );
+
+                responses.add(response);
             }
         }
 
@@ -118,28 +150,145 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
     }
 
     @Override
-    public Page<ApplicationCandidateResponse> getCandidateApplications(int page, int size, String jobPostId) {
-        String recruiterId = SecurityUtils.getCurrentUserId();
+    public Page<ApplicationCandidateResponse> getCandidateApplications(
+            int page, int size, String jobPostId) {
 
+        String recruiterId = SecurityUtils.getCurrentUserId();
         Pageable pageable = PaginationUtils.buildPageable(page, size);
 
-        Page<Application> applications = applicationRepository
-                .findByJobPostIdAndRecruiterIdOrderByCreatedAtDesc(jobPostId, recruiterId, pageable);
+        Page<Application> applicationsPage =
+                applicationRepository.findByJobPostIdAndRecruiterIdOrderByCreatedAtDesc(
+                        jobPostId, recruiterId, pageable
+                );
 
-        return applications.map(applicationMapper::toCandidateApplicationResponse);
+        List<Application> applications = applicationsPage.getContent();
+
+        if (applications.isEmpty()) {
+            return new PageImpl<>(Collections.emptyList(), pageable, applicationsPage.getTotalElements());
+        }
+
+        // 1. Lấy candidateIds
+        List<String> candidateIds = applications.stream()
+                .map(app -> app.getCandidate().getId())
+                .distinct()
+                .toList();
+
+        // 2. Lấy reputation + rating theo batch
+        Map<String, BigInteger> reputationMap =
+                reputationService.getReputationByUserIds(candidateIds);
+
+        Map<String, Double> ratingMap =
+                reviewService.getAverageRatingByUserIds(candidateIds);
+
+        // 3. Map response
+        List<ApplicationCandidateResponse> responses = applications.stream()
+                .map(app -> {
+                    String candidateId = app.getCandidate().getId();
+
+                    ApplicationCandidateResponse response =
+                            applicationMapper.toCandidateApplicationResponse(app);
+
+                    response.setReputation(
+                            reputationMap.getOrDefault(candidateId, BigInteger.ZERO)
+                    );
+
+                    response.setAverageRating(
+                            ratingMap.getOrDefault(candidateId, 0.0)
+                    );
+
+                    return response;
+                })
+                .toList();
+
+        return new PageImpl<>(responses, pageable, applicationsPage.getTotalElements());
     }
-
 
     @Override
     public List<ApplicationCandidateResponse> getCandidateApplications(String jobPostId) {
+
         String recruiterId = SecurityUtils.getCurrentUserId();
 
-        List<Application> applications = applicationRepository
-                .findAllByJobPostIdAndRecruiterIdOrderByCreatedAtDesc(jobPostId, recruiterId);
+        // 1. Lấy toàn bộ application
+        List<Application> applications =
+                applicationRepository.findAllByJobPostIdAndRecruiterIdOrderByCreatedAtDesc(
+                        jobPostId, recruiterId
+                );
 
-        return applications.stream()
-                .map(applicationMapper::toCandidateApplicationResponse)
-                .collect(Collectors.toList());
+        if (applications.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // 2. Lấy candidateIds
+        List<String> candidateIds = applications.stream()
+                .map(app -> app.getCandidate().getId())
+                .distinct()
+                .toList();
+
+        // 3. Lấy reputation + averageRating theo batch
+        Map<String, BigInteger> reputationMap =
+                reputationService.getReputationByUserIds(candidateIds);
+
+        Map<String, Double> ratingMap =
+                reviewService.getAverageRatingByUserIds(candidateIds);
+
+        // 4. Sort applications theo reputation DESC
+        List<Application> sortedApplications = applications.stream()
+                .sorted((a, b) -> {
+                    BigInteger r1 = reputationMap.getOrDefault(
+                            a.getCandidate().getId(), BigInteger.ZERO
+                    );
+                    BigInteger r2 = reputationMap.getOrDefault(
+                            b.getCandidate().getId(), BigInteger.ZERO
+                    );
+                    return r2.compareTo(r1);
+                })
+                .toList();
+
+        // 5. Map response
+        return sortedApplications.stream()
+                .map(app -> {
+                    String candidateId = app.getCandidate().getId();
+
+                    ApplicationCandidateResponse response =
+                            applicationMapper.toCandidateApplicationResponse(app);
+
+                    response.setReputation(
+                            reputationMap.getOrDefault(candidateId, BigInteger.ZERO)
+                    );
+
+                    response.setAverageRating(
+                            ratingMap.getOrDefault(candidateId, 0.0)
+                    );
+
+                    return response;
+                })
+                .toList();
+    }
+
+
+
+    @Override
+    public Page<ApplicationAllCandidateResponse> getAllCandidateApplicationsOfRecruiter(
+            int page,
+            int size
+    ) {
+        String recruiterId = SecurityUtils.getCurrentUserId();
+        Pageable pageable = PaginationUtils.buildPageable(page, size);
+
+        Page<Application> applications =
+                applicationRepository.findAllByRecruiterId(recruiterId, pageable);
+
+        return applications.map(applicationMapper::toApplicationAllCandidateResponse);
+    }
+    @Override
+
+    public List<ApplicationAllCandidateResponse> getAllCandidateApplicationsOfRecruiter() {
+        String recruiterId = SecurityUtils.getCurrentUserId();
+
+        return applicationRepository.findAllByRecruiterId(recruiterId)
+                .stream()
+                .map(applicationMapper::toApplicationAllCandidateResponse)
+                .toList();
     }
 
     @Override
@@ -201,34 +350,18 @@ public class RecruiterApplicationServiceImpl implements RecruiterApplicationServ
 
             workService.assignWork(workRequest);
         }
+
+        // --- Gửi Event cho listener mail ---
+        // Chỉ gửi mail khi trạng thái là APPROVED hoặc REJECTED
+        if (newStatus == ApplicationStatusEnum.APPROVED || newStatus == ApplicationStatusEnum.REJECTED) {
+            ApplicationStatusChangedEvent event = new ApplicationStatusChangedEvent(
+                    application.getCandidate().getEmail(),
+                    application.getJobPost().getTitle(),  // job title
+                    newStatus                  // dùng tên enum làm status
+            );
+            eventPublisher.publishEvent(event);
+        }
     }
-
-    @Override
-
-    public Page<ApplicationAllCandidateResponse> getAllCandidateApplicationsOfRecruiter(
-            int page,
-            int size
-    ) {
-        String recruiterId = SecurityUtils.getCurrentUserId();
-        Pageable pageable = PaginationUtils.buildPageable(page, size);
-
-        Page<Application> applications =
-                applicationRepository.findAllByRecruiterId(recruiterId, pageable);
-
-        return applications.map(applicationMapper::toApplicationAllCandidateResponse);
-    }
-    @Override
-
-    public List<ApplicationAllCandidateResponse> getAllCandidateApplicationsOfRecruiter() {
-        String recruiterId = SecurityUtils.getCurrentUserId();
-
-        return applicationRepository.findAllByRecruiterId(recruiterId)
-                .stream()
-                .map(applicationMapper::toApplicationAllCandidateResponse)
-                .toList();
-    }
-
-
     private void validateStatusTransition(
             ApplicationStatusEnum current,
             ApplicationStatusEnum next

@@ -1,83 +1,90 @@
-import {axiosPrivate, DEFAULT_LIMIT} from "../api/axios";
-import {ENDPOINTS} from "../config/endpoints";
+import { axiosPrivate, DEFAULT_LIMIT } from "../api/axios";
+import { ENDPOINTS } from "../config/endpoints";
 
 export const applyJob = async (data) => {
-    const response = await axiosPrivate.post(
-        ENDPOINTS.APPLICATION.APPLY_JOB,
-        data
-    );
-    return response.data;
+  const response = await axiosPrivate.post(
+    ENDPOINTS.APPLICATION.APPLY_JOB,
+    data
+  );
+  return response.data;
 };
 export const getAppliedJobPosts = async (page = 1, size = DEFAULT_LIMIT) => {
-    const response = await axiosPrivate.get(
-        ENDPOINTS.APPLICATION.LIST_APPLIED_JOB_POSTS,
-        {
-            params: {page, size},
-        }
-    );
+  const response = await axiosPrivate.get(
+    ENDPOINTS.APPLICATION.LIST_APPLIED_JOB_POSTS,
+    {
+      params: { page, size },
+    }
+  );
 
-    return response.data;
+  return response.data;
 };
 
 export const getRankedCandidates = async (
-    jobPostId,
-    page = 1,
-    size = DEFAULT_LIMIT
+  jobPostId,
+  page = 1,
+  size = DEFAULT_LIMIT
 ) => {
-    const response = await axiosPrivate.get(
-        ENDPOINTS.APPLICATION.GET_RANKED_CANDIDATES(jobPostId), {
-            params: {page, size},
-        }
-    );
-    return response.data
-}
+  const response = await axiosPrivate.get(
+    ENDPOINTS.APPLICATION.GET_RANKED_CANDIDATES(jobPostId),
+    {
+      params: { page, size },
+    }
+  );
+  return response.data;
+};
+export const getCandidatesSortedByReputation = async (jobPostId) => {
+  const response = await axiosPrivate.get(
+    ENDPOINTS.APPLICATION.GET_REPUTATION_CANDIDATE(jobPostId)
+  );
+  return response.data;
+};
 
 export const getAllApplicantOfRecruiter = async (
-    page = 1,
-    size = DEFAULT_LIMIT
+  page = 1,
+  size = DEFAULT_LIMIT
 ) => {
-    const response = await axiosPrivate.get(
-        ENDPOINTS.APPLICATION.LIST_ALL_APPLICANT_OF_RECRUITER,
-        {
-            params: {page, size},
-        }
-    );
+  const response = await axiosPrivate.get(
+    ENDPOINTS.APPLICATION.LIST_ALL_APPLICANT_OF_RECRUITER,
+    {
+      params: { page, size },
+    }
+  );
 
-    return response.data;
+  return response.data;
 };
 
 export const getCandidateApplications = async (
-    jobPostId,
-    page = 1,
-    size = DEFAULT_LIMIT
+  jobPostId,
+  page = 1,
+  size = DEFAULT_LIMIT
 ) => {
-    const response = await axiosPrivate.get(
-        ENDPOINTS.APPLICATION.LIST_APPLICANTS(jobPostId),
-        {
-            params: {page, size},
-        }
-    );
-    return response.data;
+  const response = await axiosPrivate.get(
+    ENDPOINTS.APPLICATION.LIST_APPLICANTS(jobPostId),
+    {
+      params: { page, size },
+    }
+  );
+  return response.data;
 };
 export const recruiterUpdateApplicantStatus = (
-    applicationId,
-    jobPostId,
-    data
+  applicationId,
+  jobPostId,
+  data
 ) => {
-    return axiosPrivate.patch(
-        ENDPOINTS.APPLICATION.RECRUITER_UPDATE_STATUS_APPLICANTS(
-            applicationId,
-            jobPostId
-        ),
-        data
-    );
+  return axiosPrivate.patch(
+    ENDPOINTS.APPLICATION.RECRUITER_UPDATE_STATUS_APPLICANTS(
+      applicationId,
+      jobPostId
+    ),
+    data
+  );
 };
 
 export const candidateUpdateApplicantStatus = (jobPostId, status) => {
-    return axiosPrivate.patch(
-        ENDPOINTS.APPLICATION.CANDIDATE_UPDATE_STATUS_APPLICANTS(jobPostId),
-        {
-            status,
-        }
-    );
+  return axiosPrivate.patch(
+    ENDPOINTS.APPLICATION.CANDIDATE_UPDATE_STATUS_APPLICANTS(jobPostId),
+    {
+      status,
+    }
+  );
 };

@@ -34,7 +34,7 @@ public class ApplicationInitConfiguration {
 
             try {
 
-                // Khởi tạo role
+//                 Khởi tạo role
                 initializationService.initializeRoles();
 
                 // Khởi tạo admin

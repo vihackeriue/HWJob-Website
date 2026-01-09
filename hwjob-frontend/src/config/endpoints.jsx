@@ -38,6 +38,7 @@ export const ENDPOINTS = {
 
     DETAIL_STATS: (id) => `/recruiters/job-posts/${id}/stats`,
     STATS_OF_RECRUITER: "recruiters/job-posts/stats",
+    TOP_BOOST_JOB_POST: "public/job-posts/top-boosted",
   },
   APPLICATION: {
     APPLY_JOB: "candidates/applications",
@@ -51,6 +52,8 @@ export const ENDPOINTS = {
     LIST_ALL_APPLICANT_OF_RECRUITER: "recruiters/applications/candidates/all",
     GET_RANKED_CANDIDATES: (jobPostId) =>
       `/recruiters/applications/job-posts/${jobPostId}/candidates/ranked`,
+    GET_REPUTATION_CANDIDATE: (jobPostId) =>
+      `recruiters/applications/job-posts/${jobPostId}/candidates`,
   },
   WORK: {
     CANDIDATE_WORK_OVERVIEW: (jobPostId) =>
